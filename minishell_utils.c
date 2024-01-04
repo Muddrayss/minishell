@@ -3,32 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/04 17:29:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/04 18:56:47 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_path(char **envp)
+void	free_matrix(char **matrix)
 {
-	while (envp && *envp)
-		if (ft_strncmp(*envp++, "PATH=", 5) == 0)
-			return (*(envp - 1) + 5);
-	//quit(7, "PATH not found", 15);
-	return (NULL);
+	unsigned int i;
+
+	i = -1;
+	while (matrix[++i])
+		free(matrix[i]);
+	free(matrix);
 }
 
-char	*find_cmd(char *path, char *cmd)
+char	*get_cmd(char *path, char *cmd)
 {
-	char			**dirs;
-	char			*full_path;
-	unsigned int	i;
-	unsigned int	size;
+	char **dirs;
+	char *full_path;
+	unsigned int i;
+	unsigned int size;
 
-    //TODO valutare se usare strtok per non dovere fare malloc e free con split
+	// TODO valutare se usare strtok per non dovere fare malloc e free con split
 	dirs = ft_split(path, ':');
 	full_path = NULL;
 	i = -1;
@@ -38,9 +39,9 @@ char	*find_cmd(char *path, char *cmd)
 		full_path = malloc(size * sizeof(char));
 		if (!full_path)
 			break ;
-		ft_strncpy(full_path, dirs[i], size);
-		ft_strcat(full_path, "/");
-		ft_strcat(full_path, cmd);
+		ft_strlcpy(full_path, dirs[i], size);
+		ft_strlcat(full_path, "/", size);
+		ft_strlcat(full_path, cmd, size);
 		if (access(full_path, X_OK) == 0)
 			break ;
 		free(full_path);
