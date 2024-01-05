@@ -55,4 +55,5 @@ dkms.conf
 *.tmp
 *.txt
 .nfs*
+minishell
 
