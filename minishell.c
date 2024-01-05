@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/05 17:34:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:56:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,11 @@ int	main(int argc, char **argv, char **envp)
 static void	minishell_loop(void)
 {
 	char 	*input;
-	char	prompt[20 + 20];
+	char	prompt[10];
 
-	ft_bzero(prompt, 20);
-	ft_strlcat(prompt, "\033[1;35mmini>>", 20);
+	ft_bzero(prompt, 10);
+	ft_strlcat(prompt, "mini> ", 10);
 	//TODO appendere '>' extra in base alla profondita'
-	ft_strlcat(prompt, "\033[1;0m ", 20);
 	while (1)
 	{
 		input =	readline(prompt);
