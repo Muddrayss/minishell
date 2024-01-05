@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/04 18:56:47 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/05 16:44:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,21 @@ void	free_matrix(char **matrix)
 	unsigned int i;
 
 	i = -1;
-	while (matrix[++i])
+	while (matrix && matrix[++i])
 		free(matrix[i]);
 	free(matrix);
 }
 
 char	*get_cmd(char *path, char *cmd)
 {
-	char **dirs;
-	char *full_path;
+	char 		**dirs;
+	char 		*full_path;
 	unsigned int i;
 	unsigned int size;
 
-	// TODO valutare se usare strtok per non dovere fare malloc e free con split
 	dirs = ft_split(path, ':');
+	if (!dirs)
+		ft_quit(3, ft_strdup("failed to allocate memory"));
 	full_path = NULL;
 	i = -1;
 	while (dirs[++i])
@@ -38,7 +39,7 @@ char	*get_cmd(char *path, char *cmd)
 		size = ft_strlen(dirs[i]) + ft_strlen(cmd) + 2;
 		full_path = malloc(size * sizeof(char));
 		if (!full_path)
-			break ;
+			ft_quit(3, ft_strdup("failed to allocate memory"));
 		ft_strlcpy(full_path, dirs[i], size);
 		ft_strlcat(full_path, "/", size);
 		ft_strlcat(full_path, cmd, size);

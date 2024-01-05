@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/04 18:55:45 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/05 17:30:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+# include "colors.h"
+
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -31,7 +33,14 @@
 # include <termios.h>
 # include <unistd.h>
 
-char *get_cmd(char *path, char *cmd);
-void free_matrix(char **matrix);
+char    *get_cmd(char *path, char *cmd);
+void    free_matrix(char **matrix);
+void	ft_quit(int id, char *s);
+
+typedef struct	s_data
+{
+    char	*cmd_path;
+	char	**cmd_args;
+}				t_data;		
 
 #endif
