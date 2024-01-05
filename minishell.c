@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/05 17:56:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/05 19:12:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static void exec_cmd(char *path, char **envp, char **cmd_args, t_data *data);
 static void	minishell_loop(void);
 
 //TODO sig handler che setti la variabile errno a EINTR
+//TODO per i comandi da implementare custom usare execve per creare il .bin (se non e' gia' presente) compilando con cc il file corrispondente
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -25,12 +26,11 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-
 	init(envp, &path, &data);
-	minishell_loop();
+	minishell_loop(path, envp, &data);
 }
 
-static void	minishell_loop(void)
+static void	minishell_loop(char *path, char **envp, t_data *data)
 {
 	char 	*input;
 	char	prompt[10];
@@ -41,7 +41,10 @@ static void	minishell_loop(void)
 	while (1)
 	{
 		input =	readline(prompt);
-		printf("%s\n", input);
+		if (input && input[0] != '\0')
+			add_history(input);
+		
+		//TODO cmd_args deve tenere in considerazione ' " < > << >> | $ e forse {
 	}
 }
 
@@ -51,10 +54,10 @@ static void init(char **envp, char **path, t_data *data)
 	exec_cmd(*path, envp, ft_split("clear", ' '), data);
 }
 
-static void exec_cmd(char *path, char **envp, char **cmd_args, t_data *data)
+static void exec_cmd(char *path, char **cmd_args, char **envp, t_data *data)
 {
-	pid_t	pid;
-	int		status;
+	pid_t		pid;
+	int			status;
 
 	data->cmd_args = cmd_args;
 	pid = fork();
