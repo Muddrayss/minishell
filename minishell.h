@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/05 17:36:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 12:58:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+# include "lexer.h"
 
 # include <curses.h>
 # include <dirent.h>
@@ -40,6 +41,6 @@ typedef struct	s_data
 {
     char	*cmd_path;
 	char	**cmd_args;
-}				t_data;		
+}				t_data;
 
 #endif
