@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 17:59:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 23:55:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ char    *get_cmd(char *path, char *cmd);
 void    free_matrix(char **matrix);
 void	ft_quit(int id, char *s);
 t_list	**lexer(char *input);
+bool	is_shell_space(char c);
 
 typedef struct	s_data
 {
