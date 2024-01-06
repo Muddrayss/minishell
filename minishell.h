@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/05 17:36:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 23:55:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+# include "lexer.h"
+# include "parser.h"
 
 # include <curses.h>
 # include <dirent.h>
@@ -35,11 +37,13 @@
 char    *get_cmd(char *path, char *cmd);
 void    free_matrix(char **matrix);
 void	ft_quit(int id, char *s);
+t_list	**lexer(char *input);
+bool	is_shell_space(char c);
 
 typedef struct	s_data
 {
     char	*cmd_path;
 	char	**cmd_args;
-}				t_data;		
+}				t_data;
 
 #endif

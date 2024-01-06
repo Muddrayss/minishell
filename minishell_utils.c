@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/05 16:44:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 23:58:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,12 @@ char	*get_cmd(char *path, char *cmd)
 	}
 	free_matrix(dirs);
 	return (full_path);
+}
+
+//diversa da isspace perche' bash non intepreta \v \f e \r come spazi
+bool	is_shell_space(char c)
+{
+	if (c == ' ' || c == '\n' || c == '\t')
+		return (true);
+	return (false);
 }

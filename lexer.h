@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 12:10:11 by egualand          #+#    #+#             */
-/*   Updated: 2024/01/06 15:20:03 by craimond         ###   ########.fr       */
+/*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
+/*   Updated: 2024/01/06 22:21:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef LEXER_H
+# define LEXER_H
 
-size_t	ft_strlen(const char *s)
+# include <stdint.h>
+# include <stdbool.h>
+
+# define PIPE       1
+# define REDIR_R    2
+# define REDIR_L    3
+# define ENV		4
+
+typedef int8_t t_token;
+
+typedef struct s_lexer
 {
-	size_t	i;
+    union u_elem
+    {
+        char    *cmd;
+        t_token token;
+    }           str;
+}               t_lexer;
 
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
+#endif
