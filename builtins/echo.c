@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 12:01:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 13:09:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,5 @@
 
 int main(int argc, char **argv)
 {
-    
+    printf("%s", argv[1]);
 }

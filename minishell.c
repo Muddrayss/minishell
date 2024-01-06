@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/05 19:12:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 14:56:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 		input =	readline(prompt);
 		if (input && input[0] != '\0')
 			add_history(input);
-		
+		lexer(input);
 		//TODO cmd_args deve tenere in considerazione ' " < > << >> | $ e forse {
 	}
 }
