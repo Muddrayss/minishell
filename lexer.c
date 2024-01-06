@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 16:01:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 16:06:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static bool is_token(char c);
 
 //il lexer separa i token (> < e |) dal resto del comando ("ls -a -l ") che e' tutto insieme compresi spazi successivi
 //dopo andra' fatto uno split/trim del comando prima di execve
+
+//TODO capire come gestire double e single quote, valutare se e' meglio gestirle in lexer o parser
 
 t_list	**lexer(char *input)
 {
