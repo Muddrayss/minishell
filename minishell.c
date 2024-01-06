@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 16:04:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 17:56:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void init(char **envp, char **path, t_data *data);
 static void exec_cmd(char *path, char **envp, char **cmd_args, t_data *data);
-static void	minishell_loop(void);
+static void	minishell_loop(char *path, char **envp, t_data *data);
 
 //TODO sig handler che setti la variabile errno a EINTR
 //TODO per i comandi da implementare custom usare execve per creare il .bin (se non e' gia' presente) compilando con cc il file corrispondente
@@ -34,7 +34,8 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 {
 	char 	*input;
 	char	prompt[10];
-	char	**lexer_head;
+	t_list	**lexered_params_head;
+	t_list	**parsed_params_head;
 
 	ft_bzero(prompt, 10);
 	ft_strlcat(prompt, "mini> ", 10);
@@ -44,7 +45,8 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 		input =	readline(prompt);
 		if (input && input[0] != '\0')
 			add_history(input);
-		lexer_head = lexer(input);
+		lexered_params_head = lexer(input);
+		parsed_params_head = parser(input);
 		//TODO cmd_args deve tenere in considerazione ' " < > << >> | $ e forse {
 	}
 }

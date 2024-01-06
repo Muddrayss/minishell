@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 16:06:09 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 17:55:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ t_list	**lexer(char *input)
 {
     unsigned int    i;
     union u_elem   	*elem;
-    t_list         	**lexer_head;
+    t_list         	**lexered_params_head;
 
-	lexer_head = (t_list **)malloc(sizeof(t_list *));
-	if (!lexer_head)
+	lexered_params_head = (t_list **)malloc(sizeof(t_list *));
+	if (!lexered_params_head)
 		ft_quit(9, "failed to allocate memory");
-	lexer_head = NULL;
+	lexered_params_head = NULL;
     while (*input != '\0')
     {
         i = 0;
@@ -44,12 +44,12 @@ t_list	**lexer(char *input)
 			if (!elem->cmd)
 				ft_quit(8, "failed to allocate memory");
             ft_strlcpy(elem->cmd, input, i + 1);
-			ft_lstadd_back(lexer_head, ft_lstnew(elem));
+			ft_lstadd_back(lexered_params_head, ft_lstnew(elem));
             input += i;
             i = 0;
         }
         elem->token = lexer_get_token(*input++);
-		ft_lstadd_back(lexer_head, ft_lstnew(elem));
+		ft_lstadd_back(lexered_params_head, ft_lstnew(elem));
     }
 	return (lexer);
 }
