@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 17:53:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/06 22:21:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_lexer
     {
         char    *cmd;
         t_token token;
-    }               str;
+    }           str;
 }               t_lexer;
 
 #endif
