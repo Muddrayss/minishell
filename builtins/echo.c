@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 16:20:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/07 01:27:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,49 @@
 
 #include <unistd.h>
 #include <stdbool.h>
+#include <stdio.h>
 
-static  void    check_flags(bool *is_n, bool *is_e);
+static int      check_flag(char **argv, bool *is_n);
+static short    ft_strcmp(const char *s1, const char *s2);
 
 int main(int argc, char **argv)
 {
-    unsigned int i;
-    //TODO sostituire con 1 singolo byte per 3 flag con bitwise operators
-    bool         is_n;
-    bool         is_e;
+    int     i;
+    bool    is_n;
 
-    check_flags(argv);
-    i = 0;
+    i = check_flag(argv, &is_n);
     while (argv[i])
     {
-        printf("%s", argv[i++]);
-        if (i < argc - 1)
-            write(1, ' ', 1);
+        printf("%s", argv[i]);
+        if (i < argc)
+            write(1, " ", 1);            
+        i++;
     }
     if (is_n == false)
-        write(1, '\n', 1);
+        write(1, "\n", 1);
 }
 
-//la flag -E forza il setting della flag -e a false
-
-static  void    check_flags(bool *is_n, bool *is_e)
+static int  check_flag(char **argv, bool *is_n)
 {
+    int i;
 
-} 
+    *is_n = false;
+    i = 1;
+    //gli spazi sono gia gestiti dall' interpretazione automatica di argv
+    if (argv[i][0] != '-')
+        return (i);
+    while (ft_strcmp(argv[i++], "-n") == 0)
+        *is_n = true;
+    return (i);
+}
+
+//libft originale non ha ft_strcmp ma solo ft_strncmp. ft_strncmp non e' sufficiente perche' devo comparare tutta la flag. altrimenti (-nigga) verrebbe interpretata come (-n)
+static short    ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}
