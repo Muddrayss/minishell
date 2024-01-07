@@ -30,7 +30,7 @@ LIBFT_LIB = $(LIBFT_DIR)/$(LIBFT)
 all: $(NAME)
 
 $(LIBFT_LIB):
-	@make -C $(LIBFT_DIR)
+	@make bonus -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
 	@$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) -L $(LIBFT_DIR) -lft -lreadline -o $(NAME)
