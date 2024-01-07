@@ -83,7 +83,6 @@ static t_token lexer_get_token(char c)
 static bool is_token(char *str, bool is_first)
 {
     int8_t			i;
-	bool			is_number_before;
 	static uint8_t	n_tokens;
     static char		tokens[4] = 
     {'|', '>', '<', '$'};

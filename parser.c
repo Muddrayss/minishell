@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 18:09:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/07 19:16:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_list    **parser(t_list **lexered_params_head)
         }
         lex_node = lex_node->next;
     }
+    return (parsed_params_head);
 }
 
 static t_parser *new_elem(void)
