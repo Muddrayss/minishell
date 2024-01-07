@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: marvin <egualand@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 17:56:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/07 18:48:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static void init(char **envp, char **path, t_data *data)
 {
 	*path = getenv("PATH");
 	exec_cmd(*path, envp, ft_split("clear", ' '), data);
+	init_signals();
 }
 
 static void exec_cmd(char *path, char **cmd_args, char **envp, t_data *data)

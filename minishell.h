@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: marvin <egualand@student.42firenze.it>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 23:55:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/07 18:51:18 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,18 @@
 # include <termios.h>
 # include <unistd.h>
 
+// Errors codes
+# define SIGINT_ERROR 20
+# define SIGQUIT_ERROR 21
+
 char    *get_cmd(char *path, char *cmd);
 void    free_matrix(char **matrix);
 void	ft_quit(int id, char *s);
+// Lexer
 t_list	**lexer(char *input);
 bool	is_shell_space(char c);
+// Signals
+void init_signals(void)
 
 typedef struct	s_data
 {
