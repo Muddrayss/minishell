@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 18:31:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/07 18:48:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_redirection
     char				*filename; 	// nome del file o LIMITER dell'heredoc
 }	t_redirection;
 
-//TODO capire come gestire l'ordine delle redirections e come eseguirle al momento giusto
+//TODO aggiungere un placeholder per ricordarsi a che punto eseguire una redirection
 
 typedef struct s_parser //tra | e |
 {

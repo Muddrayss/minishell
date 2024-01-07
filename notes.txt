@@ -1,0 +1,25 @@
+
+RAW COMMAND:
+
+"infile < wc -l $ITEMS="3 4 5 1" 3> outfile3.txt $VAR="Hello World" 1> outfile1.txt >> outfile.txt"
+
+
+LEXERED COMMAND:
+
+"infile "
+REDIR_L
+" wc -l 3"
+REDIR_R
+" outfile3.txt 1"
+REDIR_R
+" outfile1.txt "
+REDIR_R
+REDIR_R
+" outfile.txt"
+
+
+PARSED COMMAND:
+
+"infile wc -l 3 outfile3.txt 1 outfile1.txt  outfile.txt"
+REDIR_INPUT-->REDIR_OUTPUT_DUP-->REDIR_OUTPUT_DUP-->REDIR_APPEND
+"3 4 5 1"-->"Hello World"
