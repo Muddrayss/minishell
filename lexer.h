@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/06 22:21:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/07 16:39:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,23 @@
 # include <stdint.h>
 # include <stdbool.h>
 
-# define PIPE       1
-# define REDIR_R    2
-# define REDIR_L    3
-# define ENV		4
+typedef enum e_token
+{
+    PIPE,
+    REDIR_R,
+    REDIR_L,
+    ENV,
+}           t_token;
 
-typedef int8_t t_token;
+typedef enum e_elem_type
+{
+    CMD,
+    TOKEN,
+}           t_elem_type;
 
 typedef struct s_lexer
 {
+    t_elem_type type;
     union u_elem
     {
         char    *cmd;
