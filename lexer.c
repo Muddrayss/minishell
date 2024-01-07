@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 16:42:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/07 18:21:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_list	**lexer(char *input)
 
 static t_token lexer_get_token(char c)
 {
-    int8_t         i;
+    int8_t         	i;
 	static uint8_t	n_tokens;
     static t_token  tokens[4][2] = {
     {'|', PIPE},
