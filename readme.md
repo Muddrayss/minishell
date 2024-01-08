@@ -1,1 +1,1 @@
-![Minishell](https://github.com/Muddrayss/minishell/assets/104778891/58492010-ba5c-4cf6-8546-0c52187f8f3b)
+![minishell](https://github.com/Muddrayss/minishell/assets/104778891/8affdbb4-6f1c-41e4-9f07-250747395eb4)
