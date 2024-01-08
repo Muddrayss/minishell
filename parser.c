@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/08 15:00:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/08 19:49:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static t_parser *new_elem(void)
     if (!elem)
         ft_quit(10, "failed to allocate memory");
     elem->cmd_args = NULL;
-    elem->vars = (t_list **)malloc(sizeof(t_list *));
     if (!elem->vars)
         ft_quit(11, "failed to allocate memory");
     elem->vars = NULL;
