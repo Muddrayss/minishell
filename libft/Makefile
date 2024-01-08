@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/14 13:59:13 by egualand          #+#    #+#              #
-#    Updated: 2024/01/04 19:03:05 by egualand         ###   ########.fr        #
+#    Updated: 2024/01/08 19:27:03 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
