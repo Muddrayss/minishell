@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 18:48:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/08 17:14:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 
 typedef enum e_redirection_type
 {
-    REDIR_INPUT,        // '<'
-    REDIR_OUTPUT,       // '>'
-    REDIR_APPEND,       // '>>'
-    REDIR_HEREDOC,      // '<<'
-    REDIR_INPUT_FD,     // '<&n'
-    REDIR_OUTPUT_FD,    // '>&n'
-    REDIR_APPEND_FD,    // '>>&n'
-    REDIR_INPUT_DUP,    // 'n<'
-    REDIR_OUTPUT_DUP,   // 'n>'
-    REDIR_CLOSE_FD      // 'n<&-'
+    REDIR_INPUT,                // '<'
+    REDIR_OUTPUT,               // '>'
+    REDIR_APPEND,               // '>>'
+    REDIR_HEREDOC,              // '<<'
+    REDIR_INPUT_FD,             // '<&n'
+    REDIR_OUTPUT_FD,            // '>&n'
+    REDIR_FD_DUP_AND_CLOSE,     // 'n>&n'
+    REDIR_FD_DUP,               // 'n>&m-'
+    REDIR_APPEND_FD,            // '>>&n'
+    REDIR_INPUT_DUP,            // 'n<'
+    REDIR_OUTPUT_DUP,           // 'n>'
+    REDIR_CLOSE_FD              // 'n<&-'
 }	t_redirection_type;
 
 typedef struct s_vars
@@ -37,17 +39,17 @@ typedef struct s_vars
 typedef struct s_redirection
 {
     t_redirection_type	type;
-    int                 fd;         // FD per casi come (n<, >&n, n<&- etc.), altrimenti -42
-    char				*filename; 	// nome del file o LIMITER dell'heredoc
+    int                 fd;         // se serve, altrimenti -42
+    char				*filename; 	// se serve (nome file o limiter dell'here_doc), altrimenti NULL
 }	t_redirection;
 
-//TODO aggiungere un placeholder per ricordarsi a che punto eseguire una redirection
+//TODO aggiungere un placeholder in cmd_args per ricordarsi a che punto eseguire una redirection
 
-typedef struct s_parser //tra | e |
+typedef struct s_parser
 {
     char	**cmd_args;
-	t_list	**redirections;	//lista di redirections
-	t_list	**vars;			//lista di variabili d'ambiente create con $
+	t_list	**redirections;
+	t_list	**vars;
 }	t_parser;
 
 /*
@@ -77,9 +79,6 @@ casi strani:
 
 - (> outfile)           crea un here_doc fino al ctrl+D e mette il contenuto dentro out (COMPORTAMENTO NON STANDARD)
 - (> outfile cmd)       scrive l'output del comando sull'outfile (COMPORTAMENTO NON STANDARD)
-
-n deve essere compreso tra 0 e 1023 incluso (fdmax), altrimenti e' interpretato come argomento e non fd
-un numero n superiore al fdmax e' interpretato come argomento ANCHE SE NON CI SONO SPAZI prima del '>'
 
 il parser si puo accorgere di questi casi specifici perche' la stringa dopo il '>' mantiene o meno gli spazi/tabs
 

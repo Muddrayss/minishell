@@ -20,6 +20,6 @@ REDIR_R
 
 PARSED COMMAND:
 
-"infile wc -l  outfile3.txt  outfile1.txt  outfile.txt"
+"'-42' wc -l '-42' outfile3.txt '-42' outfile1.txt '42' outfile.txt"
 REDIR_INPUT-->REDIR_OUTPUT_DUP-->REDIR_OUTPUT_DUP-->REDIR_APPEND
 "3 4 5 1"-->"Hello World"
