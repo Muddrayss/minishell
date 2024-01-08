@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/08 17:14:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/08 19:08:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ casi input:
 
 casi extra:
 
-- (n< infile)          apre infile sul fd n per un utilizzo futuro
+- (n< infile)           apre infile sul fd n per un utilizzo futuro
 - (n<&-)                chiude il fd numero n
 - (n> outfile)			redirige l'output che andrebbe sull FD 3 nell outfile
+- (<> outfile)          apre outfile sia per read che per write
 
 casi output:
 
