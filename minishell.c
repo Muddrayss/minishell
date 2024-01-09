@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 17:27:21 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/09 18:06:28 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 	{
 		input = readline(prompt);
 		if (!input)
-			ft_quit(123, "exit\n");
+			ft_quit(123, "exit\n", data);
 		if (input[0] != '\0')
 			add_history(input);
-		params_head = lexer(input);
+		params_head = lexer(input, data);
 		(void)path;
 		(void)envp;
 		(void)data;
@@ -70,38 +70,25 @@ static void	exec_cmd(char *path, char **cmd_args, char **envp, t_data *data)
 	data->cmd_args = cmd_args;
 	pid = fork();
 	if (pid == -1)
-		ft_quit(1, NULL);
+		ft_quit(1, NULL, data);
 	if (pid == 0)
 	{
 		if (!cmd_args)
-			ft_quit(5, ft_strdup("failed to allocate memory"));
-		data->cmd_path = get_cmd(path, cmd_args[0]);
+			ft_quit(5, ft_strdup("failed to allocate memory"), data);
+		data->cmd_path = get_cmd(path, cmd_args[0], data);
 		printf("%s\n", data->cmd_path);
 		if (!data->cmd_path)
-			ft_quit(3, ft_strjoin("command not found: ", cmd_args[0]));
+			ft_quit(3, ft_strjoin("command not found: ", cmd_args[0]), data);
 		else
 			execve(data->cmd_path, cmd_args, envp);
-		ft_quit(2, NULL);
+		ft_quit(2, NULL, data);
 	}
 	else
 	{
 		if (waitpid(pid, &status, 0) == -1)
-			ft_quit(5, NULL);
+			ft_quit(5, NULL, data);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 			ft_quit(6, ft_strjoin("minishell: failed to execute command: ",
-					cmd_args[0]));
+					cmd_args[0]), data);
 	}
-}
-
-void	ft_quit(int id, char *msg)
-{
-	if (errno != EINTR)
-	{
-		if (!msg)
-			ft_putstr_fd(strerror(errno), 1);
-		else
-			ft_putstr_fd(msg, 1);
-	}
-	exit(id);
-	return ;
 }

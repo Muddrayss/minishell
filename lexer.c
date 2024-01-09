@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 17:18:51 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/09 18:08:39 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,13 @@ static bool 	is_token(char *str);
 
 //TODO capire come gestire double e single quote, valutare se e' meglio gestirle in lexer o parser
 
-t_list	**lexer(char *input)
+t_list	*lexer(char *input, t_data *data)
 {
     unsigned int    i;
     t_lexer   		*content;
-    t_list         	**lexered_params_head;
+    t_list         	*lexered_params_head;
 
-	lexered_params_head = (t_list **)malloc(sizeof(t_list *));
-	if (!lexered_params_head)
-		ft_quit(9, "failed to allocate memory");
-	*lexered_params_head = NULL;
+	lexered_params_head = NULL;
     while (*input != '\0')
     {
         i = 0;
@@ -39,13 +36,13 @@ t_list	**lexer(char *input)
         {
 			content = (t_lexer *)malloc(sizeof(t_lexer));
             if (!content)
-                ft_quit(7, "failed to allocate memory");
+                ft_quit(7, "failed to allocate memory", data);
 			content->type = CMD;
 			content->str.cmd = (char *)malloc(sizeof(char) * i + 1);
 			if (!content->str.cmd)
-				ft_quit(8, "failed to allocate memory");
+				ft_quit(8, "failed to allocate memory", data);
             ft_strlcpy(content->str.cmd, input, i + 1);
-			ft_lstadd_back(lexered_params_head, ft_lstnew(content));
+			ft_lstadd_back(&lexered_params_head, ft_lstnew(content));
             input += i;
             i = 0;
         }
@@ -54,7 +51,7 @@ t_list	**lexer(char *input)
 			content = (t_lexer *)malloc(sizeof(t_lexer));
 			content->type = TOKEN;
        	 	content->str.token = lexer_get_token(*input++);
-			ft_lstadd_back(lexered_params_head, ft_lstnew(content));
+			ft_lstadd_back(&lexered_params_head, ft_lstnew(content));
 		}
     }
 	return (lexered_params_head);

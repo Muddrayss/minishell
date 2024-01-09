@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 17:17:06 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/09 18:08:23 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,21 @@
 # define SIGINT_ERROR 20
 # define SIGQUIT_ERROR 21
 
-char		*get_cmd(char *path, char *cmd);
-void		free_matrix(char **matrix);
-void		ft_quit(int id, char *s);
-// Lexer
-t_list		**lexer(char *input);
-bool		is_shell_space(char c);
-// Signals
-void		init_signals(void);
-
 typedef struct s_data
 {
 	char	*cmd_path;
 	char	**cmd_args;
+	t_list	**lexered_params_head;
 }			t_data;
+
+char		*get_cmd(char *path, char *cmd, t_data *data);
+void		free_matrix(char **matrix);
+void		ft_quit(int id, char *msg, t_data *data);
+// Lexer
+t_list		*lexer(char *input, t_data *data);
+bool		is_shell_space(char c);
+// Signals
+void		init_signals(void);
+void		del_content(void *content);
 
 #endif
