@@ -3,25 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <egualand@student.42firenze.it>     +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 18:48:17 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/09 17:27:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void init(char **envp, char **path, t_data *data);
-static void exec_cmd(char *path, char **envp, char **cmd_args, t_data *data);
+static void	init(char **envp, char **path, t_data *data);
+static void	exec_cmd(char *path, char **envp, char **cmd_args, t_data *data);
 static void	minishell_loop(char *path, char **envp, t_data *data);
 
-//TODO sig handler che setti la variabile errno a EINTR
-//TODO per i comandi da implementare custom usare execve per creare il .bin (se non e' gia' presente) compilando con cc il file corrispondente
+// TODO sig handler che setti la variabile errno a EINTR
+// TODO per i comandi da implementare custom usare execve per creare il .bin (se non e' gia' presente) compilando con cc il file corrispondente
+// TODO colori
 
 int	main(int argc, char **argv, char **envp)
 {
-	char 	*path;
+	char	*path;
 	t_data	data;
 
 	(void)argc;
@@ -32,36 +33,39 @@ int	main(int argc, char **argv, char **envp)
 
 static void	minishell_loop(char *path, char **envp, t_data *data)
 {
-	char 	*input;
+	char	*input;
 	char	prompt[10];
-	t_list	**lexered_params_head;
-	t_list	**parsed_params_head;
+	t_list	**params_head;
 
 	ft_bzero(prompt, 10);
 	ft_strlcat(prompt, "mini> ", 10);
-	//TODO appendere '>' extra in base alla profondita'
+	// TODO appendere '>' extra in base alla profondita'
 	while (1)
 	{
-		input =	readline(prompt);
-		if (input && input[0] != '\0')
+		input = readline(prompt);
+		if (!input)
+			ft_quit(123, "exit\n");
+		if (input[0] != '\0')
 			add_history(input);
-		lexered_params_head = lexer(input);
-		parsed_params_head = parser(input);
-		//TODO cmd_args deve tenere in considerazione ' " < > << >> | $ e forse {
+		params_head = lexer(input);
+		(void)path;
+		(void)envp;
+		(void)data;
+		// TODO cmd_args deve tenere in considerazione ' " < > << >> | $ e forse {
 	}
 }
 
-static void init(char **envp, char **path, t_data *data)
+static void	init(char **envp, char **path, t_data *data)
 {
 	*path = getenv("PATH");
-	exec_cmd(*path, envp, ft_split("clear", ' '), data);
 	init_signals();
+	exec_cmd(*path, ft_split("clear", ' '), envp, data);
 }
 
-static void exec_cmd(char *path, char **cmd_args, char **envp, t_data *data)
+static void	exec_cmd(char *path, char **cmd_args, char **envp, t_data *data)
 {
-	pid_t		pid;
-	int			status;
+	pid_t	pid;
+	int		status;
 
 	data->cmd_args = cmd_args;
 	pid = fork();
@@ -84,7 +88,8 @@ static void exec_cmd(char *path, char **cmd_args, char **envp, t_data *data)
 		if (waitpid(pid, &status, 0) == -1)
 			ft_quit(5, NULL);
 		if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-			ft_quit(6, ft_strjoin("minishell: failed to execute command: ", cmd_args[0]));
+			ft_quit(6, ft_strjoin("minishell: failed to execute command: ",
+					cmd_args[0]));
 	}
 }
 

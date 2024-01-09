@@ -1,43 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 16:39:15 by craimond         ###   ########.fr       */
+/*   Created: 2024/01/07 19:30:41 by craimond          #+#    #+#             */
+/*   Updated: 2024/01/07 19:34:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include "builtins.h"
 
-# include <stdint.h>
-# include <stdbool.h>
-
-typedef enum e_token
+short    ft_strcmp(const char *s1, const char *s2)
 {
-    PIPE,
-    REDIR_R,
-    REDIR_L,
-    ENV,
-}           t_token;
+	while (*s1 && (*s1 == *s2))
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}
 
-typedef enum e_elem_type
+size_t	ft_strlen(const char *s)
 {
-    CMD,
-    TOKEN,
-}           t_elem_type;
+	size_t	i;
 
-typedef struct s_lexer
-{
-    t_elem_type type;
-    union u_elem
-    {
-        char    *cmd;
-        t_token token;
-    }           str;
-}               t_lexer;
-
-#endif
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i] != '\0')
+		i++;
+	return (i);
+}

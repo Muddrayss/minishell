@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <egualand@student.42firenze.it>     +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 18:51:18 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/09 17:17:06 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft/libft.h"
 # include "lexer.h"
+# include "libft/libft.h"
 # include "parser.h"
-
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -38,19 +37,19 @@
 # define SIGINT_ERROR 20
 # define SIGQUIT_ERROR 21
 
-char    *get_cmd(char *path, char *cmd);
-void    free_matrix(char **matrix);
-void	ft_quit(int id, char *s);
+char		*get_cmd(char *path, char *cmd);
+void		free_matrix(char **matrix);
+void		ft_quit(int id, char *s);
 // Lexer
-t_list	**lexer(char *input);
-bool	is_shell_space(char c);
+t_list		**lexer(char *input);
+bool		is_shell_space(char c);
 // Signals
-void init_signals(void)
+void		init_signals(void);
 
-typedef struct	s_data
+typedef struct s_data
 {
-    char	*cmd_path;
+	char	*cmd_path;
 	char	**cmd_args;
-}				t_data;
+}			t_data;
 
 #endif

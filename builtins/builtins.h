@@ -1,43 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 16:39:15 by craimond         ###   ########.fr       */
+/*   Created: 2024/01/07 19:30:38 by craimond          #+#    #+#             */
+/*   Updated: 2024/01/07 19:36:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-# include <stdint.h>
-# include <stdbool.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <stddef.h>
 
-typedef enum e_token
-{
-    PIPE,
-    REDIR_R,
-    REDIR_L,
-    ENV,
-}           t_token;
-
-typedef enum e_elem_type
-{
-    CMD,
-    TOKEN,
-}           t_elem_type;
-
-typedef struct s_lexer
-{
-    t_elem_type type;
-    union u_elem
-    {
-        char    *cmd;
-        t_token token;
-    }           str;
-}               t_lexer;
+short       ft_strcmp(const char *s1, const char *s2);
+size_t	    ft_strlen(const char *s);
 
 #endif
