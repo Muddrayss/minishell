@@ -31,13 +31,6 @@ typedef enum e_redirection_type
     REDIR_CLOSE_FD              // 'n<&-'
 }	t_redirection_type;
 
-typedef struct s_vars
-{
-	char			*name;
-	char			*value; //con getenv(name);
-	struct s_vars	*next;
-}	t_vars;
-
 typedef struct s_redirection
 {
     t_redirection_type	type;
