@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 18:08:39 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/09 18:31:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ t_list	*lexer(char *input, t_data *data)
 {
     unsigned int    i;
     t_lexer   		*content;
-    t_list         	*lexered_params_head;
+    t_list         	*lexered_params;
 
-	lexered_params_head = NULL;
+	lexered_params = NULL;
+    data->lexered_params = &lexered_params;
     while (*input != '\0')
     {
         i = 0;
@@ -42,19 +43,21 @@ t_list	*lexer(char *input, t_data *data)
 			if (!content->str.cmd)
 				ft_quit(8, "failed to allocate memory", data);
             ft_strlcpy(content->str.cmd, input, i + 1);
-			ft_lstadd_back(&lexered_params_head, ft_lstnew(content));
+			ft_lstadd_back(&lexered_params, ft_lstnew(content));
             input += i;
             i = 0;
         }
 		if (*input != '\0')
 		{
 			content = (t_lexer *)malloc(sizeof(t_lexer));
+            if (!content)
+                ft_quit(10, "failed to allocate memory", data);
 			content->type = TOKEN;
        	 	content->str.token = lexer_get_token(*input++);
-			ft_lstadd_back(&lexered_params_head, ft_lstnew(content));
+			ft_lstadd_back(&lexered_params, ft_lstnew(content));
 		}
     }
-	return (lexered_params_head);
+	return (lexered_params);
 }
 
 static t_token lexer_get_token(char c)

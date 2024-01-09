@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 17:17:20 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/09 19:51:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,14 @@ typedef struct s_vars
 typedef struct s_redirection
 {
     t_redirection_type	type;
-    int                 fd;         // se serve, altrimenti -42
-    char				*filename; 	// se serve (nome file o limiter dell'here_doc), altrimenti NULL
-}	t_redirection;
+    int                 fds[2];
+}	t_redir;
 
 //TODO aggiungere un placeholder in cmd_args per ricordarsi a che punto eseguire una redirection
 
 typedef struct s_parser
 {
-    char	**cmd_args;
+    char	*cmd_str;
 	t_list	**redirections;
 }	t_parser;
 

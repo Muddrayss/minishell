@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 18:03:26 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/09 18:21:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	ft_quit(int id, char *msg, t_data *data)
 		else
 			ft_putstr_fd(msg, 1);
 	}
-	if (data->lexered_params_head)
+	if (data && data->lexered_params_head)
 		ft_lstclear(data->lexered_params_head, &del_content);
 	exit(id);
 	return ;
