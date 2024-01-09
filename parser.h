@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/08 19:49:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:22:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef enum e_redirection_type
     REDIR_INPUT_FD,             // '<&n'
     REDIR_OUTPUT_FD,            // '>&n'
     REDIR_READ_WRITE,           // '<>'
-    REDIR_READ_WRITE_FD         // 'n<>'
+    REDIR_READ_WRITE_FD,        // 'n<>'
     REDIR_FD_DUP_AND_CLOSE,     // 'n>&n'
     REDIR_FD_DUP,               // 'n>&m-'
     REDIR_APPEND_FD,            // '>>&n'
@@ -41,7 +41,7 @@ typedef struct s_vars
 typedef struct s_redirection
 {
     t_redirection_type	type;
-    int                 fd;         // se serve, altrimenti -42
+    int                 fds[2];
     char				*filename; 	// se serve (nome file o limiter dell'here_doc), altrimenti NULL
 }	t_redirection;
 

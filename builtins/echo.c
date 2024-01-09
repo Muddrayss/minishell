@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 19:39:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:24:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     {
         write(1, argv[i], ft_strlen(argv[i]));
         if (i < argc - 1)
-            write(1, " ", 1);            
+            write(1, " ", 1);
         i++;
     }
     if (is_n == false)

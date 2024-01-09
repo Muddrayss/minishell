@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/08 19:49:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/09 14:02:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,28 @@
 
 t_list    **parser(t_list **lexered_params_head)
 {
-    t_list	    **parsed_params_head;
-    t_list      *lex_node;
-    t_parser    *pars_content;
-    t_lexer     *lex_content;
-    char        *cmd_str;
+    t_list	  		**parsed_params_head;
+    t_list   		*lex_node;
+    t_parser 		*pars_content;
+    t_lexer			*lex_content;
+    char			*cmd_str;
+    static char		c;
+	unsigned int	len;
 
     parsed_params_head = (t_list **)malloc(sizeof(t_list *));
     if (!parsed_params_head)
         ft_quit(12, "failed to allocate memory");
-    pars_content = init_elem();
+    pars_content = new_elem();
     lex_node = *lexered_params_head;
     while (lex_node)
     {
+		//TODO invece di usare strjoin che diventa complicato per le malloc, controllare prima la lunghezza della stringa e fare strcat
         lex_content = (t_lexer *)lex_node->content;
         if (lex_content->type == CMD)
             ft_strjoin(cmd_str, lex_content->str.cmd);
         if (lex_content->type == TOKEN)
         {
+            ft_strjoin(cmd_str, &c);
             if (lex_content->str.token == PIPE)
             {
                 ft_lstadd_back(parsed_params_head, ft_lstnew(pars_content));
@@ -51,7 +55,8 @@ static t_parser *new_elem(void)
     if (!elem)
         ft_quit(10, "failed to allocate memory");
     elem->cmd_args = NULL;
-    if (!elem->vars)
+    elem->redirections = (t_list **)malloc(sizeof(t_list *));
+    if (!elem->redirections)
         ft_quit(11, "failed to allocate memory");
-    elem->vars = NULL;
+    *(elem->redirections) = NULL;
 }

@@ -34,9 +34,9 @@ casi extra:
 
 - (n< infile)           apre infile sul fd n per un utilizzo futuro
 - (n<&-)                chiude il fd numero n
-- (n> outfile)			redirige l'output che andrebbe sull FD 3 nell outfile
+- (n> outfile)			redirige l'output che andrebbe sull FD n nell outfile
 - (<> outfile)          apre outfile sia per read che per write
-- (3<>outfile)          apre outfile sia per read che per write sul FD 3
+- (n<>outfile)          apre outfile sia per read che per write sul FD n
 
 casi output:
 
