@@ -6,38 +6,42 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/10 01:19:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:17:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# define PREV 0
-# define NEXT 1
+# define LEFT  0
+# define RIGHT 1
 
 typedef enum e_redirection_type
 {
-    REDIR_INPUT,                // '<'
-    REDIR_OUTPUT,               // '>'
-    REDIR_APPEND,               // '>>'
-    REDIR_HEREDOC,              // '<<'
+    REDIR_INPUT,                // 'filename <'
+    REDIR_HEREDOC,              // '<< limiter'
     REDIR_INPUT_FD,             // '<&n'
+    REDIR_OUTPUT,               // '> filename'
     REDIR_OUTPUT_FD,            // '>&n'
-    REDIR_READ_WRITE,           // '<>'
-    REDIR_READ_WRITE_FD,        // 'n<>'
-    REDIR_FD_DUP_AND_CLOSE,     // 'n>&n'
-    REDIR_FD_DUP,               // 'n>&m-'
-    REDIR_APPEND_FD,            // '>>&n'
-    REDIR_INPUT_DUP,            // 'n<'
+    REDIR_FD_DUP,               // 'n>&n'
     REDIR_OUTPUT_DUP,           // 'n>'
-    REDIR_CLOSE_FD              // 'n<&-'
+    REDIR_APPEND,               // '>> filename'
+    REDIR_APPEND_FD,            // '>>&n'
 }	t_redirection_type;
 
 typedef struct s_redirection
 {
     t_redirection_type	type;
-    int                 fds[2];
+    union u_input
+    {
+        int     fd;
+        char    *filename; //o limiter in caso dell heredoc
+    }                   input;
+    union u_output
+    {
+        int     fd;
+        char    *filename;
+    }                   output;
 }	t_redir;
 
 //TODO aggiungere un placeholder in cmd_args per ricordarsi a che punto eseguire una redirection

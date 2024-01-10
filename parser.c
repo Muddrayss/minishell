@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/10 01:27:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/10 13:19:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	t_parser		*content_par;
 	t_lexer			*prev_cmd_elem;
 	t_lexer			*content_lex;
-	t_lexer			*next_cmd_elem;
 	char			*cmd_str;
 	size_t			size;
 
@@ -37,14 +36,13 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 		}
 		else if (content_lex->type == TOKEN)
 		{
-			next_cmd_elem = get_next_cmd_elem(lexered_params);
 			if (content_lex->str.token == PIPE)
 			{
 				ft_lstadd_back(parsed_params, ft_lstnew(content_par));
 				content_par = new_elem(data);
 			}
 			else if (content_lex->str.token == REDIR_L)
-				handle_redir_l(prev_cmd_elem->str.cmd, next_cmd_elem->str.cmd, content_par, data);
+				handle_redir_l(lexered_params, prev_cmd_elem, content_par, data); //in caso di doppio token, fare next->next alla lista
 		}
 		lexered_params = lexered_params->next;
 	}
@@ -65,26 +63,60 @@ static t_lexer	*get_next_cmd_elem(t_list *lexered_params)
 	return (NULL);
 }
 
-static void	handle_redir_l(char *prev_cmd,  char *next_cmd, t_parser *content_par, t_data *data)
+static void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
 {
-	t_redir	*redir_content;
+	t_redir			*redir_content;
+	t_lexer			*next_cmd_elem;
+	t_token			closest_token;
+	unsigned int	token_streak;
 
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
 		ft_quit(12, "failed to allocate memory", data);
-	redir_content->fds[0] = -42;
-	redir_content->fds[1] = STDIN_FILENO;
-	add_left_right_fds(&redir_content->fds, prev_cmd, PREV, data);
-	add_left_right_fds(&redir_content->fds, next_cmd, NEXT, data);
+	redir_content->input.fd = -42;
+	redir_content->output.fd = STDIN_FILENO;
+	token_streak = check_token_streak(&closest_token, lexered_params);
+	if (token_streak == 2 && closest_token == REDIR_L)
+	{
+		handle_heredoc();
+		free(redir_content);
+		return ;
+	}
+	else if (token_streak >= 2 && closest_token != PIPE)
+	{
+		ft_putstr_fd("Parse error near '<'", 1);
+		free(redir_content);
+		return ;
+	}
+	next_cmd_elem = get_next_cmd_elem(lexered_params);
+	add_left_right_fds(&redir_content->output.fd, next_cmd_elem->str.cmd, RIGHT, data);
+	if (redir_content->output.fd == -42)
+		add_left_right_filenames(&redir_content->input.filename, prev_cmd_elem->str.cmd, LEFT, data);
 	content_par->redirections = NULL;
 	ft_lstadd_front(&content_par->redirections, ft_lstnew(redir_content));
 }
 
-static void	add_left_right_fds(int *fds[], char *cmd, uint8_t flag, t_data *data)
+static unsigned int	check_token_streak(t_token *closest_token, t_list *lexered_params)
+{
+	unsigned int	token_streak;
+	t_list			*tmp;
+
+	token_streak = 0;
+	tmp = lexered_params;
+	while (((t_lexer *)tmp->content)->type == TOKEN)
+	{
+		token_streak++;
+		tmp = tmp->next;
+	}
+	*closest_token = ((t_lexer *)lexered_params->next->content)->str.token;
+	return (token_streak);
+}
+
+static void	add_left_right_fds(int *fd, char *cmd, uint8_t flag, t_data *data)
 {
 	unsigned int	i;
 
-	if (flag == PREV)
+	if (flag == LEFT)
 	{
 		i = ft_strlen(cmd) - 1;
 		while (cmd[i] && ft_isdigit(cmd[i]))
@@ -99,16 +131,16 @@ static void	add_left_right_fds(int *fds[], char *cmd, uint8_t flag, t_data *data
 			i++;
 	}
 	if (is_shell_space(cmd[i]))
-		(*fds)[flag] = ft_atoi(cmd + i * (flag == PREV));
+		*fd = ft_atoi(cmd + i * (flag == LEFT));
 }
 
-static void	add_filename_fds(int *fds[], char *cmd, uint8_t flag, t_data *data)
+static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag, t_data *data)
 {
 	unsigned int	i;
 	char			*tmp;
 	char			*filename;
 
-	if (flag == PREV)
+	if (flag == LEFT)
 	{
 		i = ft_strlen(cmd) - 1;
 		while (cmd[i] && is_shell_space(cmd[i]))
@@ -118,27 +150,23 @@ static void	add_filename_fds(int *fds[], char *cmd, uint8_t flag, t_data *data)
 		tmp = ft_strdup(&cmd[i + 1]);
 		if (!tmp)
 			ft_quit(16, "failed to allocate memory", data);
-		filename = ft_strtrim(tmp, " \n\t");
+		*filename = ft_strtrim(tmp, " \n\t");
 		free(tmp);
-		if (!filename)
+		if (!*filename)
 			ft_quit(16, "failed to allocate memory", data);
 	}
-	else if (flag == NEXT)
+	else if (flag == RIGHT)
 	{
 		i = 0;
 		while (cmd[i] && is_shell_space(cmd[i]))
 			i++;
-		filename = ft_strdup(&cmd[i]);
-		if (!filename)
+		*filename = ft_strdup(&cmd[i]);
+		if (!*filename)
 			ft_quit(16, "failed to allocate memory", data);
 		while (cmd[i] && !is_shell_space(cmd[i]))
 			i++;
-		filename[i] = '\0';
+		*filename[i] = '\0';
 	}
-	(*fds)[flag] = open(filename, O_RDWR | O_CREAT);
-	free(filename);
-	if ((*fds)[flag] == -1)
-		ft_putstr_fd("No such file or directory", 1);
 }
 
 static unsigned int	get_len(t_list *lexered_params)
