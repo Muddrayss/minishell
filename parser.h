@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/10 13:17:09 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/10 14:53:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,20 @@
 # define LEFT  0
 # define RIGHT 1
 
-typedef enum e_redirection_type
+typedef enum e_redir_type
 {
     REDIR_INPUT,                // 'filename <'
     REDIR_HEREDOC,              // '<< limiter'
     REDIR_INPUT_FD,             // '<&n'
-    REDIR_OUTPUT,               // '> filename'
+    REDIR_OUTPUT,               // '> filename o n> filename'
     REDIR_OUTPUT_FD,            // '>&n'
-    REDIR_FD_DUP,               // 'n>&n'
-    REDIR_OUTPUT_DUP,           // 'n>'
-    REDIR_APPEND,               // '>> filename'
+    REDIR_APPEND,               // '>> filename o n>> filename'
     REDIR_APPEND_FD,            // '>>&n'
-}	t_redirection_type;
+}	t_redir_type;
 
-typedef struct s_redirection
+typedef struct s_redir
 {
-    t_redirection_type	type;
+    t_redir_type	type;
     union u_input
     {
         int     fd;
@@ -51,5 +49,11 @@ typedef struct s_parser
     char	*cmd_str;
 	t_list	**redirections;
 }	t_parser;
+
+void	        handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data);
+void	        handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data);
+unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params);
+t_parser	    *new_elem(t_data *data);
+unsigned int	get_len_between_pipes(t_list *lexered_params);
 
 #endif
