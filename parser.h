@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/10 14:53:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/11 14:58:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ typedef struct s_parser
 {
     char	*cmd_str;
 	t_list	**redirections;
+    char    **env_vars;
 }	t_parser;
 
 void	        handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data);
 void	        handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data);
 unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params);
-t_parser	    *new_elem(t_data *data);
+t_parser	    *new_elem(size_t *size, t_list *lexered_params, t_data *data);
 unsigned int	get_len_between_pipes(t_list *lexered_params);
 
 #endif
