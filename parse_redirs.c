@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/10 15:04:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/12 15:37:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@ static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag, t
 
 void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
 {
-	t_redir			*redir_content;
-	t_lexer			*next_cmd_elem;
-	t_token			next_token;
-	unsigned int	token_streak;
+	t_redir				*redir_content;
+	t_lexer				*next_cmd_elem;
+	t_token				next_token;
+	unsigned int		token_streak;
+	//placeholder per le redir
+	static const char	ph_redir
+		= -42;
 
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
@@ -50,16 +53,20 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 		    add_left_right_filenames(&redir_content->input.filename, prev_cmd_elem->str.cmd, LEFT, data);
         }
     }
-	content_par->redirections = NULL;
-	ft_lstadd_front(&content_par->redirections, ft_lstnew(redir_content));
+	content_par->redirs = NULL;
+	ft_lstadd_front(&content_par->redirs, ft_lstnew(redir_content));
+	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 1);
 }
 
 void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
 {
-	t_redir			*redir_content;
-	t_lexer			*next_cmd_elem;
-	t_token			next_token;
-	unsigned int	token_streak;
+	t_redir				*redir_content;
+	t_lexer				*next_cmd_elem;
+	t_token				next_token;
+	unsigned int		token_streak;
+	//placeholder per le redir
+	static const char	ph_redir
+		= -42;
 
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
@@ -86,8 +93,9 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 		free(redir_content);
 		return ;
 	}
-	content_par->redirections = NULL;
-	ft_lstadd_front(&content_par->redirections, ft_lstnew(redir_content));
+	content_par->redirs = NULL;
+	ft_lstadd_front(&content_par->redirs, ft_lstnew(redir_content));
+	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 1);
 }
 
 static void	add_left_right_fds(int *fd, char *cmd, uint8_t flag, t_data *data)
@@ -103,7 +111,7 @@ static void	add_left_right_fds(int *fd, char *cmd, uint8_t flag, t_data *data)
 	else
 	{
 		i = 0;
-		if (cmd[i] == '&')
+		if (cmd[i] == '&') //TODO gestire il parse error in caso di piu' caratteri '&' di fila
 			i++;
 		while (cmd[i] && ft_isdigit(cmd[i]))
 			i++;
@@ -136,6 +144,8 @@ static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag, t
 	else if (flag == RIGHT)
 	{
 		i = 0;
+		if (cmd[i] == '&')
+			i++;
 		while (cmd[i] && is_shell_space(cmd[i]))
 			i++;
 		*filename = ft_strdup(&cmd[i]);

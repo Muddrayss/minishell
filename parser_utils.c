@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/11 14:59:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:13:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 	if (!elem)
 		ft_quit(10, "failed to allocate memory", data);
 	elem->cmd_str = NULL;
-	elem->redirections = NULL;
+	elem->redirs = NULL;
 	*size = get_len_between_pipes(lexered_params) + 1;
 	num_env = get_env_num_between_pipes(lexered_params->next);
 	elem->cmd_str = (char *)malloc(sizeof(char) * *size);
@@ -67,7 +67,18 @@ unsigned int	get_len_between_pipes(t_list *lexered_params)
 	{
 		l_content = *((t_lexer *)lexered_params->content);
 		if (l_content.type == CMD)
-			cmd_len += ft_strlen(l_content.str.cmd);
+			cmd_len += ft_strlen(l_content.str.cmd) + 1; //per eventuali token
 		lexered_params = lexered_params->next;
 	}
+}
+
+void	remove_word(char **str, unsigned int starting_idx, uint8_t flag)
+{
+	
+}
+
+
+void	remove_num(char **str, unsigned int starting_idx, uint8_t flag)
+{
+	
 }

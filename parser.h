@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/11 14:58:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/12 14:56:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_redir
 typedef struct s_parser
 {
     char	*cmd_str;
-	t_list	**redirections;
+	t_list	*redirs;
     char    **env_vars;
 }	t_parser;
 
