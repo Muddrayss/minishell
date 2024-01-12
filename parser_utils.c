@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/12 17:58:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/12 19:57:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	remove_word(char **str, unsigned int starting_idx, uint8_t flag, t_data *da
 		ft_strlcat(new_str, *str, i + 1);
 		ft_strlcat(new_str, *str + starting_idx, j + 1);
 	}
-	else if (flag == RIGHT)
+	else
 	{
 		while (is_shell_space((*str)[i]))
 			i++;
@@ -102,14 +102,42 @@ void	remove_word(char **str, unsigned int starting_idx, uint8_t flag, t_data *da
 		if (!new_str)
 			ft_quit(15, "failed to allocate memory", data);
 		ft_strlcat(new_str, *str, starting_idx + 1);
-		ft_strlcat();
+		ft_strlcat(new_str, *str + i, j - i + 1);
 	}
 	free(*str);
-	str = new_str;
+	*str = new_str;
 }
 
-
-void	remove_num(char **str, unsigned int starting_idx, uint8_t flag)
+void	remove_num(char **str, unsigned int starting_idx, uint8_t flag, t_data *data)
 {
-	
+	unsigned int	i;
+	unsigned int	j;
+	char			*new_str;
+
+	i = starting_idx;
+	j = ft_strlen(&(*str)[starting_idx]);
+	if (flag == LEFT)
+	{
+		while ((*str)[i] > 0 && ft_isdigit((*str)[i]))
+			i--;
+		new_str = (char *)ft_calloc(i + j + 1, sizeof(char));
+		if (!new_str)
+			ft_quit(15, "failed to allocate memory", data);
+		ft_strlcat(new_str, *str, i + 1);
+		ft_strlcat(new_str, *str + starting_idx, j + 1);
+	}
+	else
+	{
+		if ((*str)[i] == '&')
+			i++;
+		while ((*str)[i] > 0 && ft_isdigit((*str)[i]))
+			i++;
+		new_str = (char *)ft_calloc(starting_idx + (j - i) + 1, sizeof(char));
+		if (!new_str)
+			ft_quit(15, "failed to allocate memory", data);
+		ft_strlcat(new_str, *str, starting_idx + 1);
+		ft_strlcat(new_str, *str + i, j - i + 1);
+	}
+	free(*str);
+	*str = new_str;
 }
