@@ -6,12 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/12 16:57:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/12 20:08:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void replace_placeholders(t_list *parsed_params, t_data *data);
 static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par, unsigned int i, t_data *data);
 
 t_list	*parser(t_list *lexered_params, t_data *data)
@@ -64,25 +65,27 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 		node = node->next;
 	}
 	ft_lstclear(lexered_params, &del_content);
-	//fare sostituzione di tokens con placeholders e sostituzione di ENV variables con il loro valore
+	replace_placeholders(parsed_params, data);
 	return (parsed_params);
 }
 
-static void replace_placeholder(t_list *parsed_params, t_data *data)
+static void replace_placeholders(t_list *parsed_params, t_data *data)
 {
 	t_list			*node;
 	t_parser		*content_par;
 	t_redir			*redir;
 	unsigned int	i;
+	unsigned int	j;
 
 	node = parsed_params;
 	while (node)
 	{
 		content_par = (t_parser *)node->content;
 		i = 0;
+		j = 0;
 		while (content_par->cmd_str[i] != '\0')
 		{
-			if (content_par->cmd_str[i] == -42)
+			if (content_par->cmd_str[i] == PH_REDIR)
 			{
 				redir = (t_redir *)content_par->redirs->content;
 				if (redir->type == REDIR_INPUT)
@@ -97,8 +100,8 @@ static void replace_placeholder(t_list *parsed_params, t_data *data)
 					remove_num(&content_par->cmd_str, i, LEFT, data);
 				}
 			}
-			else if (content_par->cmd_str[i] == -43)
-				replace_env_var(&content_par->cmd_str, i);
+			else if (content_par->cmd_str[i] == PH_ENV)
+				replace_env_var(&content_par->cmd_str, content_par->env_vars[j++], i, data);
 			i++;
 		}
 		node = node->next;
@@ -111,7 +114,7 @@ static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par, unsigned i
 	unsigned int		i;
 	//placeholder per il $
 	static const char	ph_env
-		= -43;
+		= PH_ENV;
 
 	path_name = ft_strdup(prev_cmd_elem);
 	if (!path_name)

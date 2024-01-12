@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/12 19:23:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/12 20:01:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # define LEFT  0
 # define RIGHT 1
+
+# define PH_REDIR   -42
+# define PH_ENV     -43
 
 typedef enum e_redir_type
 {
