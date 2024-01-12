@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/12 15:45:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/12 16:57:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	return (parsed_params);
 }
 
-static void replace_placeholder(t_list *parsed_params)
+static void replace_placeholder(t_list *parsed_params, t_data *data)
 {
 	t_list			*node;
 	t_parser		*content_par;
@@ -86,15 +86,15 @@ static void replace_placeholder(t_list *parsed_params)
 			{
 				redir = (t_redir *)content_par->redirs->content;
 				if (redir->type == REDIR_INPUT)
-					remove_word(&content_par->cmd_str, i, LEFT);
+					remove_word(&content_par->cmd_str, i, LEFT, data);
 				else if (redir->type == REDIR_HEREDOC)
-					remove_word(&content_par->cmd_str, i, RIGHT);
+					remove_word(&content_par->cmd_str, i, RIGHT, data);
 				else if (redir->type == REDIR_INPUT_FD || redir->type == REDIR_OUTPUT_FD || redir->type == REDIR_APPEND_FD)
-					remove_num(&content_par->cmd_str, i, RIGHT); //rimuove numeri a piu cifre e il carattere '&'
+					remove_num(&content_par->cmd_str, i, RIGHT, data); //rimuove numeri a piu cifre e il carattere '&'
 				else if (redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
 				{
-					remove_word(&content_par->cmd_str, i, RIGHT);
-					remove_num(&content_par->cmd_str, i, LEFT);
+					remove_word(&content_par->cmd_str, i, RIGHT, data);
+					remove_num(&content_par->cmd_str, i, LEFT, data);
 				}
 			}
 			else if (content_par->cmd_str[i] == -43)
