@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 14:54:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 15:08:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 # define PH_REDIR   -42
 # define PH_ENV     -43
+
+//TODO sostituire ogni enum con variabili di un singolo byte
 
 typedef enum e_redir_type
 {

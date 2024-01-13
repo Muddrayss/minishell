@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 14:48:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 15:09:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par, unsigned i
 
 t_list	*parser(t_list *lexered_params, t_data *data)
 {
-	t_list			*parsed_params;
 	t_parser		*content_par;
+	t_list			*parsed_params;
+	t_list			*node;
+	size_t			size;
 	t_lexer			*prev_cmd_elem;
 	t_lexer			*content_lex;
 	char			*cmd_str;
-	size_t			size;
-	t_redir_type	redir_type;
 	unsigned int	i;
-	t_token			next_token;
 	unsigned int	token_streak;
-	t_list			*node;
+	t_redir_type	redir_type;
+	t_token			next_token;
 
 	node = lexered_params;
 	content_par = new_elem(&size, node, data);
