@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 15:09:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 19:17:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,8 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	size_t			size;
 	t_lexer			*prev_cmd_elem;
 	t_lexer			*content_lex;
-	char			*cmd_str;
 	unsigned int	i;
 	unsigned int	token_streak;
-	t_redir_type	redir_type;
-	t_token			next_token;
 
 	node = lexered_params;
 	content_par = new_elem(&size, node, data);
@@ -45,7 +42,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 		{
 			if (content_lex->str.token == PIPE)
 			{
-				ft_lstadd_back(parsed_params, ft_lstnew(content_par));
+				ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
 				i = 0;
 				content_par = new_elem(&size, node->next, data);
 				node = node->next;
@@ -54,17 +51,18 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 			else if (content_lex->str.token == REDIR_L)
 				handle_redir_l(node, prev_cmd_elem, content_par, data);
 			else if (content_lex->str.token == REDIR_R)
-				handle_redir_r(node, prev_cmd_elem, content_par, data);
+				handle_redir_r(node, content_par, data);
 			else if (content_lex->str.token == ENV)
 				handle_env(prev_cmd_elem, content_par, i++, data);
 			//TODO valutare se fare qualche eccezione per i token di fila;
+			//TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un > 
 			token_streak = check_token_streak(NULL, node);
 			while (token_streak-- > 0)
 				node = node->next;
 		}
 		node = node->next;
 	}
-	ft_lstclear(lexered_params, &del_content);
+	ft_lstclear(&lexered_params, &del_content);
 	replace_placeholders(parsed_params, data);
 	return (parsed_params);
 }
@@ -98,7 +96,7 @@ static void replace_placeholders(t_list *parsed_params, t_data *data)
 					remove_num(&content_par->cmd_str, i, RIGHT, data); //rimuove numeri a piu cifre e il carattere '&'
 			}
 			else if (content_par->cmd_str[i] == PH_ENV)
-				replace_env_var(&content_par->cmd_str, content_par->env_vars[j++], i, data);
+				replace_env_var(&content_par->cmd_str, i, content_par->env_vars[j++], data);
 			i++;
 		}
 		node = node->next;
@@ -108,18 +106,18 @@ static void replace_placeholders(t_list *parsed_params, t_data *data)
 static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par, unsigned int i, t_data *data)
 {
 	char				*path_name;
-	unsigned int		i;
+	unsigned int		j;
 	//placeholder per il $
 	static const char	ph_env
 		= PH_ENV;
 
-	path_name = ft_strdup(prev_cmd_elem);
+	path_name = ft_strdup(prev_cmd_elem->str.cmd);
 	if (!path_name)
 		ft_quit(15, "failed to allocate memory", data);
-	i = 0;
-	while (!is_shell_space(path_name[i]))
-		i++;
-	path_name[i] = '\0';
+	j = 0;
+	while (!is_shell_space(path_name[j]))
+		j++;
+	path_name[j] = '\0';
 	content_par->env_vars[i] = getenv(path_name);
 	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str) + 1);
 	free(path_name);

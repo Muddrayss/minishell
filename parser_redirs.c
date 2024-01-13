@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_redirs.c                                     :+:      :+:    :+:   */
+/*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 14:46:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 19:52:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	add_left_right_fds(int *fd, char *cmd, uint8_t flag, t_data *data);
-static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag, t_data *data);
+static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag);
+static void		add_left_right_filenames(char **filename, char *cmd, uint8_t flag, t_data *data);
 
 void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
 {
@@ -46,7 +46,7 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	}
     else
     {
-	    add_left_right_fds(&redir_content->output.fd, next_cmd_elem->str.cmd, RIGHT, data);
+	    add_left_right_fds(&redir_content->output.fd, next_cmd_elem->str.cmd, RIGHT);
 	    if (redir_content->output.fd == -42)
         {
             redir_content->type = REDIR_INPUT;
@@ -58,7 +58,7 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 1);
 }
 
-void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
+void	handle_redir_r(t_list *lexered_params, t_parser *content_par, t_data *data)
 {
 	t_redir				*redir_content;
 	t_lexer				*next_cmd_elem;
@@ -76,8 +76,15 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
     redir_content->type = REDIR_OUTPUT_FD;
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
 	token_streak = check_token_streak(&next_token, lexered_params);
-	add_left_right_fds(&redir_content->output.fd, next_cmd_elem->str.cmd, RIGHT, data);
-	add_left_right_fds(&redir_content->output.fd, next_cmd_elem->str.cmd, LEFT, data);
+	if (token_streak > 3)
+	{
+		ft_putstr_fd("Parse error near: '>'", 1);
+		free(redir_content);
+		return ;
+	}
+	if (add_left_right_fds(&redir_content->output.fd, next_cmd_elem->str.cmd, RIGHT) == -1)
+		add_left_right_filenames(&redir_content->output.filename, next_cmd_elem->str.cmd, RIGHT, data);
+	add_left_right_fds(&redir_content->output.fd, next_cmd_elem->str.cmd, LEFT);
     if (redir_content->output.fd == -42)
     {
         redir_content->type = REDIR_OUTPUT;
@@ -87,18 +94,13 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
     }
 	if (redir_content->type != REDIR_APPEND && token_streak == 2 && next_token == REDIR_R)
 		redir_content->type = REDIR_APPEND_FD;
-	else if (token_streak >= 2)
-	{
-		ft_putstr_fd("Parse error near '>'", 1);
-		free(redir_content);
-		return ;
-	}
+
 	content_par->redirs = NULL;
 	ft_lstadd_front(&content_par->redirs, ft_lstnew(redir_content));
 	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 1);
 }
 
-static void	add_left_right_fds(int *fd, char *cmd, uint8_t flag, t_data *data)
+static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
 {
 	unsigned int	i;
 
@@ -118,14 +120,18 @@ static void	add_left_right_fds(int *fd, char *cmd, uint8_t flag, t_data *data)
 	}
 	if (is_shell_space(cmd[i]))
 		*fd = ft_atoi(cmd + i * (flag == LEFT)); //TODO	gestire il caso di un FD che supera MAX INT (direttamente in atoi)
+	else
+		return (-1);
+	return (0);
 }
 
 static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag, t_data *data)
 {
 	unsigned int	i;
 	char			*tmp;
-	char			*filename;
+	char			*name;
 
+	name = NULL;
 	if (flag == LEFT)
 	{
 		i = ft_strlen(cmd) - 1;
@@ -136,23 +142,23 @@ static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag, t
 		tmp = ft_strdup(&cmd[i + 1]);
 		if (!tmp)
 			ft_quit(16, "failed to allocate memory", data);
-		*filename = ft_strtrim(tmp, " \n\t");
+		name = ft_strtrim(tmp, " \n\t");
 		free(tmp);
-		if (!*filename)
+		if (!name)
 			ft_quit(16, "failed to allocate memory", data);
 	}
-	else if (flag == RIGHT)
+	else if (flag == RIGHT) //TODO gestire il caso in cui c'e' un token tipo & prima del filename
 	{
 		i = 0;
-		if (cmd[i] == '&')
-			i++;
 		while (cmd[i] && is_shell_space(cmd[i]))
 			i++;
-		*filename = ft_strdup(&cmd[i]);
-		if (!*filename)
+		name = ft_strdup(&cmd[i]);
+		if (!name)
 			ft_quit(16, "failed to allocate memory", data);
 		while (cmd[i] && !is_shell_space(cmd[i]))
 			i++;
-		*filename[i] = '\0';
+		name[i] = '\0';
 	}
+	free(*filename);
+	*filename = name;
 }

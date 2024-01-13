@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 18:21:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 15:12:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ void	ft_quit(int id, char *msg, t_data *data)
 		else
 			ft_putstr_fd(msg, 1);
 	}
-	if (data && data->lexered_params_head)
-		ft_lstclear(data->lexered_params_head, &del_content);
+	if (data && data->lexered_params)
+		ft_lstclear(data->lexered_params, &del_content);
 	exit(id);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 15:05:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 15:11:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ typedef struct s_data
 {
 	char	*cmd_path;
 	char	**cmd_args;
-	t_list	**lexered_params_head;
+	t_list	**lexered_params;
 }			t_data;
 
-# include "parser.h"
 # include "lexer.h"
+# include "parser.h"
 # include "error.h"
 
 char		*get_cmd(char *path, char *cmd, t_data *data);

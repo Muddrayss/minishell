@@ -3,19 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/01/09 17:19:09 by egualand         ###   ########.fr        #
+#    Updated: 2024/01/13 16:09:26 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
-SRCS = 	minishell.c minishell_utils.c lexer.c signals.c
+SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c 
 
 OBJS = $(SRCS:.c=.o)
-HEADERS = minishell.h lexer.h
+HEADERS = minishell.h lexer.h parser.h error.h
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
@@ -30,7 +30,7 @@ LIBFT_LIB = $(LIBFT_DIR)/$(LIBFT)
 all: $(NAME)
 
 $(LIBFT_LIB):
-	@make bonus -C $(LIBFT_DIR)
+	@make bonus -C $(LIBFT_DIR) >/dev/null
 
 $(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
 	@$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) -L $(LIBFT_DIR) -lft -lreadline -o $(NAME)
@@ -41,12 +41,12 @@ $(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
 
 clean:
 	@$(RM) $(OBJS)
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@make clean -C $(LIBFT_DIR) >/dev/null
 	@echo "Cleaning of $(NAME) done!"
 
 fclean: clean
 	@$(RM) $(NAME)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@make fclean -C $(LIBFT_DIR) >/dev/null
 	@echo "Full cleaning of $(NAME) done!"
 
 re: fclean all

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 13:53:47 by egualand          #+#    #+#             */
-/*   Updated: 2023/10/14 13:53:53 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/13 19:05:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 	size_t	dst_l;
 	size_t	src_l;
 
+	if (!src || !dst)
+		return (size);
 	i = ft_strlen(dst);
 	dst_l = ft_strlen(dst);
 	src_l = ft_strlen(src);

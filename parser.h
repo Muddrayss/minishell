@@ -6,18 +6,21 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 15:08:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 19:10:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# define LEFT  0
+# define LEFT 0
 # define RIGHT 1
 
-# define PH_REDIR   -42
-# define PH_ENV     -43
+# define PH_REDIR -42
+# define PH_ENV -43
+
+# define CMD_LEN 0
+# define ENV_NUM 1
 
 //TODO sostituire ogni enum con variabili di un singolo byte
 
@@ -54,11 +57,11 @@ typedef struct s_parser
     char    **env_vars;
 }	t_parser;
 
+t_list	        *parser(t_list *lexered_params, t_data *data);
 void	        handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data);
-void	        handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data);
+void	        handle_redir_r(t_list *lexered_params, t_parser *content_par, t_data *data);
 unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params);
 t_parser	    *new_elem(size_t *size, t_list *lexered_params, t_data *data);
-unsigned int	get_len_between_pipes(t_list *lexered_params);
 void	        remove_word(char **str, unsigned int starting_idx, uint8_t flag, t_data *data);
 void	        remove_num(char **str, unsigned int starting_idx, uint8_t flag, t_data *data);
 void	        replace_env_var(char **str, unsigned int starting_idx, char *env_var, t_data *data);
