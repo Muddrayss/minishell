@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/12 20:15:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 14:39:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
 		token_streak++;
 		tmp = tmp->next;
 	}
-	*next_token = ((t_lexer *)lexered_params->next->content)->str.token;
+	if (next_token)
+		*next_token = ((t_lexer *)lexered_params->next->content)->str.token;
 	return (token_streak);
 }
 

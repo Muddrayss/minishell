@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/12 20:01:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 14:54:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 typedef enum e_redir_type
 {
-    REDIR_INPUT,                // 'filename <'
+    REDIR_INPUT,                // '< filename'
     REDIR_HEREDOC,              // '<< limiter'
     REDIR_INPUT_FD,             // '<&n'
     REDIR_OUTPUT,               // '> filename o n> filename'
@@ -45,8 +45,6 @@ typedef struct s_redir
     }                   output;
 }	t_redir;
 
-//TODO aggiungere un placeholder in cmd_args per ricordarsi a che punto eseguire una redirection
-
 typedef struct s_parser
 {
     char	*cmd_str;
@@ -59,5 +57,8 @@ void	        handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_pa
 unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params);
 t_parser	    *new_elem(size_t *size, t_list *lexered_params, t_data *data);
 unsigned int	get_len_between_pipes(t_list *lexered_params);
+void	        remove_word(char **str, unsigned int starting_idx, uint8_t flag, t_data *data);
+void	        remove_num(char **str, unsigned int starting_idx, uint8_t flag, t_data *data);
+void	        replace_env_var(char **str, unsigned int starting_idx, char *env_var, t_data *data);
 
 #endif

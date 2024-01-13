@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 18:08:23 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/13 15:05:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "lexer.h"
-# include "libft/libft.h"
-# include "parser.h"
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -33,9 +30,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-// Errors codes
-# define SIGINT_ERROR 20
-# define SIGQUIT_ERROR 21
+# include "libft/libft.h"
 
 typedef struct s_data
 {
@@ -44,14 +39,15 @@ typedef struct s_data
 	t_list	**lexered_params_head;
 }			t_data;
 
+# include "parser.h"
+# include "lexer.h"
+# include "error.h"
+
 char		*get_cmd(char *path, char *cmd, t_data *data);
 void		free_matrix(char **matrix);
 void		ft_quit(int id, char *msg, t_data *data);
-// Lexer
-t_list		*lexer(char *input, t_data *data);
-bool		is_shell_space(char c);
-// Signals
-void		init_signals(void);
 void		del_content(void *content);
+bool		is_shell_space(char c);
+void		init_signals(void);
 
 #endif

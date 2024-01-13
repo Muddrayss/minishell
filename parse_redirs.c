@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/12 15:37:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 14:46:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ static void	add_left_right_fds(int *fd, char *cmd, uint8_t flag, t_data *data)
 			i++;
 	}
 	if (is_shell_space(cmd[i]))
-		*fd = ft_atoi(cmd + i * (flag == LEFT));
+		*fd = ft_atoi(cmd + i * (flag == LEFT)); //TODO	gestire il caso di un FD che supera MAX INT (direttamente in atoi)
 }
 
 static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag, t_data *data)

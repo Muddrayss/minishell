@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/12 20:08:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 14:48:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 			else if (content_lex->str.token == ENV)
 				handle_env(prev_cmd_elem, content_par, i++, data);
 			//TODO valutare se fare qualche eccezione per i token di fila;
-			token_streak = check_token_streak(&next_token, node);
+			token_streak = check_token_streak(NULL, node);
 			while (token_streak-- > 0)
 				node = node->next;
 		}
@@ -88,17 +88,14 @@ static void replace_placeholders(t_list *parsed_params, t_data *data)
 			if (content_par->cmd_str[i] == PH_REDIR)
 			{
 				redir = (t_redir *)content_par->redirs->content;
-				if (redir->type == REDIR_INPUT)
-					remove_word(&content_par->cmd_str, i, LEFT, data);
+				if (redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
+					remove_num(&content_par->cmd_str, i, LEFT, data);
+				if (redir->type == REDIR_INPUT || redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
+					remove_word(&content_par->cmd_str, i, RIGHT, data);
 				else if (redir->type == REDIR_HEREDOC)
 					remove_word(&content_par->cmd_str, i, RIGHT, data);
 				else if (redir->type == REDIR_INPUT_FD || redir->type == REDIR_OUTPUT_FD || redir->type == REDIR_APPEND_FD)
 					remove_num(&content_par->cmd_str, i, RIGHT, data); //rimuove numeri a piu cifre e il carattere '&'
-				else if (redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
-				{
-					remove_word(&content_par->cmd_str, i, RIGHT, data);
-					remove_num(&content_par->cmd_str, i, LEFT, data);
-				}
 			}
 			else if (content_par->cmd_str[i] == PH_ENV)
 				replace_env_var(&content_par->cmd_str, content_par->env_vars[j++], i, data);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/07 16:39:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/13 14:58:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ typedef struct s_lexer
         t_token token;
     }           str;
 }               t_lexer;
+
+t_list		*lexer(char *input, t_data *data);
 
 #endif
