@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 14:09:04 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/14 17:50:14 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,8 @@ typedef enum e_redir_type
 typedef struct s_redir
 {
 	t_redir_type	type;
-	union			u_input
-	{
-		int			fd;
-		char *filename; // o limiter in caso dell heredoc
-	} input;
-	union			u_output
-	{
-		int			fd;
-		char		*filename;
-	} output;
+	int				fds[2];
+	char 			*filename; // o limiter in caso dell heredoc
 }					t_redir;
 
 typedef struct s_parser
@@ -73,6 +65,9 @@ void				remove_num(char **str, unsigned int starting_idx,
 						uint8_t flag, t_data *data);
 void				replace_env_var(char **str, unsigned int starting_idx,
 						char *env_var, t_data *data);
-t_lexer		*get_next_cmd_elem(t_list *lexered_params);
+t_lexer				*get_next_cmd_elem(t_list *lexered_params);
+bool				is_empty_cmd(void *content);
+void				del_content_redirs(void *content);
+void				del_content_parser(void *content);
 
 #endif

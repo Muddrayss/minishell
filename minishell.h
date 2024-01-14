@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 15:11:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/14 17:53:10 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -30,8 +31,6 @@
 # include <termios.h>
 # include <unistd.h>
 
-# include "libft/libft.h"
-
 typedef struct s_data
 {
 	char	*cmd_path;
@@ -39,15 +38,15 @@ typedef struct s_data
 	t_list	**lexered_params;
 }			t_data;
 
+# include "error.h"
 # include "lexer.h"
 # include "parser.h"
-# include "error.h"
 
 char		*get_cmd(char *path, char *cmd, t_data *data);
 void		free_matrix(char **matrix);
 void		ft_quit(int id, char *msg, t_data *data);
-void		del_content(void *content);
 bool		is_shell_space(char c);
 void		init_signals(void);
+void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
 
 #endif

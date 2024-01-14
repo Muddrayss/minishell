@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
+#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/14 13:59:13 by egualand          #+#    #+#              #
-#    Updated: 2024/01/08 19:27:03 by craimond         ###   ########.fr        #
+#    Updated: 2024/01/14 15:50:35 by egualand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ BONUS = ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c \
 BONUS_OBJS = $(BONUS:.c=.o)
 
 
-CC = cc
+CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 

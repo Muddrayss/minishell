@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 15:12:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/14 18:03:52 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,27 +60,48 @@ bool	is_shell_space(char c)
 	return (false);
 }
 
-void	del_content(void *content)
+void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *))
 {
-	t_lexer	*lexer;
+	t_list	*tmp;
+	t_list	*prev;
 
-	lexer = (t_lexer *)content;
-	if (lexer->type == CMD)
-		free(lexer->str.cmd);
-	free(lexer);
+	tmp = *lst;
+	prev = NULL;
+	while (tmp)
+	{
+		if (f(tmp->content) == true)
+		{
+			if (!prev)
+				prev->next = tmp->next;
+			else
+				*lst = tmp->next;
+			ft_lstdelone(tmp, del);
+		}
+		else
+			prev = tmp;
+		tmp = tmp->next;
+	}
 }
 
 void	ft_quit(int id, char *msg, t_data *data)
 {
 	if (errno != EINTR)
 	{
+		
 		if (!msg)
 			ft_putstr_fd(strerror(errno), 1);
 		else
 			ft_putstr_fd(msg, 1);
 	}
-	if (data && data->lexered_params)
-		ft_lstclear(data->lexered_params, &del_content);
+	if (data)
+	{
+		if (data->cmd_args)
+			free_matrix(data->cmd_args);
+		if (data->cmd_path)
+			free(data->cmd_path);
+		if (data->lexered_params)
+			ft_lstclear(data->lexered_params, &del_content_lexer);
+	}
 	exit(id);
 	return ;
 }

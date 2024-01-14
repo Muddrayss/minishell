@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/09 18:31:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/14 17:30:47 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_list	*lexer(char *input, t_data *data)
             if (!content)
                 ft_quit(7, "failed to allocate memory", data);
 			content->type = CMD;
-			content->str.cmd = (char *)malloc(sizeof(char) * i + 1);
+			content->str.cmd = (char *)malloc(sizeof(char) * (i + 1));
 			if (!content->str.cmd)
 				ft_quit(8, "failed to allocate memory", data);
             ft_strlcpy(content->str.cmd, input, i + 1);
@@ -94,4 +94,14 @@ static bool is_token(char *str)
 			return (true);
 	}
 	return (false);
+}
+
+void	del_content_lexer(void *content)
+{
+	t_lexer	*elem;
+
+	elem = (t_lexer *)content;
+	if (elem->type == CMD)
+		free(elem->str.cmd);
+	free(elem);
 }

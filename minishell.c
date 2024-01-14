@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 14:15:44 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/14 18:02:04 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 		input = readline("\001\033[1;36m\002minishell$\001\033[0m\002 ");
 		if (!input)
 			ft_quit(123, "exit\n", data);
-		if (input[0] != '\0')
-			add_history(input);
+		if (input[0] == '\0')
+			continue ;
+		add_history(input);
 		params_head = lexer(input, data);
 		params_head = parser(params_head, data);
 		if (!params_head)
@@ -61,7 +62,11 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 
 static void	init(char **envp, char **path, t_data *data)
 {
+	errno = 0;
 	*path = getenv("PATH");
+	data->cmd_args = NULL;
+	data->cmd_path = NULL;
+	data->lexered_params = NULL;
 	init_signals();
 	exec_cmd(*path, ft_split("clear", ' '), envp, data);
 }

@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 19:17:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/14 17:45:37 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void replace_placeholders(t_list *parsed_params, t_data *data);
-static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par, unsigned int i, t_data *data);
+static void	replace_placeholders(t_list *parsed_params, t_data *data);
+static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par,
+				unsigned int i, t_data *data);
 
 t_list	*parser(t_list *lexered_params, t_data *data)
 {
@@ -26,8 +27,13 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	unsigned int	i;
 	unsigned int	token_streak;
 
+	if (!lexered_params)
+		return (NULL);
+	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
+	// TODO elmimare tutti i nodi del lexer in cui c'e' un comando ed e' di soli spaz
 	node = lexered_params;
 	content_par = new_elem(&size, node, data);
+	parsed_params = NULL;
 	prev_cmd_elem = NULL;
 	i = 0;
 	while (node)
@@ -54,20 +60,22 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 				handle_redir_r(node, content_par, data);
 			else if (content_lex->str.token == ENV)
 				handle_env(prev_cmd_elem, content_par, i++, data);
-			//TODO valutare se fare qualche eccezione per i token di fila;
-			//TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un > 
+			// TODO valutare se fare qualche eccezione per i token di fila;
+			// TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un >
 			token_streak = check_token_streak(NULL, node);
 			while (token_streak-- > 0)
 				node = node->next;
 		}
 		node = node->next;
 	}
-	ft_lstclear(&lexered_params, &del_content);
+	ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
+	ft_lstclear(&lexered_params, &del_content_lexer);
+	data->lexered_params = NULL;
 	replace_placeholders(parsed_params, data);
 	return (parsed_params);
 }
 
-static void replace_placeholders(t_list *parsed_params, t_data *data)
+static void	replace_placeholders(t_list *parsed_params, t_data *data)
 {
 	t_list			*node;
 	t_parser		*content_par;
@@ -88,29 +96,34 @@ static void replace_placeholders(t_list *parsed_params, t_data *data)
 				redir = (t_redir *)content_par->redirs->content;
 				if (redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
 					remove_num(&content_par->cmd_str, i, LEFT, data);
-				if (redir->type == REDIR_INPUT || redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
+				if (redir->type == REDIR_INPUT || redir->type == REDIR_APPEND
+					|| redir->type == REDIR_OUTPUT)
 					remove_word(&content_par->cmd_str, i, RIGHT, data);
 				else if (redir->type == REDIR_HEREDOC)
 					remove_word(&content_par->cmd_str, i, RIGHT, data);
-				else if (redir->type == REDIR_INPUT_FD || redir->type == REDIR_OUTPUT_FD || redir->type == REDIR_APPEND_FD)
-					remove_num(&content_par->cmd_str, i, RIGHT, data); //rimuove numeri a piu cifre e il carattere '&'
+				else if (redir->type == REDIR_INPUT_FD
+					|| redir->type == REDIR_OUTPUT_FD
+					|| redir->type == REDIR_APPEND_FD)
+					remove_num(&content_par->cmd_str, i, RIGHT, data);
+				// rimuove numeri a piu cifre e il carattere '&'
 			}
 			else if (content_par->cmd_str[i] == PH_ENV)
-				replace_env_var(&content_par->cmd_str, i, content_par->env_vars[j++], data);
+				replace_env_var(&content_par->cmd_str, i,
+					content_par->env_vars[j++], data);
 			i++;
 		}
 		node = node->next;
 	}
 }
 
-static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par, unsigned int i, t_data *data)
+static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par,
+		unsigned int i, t_data *data)
 {
 	char				*path_name;
 	unsigned int		j;
-	//placeholder per il $
-	static const char	ph_env
-		= PH_ENV;
+	static const char	ph_env = PH_ENV;
 
+	// placeholder per il $
 	path_name = ft_strdup(prev_cmd_elem->str.cmd);
 	if (!path_name)
 		ft_quit(15, "failed to allocate memory", data);
@@ -119,6 +132,7 @@ static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par, unsigned i
 		j++;
 	path_name[j] = '\0';
 	content_par->env_vars[i] = getenv(path_name);
-	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str) + 1);
+	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str)
+		+ 1);
 	free(path_name);
 }

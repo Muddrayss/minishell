@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 14:09:15 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/14 17:55:15 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,12 @@ unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
 	unsigned int	token_streak;
 	t_lexer			*elem;
 	t_list			*tmp;
-	char			*str;
 
 	token_streak = 0;
 	tmp = lexered_params;
-	while (tmp)
+	elem = (t_lexer *)tmp->content;
+	while (tmp && elem->type == TOKEN)
 	{
-		elem = (t_lexer *)tmp->content;
-		if (elem->type != TOKEN)
-		{
-			str = ft_strtrim(elem->str.cmd, " \t\n");
-			if (str[0] != '\0')
-			{
-				free(str);
-				break ;
-			}
-			free(str);
-		}
 		token_streak++;
 		tmp = tmp->next;
 	}
@@ -52,17 +41,16 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 	elem = (t_parser *)malloc(sizeof(t_parser));
 	if (!elem)
 		ft_quit(10, "failed to allocate memory", data);
-	elem->cmd_str = NULL;
 	elem->redirs = NULL;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 1;
 	num_env = get_x_between_pipes(lexered_params->next, ENV_NUM);
-	elem->cmd_str = (char *)malloc(sizeof(char) * *size);
+	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)
 	{
 		free(elem);
 		ft_quit(12, "failed to allocate memory", data);
 	}
-	elem->env_vars = (char **)malloc(sizeof(char *) * num_env + 1);
+	elem->env_vars = (char **)malloc(sizeof(char *) * (num_env + 1));
 	if (!elem->env_vars && num_env > 0)
 	{
 		free(elem->cmd_str);
@@ -197,7 +185,7 @@ void	replace_env_var(char **str, unsigned int starting_idx, char *env_var,
 
 t_lexer	*get_next_cmd_elem(t_list *lexered_params)
 {
-	t_lexer *elem;
+	t_lexer	*elem;
 
 	while (lexered_params)
 	{
@@ -207,4 +195,45 @@ t_lexer	*get_next_cmd_elem(t_list *lexered_params)
 		lexered_params = lexered_params->next;
 	}
 	return (NULL);
+}
+
+bool	is_empty_cmd(void *content)
+{
+	t_lexer	*elem;
+	char	*tmp;
+
+	elem = (t_lexer *)content;
+	if (elem->type == CMD)
+	{
+		tmp = ft_strtrim(elem->str.cmd, " \t\n");
+		if (!tmp)
+			ft_quit(15, "failed to allocate memory", NULL);
+		if (*tmp == '\0')
+		{
+			free(tmp);
+			return (true);
+		}
+		free(tmp);
+	}
+	return (false);
+}
+
+void	del_content_parser(void *content)
+{
+	t_parser	*elem;
+
+	elem = (t_parser *)content;
+	free(elem->cmd_str);
+	free_matrix(elem->env_vars);
+	ft_lstclear(&elem->redirs, &del_content_redirs);
+	free(elem);
+}
+
+void	del_content_redirs(void *content)
+{
+	t_redir *elem;
+
+	elem = (t_redir *)content;
+	if (elem->filename)
+		free(elem->filename);
 }
