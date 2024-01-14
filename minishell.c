@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 17:13:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/14 14:15:44 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ int	main(int argc, char **argv, char **envp)
 static void	minishell_loop(char *path, char **envp, t_data *data)
 {
 	char	*input;
-	char	prompt[10];
 	t_list	*params_head;
 
-	ft_bzero(prompt, 10);
-	ft_strlcat(prompt, "mini> ", 10);
+	// char	prompt[10];
+	// ft_bzero(prompt, 10);
+	// ft_strlcat(prompt, "mini> ", 10);
 	// TODO appendere '>' extra in base alla profondita'
 	while (1)
 	{
-		input = readline(prompt);
+		input = readline("\001\033[1;36m\002minishell$\001\033[0m\002 ");
 		if (!input)
 			ft_quit(123, "exit\n", data);
 		if (input[0] != '\0')

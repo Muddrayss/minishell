@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/13 19:44:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/14 14:09:15 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
 
 t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 {
-	t_parser 		*elem;
+	t_parser		*elem;
 	unsigned int	num_env;
 
 	elem = (t_parser *)malloc(sizeof(t_parser));
@@ -83,8 +83,9 @@ static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag)
 	{
 		l_content = *((t_lexer *)lexered_params->content);
 		if (flag == CMD_LEN && l_content.type == CMD)
-			n += ft_strlen(l_content.str.cmd) + 1; //per eventuali token
-		else if (flag == ENV_NUM && l_content.type == TOKEN && l_content.str.token == ENV)
+			n += ft_strlen(l_content.str.cmd) + 1; // per eventuali token
+		else if (flag == ENV_NUM && l_content.type == TOKEN
+			&& l_content.str.token == ENV)
 			n++;
 		else if (l_content.type == TOKEN && l_content.str.token == PIPE)
 			break ;
@@ -93,7 +94,8 @@ static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag)
 	return (n);
 }
 
-void	remove_word(char **str, unsigned int starting_idx, uint8_t flag, t_data *data)
+void	remove_word(char **str, unsigned int starting_idx, uint8_t flag,
+		t_data *data)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -129,7 +131,8 @@ void	remove_word(char **str, unsigned int starting_idx, uint8_t flag, t_data *da
 	*str = new_str;
 }
 
-void	remove_num(char **str, unsigned int starting_idx, uint8_t flag, t_data *data)
+void	remove_num(char **str, unsigned int starting_idx, uint8_t flag,
+		t_data *data)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -163,29 +166,45 @@ void	remove_num(char **str, unsigned int starting_idx, uint8_t flag, t_data *dat
 	*str = new_str;
 }
 
-void	replace_env_var(char **str, unsigned int starting_idx, char *env_var, t_data *data)
+void	replace_env_var(char **str, unsigned int starting_idx, char *env_var,
+		t_data *data)
 {
 	char				*new_str;
 	unsigned int		i;
 	unsigned int		j;
 	unsigned int		env_var_len;
-	static const char	ph_invalid_env
-		= -44;
+	static const char	ph_invalid_env = -44;
 
 	env_var_len = ft_strlen(env_var);
 	j = ft_strlen(&(*str)[starting_idx]);
 	i = 0;
 	while ((*str)[i] > 0 && !is_shell_space((*str)[i]))
 		i++;
-	new_str = (char *)ft_calloc(starting_idx + (j - i) + env_var_len + 1, sizeof(char));
+	new_str = (char *)ft_calloc(starting_idx + (j - i) + env_var_len + 1,
+			sizeof(char));
 	if (!new_str)
 		ft_quit(15, "failed to allocate memory", data);
 	ft_strlcat(new_str, *str, starting_idx + 1);
 	if (env_var)
 		ft_strlcat(new_str, env_var, env_var_len + 1);
 	else
-		ft_strlcat(new_str, &ph_invalid_env, 2); //per evitare casi come echo hello > $dvuawku
+		ft_strlcat(new_str, &ph_invalid_env, 2);
+	// per evitare casi come echo hello > $dvuawku
 	ft_strlcat(new_str, *str + i, j - i + 1);
 	free(*str);
 	*str = new_str;
+}
+
+t_lexer	*get_next_cmd_elem(t_list *lexered_params)
+{
+	t_lexer *elem;
+
+	while (lexered_params)
+	{
+		elem = (t_lexer *)lexered_params->content;
+		if (elem->type == CMD)
+			return (elem);
+		lexered_params = lexered_params->next;
+	}
+	return (NULL);
 }
