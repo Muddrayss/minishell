@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 17:52:08 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/15 15:53:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	}
 	else if (token_streak >= 2)
 	{
-		ft_putstr_fd("Parse error near '<'", 1);
+		ft_putstr_fd("Parse error near '<'\n", 1);
 		free(redir_content);
 		return ;
 	}
@@ -80,7 +80,7 @@ void	handle_redir_r(t_list *lexered_params, t_parser *content_par, t_data *data)
 	same_token_streak = 0;
 	if (token_streak > 3)
 	{
-		ft_putstr_fd("Parse error near: '>'", 1);
+		ft_putstr_fd("Parse error near: '>'\n", 1);
 		free(redir_content);
 		return ;
 	}

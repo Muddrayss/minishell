@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 18:03:52 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/15 15:52:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,22 +64,28 @@ void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *))
 {
 	t_list	*tmp;
 	t_list	*prev;
+	t_list	*to_free;
 
 	tmp = *lst;
 	prev = NULL;
+	to_free = NULL;
 	while (tmp)
 	{
 		if (f(tmp->content) == true)
 		{
-			if (!prev)
+			if (prev)
 				prev->next = tmp->next;
 			else
 				*lst = tmp->next;
-			ft_lstdelone(tmp, del);
+			to_free = tmp;
 		}
 		else
+		{
 			prev = tmp;
+			to_free = NULL;
+		}
 		tmp = tmp->next;
+		ft_lstdelone(to_free, del); //se to_free e' null, non fa nulla
 	}
 }
 

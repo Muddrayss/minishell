@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 17:45:37 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/15 15:26:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 		{
 			ft_strlcat(content_par->cmd_str, content_lex->str.cmd, size);
 			prev_cmd_elem = content_lex;
+			node = node->next;
 		}
 		else if (content_lex->type == TOKEN)
 		{
@@ -66,7 +67,6 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 			while (token_streak-- > 0)
 				node = node->next;
 		}
-		node = node->next;
 	}
 	ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
 	ft_lstclear(&lexered_params, &del_content_lexer);
