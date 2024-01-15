@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 18:02:04 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/15 18:43:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,10 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 	char	*input;
 	t_list	*params_head;
 
-	// char	prompt[10];
-	// ft_bzero(prompt, 10);
-	// ft_strlcat(prompt, "mini> ", 10);
 	// TODO appendere '>' extra in base alla profondita'
 	while (1)
 	{
-		input = readline("\001\033[1;36m\002minishell$\001\033[0m\002 ");
+		input = readline(AQUA "minishell$ " DEFAULT);
 		if (!input)
 			ft_quit(123, "exit\n", data);
 		if (input[0] == '\0')
@@ -50,13 +47,39 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 		add_history(input);
 		params_head = lexer(input, data);
 		params_head = parser(params_head, data);
+		
+		// while (params_head)
+		// {
+		// 	t_parser *content = (t_parser *)params_head->content;
+		// 	ft_putstr_fd(content->cmd_str, 1);
+		// 	if (content->env_vars)
+		// 	{
+		// 		while (*content->env_vars)
+		// 		{
+		// 			printf(" %s", *content->env_vars);
+		// 			content->env_vars++;
+		// 		}
+		// 	}
+		// 	if (content->redirs)
+		// 	{
+		// 		t_list *redirs = content->redirs;
+		// 		while (redirs)
+		// 		{
+		// 			t_redir *redir = (t_redir *)redirs->content;
+		// 			printf("input: %d, output: %d, filname: %s", redir->fds[0], redir->fds[1], redir->filename);
+		// 			redirs = redirs->next;
+		// 		}
+		// 	}
+		// 	printf("\n");
+		// 	params_head = params_head->next;
+		// }
+
 		if (!params_head)
 			continue ;
 		(void)params_head;
 		(void)path;
 		(void)envp;
 		(void)data;
-		// TODO cmd_args deve tenere in considerazione ' " < > << >> | $ e forse {
 	}
 }
 

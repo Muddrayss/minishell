@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 17:13:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/15 18:25:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 		if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT) == -1)
 			add_left_right_filenames(&redir_content->filename, next_cmd_elem->str.cmd, RIGHT, data);
 	if (prev_cmd_elem)
-		add_left_right_fds(&redir_content->fds[1], prev_cmd_elem->str.cmd, LEFT);
+		add_left_right_fds(&redir_content->fds[0], prev_cmd_elem->str.cmd, LEFT);
     if (redir_content->fds[1] == -42)
     {
         redir_content->type = REDIR_OUTPUT;
@@ -124,9 +124,11 @@ static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
 			i++;
 		while (cmd[i] && ft_isdigit(cmd[i]))
 			i++;
+		//guardare atoi qui, tornare indietro all inizio del numero
 	}
-	if (is_shell_space(cmd[i]))
-		*fd = ft_atoi(cmd + i * (flag == LEFT)); //TODO	gestire il caso di un FD che supera MAX INT (direttamente in atoi)
+	//TODO	gestire il caso di un FD che supera MAX INT (direttamente in atoi)
+	if (is_shell_space(cmd[i]) && i > 0)
+		*fd = ft_atoi(cmd + i * (flag == LEFT) + 1 * (flag == RIGHT && *cmd == '&'));
 	else
 		return (-1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 16:08:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/15 18:32:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	if (!lexered_params)
 		return (NULL);
 	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
-	// TODO elmimare tutti i nodi del lexer in cui c'e' un comando ed e' di soli spaz
+	//TODO gestire caso dipo "> >" e "< <"
 	node = lexered_params;
 	content_par = new_elem(&size, node, data);
 	parsed_params = NULL;
