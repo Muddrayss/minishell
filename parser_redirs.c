@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 16:55:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/15 17:13:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 		if (next_cmd_elem)
 			add_left_right_filenames(&redir_content->filename, next_cmd_elem->str.cmd, RIGHT, data);
 	}
-	else if (token_streak >= 2)
+	else if (token_streak > 3)
 	{
 		ft_putstr_fd("Parse error near '<'\n", 1);
 		free(redir_content);
@@ -67,11 +67,11 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	t_lexer				*next_cmd_elem;
 	t_token				next_token;
 	unsigned int		token_streak;
-	unsigned int		same_token_streak; // $%^^^&
 	//placeholder per le redir
 	static const char	ph_redir
 		= -42;
 
+	//TODO valutare se implementare un "same token streak"
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
 		ft_quit(12, "failed to allocate memory", data);
@@ -80,7 +80,6 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
     redir_content->type = REDIR_OUTPUT_FD;
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
 	token_streak = check_token_streak(&next_token, lexered_params);
-	same_token_streak = 0;
 	if (token_streak > 3)
 	{
 		ft_putstr_fd("Parse error near: '>'\n", 1);

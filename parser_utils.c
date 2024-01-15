@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 16:00:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/15 17:13:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
 	elem = (t_lexer *)tmp->content;
 	while (tmp && elem->type == TOKEN)
 	{
+		elem = (t_lexer *)tmp->content;
 		token_streak++;
 		tmp = tmp->next;
 	}
