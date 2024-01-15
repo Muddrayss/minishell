@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 17:30:47 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/15 19:27:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 
 static t_token  lexer_get_token(char c);
 static bool 	is_token(char *str);
-
-//il lexer separa i token (> < e |) dal resto del comando ("ls -a -l ") che e' tutto insieme compresi spazi successivi
-//dopo andra' fatto uno split/trim del comando prima di execve
-
-//TODO capire come gestire double e single quote, valutare se e' meglio gestirle in lexer o parser
 
 t_list	*lexer(char *input, t_data *data)
 {

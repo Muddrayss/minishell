@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 18:32:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/15 19:26:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
 	ft_lstclear(&lexered_params, &del_content_lexer);
 	data->lexered_params = NULL;
+	//TODO replace placeholders e' come se non funzionasse
 	replace_placeholders(parsed_params, data);
 	return (parsed_params);
 }
@@ -105,7 +106,6 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 					|| redir->type == REDIR_OUTPUT_FD
 					|| redir->type == REDIR_APPEND_FD)
 					remove_num(&content_par->cmd_str, i, RIGHT, data);
-				// rimuove numeri a piu cifre e il carattere '&'
 			}
 			else if (content_par->cmd_str[i] == PH_ENV)
 				replace_env_var(&content_par->cmd_str, i,

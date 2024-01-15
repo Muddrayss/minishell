@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 19:07:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/15 19:30:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,6 @@
 static void	init(char **envp, char **path, t_data *data);
 static void	exec_cmd(char *path, char **envp, char **cmd_args, t_data *data);
 static void	minishell_loop(char *path, char **envp, t_data *data);
-
-// TODO sig handler che setti la variabile errno a EINTR
-// TODO per i comandi da implementare custom usare execve per creare il .bin (se non e' gia' presente) compilando con cc il file corrispondente
-// TODO colori
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -36,7 +32,6 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 	char	*input;
 	t_list	*params_head;
 
-	// TODO appendere '>' extra in base alla profondita'
 	while (1)
 	{
 		input = readline(AQUA "minishell$ " DEFAULT);
@@ -50,31 +45,31 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 		if (!params_head)
 			continue ;
 	
-		while (params_head)
-		{
-			t_parser *content = (t_parser *)params_head->content;
-			ft_putstr_fd(content->cmd_str, 1);
-			if (content->env_vars)
-			{
-				while (*content->env_vars)
-				{
-					printf(" %s", *content->env_vars);
-					content->env_vars++;
-				}
-			}
-			if (content->redirs)
-			{
-				t_list *redirs = content->redirs;
-				while (redirs)
-				{
-					t_redir *redir = (t_redir *)redirs->content;
-					printf("input: %d, output: %d, filname: %s", redir->fds[0], redir->fds[1], redir->filename);
-					redirs = redirs->next;
-				}
-			}
-			printf("\n");
-			params_head = params_head->next;
-		}
+		// while (params_head)
+		// {
+		// 	t_parser *content = (t_parser *)params_head->content;
+		// 	ft_putstr_fd(content->cmd_str, 1);
+		// 	if (content->env_vars)
+		// 	{
+		// 		while (*content->env_vars)
+		// 		{
+		// 			printf(" %s", *content->env_vars);
+		// 			content->env_vars++;
+		// 		}
+		// 	}
+		// 	if (content->redirs)
+		// 	{
+		// 		t_list *redirs = content->redirs;
+		// 		while (redirs)
+		// 		{
+		// 			t_redir *redir = (t_redir *)redirs->content;
+		// 			printf("input: %d, output: %d, filname: %s", redir->fds[0], redir->fds[1], redir->filename);
+		// 			redirs = redirs->next;
+		// 		}
+		// 	}
+		// 	printf("\n");
+		// 	params_head = params_head->next;
+		// }
 
 		(void)path;
 		(void)envp;
