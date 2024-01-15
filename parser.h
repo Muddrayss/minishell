@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 17:50:14 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/15 16:09:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void				handle_redir_l(t_list *lexered_params,
 						t_lexer *prev_cmd_elem, t_parser *content_par,
 						t_data *data);
 void				handle_redir_r(t_list *lexered_params,
-						t_parser *content_par, t_data *data);
+						t_lexer *prev_cmd_elem, t_parser *content_par,
+						t_data *data);
 unsigned int		check_token_streak(t_token *next_token,
 						t_list *lexered_params);
 t_parser			*new_elem(size_t *size, t_list *lexered_params,

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 15:53:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/15 16:55:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	if (token_streak == 2 && next_token == REDIR_L)
 	{
         redir_content->type = REDIR_HEREDOC;
-		add_left_right_filenames(&redir_content->filename, next_cmd_elem->str.cmd, RIGHT, data);
+		if (next_cmd_elem)
+			add_left_right_filenames(&redir_content->filename, next_cmd_elem->str.cmd, RIGHT, data);
 	}
 	else if (token_streak >= 2)
 	{
@@ -46,11 +47,13 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	}
     else
     {
-	    add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT);
+		if (next_cmd_elem)
+	    	add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT);
 	    if (redir_content->fds[1] == -42)
         {
             redir_content->type = REDIR_INPUT;
-		    add_left_right_filenames(&redir_content->filename, prev_cmd_elem->str.cmd, LEFT, data);
+			if (prev_cmd_elem)
+		    	add_left_right_filenames(&redir_content->filename, prev_cmd_elem->str.cmd, LEFT, data);
         }
     }
 	content_par->redirs = NULL;
@@ -58,7 +61,7 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 1);
 }
 
-void	handle_redir_r(t_list *lexered_params, t_parser *content_par, t_data *data)
+void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
 {
 	t_redir				*redir_content;
 	t_lexer				*next_cmd_elem;
@@ -84,15 +87,18 @@ void	handle_redir_r(t_list *lexered_params, t_parser *content_par, t_data *data)
 		free(redir_content);
 		return ;
 	}
-	if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT) == -1)
-		add_left_right_filenames(&redir_content->filename, next_cmd_elem->str.cmd, RIGHT, data);
-	add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, LEFT);
+	if (next_cmd_elem)
+		if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT) == -1)
+			add_left_right_filenames(&redir_content->filename, next_cmd_elem->str.cmd, RIGHT, data);
+	if (prev_cmd_elem)
+		add_left_right_fds(&redir_content->fds[1], prev_cmd_elem->str.cmd, LEFT);
     if (redir_content->fds[1] == -42)
     {
         redir_content->type = REDIR_OUTPUT;
         if (token_streak == 2 && next_token == REDIR_R)
             redir_content->type = REDIR_APPEND;
-        add_left_right_filenames(&redir_content->filename, next_cmd_elem->str.cmd, RIGHT, data);
+		if (next_cmd_elem)
+        	add_left_right_filenames(&redir_content->filename, next_cmd_elem->str.cmd, RIGHT, data);
     }
 	if (redir_content->type != REDIR_APPEND && token_streak == 2 && next_token == REDIR_R)
 		redir_content->type = REDIR_APPEND_FD;

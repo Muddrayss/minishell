@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 17:55:15 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/15 16:00:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
 		token_streak++;
 		tmp = tmp->next;
 	}
-	if (next_token)
+	if (next_token && token_streak > 1)
 		*next_token = ((t_lexer *)lexered_params->next->content)->str.token;
 	return (token_streak);
 }
