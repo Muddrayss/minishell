@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 18:25:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/15 19:15:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
     redir_content->type = REDIR_INPUT_FD;
     next_cmd_elem = get_next_cmd_elem(lexered_params);
 	token_streak = check_token_streak(&next_token, lexered_params);
+	printf("token streak: %d\n", token_streak);
 	if (token_streak == 2 && next_token == REDIR_L)
 	{
         redir_content->type = REDIR_HEREDOC;
@@ -56,7 +57,6 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 		    	add_left_right_filenames(&redir_content->filename, prev_cmd_elem->str.cmd, LEFT, data);
         }
     }
-	content_par->redirs = NULL;
 	ft_lstadd_front(&content_par->redirs, ft_lstnew(redir_content));
 	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 1);
 }
@@ -101,8 +101,6 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
     }
 	if (redir_content->type != REDIR_APPEND && token_streak == 2 && next_token == REDIR_R)
 		redir_content->type = REDIR_APPEND_FD;
-
-	content_par->redirs = NULL;
 	ft_lstadd_front(&content_par->redirs, ft_lstnew(redir_content));
 	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 1);
 }
