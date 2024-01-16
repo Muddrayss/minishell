@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 19:30:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/16 18:02:05 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,11 @@ int	main(int argc, char **argv, char **envp)
 
 static void	minishell_loop(char *path, char **envp, t_data *data)
 {
-	char	*input;
-	t_list	*params_head;
+	char		*input;
+	t_list		*params_head;
+	t_parser	*content;
+	t_list		*redirs;
+	t_redir		*redir;
 
 	while (1)
 	{
@@ -44,33 +47,34 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 		params_head = parser(params_head, data);
 		if (!params_head)
 			continue ;
-	
-		// while (params_head)
-		// {
-		// 	t_parser *content = (t_parser *)params_head->content;
-		// 	ft_putstr_fd(content->cmd_str, 1);
-		// 	if (content->env_vars)
-		// 	{
-		// 		while (*content->env_vars)
-		// 		{
-		// 			printf(" %s", *content->env_vars);
-		// 			content->env_vars++;
-		// 		}
-		// 	}
-		// 	if (content->redirs)
-		// 	{
-		// 		t_list *redirs = content->redirs;
-		// 		while (redirs)
-		// 		{
-		// 			t_redir *redir = (t_redir *)redirs->content;
-		// 			printf("input: %d, output: %d, filname: %s", redir->fds[0], redir->fds[1], redir->filename);
-		// 			redirs = redirs->next;
-		// 		}
-		// 	}
-		// 	printf("\n");
-		// 	params_head = params_head->next;
-		// }
-
+		while (params_head)
+		{
+			content = (t_parser *)params_head->content;
+			ft_putstr_fd(content->cmd_str, 1);
+			if (content->env_vars)
+			{
+				// TODO: Uconditional jump or move depended on uninitialised value(s) (e.g "$$LOGNAME")
+				// TODO: Controllare perche' lexer o parser non settano correttamente il numero di env vars
+				while (*content->env_vars)
+				{
+					printf(" %s", *content->env_vars);
+					content->env_vars++;
+				}
+			}
+			if (content->redirs)
+			{
+				redirs = content->redirs;
+				while (redirs)
+				{
+					redir = (t_redir *)redirs->content;
+					printf("\ninput: %d, output: %d, filname: %s",
+						redir->fds[0], redir->fds[1], redir->filename);
+					redirs = redirs->next;
+				}
+			}
+			printf("\n");
+			params_head = params_head->next;
+		}
 		(void)path;
 		(void)envp;
 		(void)data;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 19:16:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/16 17:46:44 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 		ft_quit(10, "failed to allocate memory", data);
 	elem->redirs = NULL;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 1;
-	num_env = get_x_between_pipes(lexered_params->next, ENV_NUM);
+	// TODO: non restituisce il numero corretto di env vars
+	num_env = get_x_between_pipes(lexered_params, ENV_NUM);
 	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)
 	{
@@ -133,16 +134,19 @@ void	remove_num(char **str, unsigned int starting_idx, uint8_t flag,
 	j = ft_strlen(&(*str)[starting_idx]);
 	if (flag == LEFT)
 	{
+		i--;
+		printf("remove_num\n");
 		while ((*str)[i] > 0 && ft_isdigit((*str)[i]))
 			i--;
-		new_str = (char *)ft_calloc(i + j + 1, sizeof(char));
+		new_str = (char *)ft_calloc(i + j + 1, sizeof(char)); // ls 1> fsdds
 		if (!new_str)
 			ft_quit(15, "failed to allocate memory", data);
-		ft_strlcat(new_str, *str, i + 1);
+		ft_strlcat(new_str, *str, i + 2);
 		ft_strlcat(new_str, *str + starting_idx, j + 1);
 	}
 	else
 	{
+		i++;
 		if ((*str)[i] == '&')
 			i++;
 		while ((*str)[i] > 0 && ft_isdigit((*str)[i]))

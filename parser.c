@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 19:26:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/16 15:47:24 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void	replace_placeholders(t_list *parsed_params, t_data *data);
-static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par,
+static void	handle_env(t_list *lexered_params, t_parser *content_par,
 				unsigned int i, t_data *data);
 
 t_list	*parser(t_list *lexered_params, t_data *data)
@@ -30,7 +30,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	if (!lexered_params)
 		return (NULL);
 	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
-	//TODO gestire caso dipo "> >" e "< <"
+	// TODO gestire caso dipo "> >" e "< <"
 	node = lexered_params;
 	content_par = new_elem(&size, node, data);
 	parsed_params = NULL;
@@ -60,7 +60,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 			else if (content_lex->str.token == REDIR_R)
 				handle_redir_r(node, prev_cmd_elem, content_par, data);
 			else if (content_lex->str.token == ENV)
-				handle_env(prev_cmd_elem, content_par, i++, data);
+				handle_env(node, content_par, i++, data);
 			// TODO valutare se fare qualche eccezione per i token di fila;
 			// TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un >
 			token_streak = check_token_streak(NULL, node);
@@ -71,7 +71,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
 	ft_lstclear(&lexered_params, &del_content_lexer);
 	data->lexered_params = NULL;
-	//TODO replace placeholders e' come se non funzionasse
+	// TODO replace placeholders e' come se non funzionasse
 	replace_placeholders(parsed_params, data);
 	return (parsed_params);
 }
@@ -116,23 +116,25 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 	}
 }
 
-static void	handle_env(t_lexer *prev_cmd_elem, t_parser *content_par,
+static void	handle_env(t_list *lexered_params, t_parser *content_par,
 		unsigned int i, t_data *data)
 {
 	char				*path_name;
 	unsigned int		j;
 	static const char	ph_env = PH_ENV;
+	t_lexer				*next_cmd_elem;
 
 	// placeholder per il $
-	path_name = ft_strdup(prev_cmd_elem->str.cmd);
+	next_cmd_elem = get_next_cmd_elem(lexered_params);
+	path_name = ft_strdup(next_cmd_elem->str.cmd);
 	if (!path_name)
 		ft_quit(15, "failed to allocate memory", data);
 	j = 0;
-	while (!is_shell_space(path_name[j]))
+	while (path_name[j] && !is_shell_space(path_name[j]))
 		j++;
 	path_name[j] = '\0';
 	content_par->env_vars[i] = getenv(path_name);
 	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str)
-		+ 1);
+		+ 2);
 	free(path_name);
 }
