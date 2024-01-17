@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/01/14 15:38:38 by egualand         ###   ########.fr        #
+#    Updated: 2024/01/17 15:34:59 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,10 @@ fclean: clean
 	@$(RM) $(NAME)
 	@make fclean -C $(LIBFT_DIR) >/dev/null
 	@echo "Full cleaning of $(NAME) done!"
+
+leaks: all
+	@valgrind --leak-check=full --show-leak-kinds=all -v ./$(NAME) 2> leak_report
+	@echo "leak report generated"
 
 re: fclean all
 

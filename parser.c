@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/16 15:47:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/17 16:30:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,8 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 					|| redir->type == REDIR_APPEND_FD)
 					remove_num(&content_par->cmd_str, i, RIGHT, data);
 			}
-			else if (content_par->cmd_str[i] == PH_ENV)
-				replace_env_var(&content_par->cmd_str, i,
-					content_par->env_vars[j++], data);
+			else if (content_par->cmd_str[i] == PH_ENV) //entra troppe volte qui
+				replace_env_var(&content_par->cmd_str, i, content_par->env_vars[j++], data);
 			i++;
 		}
 		node = node->next;
@@ -134,7 +133,6 @@ static void	handle_env(t_list *lexered_params, t_parser *content_par,
 		j++;
 	path_name[j] = '\0';
 	content_par->env_vars[i] = getenv(path_name);
-	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str)
-		+ 2);
+	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str) + 2);
 	free(path_name);
 }

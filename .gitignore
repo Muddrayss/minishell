@@ -21,6 +21,7 @@
 *.a
 *.la
 *.lo
+leak_report
 
 # Shared objects (inc. Windows DLLs)
 *.dll

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/16 17:46:44 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/17 16:25:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 		ft_quit(10, "failed to allocate memory", data);
 	elem->redirs = NULL;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 1;
-	// TODO: non restituisce il numero corretto di env vars
 	num_env = get_x_between_pipes(lexered_params, ENV_NUM);
 	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)
