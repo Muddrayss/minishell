@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:18:16 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:37:28 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem,
 	token_streak = check_token_streak(&next_token, lexered_params);
 	if (token_streak > 3)
 	{
-		ft_putstr_fd("Parse error near: '>'\n", 1);
+		ft_parse_error('>');
 		free(redir_content);
 		return ;
 	}
@@ -169,7 +169,7 @@ static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag,
 			ft_quit(16, "failed to allocate memory", data);
 	}
 	else if (flag == RIGHT)
-		// TODO gestire il caso in cui c'e' un token tipo & prima del filename
+	// TODO gestire il caso in cui c'e' un token tipo & prima del filename
 	{
 		i = 0;
 		while (cmd[i] && is_shell_space(cmd[i]))
