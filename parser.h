@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 16:09:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:06:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 # define PH_REDIR -42
 # define PH_ENV -43
+# define PH_INVALID_ENV -44
 
 # define CMD_LEN 0
 # define ENV_NUM 1
@@ -64,7 +65,7 @@ void				remove_word(char **str, unsigned int starting_idx,
 						uint8_t flag, t_data *data);
 void				remove_num(char **str, unsigned int starting_idx,
 						uint8_t flag, t_data *data);
-void				replace_env_var(char **str, unsigned int starting_idx,
+void				replace_env_var(char **str, unsigned int *starting_idx,
 						char *env_var, t_data *data);
 t_lexer				*get_next_cmd_elem(t_list *lexered_params);
 bool				is_empty_cmd(void *content);

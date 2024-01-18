@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/17 16:30:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:03:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,11 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 					remove_num(&content_par->cmd_str, i, RIGHT, data);
 			}
 			else if (content_par->cmd_str[i] == PH_ENV) //entra troppe volte qui
-				replace_env_var(&content_par->cmd_str, i, content_par->env_vars[j++], data);
+			{
+				printf("%s\n", content_par->cmd_str);
+				replace_env_var(&content_par->cmd_str, &i, content_par->env_vars[j++], data);
+				printf("%s\n", content_par->cmd_str);
+			}
 			i++;
 		}
 		node = node->next;

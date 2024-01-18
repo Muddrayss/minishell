@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/17 16:25:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:14:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,25 +160,26 @@ void	remove_num(char **str, unsigned int starting_idx, uint8_t flag,
 	*str = new_str;
 }
 
-void	replace_env_var(char **str, unsigned int starting_idx, char *env_var,
+void	replace_env_var(char **str, unsigned int *starting_idx, char *env_var,
 		t_data *data)
 {
 	char				*new_str;
 	unsigned int		i;
 	unsigned int		j;
 	unsigned int		env_var_len;
-	static const char	ph_invalid_env = -44;
+	static const char	ph_invalid_env =
+		PH_INVALID_ENV;
 
 	env_var_len = ft_strlen(env_var);
-	j = ft_strlen(&(*str)[starting_idx]);
-	i = 0;
+	j = ft_strlen(&(*str)[*starting_idx]);
+	i = 1;
 	while ((*str)[i] > 0 && !is_shell_space((*str)[i]))
 		i++;
-	new_str = (char *)ft_calloc(starting_idx + (j - i) + env_var_len + 1,
+	new_str = (char *)ft_calloc(*starting_idx + (j - i) + env_var_len + 1,
 			sizeof(char));
 	if (!new_str)
 		ft_quit(15, "failed to allocate memory", data);
-	ft_strlcat(new_str, *str, starting_idx + 1);
+	ft_strlcat(new_str, *str, *starting_idx + 1);
 	if (env_var)
 		ft_strlcat(new_str, env_var, env_var_len + 1);
 	else
@@ -186,6 +187,7 @@ void	replace_env_var(char **str, unsigned int starting_idx, char *env_var,
 	// per evitare casi come echo hello > $dvuawku
 	ft_strlcat(new_str, *str + i, j - i + 1);
 	free(*str);
+	*starting_idx += env_var_len;
 	*str = new_str;
 }
 
