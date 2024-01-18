@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:51:11 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:47:16 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 
 	while (1)
 	{
-		input = readline(AQUA "minishell$ " DEFAULT);
+		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
 			ft_quit(123, "exit\n", data);
 		if (input[0] == '\0')

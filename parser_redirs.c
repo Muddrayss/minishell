@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:47:42 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:59:43 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,11 @@ static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag,
 		while (cmd[i] && !is_shell_space(cmd[i]))
 			i++;
 		name[i] = '\0';
+		if (name[0] == PH_INVALID_ENV)
+		{
+			free(name);
+			name = NULL;
+		}
 	}
 	free(*filename);
 	*filename = name;

@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:55:45 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:01:37 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ void				remove_word(char **str, unsigned int starting_idx,
 						uint8_t flag, t_data *data);
 void				remove_num(char **str, unsigned int starting_idx,
 						uint8_t flag, t_data *data);
-void				replace_env_var(char **str, unsigned int *starting_idx,
-						char *env_var, t_data *data);
-t_lexer				*get_next_cmd_elem(t_list *lexered_params);
+void replace_env_var(char **str, char *env_var,
+					 t_data *data);
+t_lexer *get_next_cmd_elem(t_list *lexered_params);
 bool				is_empty_cmd(void *content);
 void				del_content_redirs(void *content);
 void				del_content_parser(void *content);

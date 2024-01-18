@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 16:38:32 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:00:58 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,38 +161,33 @@ void	remove_num(char **str, unsigned int starting_idx, uint8_t flag,
 	*str = new_str;
 }
 
-void	replace_env_var(char **str, unsigned int *starting_idx, char *env_var,
+void	replace_env_var(char **str, char *env_var,
 		t_data *data)
 {
 	char				*new_str;
-	unsigned int		str_len;
 	unsigned int		env_varname_len;
 	unsigned int		env_var_len;
 	unsigned int		size;
-	static const char	ph_invalid_env =
-		PH_INVALID_ENV;
+	static char			ph_invalid_env = PH_INVALID_ENV;
 
-	str_len = ft_strlen(*str);
 	env_var_len = ft_strlen(env_var);
 	env_var_len += (env_var_len == 0); // Skip placeholder '$'
-	env_varname_len = 1; 
-	while ((*str)[*starting_idx + env_varname_len] > 0
-		&& !is_shell_space((*str)[*starting_idx + env_varname_len]))
-	{		
+	env_varname_len = 1;
+	while ((*str)[env_varname_len] != '\0'
+		&& !is_shell_space((*str)[env_varname_len]))
+	{
 		env_varname_len++;
 	}
-	size = str_len + env_var_len - env_varname_len + 1;
+	size = ft_strlen(*str) - env_varname_len + env_var_len + 1;
 	new_str = (char *)ft_calloc(size, sizeof(char));
 	if (!new_str)
 		ft_quit(15, "failed to allocate memory", data);
-	ft_strlcat(new_str, *str, *starting_idx + 1);
 	if (env_var)
-		ft_strlcat(new_str, env_var, *starting_idx + env_var_len + 1);
+		ft_strlcat(new_str, env_var, env_var_len + 1);
 	else
 		ft_strlcat(new_str, &ph_invalid_env, 2);
-	ft_strlcat(new_str, *str + *starting_idx + env_varname_len, size);
+	ft_strlcat(new_str, *str + env_varname_len, size);
 	free(*str);
-	*starting_idx += env_var_len;
 	*str = new_str;
 }
 
