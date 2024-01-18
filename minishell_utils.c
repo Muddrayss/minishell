@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 15:52:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:23:16 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *))
 			to_free = NULL;
 		}
 		tmp = tmp->next;
-		ft_lstdelone(to_free, del); //se to_free e' null, non fa nulla
+		ft_lstdelone(to_free, del); // se to_free e' null, non fa nulla
 	}
 }
 
@@ -93,7 +93,6 @@ void	ft_quit(int id, char *msg, t_data *data)
 {
 	if (errno != EINTR)
 	{
-		
 		if (!msg)
 			ft_putstr_fd(strerror(errno), 1);
 		else
@@ -110,4 +109,12 @@ void	ft_quit(int id, char *msg, t_data *data)
 	}
 	exit(id);
 	return ;
+}
+
+int8_t	ft_parse_error(char token)
+{
+	ft_putstr_fd("Parse error near '", 1);
+	ft_putchar_fd(token, 1);
+	ft_putstr_fd("'\n", 1);
+	return (-1);
 }

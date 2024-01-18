@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:20:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:36:19 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	replace_placeholders(t_list *parsed_params, t_data *data);
-static int	handle_env(t_list *lexered_params, t_parser *content_par,
-				unsigned int i, t_data *data);
+static void		replace_placeholders(t_list *parsed_params, t_data *data);
+static int8_t	handle_env(t_list *lexered_params, t_parser *content_par,
+					unsigned int i, t_data *data);
 
 t_list	*parser(t_list *lexered_params, t_data *data)
 {
@@ -26,8 +26,8 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	t_lexer			*content_lex;
 	unsigned int	i;
 	unsigned int	token_streak;
-	int 			func_return;
 
+	int func_return ;
 	if (!lexered_params)
 		return (NULL);
 	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
@@ -112,7 +112,8 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 					remove_num(&content_par->cmd_str, i, RIGHT, data);
 			}
 			else if (content_par->cmd_str[i] == PH_ENV)
-				replace_env_var(&content_par->cmd_str, &i, content_par->env_vars[j++], data);
+				replace_env_var(&content_par->cmd_str, &i,
+					content_par->env_vars[j++], data);
 			i++;
 		}
 		node = node->next;
@@ -132,10 +133,7 @@ static int8_t	handle_env(t_list *lexered_params, t_parser *content_par,
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
 	check_token_streak(&next_token, lexered_params);
 	if (next_token == ENV)
-	{
-		printf("Parse error near: '$'\n");
-		return (-1);
-	}
+		return (ft_parse_error('$'));
 	path_name = ft_strdup(next_cmd_elem->str.cmd);
 	if (!path_name)
 		ft_quit(15, "failed to allocate memory", data);
@@ -144,6 +142,7 @@ static int8_t	handle_env(t_list *lexered_params, t_parser *content_par,
 		j++;
 	path_name[j] = '\0';
 	content_par->env_vars[i] = getenv(path_name);
-	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str) + 2);
+	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str)
+		+ 2);
 	return (free(path_name), 0);
 }

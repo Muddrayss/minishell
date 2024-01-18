@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 17:29:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:23:39 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_data
 char		*get_cmd(char *path, char *cmd, t_data *data);
 void		free_matrix(char **matrix);
 void		ft_quit(int id, char *msg, t_data *data);
+int8_t		ft_parse_error(char token);
 bool		is_shell_space(char c);
 void		init_signals(void);
 void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));

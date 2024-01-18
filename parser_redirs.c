@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/16 15:21:27 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:18:16 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem,
 	}
 	else if (token_streak > 3)
 	{
-		ft_putstr_fd("Parse error near '<'\n", 1);
+		ft_parse_error('<');
 		free(redir_content);
 		return ;
 	}
