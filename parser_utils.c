@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 14:14:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:37:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,10 @@ void	replace_env_var(char **str, unsigned int *starting_idx, char *env_var,
 		PH_INVALID_ENV;
 
 	env_var_len = ft_strlen(env_var);
+	env_var_len += (env_var_len == 0);
 	j = ft_strlen(&(*str)[*starting_idx]);
-	i = 1;
-	while ((*str)[i] > 0 && !is_shell_space((*str)[i]))
+	i = 0;
+	while ((*str)[i + 1] > 0 && !is_shell_space((*str)[i + 1]))
 		i++;
 	new_str = (char *)ft_calloc(*starting_idx + (j - i) + env_var_len + 1,
 			sizeof(char));

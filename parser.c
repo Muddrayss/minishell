@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 14:03:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:20:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void	replace_placeholders(t_list *parsed_params, t_data *data);
-static void	handle_env(t_list *lexered_params, t_parser *content_par,
+static int	handle_env(t_list *lexered_params, t_parser *content_par,
 				unsigned int i, t_data *data);
 
 t_list	*parser(t_list *lexered_params, t_data *data)
@@ -26,6 +26,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	t_lexer			*content_lex;
 	unsigned int	i;
 	unsigned int	token_streak;
+	int 			func_return;
 
 	if (!lexered_params)
 		return (NULL);
@@ -36,6 +37,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	parsed_params = NULL;
 	prev_cmd_elem = NULL;
 	i = 0;
+	func_return = 0;
 	while (node)
 	{
 		content_lex = (t_lexer *)node->content;
@@ -60,9 +62,11 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 			else if (content_lex->str.token == REDIR_R)
 				handle_redir_r(node, prev_cmd_elem, content_par, data);
 			else if (content_lex->str.token == ENV)
-				handle_env(node, content_par, i++, data);
+				func_return = handle_env(node, content_par, i++, data);
 			// TODO valutare se fare qualche eccezione per i token di fila;
 			// TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un >
+			if (func_return == -1)
+				return (NULL);
 			token_streak = check_token_streak(NULL, node);
 			while (token_streak-- > 0)
 				node = node->next;
@@ -107,28 +111,31 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 					|| redir->type == REDIR_APPEND_FD)
 					remove_num(&content_par->cmd_str, i, RIGHT, data);
 			}
-			else if (content_par->cmd_str[i] == PH_ENV) //entra troppe volte qui
-			{
-				printf("%s\n", content_par->cmd_str);
+			else if (content_par->cmd_str[i] == PH_ENV)
 				replace_env_var(&content_par->cmd_str, &i, content_par->env_vars[j++], data);
-				printf("%s\n", content_par->cmd_str);
-			}
 			i++;
 		}
 		node = node->next;
 	}
 }
 
-static void	handle_env(t_list *lexered_params, t_parser *content_par,
+static int8_t	handle_env(t_list *lexered_params, t_parser *content_par,
 		unsigned int i, t_data *data)
 {
 	char				*path_name;
 	unsigned int		j;
 	static const char	ph_env = PH_ENV;
 	t_lexer				*next_cmd_elem;
+	t_token				next_token;
 
 	// placeholder per il $
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
+	check_token_streak(&next_token, lexered_params);
+	if (next_token == ENV)
+	{
+		printf("Parse error near: '$'\n");
+		return (-1);
+	}
 	path_name = ft_strdup(next_cmd_elem->str.cmd);
 	if (!path_name)
 		ft_quit(15, "failed to allocate memory", data);
@@ -138,5 +145,5 @@ static void	handle_env(t_list *lexered_params, t_parser *content_par,
 	path_name[j] = '\0';
 	content_par->env_vars[i] = getenv(path_name);
 	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str) + 2);
-	free(path_name);
+	return (free(path_name), 0);
 }
