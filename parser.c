@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:36:19 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:08:53 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,10 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 					remove_num(&content_par->cmd_str, i, RIGHT, data);
 			}
 			else if (content_par->cmd_str[i] == PH_ENV)
+			{
 				replace_env_var(&content_par->cmd_str, &i,
 					content_par->env_vars[j++], data);
+			}
 			i++;
 		}
 		node = node->next;
@@ -123,7 +125,7 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 static int8_t	handle_env(t_list *lexered_params, t_parser *content_par,
 		unsigned int i, t_data *data)
 {
-	char				*path_name;
+	char				*var_name;
 	unsigned int		j;
 	static const char	ph_env = PH_ENV;
 	t_lexer				*next_cmd_elem;
@@ -134,15 +136,15 @@ static int8_t	handle_env(t_list *lexered_params, t_parser *content_par,
 	check_token_streak(&next_token, lexered_params);
 	if (next_token == ENV)
 		return (ft_parse_error('$'));
-	path_name = ft_strdup(next_cmd_elem->str.cmd);
-	if (!path_name)
+	var_name = ft_strdup(next_cmd_elem->str.cmd);
+	if (!var_name)
 		ft_quit(15, "failed to allocate memory", data);
 	j = 0;
-	while (path_name[j] && !is_shell_space(path_name[j]))
+	while (var_name[j] && !is_shell_space(var_name[j]))
 		j++;
-	path_name[j] = '\0';
-	content_par->env_vars[i] = getenv(path_name);
+	var_name[j] = '\0';
+	content_par->env_vars[i] = getenv(var_name);
 	ft_strlcat(content_par->cmd_str, &ph_env, ft_strlen(content_par->cmd_str)
 		+ 2);
-	return (free(path_name), 0);
+	return (free(var_name), 0);
 }

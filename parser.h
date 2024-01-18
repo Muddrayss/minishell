@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 14:06:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:55:45 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,15 @@
 
 typedef enum e_redir_type
 {
-	REDIR_INPUT,     // '< filename'
-	REDIR_HEREDOC,   // '<< limiter'
-	REDIR_INPUT_FD,  // '<&n'
-	REDIR_OUTPUT,    // '> filename o n> filename'
+	REDIR_INPUT,	 // '< filename'
+	REDIR_HEREDOC,	 // '<< limiter'
+	REDIR_INPUT_FD,	 // '<&n'
+	REDIR_OUTPUT,	 // '> filename o n> filename'
 	REDIR_OUTPUT_FD, // '>&n'
-	REDIR_APPEND,    // '>> filename o n>> filename'
+	REDIR_APPEND,	 // '>> filename o n>> filename'
 	REDIR_APPEND_FD, // '>>&n'
-}					t_redir_type;
+}
+t_redir_type;
 
 typedef struct s_redir
 {

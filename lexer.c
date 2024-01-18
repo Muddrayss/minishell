@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/15 19:27:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:57:19 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static t_token lexer_get_token(char c)
     while (++i < (n_tokens))
         if (tokens[i][0] == c)
             return (tokens[i][1]);
-    return (0);
+    return (EMPTY);
 }
 
 static bool is_token(char *str)

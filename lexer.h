@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/14 17:21:36 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:58:04 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 typedef enum e_token
 {
+	EMPTY = -1,
 	PIPE,
 	REDIR_R,
 	REDIR_L,

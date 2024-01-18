@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 14:37:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:51:11 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,6 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 		{
 			content = (t_parser *)params_head->content;
 			ft_putstr_fd(content->cmd_str, 1);
-			if (content->env_vars)
-			{
-				// TODO: Uconditional jump or move depended on uninitialised value(s) (e.g "$$LOGNAME")
-				// TODO: Controllare perche' lexer o parser non settano correttamente il numero di env vars
-				while (*content->env_vars)
-				{
-					printf(" %s", *content->env_vars);
-					content->env_vars++;
-				}
-			}
 			if (content->redirs)
 			{
 				redirs = content->redirs;
@@ -110,7 +100,6 @@ static void	exec_cmd(char *path, char **cmd_args, char **envp, t_data *data)
 		if (!cmd_args)
 			ft_quit(5, ft_strdup("failed to allocate memory"), data);
 		data->cmd_path = get_cmd(path, cmd_args[0], data);
-		printf("%s\n", data->cmd_path);
 		if (!data->cmd_path)
 			ft_quit(3, ft_strjoin("command not found: ", cmd_args[0]), data);
 		else

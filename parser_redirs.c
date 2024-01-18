@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:37:28 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/18 15:47:42 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem,
 	redir_content->type = REDIR_INPUT_FD;
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
 	token_streak = check_token_streak(&next_token, lexered_params);
-	printf("token streak: %d\n", token_streak);
 	if (token_streak == 2 && next_token == REDIR_L)
 	{
 		redir_content->type = REDIR_HEREDOC;
