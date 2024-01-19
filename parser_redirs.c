@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 17:27:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:38:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,8 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
 	token_streak = check_token_streak(&next_token, lexered_params);
 	if (token_streak == 2 && next_token == REDIR_L)
-	{
 		redir_content->type = REDIR_HEREDOC;
-		if (next_cmd_elem)
-			add_filename(&redir_content->filename, next_cmd_elem->str.cmd, data);
-	}
-	else if (token_streak > 3)
+	if (token_streak > 3)
 	{
 		ft_parse_error('<');
 		free(redir_content);
@@ -119,11 +115,12 @@ static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
 		if (cmd[i] == '&')
 			// TODO gestire il parse error in caso di piu' caratteri '&' di fila
 			i++;
-		while (cmd[i] && ft_isdigit(cmd[i]) == 1)
+		while (cmd[i] && ft_isdigit(cmd[i]))
 			i++;
 		// guardare atoi qui, tornare indietro all inizio del numero
 	}
 	// TODO	gestire il caso di un FD che supera MAX INT (direttamente in atoi)
+	//TODO gestire caso con tot di spazi dopo & (<&       3);
 	if ((is_shell_space(cmd[i]) || cmd[i] == '\0') && i > 0)
 		*fd = ft_atoi(cmd + i * (flag == LEFT) + 1 * (flag == RIGHT && *cmd == '&'));
 	else
