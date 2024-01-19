@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 18:00:58 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:22:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,6 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 		free(elem);
 		ft_quit(12, "failed to allocate memory", data);
 	}
-	elem->env_vars = (char **)malloc(sizeof(char *) * (num_env + 1));
-	if (!elem->env_vars && num_env > 0)
-	{
-		free(elem->cmd_str);
-		free(elem);
-		ft_quit(13, "failed to allocate memory", data);
-	}
-	elem->env_vars[num_env] = NULL;
 	return (elem);
 }
 
@@ -183,9 +175,9 @@ void	replace_env_var(char **str, char *env_var,
 	if (!new_str)
 		ft_quit(15, "failed to allocate memory", data);
 	if (env_var)
-		ft_strlcat(new_str, env_var, env_var_len + 1);
+		ft_strlcat(new_str, env_var, size);
 	else
-		ft_strlcat(new_str, &ph_invalid_env, 2);
+		ft_strlcat(new_str, &ph_invalid_env, size);
 	ft_strlcat(new_str, *str + env_varname_len, size);
 	free(*str);
 	*str = new_str;
@@ -234,7 +226,6 @@ void	del_content_parser(void *content)
 
 	elem = (t_parser *)content;
 	free(elem->cmd_str);
-	free_matrix(elem->env_vars);
 	ft_lstclear(&elem->redirs, &del_content_redirs);
 	free(elem);
 }

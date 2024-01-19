@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 18:01:37 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:03:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # define RIGHT 1
 
 # define PH_REDIR -42
-# define PH_ENV -43
 # define PH_INVALID_ENV -44
 
 # define CMD_LEN 0
@@ -48,7 +47,6 @@ typedef struct s_parser
 {
 	char			*cmd_str;
 	t_list			*redirs;
-	char			**env_vars;
 }					t_parser;
 
 t_list				*parser(t_list *lexered_params, t_data *data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 17:48:56 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:21:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
 	// TODO gestire caso dipo "> >" e "< <"
 	node = lexered_params;
-	content_par = new_elem(&size, node, data);
 	parsed_params = NULL;
 	prev_cmd_elem = NULL;
 	func_return = 0;
@@ -45,6 +44,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 		node = node->next;
 	}
 	node = lexered_params;
+	content_par = new_elem(&size, node, data);
 	while (node)
 	{
 		content_lex = (t_lexer *)node->content;
@@ -113,6 +113,8 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 					|| redir->type == REDIR_APPEND_FD)
 					remove_num(&content_par->cmd_str, i, RIGHT, data);
 			}
+			else if (content_par->cmd_str[i] == PH_INVALID_ENV)
+				content_par->cmd_str[i] = ' ';
 			i++;
 		}
 		node = node->next;
