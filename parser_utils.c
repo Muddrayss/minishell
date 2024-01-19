@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 16:38:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:31:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag,
 		new_str = (char *)ft_calloc(size, sizeof(char));
 		if (!new_str)
 			ft_quit(15, "failed to allocate memory", data);
-		ft_strlcat(new_str, *str, size);
+		ft_strlcpy(new_str, *str, *starting_idx + 2);
 		ft_strlcat(new_str, *str + i, size);
 	}
 	free(*str);

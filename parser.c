@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 16:32:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:14:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 				continue ;
 			}
 			else if (content_lex->str.token == REDIR_L)
-				handle_redir_l(node, prev_cmd_elem, content_par, data);
+				handle_redir_l(node, content_par, data);
 			else if (content_lex->str.token == REDIR_R)
 				handle_redir_r(node, prev_cmd_elem, content_par, data);
 			// TODO valutare se fare qualche eccezione per i token di fila;
