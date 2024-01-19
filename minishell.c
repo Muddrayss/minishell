@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 17:01:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:49:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,30 +45,9 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 		add_history(input);
 		params_head = lexer(input, data);
 		params_head = parser(params_head, data);
+		executor(params_head);
 		if (!params_head)
 			continue ;
-
-		
-		while (params_head)
-		{
-			content = (t_parser *)params_head->content;
-			ft_putstr_fd(content->cmd_str, 1);
-			if (content->redirs)
-			{
-				redirs = content->redirs;
-				while (redirs)
-				{
-					redir = (t_redir *)redirs->content;
-					printf("\ninput: %d, output: %d, filname: %s",
-						redir->fds[0], redir->fds[1], redir->filename);
-					redirs = redirs->next;
-				}
-			}
-			printf("\n\n\n");
-			params_head = params_head->next;
-		}
-
-
 		(void)path;
 		(void)envp;
 		(void)data;

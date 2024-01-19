@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:23:39 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:48:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_data
 # include "error.h"
 # include "lexer.h"
 # include "parser.h"
+# include "executor.h"
 
 char		*get_cmd(char *path, char *cmd, t_data *data);
 void		free_matrix(char **matrix);
