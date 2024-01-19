@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 13:22:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:38:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,75 +79,67 @@ static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag)
 	return (n);
 }
 
-void	remove_word(char **str, unsigned int starting_idx, uint8_t flag,
+void	remove_filename(char **str, unsigned int *starting_idx,
 		t_data *data)
 {
+	unsigned int	word_len;
 	unsigned int	i;
-	unsigned int	j;
+	size_t			size;
 	char			*new_str;
 
-	i = starting_idx;
-	j = ft_strlen(&(*str)[starting_idx]);
-	if (flag == LEFT)
+	word_len = 0;
+	i = *starting_idx + 1;
+	while (is_shell_space((*str)[i]))
+		i++;
+	while ((*str)[i] != '\0' && !is_shell_space((*str)[i]))
 	{
-		while (is_shell_space((*str)[i]))
-			i--;
-		while ((*str)[i] > 0 && !is_shell_space((*str)[i]))
-			i--;
-		new_str = (char *)ft_calloc(i + j + 1, sizeof(char));
-		if (!new_str)
-			ft_quit(15, "failed to allocate memory", data);
-		ft_strlcat(new_str, *str, i + 1);
-		ft_strlcat(new_str, *str + starting_idx, j + 1);
+		i++;
+		word_len++;
 	}
-	else
-	{
-		while (is_shell_space((*str)[i]))
-			i++;
-		while ((*str)[i] > 0 && !is_shell_space((*str)[i]))
-			i++;
-		new_str = (char *)ft_calloc(starting_idx + (j - i) + 1, sizeof(char));
-		if (!new_str)
-			ft_quit(15, "failed to allocate memory", data);
-		ft_strlcat(new_str, *str, starting_idx + 1);
-		ft_strlcat(new_str, *str + i, j - i + 1);
-	}
+	size = ft_strlen(*str) - word_len + 1;
+	new_str = (char *)ft_calloc(size, sizeof(char));
+	if (!new_str)
+		ft_quit(15, "failed to allocate memory", data);
+	ft_strlcpy(new_str, *str, *starting_idx + 2);
+	ft_strlcat(new_str, *str + i, size);
 	free(*str);
 	*str = new_str;
 }
 
-void	remove_num(char **str, unsigned int starting_idx, uint8_t flag,
+void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag,
 		t_data *data)
 {
 	unsigned int	i;
 	unsigned int	j;
+	size_t			size;
 	char			*new_str;
 
-	i = starting_idx;
-	j = ft_strlen(&(*str)[starting_idx]);
+	i = *starting_idx - (flag == LEFT) + (flag == RIGHT);
+	j = ft_strlen(&(*str)[*starting_idx]) + 1;
 	if (flag == LEFT)
 	{
-		i--;
-		while ((*str)[i] > 0 && ft_isdigit((*str)[i]))
+		while ((*str)[i] != 0 && ft_isdigit((*str)[i]))
 			i--;
-		new_str = (char *)ft_calloc(i + j + 1, sizeof(char)); // ls 1> fsdds
+		size = i + j + 1;
+		new_str = (char *)ft_calloc(size, sizeof(char)); // ls 1> fsdds
 		if (!new_str)
 			ft_quit(15, "failed to allocate memory", data);
-		ft_strlcat(new_str, *str, i + 2);
-		ft_strlcat(new_str, *str + starting_idx, j + 1);
+		ft_strlcpy(new_str, *str, i + 2);
+		ft_strlcat(new_str, *str + *starting_idx, size);
+		*starting_idx = i + 1;
 	}
 	else
 	{
-		i++;
 		if ((*str)[i] == '&')
 			i++;
-		while ((*str)[i] > 0 && ft_isdigit((*str)[i]))
+		while ((*str)[i] != 0 && ft_isdigit((*str)[i]))
 			i++;
-		new_str = (char *)ft_calloc(starting_idx + (j - i) + 1, sizeof(char));
+		size = *starting_idx + (j - i) + 1;
+		new_str = (char *)ft_calloc(size, sizeof(char));
 		if (!new_str)
 			ft_quit(15, "failed to allocate memory", data);
-		ft_strlcat(new_str, *str, starting_idx + 1);
-		ft_strlcat(new_str, *str + i, j - i + 1);
+		ft_strlcat(new_str, *str, size);
+		ft_strlcat(new_str, *str + i, size);
 	}
 	free(*str);
 	*str = new_str;
@@ -182,8 +174,6 @@ void	replace_env_var(char **str, char *env_var,
 	free(*str);
 	*str = new_str;
 }
-
-
 
 t_lexer	*get_next_cmd_elem(t_list *lexered_params)
 {

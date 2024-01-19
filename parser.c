@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 13:21:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:32:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,14 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 			{
 				redir = (t_redir *)content_par->redirs->content;
 				if (redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
-					remove_num(&content_par->cmd_str, i, LEFT, data);
+					remove_num(&content_par->cmd_str, &i, LEFT, data);
 				if (redir->type == REDIR_INPUT || redir->type == REDIR_APPEND
-					|| redir->type == REDIR_OUTPUT)
-					remove_word(&content_par->cmd_str, i, RIGHT, data);
-				else if (redir->type == REDIR_HEREDOC)
-					remove_word(&content_par->cmd_str, i, RIGHT, data);
+					|| redir->type == REDIR_OUTPUT || redir->type == REDIR_HEREDOC)
+					remove_filename(&content_par->cmd_str, &i, data);
 				else if (redir->type == REDIR_INPUT_FD
 					|| redir->type == REDIR_OUTPUT_FD
 					|| redir->type == REDIR_APPEND_FD)
-					remove_num(&content_par->cmd_str, i, RIGHT, data);
+					remove_num(&content_par->cmd_str, &i, RIGHT, data);
 			}
 			else if (content_par->cmd_str[i] == PH_INVALID_ENV)
 				content_par->cmd_str[i] = ' ';

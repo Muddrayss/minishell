@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 17:59:43 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:43:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	handle_redir_l(t_list *lexered_params, t_lexer *prev_cmd_elem,
 		ft_quit(12, "failed to allocate memory", data);
 	redir_content->fds[0] = -42;
 	redir_content->fds[1] = STDIN_FILENO;
+	redir_content->filename = NULL;
 	redir_content->type = REDIR_INPUT_FD;
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
 	token_streak = check_token_streak(&next_token, lexered_params);
@@ -81,6 +82,7 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem,
 		ft_quit(12, "failed to allocate memory", data);
 	redir_content->fds[0] = STDOUT_FILENO;
 	redir_content->fds[1] = -42;
+	redir_content->filename = NULL;
 	redir_content->type = REDIR_OUTPUT_FD;
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
 	token_streak = check_token_streak(&next_token, lexered_params);
@@ -103,9 +105,9 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem,
 		redir_content->type = REDIR_OUTPUT;
 		if (token_streak == 2 && next_token == REDIR_R)
 			redir_content->type = REDIR_APPEND;
-		if (next_cmd_elem)
-			add_left_right_filenames(&redir_content->filename,
-				next_cmd_elem->str.cmd, RIGHT, data);
+		// if (next_cmd_elem)
+		// 	add_left_right_filenames(&redir_content->filename,
+		// 		next_cmd_elem->str.cmd, RIGHT, data);
 	}
 	if (redir_content->type != REDIR_APPEND && token_streak == 2
 		&& next_token == REDIR_R)
@@ -155,9 +157,9 @@ static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag,
 	if (flag == LEFT)
 	{
 		i = ft_strlen(cmd) - 1;
-		while (cmd[i] && is_shell_space(cmd[i]))
+		while (cmd[i] != '\0' && is_shell_space(cmd[i]))
 			i--;
-		while (cmd[i] && !is_shell_space(cmd[i]))
+		while (cmd[i] != '\0' && !is_shell_space(cmd[i]))
 			i--;
 		tmp = ft_strdup(&cmd[i + 1]);
 		if (!tmp)
@@ -171,14 +173,14 @@ static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag,
 	// TODO gestire il caso in cui c'e' un token tipo & prima del filename
 	{
 		i = 0;
-		while (cmd[i] && is_shell_space(cmd[i]))
+		while (cmd[i] != '\0' && is_shell_space(cmd[i]))
 			i++;
 		name = ft_strdup(&cmd[i]);
 		if (!name)
 			ft_quit(16, "failed to allocate memory", data);
-		while (cmd[i] && !is_shell_space(cmd[i]))
+		while (cmd[i] != '\0' && !is_shell_space(cmd[i]))
 			i++;
-		name[i] = '\0';
+		name[i - 1] = '\0';
 		if (name[0] == PH_INVALID_ENV)
 		{
 			free(name);
