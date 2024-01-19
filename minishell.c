@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 16:47:16 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:01:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	minishell_loop(char *path, char **envp, t_data *data)
 					redirs = redirs->next;
 				}
 			}
-			printf("\n");
+			printf("\n\n\n");
 			params_head = params_head->next;
 		}
 

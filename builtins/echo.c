@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 16:37:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:39:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,8 @@ static int  check_flag(char **argv, bool *is_n)
 
     *is_n = false;
     i = 1;
-    //gli spazi sono gia gestiti dall' interpretazione automatica di argv
     if (argv[1][0] != '-')
         return (1);
-    //libft originale non ha ft_strcmp ma solo ft_strncmp. ft_strncmp non e' sufficiente perche' devo comparare tutta la flag. altrimenti (-nigga) verrebbe interpretata come (-n)
     while (ft_strcmp(argv[i], "-n") == 0)
     {
         i++;

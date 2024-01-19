@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 13:43:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:02:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ static void	add_left_right_filenames(char **filename, char *cmd, uint8_t flag,
 			ft_quit(16, "failed to allocate memory", data);
 		while (cmd[i] != '\0' && !is_shell_space(cmd[i]))
 			i++;
-		name[i - 1] = '\0';
+		name[i] = '\0';
 		if (name[0] == PH_INVALID_ENV)
 		{
 			free(name);
