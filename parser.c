@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 17:14:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/20 15:15:15 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ static void	replace_placeholders(t_list *parsed_params, t_data *data)
 					|| redir->type == REDIR_OUTPUT_FD
 					|| redir->type == REDIR_APPEND_FD)
 					remove_num(&content_par->cmd_str, &i, RIGHT, data);
+				content_par->cmd_str[i] = ' ';
 			}
 			else if (content_par->cmd_str[i] == PH_INVALID_ENV)
 				content_par->cmd_str[i] = ' ';

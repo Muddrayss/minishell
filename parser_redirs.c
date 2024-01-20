@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 17:38:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/20 18:26:10 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,30 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
 	token_streak = check_token_streak(&next_token, lexered_params);
 	if (token_streak == 2 && next_token == REDIR_L)
-		redir_content->type = REDIR_HEREDOC;
-	if (token_streak > 3)
 	{
-		ft_parse_error('<');
-		free(redir_content);
-		return ;
+		redir_content->type = REDIR_HEREDOC;
+		add_filename(&redir_content->filename, next_cmd_elem->str.cmd, data);
 	}
 	else
 	{
-		if (next_cmd_elem)
+		if (token_streak > 3)
 		{
-			if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT) == -1)
-			{
-				redir_content->type = REDIR_INPUT;
-				if (next_cmd_elem)
-					add_filename(&redir_content->filename, next_cmd_elem->str.cmd, data);
-			}
+			ft_parse_error('<');
+			free(redir_content);
+			return ;
 		}
+		else
+		{
+			if (next_cmd_elem)
+			{
+				if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT) == -1)
+				{
+					redir_content->type = REDIR_INPUT;
+					if (next_cmd_elem)
+						add_filename(&redir_content->filename, next_cmd_elem->str.cmd, data);
+				}
+			}
+		}	
 	}
 	ft_lstadd_front(&content_par->redirs, ft_lstnew(redir_content));
 	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 2);

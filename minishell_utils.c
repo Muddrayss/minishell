@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:23:16 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/20 18:02:35 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	ft_quit(int id, char *msg, t_data *data)
 			ft_putstr_fd(strerror(errno), 1);
 		else
 			ft_putstr_fd(msg, 1);
+		ft_putstr_fd("\n", 1);
 	}
 	if (data)
 	{

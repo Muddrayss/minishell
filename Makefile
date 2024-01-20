@@ -3,19 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
+#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/01/17 15:34:59 by craimond         ###   ########.fr        #
+#    Updated: 2024/01/20 16:36:55 by egualand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
-SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c 
+SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c \
+		executor.c
 
 OBJS = $(SRCS:.c=.o)
-HEADERS = minishell.h lexer.h parser.h error.h
+HEADERS = minishell.h lexer.h parser.h error.h executor.h
 
 CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
@@ -50,7 +51,7 @@ fclean: clean
 	@echo "Full cleaning of $(NAME) done!"
 
 leaks: all
-	@valgrind --leak-check=full --show-leak-kinds=all -v ./$(NAME) 2> leak_report
+	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp -v ./$(NAME) 2> leak_report
 	@echo "leak report generated"
 
 re: fclean all
