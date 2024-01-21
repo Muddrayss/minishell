@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/20 17:14:04 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:04:55 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@
 # define IS_LAST 0
 
 void executor(t_list *parsed_params, t_data *data);
-void exec_redirs(t_list *redirs, t_data *data);
+int exec_redirs(t_list *redirs, t_data *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/20 18:02:35 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:10:59 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,19 @@ void	ft_quit(int id, char *msg, t_data *data)
 		ft_putstr_fd("\n", 1);
 	}
 	if (data)
-	{
-		if (data->cmd_args)
-			free_matrix(data->cmd_args);
-		if (data->cmd_path)
-			free(data->cmd_path);
-		if (data->lexered_params)
-			ft_lstclear(data->lexered_params, &del_content_lexer);
-	}
+		free_data(data);
 	exit(id);
 	return ;
+}
+
+void	free_data(t_data *data)
+{
+	if (data->cmd_args)
+		free_matrix(data->cmd_args);
+	if (data->cmd_path)
+		free(data->cmd_path);
+	if (data->lexered_params)
+		ft_lstclear(data->lexered_params, &del_content_lexer);	
 }
 
 int8_t	ft_parse_error(char token)

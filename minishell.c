@@ -6,23 +6,16 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/20 18:03:05 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 17:30:12 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+t_signals	g_signals;
+
 static void	init(char **envp, char **path, t_data *data);
 static void minishell_loop(t_data *data);
-
-// static void print_matrix(char **matrix)
-// {
-// 	unsigned int i;
-
-// 	i = -1;
-// 	while (matrix[++i])
-// 		printf("%s\n", matrix[i]);
-// }
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -44,6 +37,9 @@ static void	init(char **envp, char **path, t_data *data)
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
 	init_signals();
+	g_signals.sigint = 0;
+	g_signals.in_cmd = 0;
+	g_signals.in_heredoc = 0;
 	exec_single_cmd(*path, "clear", envp, NULL, data);
 }
 
@@ -62,7 +58,10 @@ static void	minishell_loop(t_data *data)
 		add_history(input);
 		params_head = lexer(input, data);
 		params_head = parser(params_head, data);
+		g_signals.in_cmd = 1;
+		g_signals.sigint = 0;
 		executor(params_head, data);
+		g_signals.in_cmd = 0;
 		if (!params_head)
 			continue ;
 	}
@@ -93,6 +92,11 @@ void  exec(char *path, char *cmd_str, char **envp, t_data *data)
 	data->cmd_args = cmd_args;
 	if (!cmd_args)
 		ft_quit(5, "Failed to allocate memory", data);
+	if (!cmd_args[0])
+	{
+		free_data(data);
+		exit(0);
+	}
 	data->cmd_path = get_cmd(path, cmd_args[0], data);
 	if (!data->cmd_path)
 		ft_quit(COMMAND_NOT_FOUND, ft_strjoin("command not found: ", cmd_args[0]), data);

@@ -6,14 +6,15 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/20 18:54:10 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 18:04:55 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void handle_command(t_parser *content, int fds[], t_data *data, int8_t flag);
-static void heredoc(char *limiter, int fd);
+static void heredoc(char *limiter, int fds[], t_data *data);
+static void resume(t_list *node);
 
 void executor(t_list *parsed_params, t_data *data)
 {
@@ -21,10 +22,11 @@ void executor(t_list *parsed_params, t_data *data)
     t_list          *node;
     int             fds[2];
     int prev_output_fd;
-    pid_t           pid;
     unsigned int    n_cmds;
+    int             status;
 
     node = parsed_params;
+    status = 0;
     n_cmds = ft_lstsize(node);
     if (n_cmds == 1)
     {
@@ -41,63 +43,79 @@ void executor(t_list *parsed_params, t_data *data)
             if (pipe(fds) == -1)
                 ft_quit(18, NULL, data);
             fds[0] = prev_output_fd;
-            pid = fork();
-            if (pid == -1)
+            content->pid = fork();
+            if (content->pid == -1)
                 ft_quit(19, NULL, data);
-            if (pid == 0)
+            if (content->pid == 0)
             {
                 handle_command(content, fds, data, IS_LAST);
             }
             else
             {
+                while (!WIFSTOPPED(status) && !WIFEXITED(status) && !WIFSIGNALED(status))
+                {
+                    waitpid(content->pid, &status, WUNTRACED);
+                }
                 if (close(fds[0]) == -1)
                     ft_quit(20, NULL, data);
                 prev_output_fd = fds[1];
             }
             node = node->next;
         }
-       // wait_all_commands(n_cmds, data);
+        resume(parsed_params);
+        // wait_all_commands(n_cmds, data);
     }
     
 }
 
+static void resume(t_list *node)
+{
+    t_parser *content;
+
+    while (node)
+    {
+        content = (t_parser *)node->content;
+        kill(content->pid, SIGCONT);
+        node = node->next;
+    }
+}
+
 static void handle_command(t_parser *content, int fds[], t_data *data, int8_t flag)
-{   
-    exec_redirs(content->redirs, data);
-    if ((dup2(fds[0], STDIN_FILENO) == -1)
-        || (flag != IS_LAST && dup2(fds[1], STDOUT_FILENO) == -1)
-        || close(fds[0]) == -1
-        || close(fds[1]) == -1)
+{
+    int here_doc_fd;
+    
+    here_doc_fd = exec_redirs(content->redirs, data);
+    if (here_doc_fd != -1)
+        fds[0] = here_doc_fd;
+    kill(getpid(), SIGSTOP);
+    if ((dup2(fds[0], STDIN_FILENO) == -1) || (flag != IS_LAST && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[0]) == -1 || close(fds[1]) == -1)
         ft_quit(20, NULL, data);
     exec(getenv("PATH"), content->cmd_str, data->envp, data);
 }
 
-void exec_redirs(t_list *redirs, t_data *data)
+int exec_redirs(t_list *redirs, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
-    unsigned int    i;
+    int heredoc_fds[2] = 
+    {-1, -1};
 
     node = redirs;
-    i = 2;
     while (node)
     {
-        redir = (t_redir *)redirs->content;
+        redir = (t_redir *)node->content;
         if (redir->fds[0] == -42)
         {
             if (redir->type == REDIR_HEREDOC)
             {
-                heredoc(redir->filename, i);
-                i++;
+                heredoc(redir->filename, heredoc_fds, data);
             }
             else if (redir->type == REDIR_INPUT)
             {
                 redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
-                if (redir->fds[0] == -1)
+                if (redir->fds[0] == -1 || dup2(redir->fds[0], STDIN_FILENO) == -1 || close(redir->fds[0]) == -1)
                     ft_quit(21, NULL, data);
             }
-            dup2(redir->fds[0], STDIN_FILENO);
-            close(redir->fds[0]);
         }
         else if (redir->fds[1] == -42)
         {
@@ -118,25 +136,39 @@ void exec_redirs(t_list *redirs, t_data *data)
         }
         node = node->next;
     }
+    return (close(heredoc_fds[0]), heredoc_fds[1]);
 }
 
-static void heredoc(char *limiter, int fd)
+static size_t   get_max_num(size_t num1, size_t num2)
 {
-    char *str;
-    
-    (void)limiter;
+    if (num1 > num2)
+        return (num1);
+    return (num2);
+}
+
+static void heredoc(char *limiter, int fds[], t_data *data)
+{
+    char    *str;
+    size_t  str_len;
+    size_t  limiter_len;
+  
     str = NULL;
-    while (1)
+    limiter_len = ft_strlen(limiter);
+    if (is_shell_space(limiter[limiter_len - 1]))
+        limiter_len--;
+    if (fds[0] == -1 && pipe(fds) == -1)
+        ft_quit(18, NULL, data);
+    while (!g_signals.sigint)
     {
         str = readline("> ");
         if (!str)
             break ;
-        if (ft_strncmp(str, limiter, ft_strlen(limiter)) == 0)
+        str_len = ft_strlen(str);
+        if (ft_strncmp(limiter, str, get_max_num(str_len, limiter_len)) == 0)
             break ;
-        ft_putstr_fd(str, fd);
+        ft_putstr_fd(str, fds[0]);
         free(str);
     }
     free(str);
 }
 
-//TODO gestire pie' here doc di seguito anche tra pipe e pipe. basta aprire con open (O_APPEND) il primo e poi fare putstr del secondo sul primo. chiudendo il secondo.

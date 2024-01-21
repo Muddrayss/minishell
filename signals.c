@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/01/15 19:28:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/21 17:27:30 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,16 @@ static void	sig_handler(int signo)
 	errno = EINTR;
 	if (signo == SIGINT)
 	{
-		ft_putstr_fd("\n", 1);
+		if (!g_signals.in_heredoc)
+			ft_putstr_fd("\n", 1);
+		if (g_signals.in_cmd)
+		{
+			g_signals.sigint = 1;
+			rl_replace_line("", 0);
+			rl_redisplay();
+			rl_done = 1;
+			return ;
+		}
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();

@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/20 18:26:10 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:45:27 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 			}
 		}	
 	}
-	ft_lstadd_front(&content_par->redirs, ft_lstnew(redir_content));
+	ft_lstadd_back(&content_par->redirs, ft_lstnew(redir_content));
 	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 2);
 }
 
@@ -101,7 +101,7 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	}
 	if (redir_content->type != REDIR_APPEND && token_streak == 2 && next_token == REDIR_R)
 		redir_content->type = REDIR_APPEND_FD;
-	ft_lstadd_front(&content_par->redirs, ft_lstnew(redir_content));
+	ft_lstadd_back(&content_par->redirs, ft_lstnew(redir_content));
 	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 2);
 }
 

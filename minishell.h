@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/20 17:15:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 17:26:31 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ typedef struct s_data
 	t_list	**lexered_params;
 }			t_data;
 
+typedef struct s_signals
+{
+	int sigint;
+	int in_cmd;
+	int in_heredoc;
+}				t_signals;
+extern t_signals	g_signals;
+
 # include "colors.h"
 # include "error.h"
 # include "lexer.h"
@@ -50,9 +58,11 @@ void exec_single_cmd(char *path, char *cmd_str, char **envp, t_list *redirs, t_d
 void exec(char *path, char *cmd_str, char **envp, t_data *data);
 void		free_matrix(char **matrix);
 void		ft_quit(int id, char *msg, t_data *data);
-int8_t		ft_parse_error(char token);
+void free_data(t_data *data);
+int8_t ft_parse_error(char token);
 bool		is_shell_space(char c);
 void		init_signals(void);
 void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
+
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 17:14:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/21 15:55:22 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ typedef struct s_redir
 
 typedef struct s_parser
 {
-	char			*cmd_str;
-	t_list			*redirs;
-}					t_parser;
+	char	*cmd_str;
+	t_list	*redirs;
+	pid_t 	pid;
+} t_parser;
 
 t_list			*parser(t_list *lexered_params, t_data *data);
 void			handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data);
