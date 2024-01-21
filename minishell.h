@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 17:26:31 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 19:37:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ extern t_signals	g_signals;
 # include "executor.h"
 
 char		*get_cmd(char *path, char *cmd, t_data *data);
-void exec_single_cmd(char *path, char *cmd_str, char **envp, t_list *redirs, t_data *data);
-void exec(char *path, char *cmd_str, char **envp, t_data *data);
+void		exec_single_cmd(char *path, char *cmd_str, t_list *redirs, t_data *data);
+void  		exec(char *path, char *cmd_str, t_data *data);
 void		free_matrix(char **matrix);
 void		ft_quit(int id, char *msg, t_data *data);
-void free_data(t_data *data);
-int8_t ft_parse_error(char token);
+void 		free_data(t_data *data);
+int8_t 		ft_parse_error(char token);
 bool		is_shell_space(char c);
 void		init_signals(void);
 void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));

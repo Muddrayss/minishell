@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 18:47:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:11:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void handle_command(t_parser *content, int fds[], t_data *data, int8_t flag);
+static void handle_command(t_parser *content, int fds[], t_data *data, bool is_last);
 static void heredoc(char *limiter, int fd);
 static void resume(t_list *node);
 
@@ -28,43 +28,32 @@ void executor(t_list *parsed_params, t_data *data)
     node = parsed_params;
     status = 0;
     n_cmds = ft_lstsize(node);
-    if (n_cmds == 1)
+    node = parsed_params;
+    prev_output_fd = STDIN_FILENO;
+    while (node)
     {
         content = (t_parser *)node->content;
-        exec_single_cmd(getenv("PATH"), content->cmd_str, data->envp, content->redirs, data);
-    }
-    else
-    {
-        node = parsed_params;
-        prev_output_fd = STDOUT_FILENO;
-        while (node)
+        if (pipe(fds) == -1)
+            ft_quit(18, NULL, data);
+        fds[0] = prev_output_fd;
+        content->pid = fork();
+        if (content->pid == -1)
+            ft_quit(19, NULL, data);
+        if (content->pid == 0)
+            handle_command(content, fds, data, true * (node->next == NULL));
+        else
         {
-            content = (t_parser *)node->content;
-            if (pipe(fds) == -1)
-                ft_quit(18, NULL, data);
-            fds[0] = prev_output_fd;
-            content->pid = fork();
-            if (content->pid == -1)
-                ft_quit(19, NULL, data);
-            if (content->pid == 0)
-            {
-                handle_command(content, fds, data, IS_LAST);
-            }
-            else
-            {
-                while (!WIFSTOPPED(status) && !WIFEXITED(status) && !WIFSIGNALED(status))
-                {
-                    waitpid(content->pid, &status, WUNTRACED);
-                }
-                if (close(fds[0]) == -1)
-                    ft_quit(20, NULL, data);
-                prev_output_fd = fds[1];
-            }
-            node = node->next;
+            waitpid(content->pid, &status, WUNTRACED);
+            while (!WIFSTOPPED(status) && !WIFEXITED(status) && !WIFSIGNALED(status))
+                waitpid(content->pid, &status, WUNTRACED);
+            if (close(fds[0]) == -1)
+                ft_quit(20, NULL, data);
+            prev_output_fd = fds[1];
         }
-        resume(parsed_params);
-        // wait_all_commands(n_cmds, data);
+        node = node->next;
     }
+    resume(parsed_params);
+    waitpid(content->pid, NULL, 0); //aspetta l'ultimo comando
 }
 
 static void resume(t_list *node)
@@ -79,13 +68,14 @@ static void resume(t_list *node)
     }
 }
 
-static void handle_command(t_parser *content, int fds[], t_data *data, int8_t flag)
+static void handle_command(t_parser *content, int fds[], t_data *data, bool is_last)
 {    
     exec_redirs(content->redirs, fds[0], data);
+    //the here_doc writes in fds[0]
     kill(getpid(), SIGSTOP);
-    if ((dup2(fds[0], STDIN_FILENO) == -1) || (flag != IS_LAST && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[0]) == -1 || close(fds[1]) == -1)
+    if ((dup2(fds[0], STDIN_FILENO) == -1) || (is_last == false && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[0]) == -1 || close(fds[1]) == -1)
         ft_quit(20, NULL, data);
-    exec(getenv("PATH"), content->cmd_str, data->envp, data);
+    exec(getenv("PATH"), content->cmd_str, data);
 }
 
 void exec_redirs(t_list *redirs, int in_fd, t_data *data)
@@ -142,6 +132,7 @@ static void heredoc(char *limiter, int fd)
     size_t  str_len;
     size_t  limiter_len;
   
+    g_signals.in_cmd = 1;
     str = NULL;
     limiter_len = ft_strlen(limiter);
     if (is_shell_space(limiter[limiter_len - 1]))
@@ -158,5 +149,6 @@ static void heredoc(char *limiter, int fd)
         free(str);
     }
     free(str);
+    g_signals.in_cmd = 0;
 }
 

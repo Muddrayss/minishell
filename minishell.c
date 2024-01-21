@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 17:30:12 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 20:06:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	init(char **envp, char **path, t_data *data)
 	g_signals.sigint = 0;
 	g_signals.in_cmd = 0;
 	g_signals.in_heredoc = 0;
-	exec_single_cmd(*path, "clear", envp, NULL, data);
+	exec_single_cmd(*path, "clear", NULL, data);
 }
 
 static void	minishell_loop(t_data *data)
@@ -66,8 +66,8 @@ static void	minishell_loop(t_data *data)
 			continue ;
 	}
 }
-
-void	exec_single_cmd(char *path, char *cmd_str, char **envp, t_list *redirs, t_data *data)
+//va bene per comandi senza here_doc (non essendoci pipe())
+void	exec_single_cmd(char *path, char *cmd_str, t_list *redirs, t_data *data)
 {
 	pid_t	pid;
 
@@ -77,14 +77,14 @@ void	exec_single_cmd(char *path, char *cmd_str, char **envp, t_list *redirs, t_d
 	if (pid == 0)
 	{
 		if (redirs)
-			exec_redirs(redirs, data);
-		exec(path, cmd_str, envp, data);
+			exec_redirs(redirs, 0, data);
+		exec(path, cmd_str, data);
 	}
 	else
 		wait(NULL);
 }
 
-void  exec(char *path, char *cmd_str, char **envp, t_data *data)
+void  exec(char *path, char *cmd_str, t_data *data)
 {
 	char	**cmd_args;
 
@@ -101,7 +101,6 @@ void  exec(char *path, char *cmd_str, char **envp, t_data *data)
 	if (!data->cmd_path)
 		ft_quit(COMMAND_NOT_FOUND, ft_strjoin("command not found: ", cmd_args[0]), data);
 	else
-		execve(data->cmd_path, cmd_args, envp);
-	ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ",
-					cmd_str), data);
+		execve(data->cmd_path, cmd_args, data->envp);
+	ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_str), data);
 }
