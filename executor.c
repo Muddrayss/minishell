@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 18:04:55 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/21 18:47:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void handle_command(t_parser *content, int fds[], t_data *data, int8_t flag);
-static void heredoc(char *limiter, int fds[], t_data *data);
+static void heredoc(char *limiter, int fd);
 static void resume(t_list *node);
 
 void executor(t_list *parsed_params, t_data *data)
@@ -21,7 +21,7 @@ void executor(t_list *parsed_params, t_data *data)
     t_parser        *content;
     t_list          *node;
     int             fds[2];
-    int prev_output_fd;
+    int             prev_output_fd;
     unsigned int    n_cmds;
     int             status;
 
@@ -36,7 +36,7 @@ void executor(t_list *parsed_params, t_data *data)
     else
     {
         node = parsed_params;
-        prev_output_fd = STDIN_FILENO;
+        prev_output_fd = STDOUT_FILENO;
         while (node)
         {
             content = (t_parser *)node->content;
@@ -65,7 +65,6 @@ void executor(t_list *parsed_params, t_data *data)
         resume(parsed_params);
         // wait_all_commands(n_cmds, data);
     }
-    
 }
 
 static void resume(t_list *node)
@@ -81,24 +80,18 @@ static void resume(t_list *node)
 }
 
 static void handle_command(t_parser *content, int fds[], t_data *data, int8_t flag)
-{
-    int here_doc_fd;
-    
-    here_doc_fd = exec_redirs(content->redirs, data);
-    if (here_doc_fd != -1)
-        fds[0] = here_doc_fd;
+{    
+    exec_redirs(content->redirs, fds[0], data);
     kill(getpid(), SIGSTOP);
     if ((dup2(fds[0], STDIN_FILENO) == -1) || (flag != IS_LAST && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[0]) == -1 || close(fds[1]) == -1)
         ft_quit(20, NULL, data);
     exec(getenv("PATH"), content->cmd_str, data->envp, data);
 }
 
-int exec_redirs(t_list *redirs, t_data *data)
+void exec_redirs(t_list *redirs, int in_fd, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
-    int heredoc_fds[2] = 
-    {-1, -1};
 
     node = redirs;
     while (node)
@@ -107,9 +100,7 @@ int exec_redirs(t_list *redirs, t_data *data)
         if (redir->fds[0] == -42)
         {
             if (redir->type == REDIR_HEREDOC)
-            {
-                heredoc(redir->filename, heredoc_fds, data);
-            }
+                heredoc(redir->filename, in_fd);
             else if (redir->type == REDIR_INPUT)
             {
                 redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
@@ -131,12 +122,11 @@ int exec_redirs(t_list *redirs, t_data *data)
                 if (redir->fds[1] == -1)
                     ft_quit(22, NULL, data);
             }
-            dup2(redir->fds[1], STDOUT_FILENO);
-            close(redir->fds[1]);
+            if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || close(redir->fds[1]))
+                ft_quit(23, NULL, data);
         }
         node = node->next;
     }
-    return (close(heredoc_fds[0]), heredoc_fds[1]);
 }
 
 static size_t   get_max_num(size_t num1, size_t num2)
@@ -146,7 +136,7 @@ static size_t   get_max_num(size_t num1, size_t num2)
     return (num2);
 }
 
-static void heredoc(char *limiter, int fds[], t_data *data)
+static void heredoc(char *limiter, int fd)
 {
     char    *str;
     size_t  str_len;
@@ -156,8 +146,6 @@ static void heredoc(char *limiter, int fds[], t_data *data)
     limiter_len = ft_strlen(limiter);
     if (is_shell_space(limiter[limiter_len - 1]))
         limiter_len--;
-    if (fds[0] == -1 && pipe(fds) == -1)
-        ft_quit(18, NULL, data);
     while (!g_signals.sigint)
     {
         str = readline("> ");
@@ -166,7 +154,7 @@ static void heredoc(char *limiter, int fds[], t_data *data)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, get_max_num(str_len, limiter_len)) == 0)
             break ;
-        ft_putstr_fd(str, fds[0]);
+        ft_putstr_fd(str, fd);
         free(str);
     }
     free(str);
