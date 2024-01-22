@@ -14,7 +14,7 @@
 
 static void child(t_parser *content, int fds[], bool is_last, t_data *data);
 static void fill_heredoc(char *limiter, int fd);
-static void resume(t_list *node);
+//static void resume(t_list *node);
 static void wait_for_children(unsigned int n_cmds);
 static void parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], t_data *data);
 
@@ -42,7 +42,8 @@ void executor(t_list *parsed_params, t_data *data)
             parent(content->redirs, content->pid, original_stdin, fds, data);
         node = node->next;
     }
-    resume(parsed_params);
+    //TODO trovare una soluzione per gli heredoc multipli (in diverse pipe)
+    //resume(parsed_params);
     wait_for_children(ft_lstsize(parsed_params));
     dup2(original_stdin, STDIN_FILENO);
 }
@@ -62,6 +63,7 @@ static void parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[
     if (is_heredoc)
         dup2(heredoc_fds[0], STDIN_FILENO); //in questo modo l'heredoc sovrascrive l'output precedente
     close(heredoc_fds[0]);
+    kill(child_pid, SIGCONT);
 }
 
 static void child(t_parser *content, int fds[], bool is_last, t_data *data)
@@ -73,7 +75,7 @@ static void child(t_parser *content, int fds[], bool is_last, t_data *data)
     printf(GREEN "executing %s" DEFAULT "\n", content->cmd_str);
     exec(getenv("PATH"), content->cmd_str, data);
 }
-
+/*
 static void resume(t_list *node)
 {
     t_parser *content;
@@ -86,7 +88,7 @@ static void resume(t_list *node)
         printf("resumed %d\n", content->pid);
     }
 }
-
+*/
 static void wait_for_children(unsigned int n_cmds)
 {
     unsigned int i;
