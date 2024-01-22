@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 18:12:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 20:46:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,7 @@ void	exec_single_cmd(char *path, char *cmd_str, t_list *redirs, t_data *data)
 	if (pid == 0)
 		exec(path, cmd_str, data);
 	else
-	{
-		// kill(pid, SIGSTOP);
-		exec_redirs(redirs, STDIN_FILENO, data);
-	}
-	// kill(pid, SIGCONT);
+		exec_redirs(redirs, STDIN_FILENO, 0, data);
 	wait(NULL);
 }
 

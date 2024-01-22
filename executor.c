@@ -6,17 +6,18 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 18:13:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 20:49:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void child(t_parser *content, int fds[], bool is_last, t_data *data);
-static void heredoc(char *limiter, int fd);
+static void fill_heredoc(char *limiter, int fd);
 static void resume(t_list *node);
 static void wait_for_children(unsigned int n_cmds);
-static void parent(t_list *redirs, pid_t child_pid, int fds[], t_data *data);
+static void parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], t_data *data);
+
 
 void executor(t_list *parsed_params, t_data *data)
 {
@@ -36,9 +37,9 @@ void executor(t_list *parsed_params, t_data *data)
         if (content->pid == -1)
             ft_quit(19, NULL, data);
         if (content->pid == 0)
-            child(content, fds, true * (node->next == NULL), data);
+            child(content, fds, node->next == NULL, data);
         else
-            parent(content->redirs, content->pid, fds, data);
+            parent(content->redirs, content->pid, original_stdin, fds, data);
         node = node->next;
     }
     resume(parsed_params);
@@ -46,13 +47,21 @@ void executor(t_list *parsed_params, t_data *data)
     dup2(original_stdin, STDIN_FILENO);
 }
 
-static void parent(t_list *redirs, pid_t child_pid, int fds[], t_data *data)
+static void parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], t_data *data)
 {
+    bool    is_heredoc;
+    int     heredoc_fds[2];
+
     kill(child_pid, SIGSTOP);
     close(fds[1]);
-    exec_redirs(redirs, fds[0], data);
+    pipe(heredoc_fds); //uso la pipe come file temporaneo per l'heredoc (anche se non e' tra processi)
     dup2(fds[0], STDIN_FILENO);
     close(fds[0]);
+    is_heredoc = exec_redirs(redirs, heredoc_fds[1], original_stdin, data);
+    close(heredoc_fds[1]);
+    if (is_heredoc)
+        dup2(heredoc_fds[0], STDIN_FILENO); //in questo modo l'heredoc sovrascrive l'output precedente
+    close(heredoc_fds[0]);
 }
 
 static void child(t_parser *content, int fds[], bool is_last, t_data *data)
@@ -61,6 +70,7 @@ static void child(t_parser *content, int fds[], bool is_last, t_data *data)
     if (!is_last)
         dup2(fds[1], STDOUT_FILENO);
     close(fds[1]);
+    printf(GREEN "executing %s" DEFAULT "\n", content->cmd_str);
     exec(getenv("PATH"), content->cmd_str, data);
 }
 
@@ -73,6 +83,7 @@ static void resume(t_list *node)
         content = (t_parser *)node->content;
         kill(content->pid, SIGCONT);
         node = node->next;
+        printf("resumed %d\n", content->pid);
     }
 }
 
@@ -88,11 +99,13 @@ static void wait_for_children(unsigned int n_cmds)
     }
 }
 
-void exec_redirs(t_list *redirs, int heredoc_fd, t_data *data)
+bool exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
+    bool            is_heredoc;
 
+    is_heredoc = false;
     node = redirs;
     while (node)
     {
@@ -100,7 +113,11 @@ void exec_redirs(t_list *redirs, int heredoc_fd, t_data *data)
         if (redir->fds[0] == -42)
         {
             if (redir->type == REDIR_HEREDOC)
-                heredoc(redir->filename, heredoc_fd);
+            {
+                dup2(original_stdin, STDIN_FILENO);
+                fill_heredoc(redir->filename, heredoc_fd);
+                is_heredoc = true;
+            }
             else if (redir->type == REDIR_INPUT)
             {
                 redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
@@ -127,6 +144,7 @@ void exec_redirs(t_list *redirs, int heredoc_fd, t_data *data)
         }
         node = node->next;
     }
+    return (is_heredoc);
 }
 
 static size_t   get_max_num(size_t num1, size_t num2)
@@ -136,7 +154,7 @@ static size_t   get_max_num(size_t num1, size_t num2)
     return (num2);
 }
 
-static void heredoc(char *limiter, int fd)
+static void fill_heredoc(char *limiter, int fd)
 {
     char    *str;
     size_t  str_len;

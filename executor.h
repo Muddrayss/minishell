@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 17:52:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 20:14:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
 # define COMMAND_NOT_FOUND 127
 
 void    executor(t_list *parsed_params, t_data *data);
-void    exec_redirs(t_list *redirs, int heredoc_fd, t_data *data);
+bool    exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *data);
 
 #endif
