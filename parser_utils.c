@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 17:31:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 12:05:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,12 @@ unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
 t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 {
 	t_parser		*elem;
-	unsigned int	num_env;
 
 	elem = (t_parser *)malloc(sizeof(t_parser));
 	if (!elem)
 		ft_quit(10, "failed to allocate memory", data);
 	elem->redirs = NULL;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 1;
-	num_env = get_x_between_pipes(lexered_params, ENV_NUM);
 	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)
 	{
@@ -69,9 +67,9 @@ static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag)
 		l_content = *((t_lexer *)lexered_params->content);
 		if (flag == CMD_LEN && l_content.type == CMD)
 			n += ft_strlen(l_content.str.cmd) + 1; // per eventuali token
-		else if (flag == ENV_NUM && l_content.type == TOKEN
-			&& l_content.str.token == ENV)
-			n++;
+		// else if (flag == ENV_NUM && l_content.type == TOKEN
+		// 	&& l_content.str.token == ENV)
+		// 	n++;
 		else if (l_content.type == TOKEN && l_content.str.token == PIPE)
 			break ;
 		lexered_params = lexered_params->next;

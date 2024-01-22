@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 20:11:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 12:08:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,10 @@ void executor(t_list *parsed_params, t_data *data)
     t_list          *node;
     int             fds[2];
     int             prev_output_fd;
-    unsigned int    n_cmds;
     int             status;
 
     node = parsed_params;
     status = 0;
-    n_cmds = ft_lstsize(node);
-    node = parsed_params;
     prev_output_fd = STDIN_FILENO;
     while (node)
     {
@@ -46,9 +43,9 @@ void executor(t_list *parsed_params, t_data *data)
             waitpid(content->pid, &status, WUNTRACED);
             while (!WIFSTOPPED(status) && !WIFEXITED(status) && !WIFSIGNALED(status))
                 waitpid(content->pid, &status, WUNTRACED);
-            if (close(fds[0]) == -1)
+            if (close(fds[1]) == -1)
                 ft_quit(20, NULL, data);
-            prev_output_fd = fds[1];
+            prev_output_fd = fds[0];
         }
         node = node->next;
     }
@@ -70,15 +67,15 @@ static void resume(t_list *node)
 
 static void handle_command(t_parser *content, int fds[], t_data *data, bool is_last)
 {    
-    exec_redirs(content->redirs, fds[0], data);
+    exec_redirs(content->redirs, fds[1], data);
     //the here_doc writes in fds[0]
     kill(getpid(), SIGSTOP);
-    if ((dup2(fds[0], STDIN_FILENO) == -1) || (is_last == false && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[0]) == -1 || close(fds[1]) == -1)
+    if ((dup2(fds[1], STDIN_FILENO) == -1) || (is_last == false && dup2(fds[0], STDOUT_FILENO) == -1) || close(fds[1]) == -1 || close(fds[0]) == -1)
         ft_quit(20, NULL, data);
     exec(getenv("PATH"), content->cmd_str, data);
 }
 
-void exec_redirs(t_list *redirs, int in_fd, t_data *data)
+void exec_redirs(t_list *redirs, int heredoc_fd, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
@@ -90,7 +87,7 @@ void exec_redirs(t_list *redirs, int in_fd, t_data *data)
         if (redir->fds[0] == -42)
         {
             if (redir->type == REDIR_HEREDOC)
-                heredoc(redir->filename, in_fd);
+                heredoc(redir->filename, heredoc_fd);
             else if (redir->type == REDIR_INPUT)
             {
                 redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
@@ -147,6 +144,7 @@ static void heredoc(char *limiter, int fd)
             break ;
         ft_putstr_fd(str, fd);
         free(str);
+        str = NULL; //per evitare la double free
     }
     free(str);
     g_signals.in_cmd = 0;
