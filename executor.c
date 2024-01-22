@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 14:37:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 14:44:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void executor(t_list *parsed_params, t_data *data)
         else
         {
             kill(content->pid, SIGSTOP);
-            exec_redirs(content->redirs, fds[1], data);
+            exec_redirs(content->redirs, fds[0], data);
             if (close(fds[1]) == -1)
                 ft_quit(20, NULL, data);
             prev_output_fd = fds[0];
