@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 17:33:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 18:12:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	minishell_loop(t_data *data)
 			continue ;
 	}
 }
-//va bene per comandi senza here_doc (non essendoci pipe())
+//va bene per comandi senza here_doc (non essendoci pipe() ne heredoc)
 void	exec_single_cmd(char *path, char *cmd_str, t_list *redirs, t_data *data)
 {
 	pid_t	pid;
@@ -79,7 +79,7 @@ void	exec_single_cmd(char *path, char *cmd_str, t_list *redirs, t_data *data)
 	else
 	{
 		// kill(pid, SIGSTOP);
-		exec_redirs(redirs, data);
+		exec_redirs(redirs, STDIN_FILENO, data);
 	}
 	// kill(pid, SIGCONT);
 	wait(NULL);

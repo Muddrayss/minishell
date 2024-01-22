@@ -6,24 +6,26 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 17:14:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 18:13:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void child(t_parser *content, int fds[], bool is_last, t_data *data);
-static void heredoc(char *limiter);
-// static void resume(t_list *node);
+static void heredoc(char *limiter, int fd);
+static void resume(t_list *node);
 static void wait_for_children(unsigned int n_cmds);
-static void parent(t_list *redirs, int fds[], t_data *data);
+static void parent(t_list *redirs, pid_t child_pid, int fds[], t_data *data);
 
 void executor(t_list *parsed_params, t_data *data)
 {
     t_parser        *content;
     t_list          *node;
     int             fds[2];
+    int             original_stdin;
 
+    original_stdin = dup(STDIN_FILENO);
     node = parsed_params;
     while (node)
     {
@@ -36,53 +38,57 @@ void executor(t_list *parsed_params, t_data *data)
         if (content->pid == 0)
             child(content, fds, true * (node->next == NULL), data);
         else
-            parent(content->redirs, fds, data);
+            parent(content->redirs, content->pid, fds, data);
         node = node->next;
     }
-    // resume(parsed_params);
+    resume(parsed_params);
     wait_for_children(ft_lstsize(parsed_params));
+    dup2(original_stdin, STDIN_FILENO);
 }
 
-static void parent(t_list *redirs, int fds[], t_data *data)
+static void parent(t_list *redirs, pid_t child_pid, int fds[], t_data *data)
 {
+    kill(child_pid, SIGSTOP);
     close(fds[1]);
+    exec_redirs(redirs, fds[0], data);
     dup2(fds[0], STDIN_FILENO);
-    exec_redirs(redirs, data); //heredoc scrive nell'input della pipe
     close(fds[0]);
 }
 
 static void child(t_parser *content, int fds[], bool is_last, t_data *data)
-{   
+{
     close(fds[0]);
     if (!is_last)
         dup2(fds[1], STDOUT_FILENO);
     close(fds[1]);
-    //kill(getpid(), SIGSTOP);
     exec(getenv("PATH"), content->cmd_str, data);
 }
 
-// static void resume(t_list *node)
-// {
-//     t_parser *content;
+static void resume(t_list *node)
+{
+    t_parser *content;
 
-//     while (node)
-//     {
-//         content = (t_parser *)node->content;
-//         kill(content->pid, SIGCONT);
-//         node = node->next;
-//     }
-// }
+    while (node)
+    {
+        content = (t_parser *)node->content;
+        kill(content->pid, SIGCONT);
+        node = node->next;
+    }
+}
 
 static void wait_for_children(unsigned int n_cmds)
 {
     unsigned int i;
 
     i = 0;
-    while (i++ < n_cmds)
+    while (i < n_cmds)
+    {
         wait(NULL);
+        i++;
+    }
 }
 
-void exec_redirs(t_list *redirs, t_data *data)
+void exec_redirs(t_list *redirs, int heredoc_fd, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
@@ -94,7 +100,7 @@ void exec_redirs(t_list *redirs, t_data *data)
         if (redir->fds[0] == -42)
         {
             if (redir->type == REDIR_HEREDOC)
-                heredoc(redir->filename);
+                heredoc(redir->filename, heredoc_fd);
             else if (redir->type == REDIR_INPUT)
             {
                 redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
@@ -130,7 +136,7 @@ static size_t   get_max_num(size_t num1, size_t num2)
     return (num2);
 }
 
-static void heredoc(char *limiter)
+static void heredoc(char *limiter, int fd)
 {
     char    *str;
     size_t  str_len;
@@ -149,8 +155,8 @@ static void heredoc(char *limiter)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, get_max_num(str_len, limiter_len)) == 0)
             break ;
-        ft_putstr_fd(str, 1);
-        ft_putchar_fd('\n', 1);
+        ft_putstr_fd(str, fd);
+        ft_putchar_fd('\n', fd);
         free(str);
         str = NULL; //per evitare la double free
     }
