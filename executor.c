@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 12:08:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 14:37:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,8 @@ void executor(t_list *parsed_params, t_data *data)
     t_list          *node;
     int             fds[2];
     int             prev_output_fd;
-    int             status;
 
     node = parsed_params;
-    status = 0;
     prev_output_fd = STDIN_FILENO;
     while (node)
     {
@@ -40,9 +38,8 @@ void executor(t_list *parsed_params, t_data *data)
             handle_command(content, fds, data, true * (node->next == NULL));
         else
         {
-            waitpid(content->pid, &status, WUNTRACED);
-            while (!WIFSTOPPED(status) && !WIFEXITED(status) && !WIFSIGNALED(status))
-                waitpid(content->pid, &status, WUNTRACED);
+            kill(content->pid, SIGSTOP);
+            exec_redirs(content->redirs, fds[1], data);
             if (close(fds[1]) == -1)
                 ft_quit(20, NULL, data);
             prev_output_fd = fds[0];
@@ -67,9 +64,6 @@ static void resume(t_list *node)
 
 static void handle_command(t_parser *content, int fds[], t_data *data, bool is_last)
 {    
-    exec_redirs(content->redirs, fds[1], data);
-    //the here_doc writes in fds[0]
-    kill(getpid(), SIGSTOP);
     if ((dup2(fds[1], STDIN_FILENO) == -1) || (is_last == false && dup2(fds[0], STDOUT_FILENO) == -1) || close(fds[1]) == -1 || close(fds[0]) == -1)
         ft_quit(20, NULL, data);
     exec(getenv("PATH"), content->cmd_str, data);
