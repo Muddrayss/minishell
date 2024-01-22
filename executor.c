@@ -6,70 +6,83 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 14:44:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:14:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void handle_command(t_parser *content, int fds[], t_data *data, bool is_last);
-static void heredoc(char *limiter, int fd);
-static void resume(t_list *node);
+static void child(t_parser *content, int fds[], bool is_last, t_data *data);
+static void heredoc(char *limiter);
+// static void resume(t_list *node);
+static void wait_for_children(unsigned int n_cmds);
+static void parent(t_list *redirs, int fds[], t_data *data);
 
 void executor(t_list *parsed_params, t_data *data)
 {
     t_parser        *content;
     t_list          *node;
     int             fds[2];
-    int             prev_output_fd;
 
     node = parsed_params;
-    prev_output_fd = STDIN_FILENO;
     while (node)
     {
         content = (t_parser *)node->content;
         if (pipe(fds) == -1)
             ft_quit(18, NULL, data);
-        fds[0] = prev_output_fd;
         content->pid = fork();
         if (content->pid == -1)
             ft_quit(19, NULL, data);
         if (content->pid == 0)
-            handle_command(content, fds, data, true * (node->next == NULL));
+            child(content, fds, true * (node->next == NULL), data);
         else
-        {
-            kill(content->pid, SIGSTOP);
-            exec_redirs(content->redirs, fds[0], data);
-            if (close(fds[1]) == -1)
-                ft_quit(20, NULL, data);
-            prev_output_fd = fds[0];
-        }
+            parent(content->redirs, fds, data);
         node = node->next;
     }
-    resume(parsed_params);
-    waitpid(content->pid, NULL, 0); //aspetta l'ultimo comando
+    // resume(parsed_params);
+    wait_for_children(ft_lstsize(parsed_params));
 }
 
-static void resume(t_list *node)
+static void parent(t_list *redirs, int fds[], t_data *data)
 {
-    t_parser *content;
-
-    while (node)
-    {
-        content = (t_parser *)node->content;
-        kill(content->pid, SIGCONT);
-        node = node->next;
-    }
+    close(fds[1]);
+    dup2(fds[0], STDIN_FILENO);
+    exec_redirs(redirs, data); //heredoc scrive nell'input della pipe
+    close(fds[0]);
 }
 
-static void handle_command(t_parser *content, int fds[], t_data *data, bool is_last)
-{    
-    if ((dup2(fds[1], STDIN_FILENO) == -1) || (is_last == false && dup2(fds[0], STDOUT_FILENO) == -1) || close(fds[1]) == -1 || close(fds[0]) == -1)
-        ft_quit(20, NULL, data);
+static void child(t_parser *content, int fds[], bool is_last, t_data *data)
+{   
+    close(fds[0]);
+    if (!is_last)
+        dup2(fds[1], STDOUT_FILENO);
+    close(fds[1]);
+    //kill(getpid(), SIGSTOP);
     exec(getenv("PATH"), content->cmd_str, data);
 }
 
-void exec_redirs(t_list *redirs, int heredoc_fd, t_data *data)
+// static void resume(t_list *node)
+// {
+//     t_parser *content;
+
+//     while (node)
+//     {
+//         content = (t_parser *)node->content;
+//         kill(content->pid, SIGCONT);
+//         node = node->next;
+//     }
+// }
+
+static void wait_for_children(unsigned int n_cmds)
+{
+    unsigned int i;
+
+    i = 0;
+    while (i++ < n_cmds)
+        wait(NULL);
+}
+
+void exec_redirs(t_list *redirs, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
@@ -81,7 +94,7 @@ void exec_redirs(t_list *redirs, int heredoc_fd, t_data *data)
         if (redir->fds[0] == -42)
         {
             if (redir->type == REDIR_HEREDOC)
-                heredoc(redir->filename, heredoc_fd);
+                heredoc(redir->filename);
             else if (redir->type == REDIR_INPUT)
             {
                 redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
@@ -117,7 +130,7 @@ static size_t   get_max_num(size_t num1, size_t num2)
     return (num2);
 }
 
-static void heredoc(char *limiter, int fd)
+static void heredoc(char *limiter)
 {
     char    *str;
     size_t  str_len;
@@ -136,7 +149,8 @@ static void heredoc(char *limiter, int fd)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, get_max_num(str_len, limiter_len)) == 0)
             break ;
-        ft_putstr_fd(str, fd);
+        ft_putstr_fd(str, 1);
+        ft_putchar_fd('\n', 1);
         free(str);
         str = NULL; //per evitare la double free
     }

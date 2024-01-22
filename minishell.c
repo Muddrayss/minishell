@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 20:06:09 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:33:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,14 @@ void	exec_single_cmd(char *path, char *cmd_str, t_list *redirs, t_data *data)
 	if (pid == -1)
 		ft_quit(1, NULL, data);
 	if (pid == 0)
-	{
-		if (redirs)
-			exec_redirs(redirs, 0, data);
 		exec(path, cmd_str, data);
-	}
 	else
-		wait(NULL);
+	{
+		// kill(pid, SIGSTOP);
+		exec_redirs(redirs, data);
+	}
+	// kill(pid, SIGCONT);
+	wait(NULL);
 }
 
 void  exec(char *path, char *cmd_str, t_data *data)
@@ -102,5 +103,5 @@ void  exec(char *path, char *cmd_str, t_data *data)
 		ft_quit(COMMAND_NOT_FOUND, ft_strjoin("command not found: ", cmd_args[0]), data);
 	else
 		execve(data->cmd_path, cmd_args, data->envp);
-	ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_str), data);
+	ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_args[0]), data);
 }

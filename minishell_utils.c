@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 16:10:59 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/22 15:59:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	ft_quit(int id, char *msg, t_data *data)
 		else
 			ft_putstr_fd(msg, 1);
 		ft_putstr_fd("\n", 1);
+		printf(RED "error code: %d\n", id);
 	}
 	if (data)
 		free_data(data);
