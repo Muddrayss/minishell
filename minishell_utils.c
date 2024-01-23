@@ -6,11 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/23 20:03:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/23 20:18:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void clean_heredocs(t_data *data);
 
 void	free_matrix(char **matrix)
 {
@@ -106,8 +108,21 @@ void	ft_quit(int id, char *msg, t_data *data)
 	return ;
 }
 
+static void clean_heredocs(t_data *data)
+{
+    char    *tmpdir_name;
+	char	*cmd;
+
+    tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
+	cmd = ft_strjoin("rm -r ", tmpdir_name);
+	free(tmpdir_name);
+    exec_single_cmd(getenv("PATH"), cmd, NULL, data);
+	free(cmd);
+}
+
 void	free_data(t_data *data)
 {
+	clean_heredocs(data);
 	if (data->cmd_args)
 		free_matrix(data->cmd_args);
 	if (data->cmd_path)

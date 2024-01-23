@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/23 20:04:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/23 20:12:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ static void fill_heredoc(char *limiter, int fd);
 static bool is_heredoc(t_list *redirs);
 static void resume(t_list *node);
 static void wait_for_children(unsigned int n_cmds);
-static int parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data);
+static int  parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data);
 static char *get_filename(t_data *data);
-static void clean_heredocs(t_data *data);
 
 void executor(t_list *parsed_params, t_data *data)
 {
@@ -50,16 +49,7 @@ void executor(t_list *parsed_params, t_data *data)
     }
     resume(parsed_params);
     wait_for_children(ft_lstsize(parsed_params));
-    clean_heredocs(data);
     dup2(original_stdin, STDIN_FILENO);
-}
-
-static void clean_heredocs(t_data *data)
-{
-    char    *tmpdir_name;
-
-    tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
-    exec_single_cmd(getenv("PATH"), ft_strjoin("rmdir ", tmpdir_name), NULL, data);
 }
 
 static int parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data)
@@ -68,7 +58,6 @@ static int parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[]
 
     kill(child_pid, SIGSTOP);
     heredoc_fd = open(heredoc_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    printf("filnema: %s\n", heredoc_filename);
     free(heredoc_filename);
     close(fds[1]);
     exec_redirs(redirs, heredoc_fd, original_stdin, data);
@@ -88,7 +77,6 @@ static void child(t_parser *content, int fds[], int prev_out_fd, char *heredoc_f
     if (is_heredoc(content->redirs) == true)
     {
         heredoc_fd = open(heredoc_filename, O_RDONLY, 0644);
-        printf("filename: %s\n", heredoc_filename);
         dup2(heredoc_fd, STDIN_FILENO);
         close(heredoc_fd);
     }
@@ -97,7 +85,6 @@ static void child(t_parser *content, int fds[], int prev_out_fd, char *heredoc_f
     if (!is_last)
         dup2(fds[1], STDOUT_FILENO);
     close(fds[1]);
-    printf(GREEN "executing %s" DEFAULT "\n", content->cmd_str);
     exec(getenv("PATH"), content->cmd_str, data);
 }
 

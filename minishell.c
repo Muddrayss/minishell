@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/23 19:50:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/23 20:10:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void	init(char **envp, char **path, t_data *data)
 	g_signals.in_cmd = 0;
 	g_signals.in_heredoc = 0;
 	exec_single_cmd(*path, "clear", NULL, data);
+	exec_single_cmd(*path, "mkdir tmp", NULL, data);
 }
 
 static void	minishell_loop(t_data *data)
