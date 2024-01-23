@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 20:04:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/23 19:49:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_data
 	char	*cmd_path;
 	char	**cmd_args;
 	char	**envp;
+	char	*starting_dir;
 	t_list	**lexered_params;
 }			t_data;
 

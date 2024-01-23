@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/23 17:16:03 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/23 19:50:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	init(char **envp, char **path, t_data *data)
 	data->cmd_args = NULL;
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
+	data->starting_dir = getenv("PWD");
 	init_signals();
 	g_signals.sigint = 0;
 	g_signals.in_cmd = 0;

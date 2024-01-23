@@ -3,77 +3,92 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/23 17:54:52 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/23 20:04:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void child(t_parser *content, int fds[], char *heredoc_filename, bool is_last, t_data *data);
+static void child(t_parser *content, int fds[], int prev_out_fd, char *heredoc_filename, bool is_last, t_data *data);
 static void fill_heredoc(char *limiter, int fd);
-static bool check_heredoc_presence(t_list *redirs);
-// static void resume(t_list *node);
+static bool is_heredoc(t_list *redirs);
+static void resume(t_list *node);
 static void wait_for_children(unsigned int n_cmds);
-static void parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data);
-static char *get_filename(void);
+static int parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data);
+static char *get_filename(t_data *data);
+static void clean_heredocs(t_data *data);
 
 void executor(t_list *parsed_params, t_data *data)
 {
     t_parser        *content;
     t_list          *node;
     int             fds[2];
-    char *heredoc_filename;
-    int original_stdin;
+    int             prev_out_fd;
+    char            *heredoc_filename;
+    int             original_stdin;
 
     original_stdin = dup(STDIN_FILENO);
+    prev_out_fd = -1;
     node = parsed_params;
     while (node)
     {
         content = (t_parser *)node->content;
         if (pipe(fds) == -1)
             ft_quit(18, NULL, data);
-        heredoc_filename = get_filename();
+        heredoc_filename = get_filename(data);
         content->pid = fork();
         if (content->pid == -1)
             ft_quit(19, NULL, data);
         if (content->pid != 0)
-            parent(content->redirs, content->pid, original_stdin, fds, heredoc_filename, data);
+            prev_out_fd = parent(content->redirs, content->pid, original_stdin, fds, heredoc_filename, data);
         else if (content->pid == 0)
-            child(content, fds, heredoc_filename, node->next == NULL, data);
+            child(content, fds, prev_out_fd, heredoc_filename, node->next == NULL, data);
         node = node->next;
     }
-    //TODO trovare una soluzione per gli heredoc multipli (in diverse pipe)
-    //resume(parsed_params);
+    resume(parsed_params);
     wait_for_children(ft_lstsize(parsed_params));
+    clean_heredocs(data);
     dup2(original_stdin, STDIN_FILENO);
 }
 
-static void parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data)
+static void clean_heredocs(t_data *data)
+{
+    char    *tmpdir_name;
+
+    tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
+    exec_single_cmd(getenv("PATH"), ft_strjoin("rmdir ", tmpdir_name), NULL, data);
+}
+
+static int parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data)
 {
     int heredoc_fd;
 
     kill(child_pid, SIGSTOP);
     heredoc_fd = open(heredoc_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    printf("filnema: %s\n", heredoc_filename);
     free(heredoc_filename);
     close(fds[1]);
-    dup2(fds[0], STDIN_FILENO);
-    close(fds[0]);
     exec_redirs(redirs, heredoc_fd, original_stdin, data);
-    kill(child_pid, SIGCONT);
+    close(heredoc_fd);
+    return (fds[0]);
 }
 
-static void child(t_parser *content, int fds[], char *heredoc_filename, bool is_last, t_data *data)
+static void child(t_parser *content, int fds[], int prev_out_fd, char *heredoc_filename, bool is_last, t_data *data)
 {
-    bool    is_heredoc;
     int     heredoc_fd;
 
-    is_heredoc = check_heredoc_presence(content->redirs);
-    if (is_heredoc)
+    if (prev_out_fd != -1)
+    {
+        dup2(prev_out_fd, STDIN_FILENO);
+        close(prev_out_fd);
+    }
+    if (is_heredoc(content->redirs) == true)
     {
         heredoc_fd = open(heredoc_filename, O_RDONLY, 0644);
+        printf("filename: %s\n", heredoc_filename);
         dup2(heredoc_fd, STDIN_FILENO);
         close(heredoc_fd);
     }
@@ -86,7 +101,7 @@ static void child(t_parser *content, int fds[], char *heredoc_filename, bool is_
     exec(getenv("PATH"), content->cmd_str, data);
 }
 
-static bool check_heredoc_presence(t_list *redirs)
+static bool is_heredoc(t_list *redirs)
 {
     t_list  *node;
     t_redir *redir;
@@ -101,7 +116,7 @@ static bool check_heredoc_presence(t_list *redirs)
     }
     return (false);
 }
-/*
+
 static void resume(t_list *node)
 {
     t_parser *content;
@@ -111,10 +126,9 @@ static void resume(t_list *node)
         content = (t_parser *)node->content;
         kill(content->pid, SIGCONT);
         node = node->next;
-        printf("resumed %d\n", content->pid);
     }
 }
-*/
+
 static void wait_for_children(unsigned int n_cmds)
 {
     unsigned int i;
@@ -127,17 +141,20 @@ static void wait_for_children(unsigned int n_cmds)
     }
 }
 
-static char *get_filename(void)
+static char *get_filename(t_data *data)
 {
     static int  i = 0;
+    char        *idx;
     char        *tmp;
     char        *filename;
 
-    tmp = ft_itoa(++i);
-    filename = ft_strjoin("/tmp/.heredoc_", tmp);
+    idx = ft_itoa(++i);
+    tmp = ft_strjoin(data->starting_dir, "/tmp/.heredoc_");
+    filename = ft_strjoin(tmp, idx);
     free(tmp);
+    free(idx);
     if (!filename)
-        ft_quit(20, NULL, NULL);
+        ft_quit(20, NULL, data);
     return (filename);
 }
 
