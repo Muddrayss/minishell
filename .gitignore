@@ -5,3 +5,5 @@ libft/.vscode/
 .nfs*
 minishell
 leaks_report
+*.o
+*.out
