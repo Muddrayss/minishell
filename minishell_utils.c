@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 18:17:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/23 17:14:49 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	free_data(t_data *data)
 	if (data->cmd_path)
 		free(data->cmd_path);
 	if (data->lexered_params)
-		ft_lstclear(data->lexered_params, &del_content_lexer);	
+		ft_lstclear(data->lexered_params, &del_content_lexer);
 }
 
 int8_t	ft_parse_error(char token)
