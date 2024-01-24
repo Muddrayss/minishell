@@ -32,12 +32,14 @@ void executor(t_list *parsed_params, t_data *data)
     original_stdin = dup(STDIN_FILENO);
     prev_out_fd = -1;
     node = parsed_params;
+    heredoc_filename = NULL;
     while (node)
     {
         content = (t_parser *)node->content;
         if (pipe(fds) == -1)
             ft_quit(18, NULL, data);
-        heredoc_filename = get_filename(data);
+        if (is_heredoc(content->redirs)) 
+            heredoc_filename = get_filename(data);
         content->pid = fork();
         if (content->pid == -1)
             ft_quit(19, NULL, data);
