@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 14:58:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 15:16:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	ft_quit(int id, char *msg, t_data *data)
 		else
 			ft_putstr_fd(msg, 1);
 		ft_putstr_fd("\n", 1);
-		// printf(RED "error code: %d\n" DEFAULT, id);
+		printf(RED "error code: %d\n" DEFAULT, id); //to remove
 	}
 	if (data)
 		free_data(data);

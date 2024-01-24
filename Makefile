@@ -6,14 +6,13 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/01/24 14:44:43 by craimond         ###   ########.fr        #
+#    Updated: 2024/01/24 15:15:09 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
 SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c executor.c heredoc.c
-
 OBJS = $(SRCS:.c=.o)
 HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h error.h executor.h)
 
@@ -50,7 +49,7 @@ fclean: clean
 	@echo "Full cleaning of $(NAME) done!"
 
 leaks: all
-	@printf "{\n readline\n Memcheck:Leak\n fun:readline\n}" > readline.supp
+	@printf "{\n readline\n Memcheck:Leak\n fun:rl_parse_and_bind\n fun:readline_internal_teardown\n fun:rl_initialize\n fun:readline\n}" > readline.supp
 	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp -v ./$(NAME) 2> leak_report
 	@echo "leak report generated"
 

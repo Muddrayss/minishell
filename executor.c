@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 15:00:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 15:25:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[]
     if (close(fds[1]) == -1)
         ft_quit(29, NULL, data);
     exec_redirs(redirs, heredoc_fd, original_stdin, data);
-    if (close(heredoc_fd) == -1)
+    if (heredoc_filename && close(heredoc_fd) == -1)
         ft_quit(31, NULL, data);
     return (fds[0]);
 }
@@ -84,20 +84,20 @@ static void child(t_parser *content, int fds[], int prev_out_fd, char *heredoc_f
 
     if (prev_out_fd != -1)
     {
-        if (dup2(prev_out_fd, STDIN_FILENO) == -1 || close(prev_out_fd))
+        if (dup2(prev_out_fd, STDIN_FILENO) == -1 || close(prev_out_fd) == -1)
             ft_quit(25, NULL, data);
     }
     if (is_heredoc(content->redirs) == true)
     {
         heredoc_fd = open(heredoc_filename, O_RDONLY, 0644);
-        if (heredoc_fd == -1 || dup2(heredoc_fd, STDIN_FILENO) || close(heredoc_fd))
+        if (heredoc_fd == -1 || dup2(heredoc_fd, STDIN_FILENO) == -1 || close(heredoc_fd) == -1)
         {
             free(heredoc_filename);
             ft_quit(26, NULL, data);
         }
     }
     free(heredoc_filename);
-    if (close(fds[0]) == -1 || (is_last && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[1]) == -1)
+    if (close(fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[1]) == -1)
         ft_quit(27, NULL, data);
     exec(getenv("PATH"), content->cmd_str, data);
 }
@@ -140,7 +140,7 @@ static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_da
                 if (redir->fds[1] == -1)
                     ft_quit(22, NULL, data);
             }
-            if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || close(redir->fds[1]))
+            if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || close(redir->fds[1]) == -1)
                 ft_quit(23, NULL, data);
         }
         node = node->next;
