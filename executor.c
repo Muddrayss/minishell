@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 16:17:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 16:25:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,20 +61,22 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
 {
     char    *heredoc_filename;
     int     heredoc_fd;
+    bool    flag;
 
+    flag = is_heredoc(content->redirs);
     heredoc_fd = -1;
     if (fds[2] != -1)
     {
         if (dup2(fds[2], STDIN_FILENO) == -1 || close(fds[2]) == -1)
             ft_quit(25, NULL, data);
     }
-    if (is_heredoc(content->redirs))
+    if (flag)
     {
         heredoc_filename = get_filename(data);
         heredoc_fd = open(heredoc_filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
     }
     exec_redirs(content->redirs, heredoc_fd, original_stdin, data);
-    if (is_heredoc(content->redirs) == true)
+    if (flag)
     {
         if (heredoc_fd == -1 || dup2(heredoc_fd, STDIN_FILENO) == -1 || close(heredoc_fd) == -1)
         {
@@ -116,7 +118,7 @@ static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_da
         else if (redir->fds[1] == -42)
         {
             append_or_trunc = O_TRUNC * (redir->type == REDIR_OUTPUT) + O_APPEND * (redir->type == REDIR_APPEND);
-            if (redir->type == REDIR_OUTPUT || redir->type == REDIR_HEREDOC)
+            if (redir->type == REDIR_OUTPUT || redir->type == REDIR_APPEND)
             {
                 redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | append_or_trunc, 0644);
                 if (redir->fds[1] == -1)
