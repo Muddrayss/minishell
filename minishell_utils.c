@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 14:47:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 14:58:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void	free_data(t_data *data)
 		free(data->cmd_path);
 	if (data->lexered_params)
 		ft_lstclear(data->lexered_params, &del_content_lexer);
+	//TODO fare una funzione che chiude tutti i fd
 }
 
 int8_t	ft_parse_error(char token)
