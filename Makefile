@@ -3,20 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/01/20 16:36:55 by egualand         ###   ########.fr        #
+#    Updated: 2024/01/24 14:44:43 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
-SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c \
-		executor.c
+SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c executor.c heredoc.c
 
 OBJS = $(SRCS:.c=.o)
-HEADERS = minishell.h lexer.h parser.h error.h executor.h
+HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h error.h executor.h)
 
 CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
@@ -51,6 +50,7 @@ fclean: clean
 	@echo "Full cleaning of $(NAME) done!"
 
 leaks: all
+	@printf "{\n readline\n Memcheck:Leak\n fun:readline\n}" > readline.supp
 	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp -v ./$(NAME) 2> leak_report
 	@echo "leak report generated"
 

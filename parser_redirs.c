@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 16:45:27 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/24 14:43:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "headers/minishell.h"
 
 static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag);
 static void		add_filename(char **filename, char *cmd, t_data *data);
@@ -23,7 +23,6 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 	unsigned int		token_streak;
 	static const char	ph_redir = -42;
 
-	// placeholder per le redir
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
 		ft_quit(12, "failed to allocate memory", data);
@@ -71,8 +70,6 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	unsigned int		token_streak;
 	static const char	ph_redir = -42;
 
-	// placeholder per le redir
-	// TODO valutare se implementare un "same token streak"
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
 		ft_quit(12, "failed to allocate memory", data);

@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/22 12:05:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 14:43:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "headers/minishell.h"
 
 static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag);
 

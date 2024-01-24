@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/23 20:18:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 14:47:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "headers/minishell.h"
 
 static void clean_heredocs(t_data *data);
 
@@ -114,9 +114,9 @@ static void clean_heredocs(t_data *data)
 	char	*cmd;
 
     tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
-	cmd = ft_strjoin("rm -r ", tmpdir_name);
+	cmd = ft_strjoin("rm -rf ", tmpdir_name);
 	free(tmpdir_name);
-    exec_single_cmd(getenv("PATH"), cmd, NULL, data);
+    exec_simple_cmd(getenv("PATH"), cmd, data);
 	free(cmd);
 }
 

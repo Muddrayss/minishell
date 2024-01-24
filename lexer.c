@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:57:19 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/24 14:44:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "headers/minishell.h"
 
 static t_token  lexer_get_token(char c);
 static bool 	is_token(char *str);

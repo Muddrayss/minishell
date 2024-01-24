@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/23 19:49:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 14:45:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ extern t_signals	g_signals;
 # include "parser.h"
 # include "executor.h"
 
+# define MAX(a, b) (a * (a > b) + b * (a <= b))
+
 char		*get_cmd(char *path, char *cmd, t_data *data);
-void		exec_single_cmd(char *path, char *cmd_str, t_list *redirs, t_data *data);
+void		exec_simple_cmd(char *path, char *cmd_str, t_data *data);
 void  		exec(char *path, char *cmd_str, t_data *data);
 void		free_matrix(char **matrix);
 void		ft_quit(int id, char *msg, t_data *data);

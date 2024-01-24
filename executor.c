@@ -6,19 +6,17 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/23 20:12:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 14:44:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "headers/minishell.h"
 
+static int  parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data);
 static void child(t_parser *content, int fds[], int prev_out_fd, char *heredoc_filename, bool is_last, t_data *data);
-static void fill_heredoc(char *limiter, int fd);
-static bool is_heredoc(t_list *redirs);
+static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *data);
 static void resume(t_list *node);
 static void wait_for_children(unsigned int n_cmds);
-static int  parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[], char *heredoc_filename, t_data *data);
-static char *get_filename(t_data *data);
 
 void executor(t_list *parsed_params, t_data *data)
 {
@@ -32,9 +30,9 @@ void executor(t_list *parsed_params, t_data *data)
     original_stdin = dup(STDIN_FILENO);
     prev_out_fd = -1;
     node = parsed_params;
-    heredoc_filename = NULL;
     while (node)
     {
+        heredoc_filename = NULL;
         content = (t_parser *)node->content;
         if (pipe(fds) == -1)
             ft_quit(18, NULL, data);
@@ -59,7 +57,8 @@ static int parent(t_list *redirs, pid_t child_pid, int original_stdin, int fds[]
     int heredoc_fd;
 
     kill(child_pid, SIGSTOP);
-    heredoc_fd = open(heredoc_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (heredoc_filename)
+        heredoc_fd = open(heredoc_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     free(heredoc_filename);
     close(fds[1]);
     exec_redirs(redirs, heredoc_fd, original_stdin, data);
@@ -90,70 +89,11 @@ static void child(t_parser *content, int fds[], int prev_out_fd, char *heredoc_f
     exec(getenv("PATH"), content->cmd_str, data);
 }
 
-static bool is_heredoc(t_list *redirs)
-{
-    t_list  *node;
-    t_redir *redir;
-
-    node = redirs;
-    while (node)
-    {
-        redir = (t_redir *)node->content;
-        if (redir->type == REDIR_HEREDOC)
-            return (true);
-        node = node->next;
-    }
-    return (false);
-}
-
-static void resume(t_list *node)
-{
-    t_parser *content;
-
-    while (node)
-    {
-        content = (t_parser *)node->content;
-        kill(content->pid, SIGCONT);
-        node = node->next;
-    }
-}
-
-static void wait_for_children(unsigned int n_cmds)
-{
-    unsigned int i;
-
-    i = 0;
-    while (i < n_cmds)
-    {
-        wait(NULL);
-        i++;
-    }
-}
-
-static char *get_filename(t_data *data)
-{
-    static int  i = 0;
-    char        *idx;
-    char        *tmp;
-    char        *filename;
-
-    idx = ft_itoa(++i);
-    tmp = ft_strjoin(data->starting_dir, "/tmp/.heredoc_");
-    filename = ft_strjoin(tmp, idx);
-    free(tmp);
-    free(idx);
-    if (!filename)
-        ft_quit(20, NULL, data);
-    return (filename);
-}
-
-bool exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *data)
+static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
-    bool            is_heredoc;
 
-    is_heredoc = false;
     node = redirs;
     while (node)
     {
@@ -164,7 +104,6 @@ bool exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *dat
             {
                 dup2(original_stdin, STDIN_FILENO);
                 fill_heredoc(redir->filename, heredoc_fd);
-                is_heredoc = true;
             }
             else if (redir->type == REDIR_INPUT)
             {
@@ -192,41 +131,28 @@ bool exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *dat
         }
         node = node->next;
     }
-    return (is_heredoc);
 }
 
-static size_t   get_max_num(size_t num1, size_t num2)
+static void resume(t_list *node)
 {
-    if (num1 > num2)
-        return (num1);
-    return (num2);
-}
+    t_parser *content;
 
-static void fill_heredoc(char *limiter, int fd)
-{
-    char    *str;
-    size_t  str_len;
-    size_t  limiter_len;
-  
-    g_signals.in_heredoc = 1;
-    str = NULL;
-    limiter_len = ft_strlen(limiter);
-    if (is_shell_space(limiter[limiter_len - 1]))
-        limiter_len--;
-    while (!g_signals.sigint)
+    while (node)
     {
-        str = readline("> ");
-        if (!str)
-            break ;
-        str_len = ft_strlen(str);
-        if (ft_strncmp(limiter, str, get_max_num(str_len, limiter_len)) == 0)
-            break ;
-        ft_putstr_fd(str, fd);
-        ft_putchar_fd('\n', fd);
-        free(str);
-        str = NULL; //per evitare la double free
+        content = (t_parser *)node->content;
+        kill(content->pid, SIGCONT);
+        node = node->next;
     }
-    free(str);
-    g_signals.in_heredoc = 0;
 }
 
+static void wait_for_children(unsigned int n_cmds)
+{
+    unsigned int i;
+
+    i = 0;
+    while (i < n_cmds)
+    {
+        wait(NULL);
+        i++;
+    }
+}
