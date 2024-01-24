@@ -6,15 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 16:25:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/24 16:38:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static int parent(int fds[], t_data *data);
+static int  parent(int fds[], t_data *data);
 static void child(t_parser *content, int fds[], bool is_last, int original_stdin, t_data *data);
 static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *data);
+static void resume(t_list *node);
 static void wait_for_children(unsigned int n_cmds);
 
 void executor(t_list *parsed_params, t_data *data)
@@ -45,6 +46,7 @@ void executor(t_list *parsed_params, t_data *data)
             child(content, fds, node->next == NULL, original_stdin, data);
         node = node->next;
     }
+    resume(parsed_params);
     wait_for_children(ft_lstsize(parsed_params));
     if (dup2(original_stdin, STDIN_FILENO) == -1 || close(original_stdin) == -1)
         ft_quit(24, NULL, data);
@@ -52,7 +54,7 @@ void executor(t_list *parsed_params, t_data *data)
 
 static int parent(int fds[], t_data *data)
 {
-    if (close(fds[1]) == -1)
+    if (close(fds[1]) == -1 || (fds[2] != -1 && close(fds[2]) == -1))
         ft_quit(29, NULL, data);
     return (fds[0]);
 }
@@ -65,11 +67,8 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
 
     flag = is_heredoc(content->redirs);
     heredoc_fd = -1;
-    if (fds[2] != -1)
-    {
-        if (dup2(fds[2], STDIN_FILENO) == -1 || close(fds[2]) == -1)
-            ft_quit(25, NULL, data);
-    }
+    if (fds[2] != -1 && (dup2(fds[2], STDIN_FILENO) == -1 || close(fds[2]) == -1))
+        ft_quit(25, NULL, data);
     if (flag)
     {
         heredoc_filename = get_filename(data);
@@ -87,6 +86,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
     }
     if (close(fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[1]) == -1)
         ft_quit(27, NULL, data);
+    kill(getpid(), SIGSTOP);
     exec(getenv("PATH"), content->cmd_str, data);
 }
 
@@ -127,6 +127,20 @@ static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_da
             if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || close(redir->fds[1]) == -1)
                 ft_quit(23, NULL, data);
         }
+        node = node->next;
+    }
+}
+
+static void resume(t_list *node)
+{
+    t_parser *content;
+
+    //TODO deve aspettare che i figli arrivino in block, fino a che i figli non sono in stop non deve mandare il resume altrimenti manda resume prima del block
+    while (node)
+    {
+        content = (t_parser *)node->content;
+        printf("resuming %d\n", content->pid);
+        kill(content->pid, SIGCONT);
         node = node->next;
     }
 }
