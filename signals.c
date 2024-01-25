@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/01/24 14:43:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:51:38 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	sig_handler(int signo)
 	if (signo == SIGINT)
 	{
 		if (!g_signals.in_heredoc)
-			ft_putstr_fd("\n", 1);
+			ft_putstr_fd("\n", 2);
 		if (g_signals.in_cmd)
 		{
 			g_signals.sigint = 1;

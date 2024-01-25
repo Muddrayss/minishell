@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 16:15:15 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:49:13 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ static void exec_redirs(t_list *redirs, int original_stdin, t_data *data)
     t_list          *node;
     t_redir         *redir;
     char            *heredoc_filename;
-    int8_t          append_or_trunc;
     int             heredoc_fd;
 
     heredoc_filename = NULL;
@@ -117,10 +116,12 @@ static void exec_redirs(t_list *redirs, int original_stdin, t_data *data)
         }
         else if (redir->fds[1] == -42)
         {
-            append_or_trunc = O_TRUNC * (redir->type == REDIR_OUTPUT) + O_APPEND * (redir->type == REDIR_APPEND);
             if (redir->type == REDIR_OUTPUT || redir->type == REDIR_APPEND)
             {
-                redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | append_or_trunc, 0644);
+                if ((redir->type == REDIR_OUTPUT))
+                    redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                else if (redir->type == REDIR_APPEND)
+                    redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
                 if (redir->fds[1] == -1)
                     ft_quit(22, NULL, data);
             }

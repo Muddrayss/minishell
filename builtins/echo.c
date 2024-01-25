@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/19 16:39:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:44:44 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int  check_flag(char **argv, bool *is_n)
     i = 1;
     if (argv[1][0] != '-')
         return (1);
-    while (ft_strcmp(argv[i], "-n") == 0)
+    while (ft_strcmp(argv[i], "-n") == 0) //TODO gestire caso -nnnnnnnnnn (TRIM)
     {
         i++;
         *is_n = true;

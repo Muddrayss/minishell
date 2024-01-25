@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 15:49:20 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 17:40:08 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,17 @@ void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *))
 
 void	ft_quit(int id, char *msg, t_data *data)
 {
-	printf(RED "error : %d\n" DEFAULT, id); //to remove
+	dprintf(2, RED "error : %d\n" DEFAULT, id); //to remove
 	if (errno != EINTR)
 	{
+		while (open("./tmp/print_sem", O_CREAT | O_EXCL, 0666) == EEXIST)
+			;
 		if (!msg)
-			ft_putstr_fd(strerror(errno), 1);
+			ft_putstr_fd(strerror(errno), 2);
 		else
-			ft_putstr_fd(msg, 1);
-		ft_putstr_fd("\n", 1);
+			ft_putstr_fd(msg, 2);
+		ft_putstr_fd("\n", 2);
+		unlink("./tmp/print_sem");
 	}
 	if (data)
 		free_data(data);
