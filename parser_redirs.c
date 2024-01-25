@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 14:43:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:01:47 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 	if (!redir_content)
 		ft_quit(12, "failed to allocate memory", data);
 	redir_content->fds[0] = -42;
-	redir_content->fds[1] = STDIN_FILENO;
+	redir_content->fds[1] = STDOUT_FILENO;
 	redir_content->filename = NULL;
 	redir_content->type = REDIR_INPUT_FD;
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
@@ -73,7 +73,7 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
 		ft_quit(12, "failed to allocate memory", data);
-	redir_content->fds[0] = STDOUT_FILENO;
+	redir_content->fds[0] = STDIN_FILENO;
 	redir_content->fds[1] = -42;
 	redir_content->filename = NULL;
 	redir_content->type = REDIR_OUTPUT_FD;

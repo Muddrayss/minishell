@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 14:42:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 15:07:03 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 void    executor(t_list *parsed_params, t_data *data);
 bool    is_heredoc(t_list *redirs);
-char    *get_filename(t_data *data);
+char    *get_filename(int id, t_data *data);
 void    fill_heredoc(char *limiter, int fd);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 16:38:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:04:01 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int  parent(int fds[], t_data *data);
 static void child(t_parser *content, int fds[], bool is_last, int original_stdin, t_data *data);
-static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *data);
+static void exec_redirs(t_list *redirs, int original_stdin, t_data *data);
 static void resume(t_list *node);
 static void wait_for_children(unsigned int n_cmds);
 
@@ -54,8 +54,17 @@ void executor(t_list *parsed_params, t_data *data)
 
 static int parent(int fds[], t_data *data)
 {
+    int             status;
+    
     if (close(fds[1]) == -1 || (fds[2] != -1 && close(fds[2]) == -1))
         ft_quit(29, NULL, data);
+    wait3(&status, WUNTRACED, NULL);
+    if (!WIFSTOPPED(status))
+    {
+        printf("kill all\n");
+        kill(0, SIGINT);
+        exit(0);
+    }
     return (fds[0]);
 }
 
@@ -63,7 +72,8 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
 {
     if (fds[2] != -1 && (dup2(fds[2], STDIN_FILENO) == -1 || close(fds[2]) == -1))
         ft_quit(25, NULL, data);
-    exec_redirs(content->redirs, original_stdin, data);
+    if (content->redirs)
+        exec_redirs(content->redirs, original_stdin, data);
     if (close(fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[1]) == -1)
         ft_quit(27, NULL, data);
     kill(getpid(), SIGSTOP);
@@ -74,9 +84,9 @@ static void exec_redirs(t_list *redirs, int original_stdin, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
-    int             heredoc_fd;
     char            *heredoc_filename;
     int8_t          append_or_trunc;
+    int             heredoc_fd;
 
     heredoc_filename = NULL;
     node = redirs;
@@ -91,10 +101,11 @@ static void exec_redirs(t_list *redirs, int original_stdin, t_data *data)
                     ft_quit(28, NULL, data);
                 if (!heredoc_filename)
                 {
-                     heredoc_filename = get_filename(data);
-                     heredoc_fd = open(heredoc_filename, O_RDWR, O_CREAT, O_TRUNC, 0644);
-                     free(heredoc_filename);
-                } 
+                    heredoc_filename = get_filename(getpid(), data);
+                    heredoc_fd = open(heredoc_filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                    if (heredoc_fd == -1)
+                        ft_quit(20, NULL, data);
+                }
                 fill_heredoc(redir->filename, heredoc_fd);
             }
             else if (redir->type == REDIR_INPUT)
@@ -114,23 +125,30 @@ static void exec_redirs(t_list *redirs, int original_stdin, t_data *data)
                     ft_quit(22, NULL, data);
             }
         }
-        if (dup2(redir->fds[0], STDIN_FILENO) == -1 || close(redir->fds[0]) == -1)
-            ft_quit(23, NULL, data);
-        if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || close(redir->fds[1]) == -1)
-            ft_quit(23, NULL, data);  
         node = node->next;
     }
+    if (heredoc_filename)
+    {
+        if (close(heredoc_fd) == -1)
+            ft_quit(33, NULL, data);
+        redir->fds[0] = open(heredoc_filename, O_RDONLY, 0644);
+        if (redir->fds[0] == -1)
+            ft_quit(34, NULL, data);
+        free(heredoc_filename);        
+    }
+    if (dup2(redir->fds[0], STDIN_FILENO) == -1 || (redir->fds[0] != STDIN_FILENO && close(redir->fds[0]) == -1))
+        ft_quit(23, NULL, data);
+    if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || (redir->fds[1] != STDOUT_FILENO && close(redir->fds[1]) == -1))
+        ft_quit(24, NULL, data);
 }
 
 static void resume(t_list *node)
 {
-    t_parser *content;
+    t_parser        *content;
 
-    //TODO deve aspettare che i figli arrivino in block, fino a che i figli non sono in stop non deve mandare il resume altrimenti manda resume prima del block
     while (node)
     {
         content = (t_parser *)node->content;
-        printf("resuming %d\n", content->pid);
         kill(content->pid, SIGCONT);
         node = node->next;
     }

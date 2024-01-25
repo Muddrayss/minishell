@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 14:41:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 15:05:53 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,19 @@ bool is_heredoc(t_list *redirs)
     return (false);
 }
 
-char    *get_filename(t_data *data)
+char    *get_filename(int id, t_data *data)
 {
-    static int  i = 0;
     char        *idx;
     char        *tmp;
     char        *filename;
 
-    idx = ft_itoa(++i);
+    idx = ft_itoa(id);
     tmp = ft_strjoin(data->starting_dir, "/tmp/.heredoc_");
     filename = ft_strjoin(tmp, idx);
     free(tmp);
     free(idx);
     if (!filename)
-        ft_quit(20, NULL, data);
+        ft_quit(22, "failed to allocate memory", data);
     return (filename);
 }
 

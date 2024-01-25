@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
+#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/01/24 15:15:09 by craimond         ###   ########.fr        #
+#    Updated: 2024/01/25 15:33:32 by egualand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ $(LIBFT_LIB):
 	@make bonus -C $(LIBFT_DIR) >/dev/null
 
 $(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
+	@mkdir -p tmp
 	@$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) -L $(LIBFT_DIR) -lft -lreadline -o $(NAME)
 	@echo "Compilation of $(NAME) done!"
 
@@ -39,6 +40,7 @@ $(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
 	@$(CC) $(CFLAGS) -I $(INCLUDES_DIR) -c $< -o $@
 
 clean:
+	@$(RM) -r tmp
 	@$(RM) $(OBJS)
 	@make clean -C $(LIBFT_DIR) >/dev/null
 	@echo "Cleaning of $(NAME) done!"

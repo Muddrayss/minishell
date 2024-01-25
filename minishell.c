@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 14:46:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 15:21:40 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static void	init(char **envp, char **path, t_data *data)
 	g_signals.in_cmd = 0;
 	g_signals.in_heredoc = 0;
 	exec_simple_cmd(*path, "clear", data);
-	exec_simple_cmd(*path, "mkdir tmp", data);
+	clean_heredocs(data);
+	exec_simple_cmd(*path, "mkdir -p tmp", data);
 }
 
 static void	minishell_loop(t_data *data)
