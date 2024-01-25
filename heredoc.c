@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 15:05:53 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:17:45 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void fill_heredoc(char *limiter, int fd)
     g_signals.in_heredoc = 1;
     str = NULL;
     limiter_len = ft_strlen(limiter);
-    if (is_shell_space(limiter[limiter_len - 1]))
-        limiter_len--;
     while (!g_signals.sigint)
     {
         str = readline("> ");

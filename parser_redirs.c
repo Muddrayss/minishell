@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 16:01:47 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:24:31 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,8 @@ static void	add_filename(char **filename, char *cmd, t_data *data)
 	name = ft_strdup(&cmd[i]);
 	if (!name)
 		ft_quit(16, "failed to allocate memory", data);
-	while (cmd[i] != '\0' && !is_shell_space(cmd[i]))
+	i = 0;
+	while (cmd[i + 1] != '\0' && !is_shell_space(cmd[i + 1]))
 		i++;
 	name[i] = '\0';
 	if (name[0] == PH_INVALID_ENV)

@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 16:04:01 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:15:15 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static int parent(int fds[], t_data *data)
     if (close(fds[1]) == -1 || (fds[2] != -1 && close(fds[2]) == -1))
         ft_quit(29, NULL, data);
     wait3(&status, WUNTRACED, NULL);
-    if (!WIFSTOPPED(status))
+    if (!WIFSTOPPED(status) && !WIFEXITED(status))
     {
         printf("kill all\n");
         kill(0, SIGINT);
