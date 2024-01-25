@@ -6,11 +6,11 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 16:45:27 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:24:31 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "headers/minishell.h"
 
 static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag);
 static void		add_filename(char **filename, char *cmd, t_data *data);
@@ -23,12 +23,11 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 	unsigned int		token_streak;
 	static const char	ph_redir = -42;
 
-	// placeholder per le redir
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
 		ft_quit(12, "failed to allocate memory", data);
 	redir_content->fds[0] = -42;
-	redir_content->fds[1] = STDIN_FILENO;
+	redir_content->fds[1] = STDOUT_FILENO;
 	redir_content->filename = NULL;
 	redir_content->type = REDIR_INPUT_FD;
 	next_cmd_elem = get_next_cmd_elem(lexered_params);
@@ -71,12 +70,10 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	unsigned int		token_streak;
 	static const char	ph_redir = -42;
 
-	// placeholder per le redir
-	// TODO valutare se implementare un "same token streak"
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
 		ft_quit(12, "failed to allocate memory", data);
-	redir_content->fds[0] = STDOUT_FILENO;
+	redir_content->fds[0] = STDIN_FILENO;
 	redir_content->fds[1] = -42;
 	redir_content->filename = NULL;
 	redir_content->type = REDIR_OUTPUT_FD;
@@ -147,7 +144,8 @@ static void	add_filename(char **filename, char *cmd, t_data *data)
 	name = ft_strdup(&cmd[i]);
 	if (!name)
 		ft_quit(16, "failed to allocate memory", data);
-	while (cmd[i] != '\0' && !is_shell_space(cmd[i]))
+	i = 0;
+	while (cmd[i + 1] != '\0' && !is_shell_space(cmd[i + 1]))
 		i++;
 	name[i] = '\0';
 	if (name[0] == PH_INVALID_ENV)

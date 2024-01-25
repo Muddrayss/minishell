@@ -6,11 +6,11 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/21 16:10:59 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 15:49:20 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "headers/minishell.h"
 
 void	free_matrix(char **matrix)
 {
@@ -91,6 +91,7 @@ void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *))
 
 void	ft_quit(int id, char *msg, t_data *data)
 {
+	printf(RED "error : %d\n" DEFAULT, id); //to remove
 	if (errno != EINTR)
 	{
 		if (!msg)
@@ -105,6 +106,18 @@ void	ft_quit(int id, char *msg, t_data *data)
 	return ;
 }
 
+void clean_heredocs(t_data *data)
+{
+    char    *tmpdir_name;
+	char	*cmd;
+
+    tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
+	cmd = ft_strjoin("rm -rf ", tmpdir_name);
+	free(tmpdir_name);
+    exec_simple_cmd(getenv("PATH"), cmd, data);
+	free(cmd);
+}
+
 void	free_data(t_data *data)
 {
 	if (data->cmd_args)
@@ -112,7 +125,8 @@ void	free_data(t_data *data)
 	if (data->cmd_path)
 		free(data->cmd_path);
 	if (data->lexered_params)
-		ft_lstclear(data->lexered_params, &del_content_lexer);	
+		ft_lstclear(data->lexered_params, &del_content_lexer);
+	//TODO fare una funzione che chiude tutti i fd
 }
 
 int8_t	ft_parse_error(char token)

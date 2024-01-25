@@ -6,17 +6,15 @@
 #    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/01/20 16:36:55 by egualand         ###   ########.fr        #
+#    Updated: 2024/01/25 15:33:32 by egualand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
-SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c \
-		executor.c
-
+SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c executor.c heredoc.c
 OBJS = $(SRCS:.c=.o)
-HEADERS = minishell.h lexer.h parser.h error.h executor.h
+HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h error.h executor.h)
 
 CC = cc -g
 CFLAGS = -Wall -Wextra -Werror
@@ -34,6 +32,7 @@ $(LIBFT_LIB):
 	@make bonus -C $(LIBFT_DIR) >/dev/null
 
 $(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
+	@mkdir -p tmp
 	@$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) -L $(LIBFT_DIR) -lft -lreadline -o $(NAME)
 	@echo "Compilation of $(NAME) done!"
 
@@ -41,6 +40,7 @@ $(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
 	@$(CC) $(CFLAGS) -I $(INCLUDES_DIR) -c $< -o $@
 
 clean:
+	@$(RM) -r tmp
 	@$(RM) $(OBJS)
 	@make clean -C $(LIBFT_DIR) >/dev/null
 	@echo "Cleaning of $(NAME) done!"
@@ -51,6 +51,7 @@ fclean: clean
 	@echo "Full cleaning of $(NAME) done!"
 
 leaks: all
+	@printf "{\n readline\n Memcheck:Leak\n fun:rl_parse_and_bind\n fun:readline_internal_teardown\n fun:rl_initialize\n fun:readline\n}" > readline.supp
 	@valgrind --leak-check=full --show-leak-kinds=all --suppressions=readline.supp -v ./$(NAME) 2> leak_report
 	@echo "leak report generated"
 
