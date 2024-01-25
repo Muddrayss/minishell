@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 19:26:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:30:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 	if (!elem)
 		ft_quit(10, "failed to allocate memory", data);
 	elem->redirs = NULL;
+	elem->bin_path = NULL;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 1;
 	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)

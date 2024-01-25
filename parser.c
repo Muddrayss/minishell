@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 19:25:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:29:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,9 @@ static void	handle_slash(t_list *node, t_lexer *prev_cmd_elem, t_parser *content
 	t_lexer		*next_cmd_elem;
 	static char	placehodler = PH_ABS_PATH;
 
+ 	//TODO gestire il fatto che il lexer identifica tanti '/' per ogni singola path
+	if (content_par->bin_path != NULL)
+		return ;
 	next_cmd_elem = get_next_cmd_elem(node);
 	if (next_cmd_elem != (t_lexer *)node->next)
 		ft_parse_error('/');
