@@ -61,41 +61,24 @@ static int parent(int fds[], t_data *data)
 
 static void child(t_parser *content, int fds[], bool is_last, int original_stdin, t_data *data)
 {
-    char    *heredoc_filename;
-    int     heredoc_fd;
-    bool    flag;
-
-    flag = is_heredoc(content->redirs);
-    heredoc_fd = -1;
     if (fds[2] != -1 && (dup2(fds[2], STDIN_FILENO) == -1 || close(fds[2]) == -1))
         ft_quit(25, NULL, data);
-    if (flag)
-    {
-        heredoc_filename = get_filename(data);
-        heredoc_fd = open(heredoc_filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
-    }
-    exec_redirs(content->redirs, heredoc_fd, original_stdin, data);
-    if (flag)
-    {
-        if (heredoc_fd == -1 || dup2(heredoc_fd, STDIN_FILENO) == -1 || close(heredoc_fd) == -1)
-        {
-            free(heredoc_filename);
-            ft_quit(26, NULL, data);
-        }
-        free(heredoc_filename);
-    }
+    exec_redirs(content->redirs, original_stdin, data);
     if (close(fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[1]) == -1)
         ft_quit(27, NULL, data);
     kill(getpid(), SIGSTOP);
     exec(getenv("PATH"), content->cmd_str, data);
 }
 
-static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_data *data)
+static void exec_redirs(t_list *redirs, int original_stdin, t_data *data)
 {
     t_list          *node;
     t_redir         *redir;
+    int             heredoc_fd;
+    char            *heredoc_filename;
     int8_t          append_or_trunc;
 
+    heredoc_filename = NULL;
     node = redirs;
     while (node)
     {
@@ -106,12 +89,18 @@ static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_da
             {
                 if (dup2(original_stdin, STDIN_FILENO) == -1)
                     ft_quit(28, NULL, data);
+                if (!heredoc_filename)
+                {
+                     heredoc_filename = get_filename(data);
+                     heredoc_fd = open(heredoc_filename, O_RDWR, O_CREAT, O_TRUNC, 0644);
+                     free(heredoc_filename);
+                } 
                 fill_heredoc(redir->filename, heredoc_fd);
             }
             else if (redir->type == REDIR_INPUT)
             {
                 redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
-                if (redir->fds[0] == -1 || dup2(redir->fds[0], STDIN_FILENO) == -1 || close(redir->fds[0]) == -1)
+                if (redir->fds[0] == -1)
                     ft_quit(21, NULL, data);
             }
         }
@@ -124,9 +113,11 @@ static void exec_redirs(t_list *redirs, int heredoc_fd, int original_stdin, t_da
                 if (redir->fds[1] == -1)
                     ft_quit(22, NULL, data);
             }
-            if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || close(redir->fds[1]) == -1)
-                ft_quit(23, NULL, data);
         }
+        if (dup2(redir->fds[0], STDIN_FILENO) == -1 || close(redir->fds[0]) == -1)
+            ft_quit(23, NULL, data);
+        if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || close(redir->fds[1]) == -1)
+            ft_quit(23, NULL, data);  
         node = node->next;
     }
 }
