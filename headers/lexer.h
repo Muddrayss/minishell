@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:58:04 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 18:00:39 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ typedef enum e_token
 	REDIR_R,
 	REDIR_L,
 	ENV,
+	SLASH,
+	SEMICOLON,
+	QUOTE,
+	DQUOTE,
+	AND
 }				t_token;
 
 typedef enum e_elem_type
