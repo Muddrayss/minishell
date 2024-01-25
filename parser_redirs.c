@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 16:32:03 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:26:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 	t_lexer				*next_cmd_elem;
 	t_token				next_token;
 	unsigned int		token_streak;
-	static const char	ph_redir = -42;
+	static const char	placeholder = PH_REDIR;
 
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
@@ -59,7 +59,7 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 		}	
 	}
 	ft_lstadd_back(&content_par->redirs, ft_lstnew(redir_content));
-	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 2);
+	ft_strlcat(content_par->cmd_str, &placeholder, ft_strlen(content_par->cmd_str) + 2);
 }
 
 void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
@@ -68,7 +68,8 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	t_lexer				*next_cmd_elem;
 	t_token				next_token;
 	unsigned int		token_streak;
-	static const char	ph_redir = -42;
+	static const char	placeholder
+		 = PH_REDIR;
 
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
@@ -99,7 +100,7 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	if (redir_content->type != REDIR_APPEND && token_streak == 2 && next_token == REDIR_R)
 		redir_content->type = REDIR_APPEND_FD;
 	ft_lstadd_back(&content_par->redirs, ft_lstnew(redir_content));
-	ft_strlcat(content_par->cmd_str, &ph_redir, ft_strlen(content_par->cmd_str) + 2);
+	ft_strlcat(content_par->cmd_str, &placeholder, ft_strlen(content_par->cmd_str) + 2);
 }
 
 static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)

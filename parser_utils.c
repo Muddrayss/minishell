@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/24 14:43:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:26:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void	replace_env_var(char **str, char *env_var,
 	unsigned int		env_varname_len;
 	unsigned int		env_var_len;
 	unsigned int		size;
-	static char			ph_invalid_env = PH_INVALID_ENV;
+	static char			placeholder = PH_INVALID_ENV;
 
 	env_var_len = ft_strlen(env_var);
 	env_var_len += (env_var_len == 0); // Skip placeholder '$'
@@ -167,7 +167,7 @@ void	replace_env_var(char **str, char *env_var,
 	if (env_var)
 		ft_strlcat(new_str, env_var, size);
 	else
-		ft_strlcat(new_str, &ph_invalid_env, size);
+		ft_strlcat(new_str, &placeholder, size);
 	ft_strlcat(new_str, *str + env_varname_len, size);
 	free(*str);
 	*str = new_str;
