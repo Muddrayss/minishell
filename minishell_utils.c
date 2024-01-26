@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/26 16:02:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/26 16:22:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,12 @@ static char	*get_custom_bin(char *path, char **envp)
 	char	*tmp;
 
 	full_path = NULL;
-	tmp = "";
+	tmp = ft_getenv(envp, "PWD");
+	ft_strlcat(tmp, "/", ft_strlen(tmp) + 2);
 	if (ft_strncmp(path, "../", 3) == 0)
-	{
-		tmp = ft_getenv(envp, "OLDPWD");
-		full_path = ft_strjoin(tmp, path + 2);
-	}
+		full_path = ft_strjoin(tmp, path);
 	else if (ft_strncmp(path, "./", 2) == 0)
-	{
-		tmp = ft_getenv(envp, "PWD");
-		full_path = ft_strjoin(tmp, path + 1);
-	}
+		full_path = ft_strjoin(tmp, path + 2);
 	else
 		full_path = ft_strdup(path);
 	if (access(full_path, X_OK) == 0)

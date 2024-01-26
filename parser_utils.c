@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 19:30:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/26 16:05:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,6 @@ static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag)
 		l_content = *((t_lexer *)lexered_params->content);
 		if (flag == CMD_LEN && l_content.type == CMD)
 			n += ft_strlen(l_content.str.cmd) + 1; // per eventuali token
-		// else if (flag == ENV_NUM && l_content.type == TOKEN
-		// 	&& l_content.str.token == ENV)
-		// 	n++;
 		else if (l_content.type == TOKEN && l_content.str.token == PIPE)
 			break ;
 		lexered_params = lexered_params->next;
