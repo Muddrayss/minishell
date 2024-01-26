@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 17:40:08 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/26 16:02:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
+
+static char	*get_custom_bin(char *path, char **envp);
 
 void	free_matrix(char **matrix)
 {
@@ -29,6 +31,8 @@ char	*get_cmd(char *path, char *cmd, t_data *data)
 	unsigned int	i;
 	unsigned int	size;
 
+	if (ft_strnstr(cmd, "/", 1) || ft_strnstr(cmd, "./", 2) || ft_strnstr(cmd, "../", 3))
+		return (get_custom_bin(cmd, data->envp));
 	dirs = ft_split(path, ':');
 	if (!dirs)
 		ft_quit(3, ft_strdup("failed to allocate memory"), data);
@@ -49,7 +53,56 @@ char	*get_cmd(char *path, char *cmd, t_data *data)
 		full_path = NULL;
 	}
 	free_matrix(dirs);
+	if (!full_path)
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd("\n", 2);
+	}
 	return (full_path);
+}
+
+static char	*get_custom_bin(char *path, char **envp)
+{
+	char	*full_path;
+	char	*tmp;
+
+	full_path = NULL;
+	tmp = "";
+	if (ft_strncmp(path, "../", 3) == 0)
+	{
+		tmp = ft_getenv(envp, "OLDPWD");
+		full_path = ft_strjoin(tmp, path + 2);
+	}
+	else if (ft_strncmp(path, "./", 2) == 0)
+	{
+		tmp = ft_getenv(envp, "PWD");
+		full_path = ft_strjoin(tmp, path + 1);
+	}
+	else
+		full_path = ft_strdup(path);
+	if (access(full_path, X_OK) == 0)
+		return (free(tmp), full_path);
+	ft_putstr_fd("minishell: no such file or directory: ", 2);
+	ft_putstr_fd(path, 2);
+	ft_putstr_fd("\n", 2);
+	return (free(tmp), free(full_path), NULL);
+}
+
+char	*ft_getenv(char **envp, char *env_name)
+{
+	char	*env_value;
+	int		env_name_len;
+	int		i;
+
+	env_value = NULL;
+	env_name_len = ft_strlen(env_name);
+	i = 0;
+	while (ft_strncmp(envp[i], env_name, env_name_len) != 0)
+		i++;
+	if (envp[i] != NULL)
+		env_value = ft_strdup(envp[i] + env_name_len + 1); //per saltare il nome e l'=
+	return (env_value);
 }
 
 // diversa da isspace perche' bash non intepreta \v \f e \r come spazi
@@ -134,8 +187,8 @@ void	free_data(t_data *data)
 
 int8_t	ft_parse_error(char token)
 {
-	ft_putstr_fd("Parse error near '", 1);
-	ft_putchar_fd(token, 1);
-	ft_putstr_fd("'\n", 1);
+	ft_putstr_fd("Parse error near '", 2);
+	ft_putchar_fd(token, 2);
+	ft_putstr_fd("'\n", 2);
 	return (-1);
 }

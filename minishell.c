@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 16:41:07 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/26 16:04:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static void	minishell_loop(t_data *data)
 	char		*input;
 	t_list		*params_head;
 
+	write(1, "\n", 1); //cosi' piu' minishell nested non stanno accanto quando si preme ctrl+c
 	while (1)
 	{
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
@@ -97,7 +98,10 @@ void  exec(char *path, char *cmd_str, t_data *data)
 	}
 	data->cmd_path = get_cmd(path, cmd_args[0], data);
 	if (!data->cmd_path)
-		ft_quit(COMMAND_NOT_FOUND, ft_strjoin("command not found: ", cmd_args[0]), data);
+	{
+		free_data(data);
+		exit(COMMAND_NOT_FOUND);
+	}
 	else
 		execve(data->cmd_path, cmd_args, data->envp);
 	ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_args[0]), data);

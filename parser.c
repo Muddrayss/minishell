@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 19:29:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/26 14:06:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void		replace_placeholders(t_list *parsed_params, t_data *data);
 static int8_t 	handle_env(t_list *lexered_params, t_data *data);
-static void		handle_slash(t_list *node, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data);
+// static void		handle_slash(t_list *node, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data);
 
 t_list	*parser(t_list *lexered_params, t_data *data)
 {
@@ -68,8 +68,8 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 				handle_redir_l(node, content_par, data);
 			else if (content_lex->str.token == REDIR_R)
 				handle_redir_r(node, prev_cmd_elem, content_par, data);
-			else if (content_lex->str.token == SLASH)
-				handle_slash(node, prev_cmd_elem, content_par, data);
+			// else if (content_lex->str.token == SLASH)
+			// 	handle_slash(node, prev_cmd_elem, content_par, data);
 			// TODO valutare se fare qualche eccezione per i token di fila;
 			// TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un >
 			if (func_return == -1)
@@ -148,40 +148,39 @@ static int8_t	handle_env(t_list *lexered_params, t_data *data)
 	return (free(var_name), 0);
 }
 
-static void	handle_slash(t_list *node, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
-{
-	int			size;
-	int			len;
-	char		*tmp;
-	t_lexer		*next_cmd_elem;
-	static char	placehodler = PH_ABS_PATH;
+// static void	handle_slash(t_list *node, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
+// {
+// 	int			size;
+// 	int			len;
+// 	char		*tmp;
+// 	t_lexer		*next_cmd_elem;
+// 	static char	placehodler = PH_ABS_PATH;
 
- 	//TODO gestire il fatto che il lexer identifica tanti '/' per ogni singola path
-	if (content_par->bin_path != NULL)
-		return ;
-	next_cmd_elem = get_next_cmd_elem(node);
-	if (next_cmd_elem != (t_lexer *)node->next)
-		ft_parse_error('/');
-	tmp = ft_strdup(next_cmd_elem->str.cmd);
-	if (!tmp)
-		ft_quit(98, "failed to allocate memory", data);
-	while (next_cmd_elem->str.cmd[size] && !is_shell_space(next_cmd_elem->str.cmd[size]))
-		size++;
-	tmp[size - 1] = '\0';
-	size += 3; //2 per eventuali . o .. e \0
-	content_par->bin_path = ft_calloc(size, sizeof(char));
-	if (!content_par->bin_path)
-		ft_quit(99, "failed to allocate memory", data);
-	len = ft_strlen(prev_cmd_elem->str.cmd);
-	if (prev_cmd_elem->str.cmd[len - 1] == '.')
-	{
-		ft_strlcat(content_par->bin_path, ".", size);
-		if (prev_cmd_elem->str.cmd[len - 1] == '.')
-			ft_strlcat(content_par->bin_path, ".", size);
-	}
-	else
-		ft_strlcat(content_par->bin_path, &placehodler, size);
-	ft_strlcat(content_par->bin_path, "/", size);
-	ft_strlcat(content_par->bin_path, tmp, size);
-	free(tmp);
-}
+// 	if (content_par->bin_path != NULL)
+// 		return ;
+// 	next_cmd_elem = get_next_cmd_elem(node);
+// 	if (next_cmd_elem != (t_lexer *)node->next)
+// 		ft_parse_error('/');
+// 	tmp = ft_strdup(next_cmd_elem->str.cmd);
+// 	if (!tmp)
+// 		ft_quit(98, "failed to allocate memory", data);
+// 	while (next_cmd_elem->str.cmd[size] && !is_shell_space(next_cmd_elem->str.cmd[size]))
+// 		size++;
+// 	tmp[size - 1] = '\0';
+// 	size += 3; //2 per eventuali . o .. e \0
+// 	content_par->bin_path = ft_calloc(size, sizeof(char));
+// 	if (!content_par->bin_path)
+// 		ft_quit(99, "failed to allocate memory", data);
+// 	len = ft_strlen(prev_cmd_elem->str.cmd);
+// 	if (prev_cmd_elem->str.cmd[len - 1] == '.')
+// 	{
+// 		ft_strlcat(content_par->bin_path, ".", size);
+// 		if (prev_cmd_elem->str.cmd[len - 1] == '.')
+// 			ft_strlcat(content_par->bin_path, ".", size);
+// 	}
+// 	else
+// 		ft_strlcat(content_par->bin_path, &placehodler, size);
+// 	ft_strlcat(content_par->bin_path, "/", size);
+// 	ft_strlcat(content_par->bin_path, tmp, size);
+// 	free(tmp);
+// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 15:22:07 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/26 15:33:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ char		*get_cmd(char *path, char *cmd, t_data *data);
 void		exec_simple_cmd(char *path, char *cmd_str, t_data *data);
 void  		exec(char *path, char *cmd_str, t_data *data);
 void		free_matrix(char **matrix);
-void clean_heredocs(t_data *data);
-void ft_quit(int id, char *msg, t_data *data);
+void 		clean_heredocs(t_data *data);
+void 		ft_quit(int id, char *msg, t_data *data);
 void 		free_data(t_data *data);
 int8_t 		ft_parse_error(char token);
 bool		is_shell_space(char c);
 void		init_signals(void);
 void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
+char		*ft_getenv(char **envp, char *env_name);
 
 #endif
