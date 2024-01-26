@@ -6,13 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/26 16:28:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/26 17:31:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static char	*get_custom_bin(char *path, char **envp);
+static char	*get_custom_bin(char *path, t_data *data);
+static char	*get_env_name(char *full_env, t_data *data);
+static char	*new_env(char *name, char *value, t_data *data);
 
 void	free_matrix(char **matrix)
 {
@@ -32,7 +34,7 @@ char	*get_cmd(char *path, char *cmd, t_data *data)
 	unsigned int	size;
 
 	if (ft_strnstr(cmd, "/", 1) || ft_strnstr(cmd, "./", 2) || ft_strnstr(cmd, "../", 3))
-		return (get_custom_bin(cmd, data->envp));
+		return (get_custom_bin(cmd, data));
 	dirs = ft_split(path, ':');
 	if (!dirs)
 		ft_quit(3, ft_strdup("failed to allocate memory"), data);
@@ -62,13 +64,13 @@ char	*get_cmd(char *path, char *cmd, t_data *data)
 	return (full_path);
 }
 
-static char	*get_custom_bin(char *path, char **envp, t_data *data)
+static char	*get_custom_bin(char *path, t_data *data)
 {
 	char	*full_path;
 	char	*tmp;
 
 	full_path = NULL;
-	tmp = ft_getenv(envp, "PWD");
+	tmp = ft_getenv(data, "PWD");
 	ft_strlcat(tmp, "/", ft_strlen(tmp) + 2);
 	if (ft_strncmp(path, "../", 3) == 0)
 		full_path = ft_strjoin(tmp, path);
@@ -104,6 +106,87 @@ char	*ft_getenv(t_data *data, char *env_name)
 			ft_quit(3, "failed to allocate memory", data);
 	}
 	return (env_value);
+}
+
+void	ft_setenv(char *name, char *value, int8_t overwrite, t_data *data)
+{
+	size_t	name_len;
+	int		i;
+	char	*env_name;
+	char	**tmp;
+
+	name_len = ft_strlen(name);
+	if (overwrite)
+	{
+		i = 0;
+		if (data->envp[i])
+			env_name = get_env_name(data->envp[i++], data);
+		while (data->envp[i] && ft_strncmp(env_name, name, name_len) != 0)
+			env_name = get_env_name(data->envp[i++], data);
+		free(data->envp[i]);
+		data->envp[i] = new_env(name, value, data);
+	}
+	else
+	{
+		i = 0;
+		while(data->envp[i])
+			i++;
+		tmp = ft_strarr_dup(data->envp);
+		free_matrix(data->envp);
+		data->envp = malloc(sizeof(char *) * i + 2);
+		if (!data->envp)
+		{
+			free_matrix(tmp);
+			ft_quit(34, "failed to allocate memory", data);
+		}
+		data->envp[i + 1] = NULL;
+		i = 0;
+		while (tmp[i])
+		{
+			data->envp[i] = ft_strdup(tmp[i]);
+			if (!data->envp[i])
+			{
+				free_matrix(tmp);
+				ft_quit(36, "failed to allocate memory", data);
+			}
+			i++;
+		}
+		free_matrix(tmp);
+		data->envp[i] = new_env(name, value, data);
+	}
+}
+
+static char	*new_env(char *name, char *value, t_data *data)
+{
+	size_t	value_len;
+	size_t	name_len;
+	size_t	size;
+	char	*env;
+
+	name_len = ft_strlen(name);
+	value_len = ft_strlen(value);
+	size = name_len + value_len + 2;
+	env = ft_calloc(size, sizeof(char)); //1 per = e 1 per '\0'
+	if (!env)
+		ft_quit(39, "failed to allocate memory", data);
+	ft_strlcpy(env, name, size);
+	env[name_len] = '=';
+	ft_strlcat(env, value, size);
+	return (env);
+}
+
+static char	*get_env_name(char *full_env, t_data *data)
+{
+	int 	i;
+	char	*env_name;
+
+	env_name = ft_calloc(ft_strlen(full_env) + 1, sizeof(char));
+	if (!env_name)
+		ft_quit(38, "failed to allocate memory", data);
+	i = 0;
+	while (full_env[i] != '\0' && full_env[i] != '=')
+		env_name[i] = full_env[i];
+	return (env_name);
 }
 
 // diversa da isspace perche' bash non intepreta \v \f e \r come spazi
