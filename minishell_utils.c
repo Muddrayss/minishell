@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/26 16:22:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/26 16:28:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*get_cmd(char *path, char *cmd, t_data *data)
 	return (full_path);
 }
 
-static char	*get_custom_bin(char *path, char **envp)
+static char	*get_custom_bin(char *path, char **envp, t_data *data)
 {
 	char	*full_path;
 	char	*tmp;
@@ -76,6 +76,8 @@ static char	*get_custom_bin(char *path, char **envp)
 		full_path = ft_strjoin(tmp, path + 2);
 	else
 		full_path = ft_strdup(path);
+	if (!full_path)
+		ft_quit(37, "failed to allocate memory", data);
 	if (access(full_path, X_OK) == 0)
 		return (free(tmp), full_path);
 	ft_putstr_fd("minishell: no such file or directory: ", 2);
@@ -84,7 +86,7 @@ static char	*get_custom_bin(char *path, char **envp)
 	return (free(tmp), free(full_path), NULL);
 }
 
-char	*ft_getenv(char **envp, char *env_name)
+char	*ft_getenv(t_data *data, char *env_name)
 {
 	char	*env_value;
 	int		env_name_len;
@@ -93,10 +95,14 @@ char	*ft_getenv(char **envp, char *env_name)
 	env_value = NULL;
 	env_name_len = ft_strlen(env_name);
 	i = 0;
-	while (ft_strncmp(envp[i], env_name, env_name_len) != 0)
+	while (ft_strncmp(data->envp[i], env_name, env_name_len) != 0)
 		i++;
-	if (envp[i] != NULL)
-		env_value = ft_strdup(envp[i] + env_name_len + 1); //per saltare il nome e l'=
+	if (data->envp[i] != NULL)
+	{
+		env_value = ft_strdup(data->envp[i] + env_name_len + 1); //per saltare il nome e l'=
+		if (!env_value)
+			ft_quit(3, "failed to allocate memory", data);
+	}
 	return (env_value);
 }
 
