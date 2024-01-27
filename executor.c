@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/27 18:44:41 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/27 19:40:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static int parent(int fds[], t_data *data);
 static bool is_last_subcmd(char *cmd_str);
 static void child(t_parser *content, int fds[], bool is_last, int original_stdin, int heredoc_fileno, t_data *data);
 static void exec_redirs(t_list *redirs, t_data *data);
-// static void resume(t_list *node);
 static char *ft_strdup_until(char *str, char c, t_data *data);
 static t_list *ft_lstdup_until(t_list *lst, void *stop, t_data *data);
 static void wait_for_children(t_list *parsed_params);
@@ -38,7 +37,6 @@ void executor(t_list *parsed_params, t_data *data)
     create_heredocs(parsed_params, data);
     prev_out_fd = -1;
     node = parsed_params;
-    printf("Starting node\n");
     while (node)
     {
         content = (t_parser *)node->content;
@@ -54,8 +52,6 @@ void executor(t_list *parsed_params, t_data *data)
             prev_out_fd = parent(fds, data);
         node = node->next;
     }
-    printf("Finishing node\n");
-    // resume(parsed_params);
     wait_for_children(parsed_params);
     if (dup2(original_stdin, STDIN_FILENO) == -1 || close(original_stdin) == -1)
         ft_quit(24, NULL, data);
@@ -151,9 +147,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         }
         else
         {
-            printf("aspettando pid: %d\n", pid);
             waitpid(pid, NULL, 0);
-            printf("sbloccato pid: %d\n", pid);
             i += ft_strlen(new_cmd_str);
             free(new_cmd_str);
             if (dup2(original_stdin, STDIN_FILENO) == -1)
@@ -265,18 +259,6 @@ static void exec_redirs(t_list *redirs, t_data *data)
     if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || (redir->fds[1] != STDOUT_FILENO && close(redir->fds[1]) == -1))
         ft_quit(24, NULL, data);
 }
-
-// static void resume(t_list *node)
-// {
-//     t_parser        *content;
-
-//     while (node)
-//     {
-//         content = (t_parser *)node->content;
-//         kill(content->pid, SIGCONT);
-//         node = node->next;
-//     }
-// }
 
 static void wait_for_children(t_list *parsed_params)
 {
