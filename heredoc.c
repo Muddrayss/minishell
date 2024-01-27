@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/27 18:07:19 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/27 20:11:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void fill_heredoc(char *limiter, int fd)
         str = readline("> ");
         if (!str)
             break ;
+        //TODO gestire caso in cui str ha una env var con $
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, MAX(str_len, limiter_len)) == 0)
             break ;
