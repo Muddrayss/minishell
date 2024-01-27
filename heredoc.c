@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 16:17:45 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/27 18:07:19 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,29 @@ bool is_heredoc(t_list *redirs)
     return (false);
 }
 
-char    *get_filename(int id, t_data *data)
+char    *get_filename(int id1, int id2, t_data *data)
 {
-    char        *idx;
-    char        *tmp;
+    char        *idx1;
+    char        *idx2;
     char        *filename;
+    size_t      size;
 
-    idx = ft_itoa(id);
-    tmp = ft_strjoin(data->starting_dir, "/tmp/.heredoc_");
-    filename = ft_strjoin(tmp, idx);
-    free(tmp);
-    free(idx);
+    idx1 = ft_itoa(id1);
+    idx2 = ft_itoa(id2);
+    size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx1) + ft_strlen(idx2) + 2;
+    filename = ft_calloc(size, sizeof(char));
     if (!filename)
+    {
+        free(idx1);
+        free(idx2);
         ft_quit(22, "failed to allocate memory", data);
-    return (filename);
+    }
+    ft_strlcpy(filename, data->starting_dir, size);
+    ft_strlcat(filename, "/tmp/.heredoc_", size);
+    ft_strlcat(filename, idx1, size);
+    ft_strlcat(filename, ".", size);
+    ft_strlcat(filename, idx2, size);
+    return (free(idx1), free(idx2), filename);
 }
 
 void fill_heredoc(char *limiter, int fd)

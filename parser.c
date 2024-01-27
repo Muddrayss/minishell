@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/26 16:06:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/27 15:51:28 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 	t_lexer			*prev_cmd_elem;
 	t_lexer			*content_lex;
 	unsigned int	token_streak;
+	static char		ph_semicolon = PH_SEMICOLON;
+	static char		ph_redir_stop = PH_REDIR_STOP;
 
 	int func_return ;
 	if (!lexered_params)
@@ -67,6 +69,11 @@ t_list	*parser(t_list *lexered_params, t_data *data)
 				handle_redir_l(node, content_par, data);
 			else if (content_lex->str.token == REDIR_R)
 				handle_redir_r(node, prev_cmd_elem, content_par, data);
+			else if (content_lex->str.token == SEMICOLON)
+			{
+				ft_strlcat(content_par->cmd_str, &ph_semicolon, size);
+				ft_lstadd_back(&content_par->redirs, ft_lstnew(&ph_redir_stop));
+			}
 			// TODO valutare se fare qualche eccezione per i token di fila;
 			// TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un >
 			if (func_return == -1)

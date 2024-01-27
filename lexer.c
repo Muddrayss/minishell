@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/26 14:07:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/27 15:22:46 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,11 @@ static t_token lexer_get_token(char c)
 {
     int8_t         	i;
 	static uint8_t	n_tokens;
-    static int tokens[9][2] = {
+    static int tokens[8][2] = {
         {'|', PIPE},
         {'>', REDIR_R},
         {'<', REDIR_L},
         {'$', ENV},
-        //{'/', SLASH},
         {';', SEMICOLON},
         {'\'', QUOTE},
         {'\"', DQUOTE},
@@ -83,10 +82,10 @@ static bool is_token(char *str)
 {
     int8_t			i;
 	static uint8_t	n_tokens;
-    static char		tokens[9] = 
-    {'|', '>', '<', '$', ';', '\'', '\"', '&'};//, '/'};
+    static char tokens[8] =
+        {'|', '>', '<', '$', ';', '\'', '\"', '&'};
 
-	n_tokens = sizeof(tokens) / sizeof(tokens[0]);
+    n_tokens = sizeof(tokens) / sizeof(tokens[0]);
 	i = -1;
    	while (++i < n_tokens)
 	{

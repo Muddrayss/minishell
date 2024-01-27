@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/26 16:04:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/27 15:15:39 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void	minishell_loop(t_data *data)
 	char		*input;
 	t_list		*params_head;
 
-	write(1, "\n", 1); //cosi' piu' minishell nested non stanno accanto quando si preme ctrl+c
+	//write(1, "\n", 1); //cosi' piu' minishell nested non stanno accanto quando si preme ctrl+c
 	while (1)
 	{
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
@@ -77,7 +77,7 @@ void	exec_simple_cmd(char *path, char *cmd_str, t_data *data)
 
 	pid = fork();
 	if (pid == -1)
-		ft_quit(1, NULL, data);
+		ft_quit(99, NULL, data);
 	if (pid == 0)
 		exec(path, cmd_str, data);
 	wait(NULL);
@@ -104,5 +104,7 @@ void  exec(char *path, char *cmd_str, t_data *data)
 	}
 	else
 		execve(data->cmd_path, cmd_args, data->envp);
-	ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_args[0]), data);
+	if (errno != ENOEXEC)
+		ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_args[0]), data);
+	exit(0);
 }

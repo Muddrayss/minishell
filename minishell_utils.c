@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/26 18:05:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/27 15:09:51 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,19 @@ static char	*get_custom_bin(char *path, t_data *data)
 	if (!full_path)
 		ft_quit(37, "failed to allocate memory", data);
 	if (access(full_path, X_OK) == 0)
-		return (free(tmp), full_path);
-	ft_putstr_fd("minishell: no such file or directory: ", 2);
-	ft_putstr_fd(path, 2);
-	ft_putstr_fd("\n", 2);
-	return (free(tmp), free(full_path), NULL);
+    	return (free(tmp), full_path);
+	else
+	{
+		if (errno == EACCES)
+			ft_putstr_fd("minishell: permission denied: ", 2);
+		else if (errno == ENOENT)
+			ft_putstr_fd("minishell: no such file or directory: ", 2);
+		else
+			ft_putstr_fd("minishell: error accessing file: ", 2);
+	}
+    ft_putstr_fd(path, 2);
+    ft_putstr_fd("\n", 2);
+    return (free(tmp), free(full_path), NULL);
 }
 
 char	*ft_getenv(t_data *data, char *env_name)
@@ -175,7 +183,6 @@ static char	*get_env_name(char *full_env, t_data *data)
 	return (env_name);
 }
 
-// diversa da isspace perche' bash non intepreta \v \f e \r come spazi
 bool	is_shell_space(char c)
 {
 	if (c == ' ' || c == '\n' || c == '\t')

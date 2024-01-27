@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/26 16:05:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/27 18:30:07 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 	if (!elem)
 		ft_quit(10, "failed to allocate memory", data);
 	elem->redirs = NULL;
-	elem->bin_path = NULL;
+	elem->pid = -1;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 1;
 	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)

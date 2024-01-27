@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 19:24:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/27 18:29:58 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # define PH_REDIR -42
 # define PH_INVALID_ENV -43
 # define PH_ABS_PATH -44
+# define PH_SEMICOLON -45
+# define PH_REDIR_STOP -46
 
 # define CMD_LEN 0
 # define ENV_NUM 1
@@ -47,7 +49,6 @@ typedef struct s_redir
 typedef struct s_parser
 {
 	char	*cmd_str;
-	char	*bin_path; //null se il comando e' un builtin, altrimenti path del binario (con PH_CWD se c'e' il ./)
 	t_list	*redirs;
 	pid_t 	pid;
 } t_parser;
