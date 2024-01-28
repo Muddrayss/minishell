@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 15:17:17 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/28 17:12:28 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void fill_heredoc(char *limiter, int fd)
         str = readline("> ");
         if (!str || g_status == 130)
             break ;
+        //TODO gestire caso in cui str ha una env var con $
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, MAX(str_len, limiter_len)) == 0)
             break ;
