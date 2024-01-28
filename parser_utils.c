@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/27 18:30:07 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/28 16:02:00 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
 	return (token_streak);
 }
 
-t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
+t_parser	*new_elem(size_t *size, t_list *lexered_params)
 {
 	t_parser		*elem;
 
 	elem = (t_parser *)malloc(sizeof(t_parser));
 	if (!elem)
-		ft_quit(10, "failed to allocate memory", data);
+		ft_quit(10, "failed to allocate memory");
 	elem->redirs = NULL;
 	elem->pid = -1;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 1;
@@ -52,7 +52,7 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params, t_data *data)
 	if (!elem->cmd_str)
 	{
 		free(elem);
-		ft_quit(12, "failed to allocate memory", data);
+		ft_quit(12, "failed to allocate memory");
 	}
 	return (elem);
 }
@@ -75,8 +75,7 @@ static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag)
 	return (n);
 }
 
-void	remove_filename(char **str, unsigned int *starting_idx,
-		t_data *data)
+void	remove_filename(char **str, unsigned int *starting_idx)
 {
 	unsigned int	word_len;
 	unsigned int	i;
@@ -95,15 +94,14 @@ void	remove_filename(char **str, unsigned int *starting_idx,
 	size = ft_strlen(*str) - word_len + 1;
 	new_str = (char *)ft_calloc(size, sizeof(char));
 	if (!new_str)
-		ft_quit(15, "failed to allocate memory", data);
+		ft_quit(15, "failed to allocate memory");
 	ft_strlcpy(new_str, *str, *starting_idx + 2);
 	ft_strlcat(new_str, *str + i, size);
 	free(*str);
 	*str = new_str;
 }
 
-void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag,
-		t_data *data)
+void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -119,7 +117,7 @@ void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag,
 		size = i + j + 1;
 		new_str = (char *)ft_calloc(size, sizeof(char)); // ls 1> fsdds
 		if (!new_str)
-			ft_quit(15, "failed to allocate memory", data);
+			ft_quit(15, "failed to allocate memory");
 		ft_strlcpy(new_str, *str, i + 2);
 		ft_strlcat(new_str, *str + *starting_idx, size);
 		*starting_idx = i + 1;
@@ -133,7 +131,7 @@ void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag,
 		size = *starting_idx + (j - i) + 1;
 		new_str = (char *)ft_calloc(size, sizeof(char));
 		if (!new_str)
-			ft_quit(15, "failed to allocate memory", data);
+			ft_quit(15, "failed to allocate memory");
 		ft_strlcpy(new_str, *str, *starting_idx + 2);
 		ft_strlcat(new_str, *str + i, size);
 	}
@@ -141,8 +139,7 @@ void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag,
 	*str = new_str;
 }
 
-void	replace_env_var(char **str, char *env_var,
-		t_data *data)
+void	replace_env_var(char **str, char *env_var)
 {
 	char				*new_str;
 	unsigned int		env_varname_len;
@@ -161,11 +158,11 @@ void	replace_env_var(char **str, char *env_var,
 	size = ft_strlen(*str) - env_varname_len + env_var_len + 1;
 	new_str = (char *)ft_calloc(size, sizeof(char));
 	if (!new_str)
-		ft_quit(15, "failed to allocate memory", data);
+		ft_quit(15, "failed to allocate memory");
 	if (env_var)
 		ft_strlcat(new_str, env_var, size);
 	else
-		ft_strlcat(new_str, &placeholder, size);
+		ft_strlcat(new_str, &placeholder, ft_strlen(new_str) + 2);
 	ft_strlcat(new_str, *str + env_varname_len, size);
 	free(*str);
 	*str = new_str;
@@ -195,7 +192,7 @@ bool	is_empty_cmd(void *content)
 	{
 		tmp = ft_strtrim(elem->str.cmd, " \t\n");
 		if (!tmp)
-			ft_quit(15, "failed to allocate memory", NULL);
+			ft_quit(15, "failed to allocate memory");
 		if (*tmp == '\0')
 		{
 			free(tmp);

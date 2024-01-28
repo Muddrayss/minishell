@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 19:26:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/28 16:43:20 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag);
-static void		add_filename(char **filename, char *cmd, t_data *data);
+static void		add_filename(char **filename, char *cmd);
 
-void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
+bool	handle_redir_l(t_list *lexered_params, t_parser *content_par)
 {
 	t_redir				*redir_content;
 	t_lexer				*next_cmd_elem;
@@ -25,7 +25,7 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
-		ft_quit(12, "failed to allocate memory", data);
+		ft_quit(12, "failed to allocate memory");
 	redir_content->fds[0] = -42;
 	redir_content->fds[1] = STDOUT_FILENO;
 	redir_content->filename = NULL;
@@ -35,7 +35,7 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 	if (token_streak == 2 && next_token == REDIR_L)
 	{
 		redir_content->type = REDIR_HEREDOC;
-		add_filename(&redir_content->filename, next_cmd_elem->str.cmd, data);
+		add_filename(&redir_content->filename, next_cmd_elem->str.cmd);
 	}
 	else
 	{
@@ -43,7 +43,7 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 		{
 			ft_parse_error('<');
 			free(redir_content);
-			return ;
+			return (true * (next_token == REDIR_L));
 		}
 		else
 		{
@@ -53,16 +53,17 @@ void	handle_redir_l(t_list *lexered_params, t_parser *content_par, t_data *data)
 				{
 					redir_content->type = REDIR_INPUT;
 					if (next_cmd_elem)
-						add_filename(&redir_content->filename, next_cmd_elem->str.cmd, data);
+						add_filename(&redir_content->filename, next_cmd_elem->str.cmd);
 				}
 			}
 		}	
 	}
 	ft_lstadd_back(&content_par->redirs, ft_lstnew(redir_content));
 	ft_strlcat(content_par->cmd_str, &placeholder, ft_strlen(content_par->cmd_str) + 2);
+	return (true * (next_token == REDIR_L));
 }
 
-void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par, t_data *data)
+bool	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par)
 {
 	t_redir				*redir_content;
 	t_lexer				*next_cmd_elem;
@@ -73,7 +74,7 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 
 	redir_content = (t_redir *)malloc(sizeof(t_redir));
 	if (!redir_content)
-		ft_quit(12, "failed to allocate memory", data);
+		ft_quit(12, "failed to allocate memory");
 	redir_content->fds[0] = STDIN_FILENO;
 	redir_content->fds[1] = -42;
 	redir_content->filename = NULL;
@@ -84,11 +85,11 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	{
 		ft_parse_error('>');
 		free(redir_content);
-		return ;
+		return (true * (next_token == REDIR_R));
 	}
 	if (next_cmd_elem)
 		if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT) == -1)
-			add_filename(&redir_content->filename, next_cmd_elem->str.cmd, data);
+			add_filename(&redir_content->filename, next_cmd_elem->str.cmd);
 	if (prev_cmd_elem)
 		add_left_right_fds(&redir_content->fds[0], prev_cmd_elem->str.cmd, LEFT);
 	if (redir_content->fds[1] == -42)
@@ -101,6 +102,7 @@ void	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 		redir_content->type = REDIR_APPEND_FD;
 	ft_lstadd_back(&content_par->redirs, ft_lstnew(redir_content));
 	ft_strlcat(content_par->cmd_str, &placeholder, ft_strlen(content_par->cmd_str) + 2);
+	return (true * (next_token == REDIR_R));
 }
 
 static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
@@ -132,7 +134,7 @@ static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
 	return (0);
 }
 
-static void	add_filename(char **filename, char *cmd, t_data *data)
+static void	add_filename(char **filename, char *cmd)
 {
 	unsigned int	i;
 	char			*name;
@@ -144,7 +146,7 @@ static void	add_filename(char **filename, char *cmd, t_data *data)
 		i++;
 	name = ft_strdup(&cmd[i]);
 	if (!name)
-		ft_quit(16, "failed to allocate memory", data);
+		ft_quit(16, "failed to allocate memory");
 	i = 0;
 	while (cmd[i + 1] != '\0' && !is_shell_space(cmd[i + 1]))
 		i++;

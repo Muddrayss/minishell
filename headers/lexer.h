@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 18:00:39 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/28 13:57:11 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_lexer
 	} str;
 }				t_lexer;
 
-t_list			*lexer(char *input, t_data *data);
+t_list			*lexer(char *input);
 void			del_content_lexer(void *content);
 
 #endif

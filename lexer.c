@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/27 15:22:46 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/28 15:05:01 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 static t_token  lexer_get_token(char c);
 static bool 	is_token(char *str);
 
-t_list	*lexer(char *input, t_data *data)
+t_list	*lexer(char *input)
 {
+    t_data          *data;
     unsigned int    i;
     t_lexer   		*content;
     t_list         	*lexered_params;
 
+    data = get_data();
 	lexered_params = NULL;
     data->lexered_params = &lexered_params;
     while (*input != '\0')
@@ -32,11 +34,11 @@ t_list	*lexer(char *input, t_data *data)
         {
 			content = (t_lexer *)malloc(sizeof(t_lexer));
             if (!content)
-                ft_quit(7, "failed to allocate memory", data);
+                ft_quit(7, "failed to allocate memory");
 			content->type = CMD;
 			content->str.cmd = (char *)malloc(sizeof(char) * (i + 1));
 			if (!content->str.cmd)
-				ft_quit(8, "failed to allocate memory", data);
+				ft_quit(8, "failed to allocate memory");
             ft_strlcpy(content->str.cmd, input, i + 1);
 			ft_lstadd_back(&lexered_params, ft_lstnew(content));
             input += i;
@@ -46,7 +48,7 @@ t_list	*lexer(char *input, t_data *data)
 		{
 			content = (t_lexer *)malloc(sizeof(t_lexer));
             if (!content)
-                ft_quit(10, "failed to allocate memory", data);
+                ft_quit(10, "failed to allocate memory");
 			content->type = TOKEN;
        	 	content->str.token = lexer_get_token(*input++);
 			ft_lstadd_back(&lexered_params, ft_lstnew(content));

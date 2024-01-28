@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/01/25 16:51:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/28 14:59:08 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,49 @@ static void	sig_handler(int signo)
 	errno = EINTR;
 	if (signo == SIGINT)
 	{
-		if (!g_signals.in_heredoc)
-			ft_putstr_fd("\n", 2);
-		if (g_signals.in_cmd)
-		{
-			g_signals.sigint = 1;
-			rl_replace_line("", 0);
-			rl_redisplay();
-			rl_done = 1;
-			return ;
-		}
+		g_status = 130;
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		rl_replace_line("", STDIN_FILENO);
 		rl_redisplay();
 	}
 	else if (signo == SIGQUIT)
 	{
-		ft_putstr_fd("\b\b  \b\b", 1);
+		g_status = 131;
+		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
+	}
+}
+
+static void	in_cmd_sig_handler(int signo)
+{
+	errno = EINTR;
+	if (signo == SIGINT)
+	{
+		g_status = 130;
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		// rl_on_new_line();
+		// rl_replace_line("", STDIN_FILENO);
+		// rl_redisplay();
+	}
+	else if (signo == SIGQUIT)
+	{
+		g_status = 131;
+		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 	}
 }
 
 void	init_signals(void)
 {
 	if (signal(SIGINT, &sig_handler) == SIG_ERR)
-		ft_quit(SIGINT_ERROR, "Signal error.", NULL);
+		ft_quit(SIGINT_ERROR, "Signal error.");
 	if (signal(SIGQUIT, &sig_handler) == SIG_ERR)
-		ft_quit(SIGQUIT_ERROR, "Signal error.", NULL);
+		ft_quit(SIGQUIT_ERROR, "Signal error.");
+}
+
+void	init_in_cmd_signals(void)
+{
+	if (signal(SIGINT, &in_cmd_sig_handler) == SIG_ERR)
+		ft_quit(SIGINT_ERROR, "Signal error.");
+	if (signal(SIGQUIT, &in_cmd_sig_handler) == SIG_ERR)
+		ft_quit(SIGQUIT_ERROR, "Signal error.");
 }
