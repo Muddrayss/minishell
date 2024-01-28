@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 17:11:18 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/28 19:41:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void create_heredocs(t_list *parsed_params);
 static int parent(int fds[]);
-static bool is_last_subcmd(char *cmd_str);
+static bool check_last_subcmd(char *cmd_str);
 static void child(t_parser *content, int fds[], bool is_last, int original_stdin, int heredoc_fileno);
 static void exec_redirs(t_list *redirs);
 static char *ft_strdup_until(char *str, char c);
@@ -47,10 +47,11 @@ void executor(t_list *parsed_params)
         if (content->pid == -1)
             ft_quit(19, NULL);
         if (content->pid == 0)
-            child(content, fds, node->next == NULL, original_stdin, heredoc_fileno++);
+            child(content, fds, node->next == NULL, original_stdin, heredoc_fileno);
         else
             prev_out_fd = parent(fds);
         node = node->next;
+        heredoc_fileno++;
     }
     wait_for_children(parsed_params);
     if (dup2(original_stdin, STDIN_FILENO) == -1 || close(original_stdin) == -1)
@@ -121,6 +122,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
     static char     ph_redir_stop = PH_REDIR_STOP;
     int             heredoc_fileno2;
     pid_t           pid;
+    bool            is_last_subcmd;
 
     if (fds[2] != -1 && (dup2(fds[2], STDIN_FILENO) == -1 || close(fds[2]) == -1))
         ft_quit(25, NULL);
@@ -128,9 +130,10 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
     while (1)
     {
         new_cmd_str = ft_strdup_until(content->cmd_str, PH_SEMICOLON); //fino a '\0' o PH_SEMICOLON
-        if (!new_cmd_str || new_cmd_str[0] == '\0')
-            break ;
         new_redirs = ft_lstdup_until(content->redirs, &ph_redir_stop);  //fino a NULL o PH_REDIR_STOP
+        if ((!new_cmd_str || new_cmd_str[0] == '\0') && !new_redirs) //se c'e' una redir la stringa e' vuota ma devi comunque eseguire
+            break ;
+        is_last_subcmd = check_last_subcmd(content->cmd_str);
         pid = fork();
         if (pid == -1)
             ft_quit(26, NULL);
@@ -139,8 +142,11 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
             if (new_redirs)
                 exec_redirs(new_redirs);
             if (is_heredoc(new_redirs))
-                dup2(get_matching_heredoc(heredoc_fileno, heredoc_fileno2++), STDIN_FILENO);
-            if (is_last_subcmd(content->cmd_str))
+            {
+                if (dup2(get_matching_heredoc(heredoc_fileno, heredoc_fileno2), STDIN_FILENO) == -1)
+                    ft_quit(32, NULL);
+            }    
+            if (is_last_subcmd)
             {
                 if (close(fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[1]) == -1)
                     ft_quit(27, NULL);
@@ -149,6 +155,8 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         }
         else
         {
+            if (is_heredoc(new_redirs))
+                heredoc_fileno2++;
             waitpid(pid, NULL, 0);
             free(new_cmd_str);
             if (dup2(original_stdin, STDIN_FILENO) == -1)
@@ -179,19 +187,15 @@ static char *ft_strdup_until(char *str, char c)
 static t_list *ft_lstdup_until(t_list *lst, void *stop)
 {
     t_list                  *new_lst;
-    t_list                  *node;
+    static t_list           *node;
+    static bool             over = false;
     t_list                  *new_node;
-    static  unsigned int    start = 0;
-    unsigned int            i;
 
-    i = 0;
+    if (over == true)
+        return (NULL);
+    if (!node)
+        node = lst;
     new_lst = NULL;
-    node = lst;
-    while (i < start && node)
-    {
-        node = node->next;
-        i++;
-    }
     while (node && *((char *)(node->content)) != *((char *)stop))
     {
         new_node = ft_lstnew(node->content);
@@ -200,6 +204,10 @@ static t_list *ft_lstdup_until(t_list *lst, void *stop)
         ft_lstadd_back(&new_lst, new_node);
         node = node->next;
     }
+    if (node)
+        node = node->next;
+    else
+        over = true;
     return (new_lst);
 }
 
@@ -213,17 +221,17 @@ static int get_matching_heredoc(int id1, int id2)
     return (fd);
 }
 
-static bool is_last_subcmd(char *cmd_str)
+static bool check_last_subcmd(char *cmd_str)
 {
     static unsigned int i = 0;
 
     while (cmd_str[i])
     {
         if (cmd_str[i] == PH_SEMICOLON)
-            return (false);
+            return (i++, false);
         i++;
     }
-    return (true);
+    return (i++, true);
 }
 
 static void exec_redirs(t_list *redirs)

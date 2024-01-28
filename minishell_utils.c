@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 16:54:03 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/28 18:01:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ void	ft_quit(int id, char *msg)
 	t_data	*data;
 
 	data = get_data();
-	// dprintf(2, RED "error : %d\n" DEFAULT, id); //to remove
+	dprintf(2, RED "error : %d\n" DEFAULT, id); //to remove
 	if (errno != EINTR)
 	{
 		while (open("./tmp/print_sem", O_CREAT | O_EXCL, 0666) == EEXIST)

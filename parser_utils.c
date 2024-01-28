@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 16:02:00 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/28 18:13:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params)
 		ft_quit(10, "failed to allocate memory");
 	elem->redirs = NULL;
 	elem->pid = -1;
-	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 1;
+	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 2;
 	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)
 	{
@@ -91,7 +91,7 @@ void	remove_filename(char **str, unsigned int *starting_idx)
 		i++;
 		word_len++;
 	}
-	size = ft_strlen(*str) - word_len + 1;
+	size = ft_strlen(*str) - word_len + 2;
 	new_str = (char *)ft_calloc(size, sizeof(char));
 	if (!new_str)
 		ft_quit(15, "failed to allocate memory");
