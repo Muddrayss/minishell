@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 17:12:28 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:55:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void fill_heredoc(char *limiter, int fd)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, MAX(str_len, limiter_len)) == 0)
             break ;
+        replace_env_vars(&str);
         ft_putstr_fd(str, fd);
         ft_putchar_fd('\n', fd);
         free(str);
