@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 16:40:25 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:09:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,9 @@
 # define RIGHT 1
 
 # define PH_REDIR -42
-# define PH_INVALID_ENV -43
 // # define PH_ABS_PATH -44
 # define PH_SEMICOLON -45
-# define PH_REDIR_STOP 99
+# define PH_REDIR_STOP -46
 
 # define CMD_LEN 0
 # define ENV_NUM 1

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 13:57:04 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:52:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define EXEC_FAILURE 1
 # define COMMAND_NOT_FOUND 127
 
+void    replace_env_vars(char **str);
 void    executor(t_list *parsed_params);
 bool    is_heredoc(t_list *redirs);
 char    *get_filename(int id1, int id2);
