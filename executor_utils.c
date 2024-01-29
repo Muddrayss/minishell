@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 22:07:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 22:28:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static char *get_env_name(char *str)
     int		i;
 
     i = 0;
-    if (!str || str[i] == '\0')
+    if (!str || str[i] == '\0' || str[i] == '$' || is_shell_space(str[i]))
         return (NULL);
     while (str[i] != '\0' && !is_shell_space(str[i]) && str[i] != '$')
         i++;
