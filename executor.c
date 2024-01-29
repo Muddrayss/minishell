@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 19:41:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:51:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static char *ft_strdup_until(char *str, char c);
 static t_list *ft_lstdup_until(t_list *lst, void *stop);
 static void wait_for_children(t_list *parsed_params);
 static int get_matching_heredoc(int id1, int id2);
+static char *get_env_name(char *str);
 
 void executor(t_list *parsed_params)
 {
@@ -101,17 +102,17 @@ static void create_heredocs(t_list *parsed_params)
 
 static int parent(int fds[])
 {
-    int             status;
+    // int             status;
     
     init_in_cmd_signals();
     if (close(fds[1]) == -1 || (fds[2] != -1 && close(fds[2]) == -1))
         ft_quit(29, NULL);
-    wait3(&status, WUNTRACED, NULL);
-    if (!WIFSTOPPED(status) && !WIFEXITED(status))
-    {
-        kill(0, SIGINT);
-        exit(0);
-    }
+    // wait3(&status, WUNTRACED, NULL);
+    // if (!WIFSTOPPED(status) && !WIFEXITED(status))
+    // {
+    //     kill(0, SIGINT);
+    //     exit(0);
+    // }
     return (fds[0]);
 }
 
@@ -139,6 +140,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
             ft_quit(26, NULL);
         if (pid == 0)
         {
+            replace_env_vars(&new_cmd_str);
             if (new_redirs)
                 exec_redirs(new_redirs);
             if (is_heredoc(new_redirs))
@@ -157,14 +159,64 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         {
             if (is_heredoc(new_redirs))
                 heredoc_fileno2++;
-            waitpid(pid, NULL, 0);
+            //TODO aggiornare la env var con ft_stenv leggendo da un file
+            waitpid(pid, &g_status, 0);
+            g_status = WEXITSTATUS(g_status);
             free(new_cmd_str);
             if (dup2(original_stdin, STDIN_FILENO) == -1)
                 ft_quit(24, NULL);
         }
     }
-    exit(0);
+    exit(g_status);
 }
+
+void replace_env_vars(char **str)
+{
+    char				*env_name;
+    int                 env_name_len;
+    char				*env_value;
+    unsigned int		i;
+
+	//TODO gestire segfault con solo "$"
+    i = 0;
+    while ((*str)[i] != '\0')
+    {
+        if ((*str)[i] == '$')
+        {
+            env_name = get_env_name(*str + i + 1); //fino a spazio, '\0' o '$'
+            if (env_name)
+            {
+                if (ft_strncmp(env_name, "?", 2) != 0)
+                    env_value = ft_getenv(env_name);
+                else
+                    env_value = ft_itoa(g_status);
+                env_name_len = ft_strlen(env_name);
+                *str = ft_insert_str(*str, env_value, i, i + env_name_len + 1);
+                free(env_name);
+                i += env_name_len;
+            }
+        }
+        i++;
+    }
+}
+
+static char *get_env_name(char *str)
+{
+    char	*env_name;
+    int		i;
+
+    i = 0;
+    if (!str || str[i] == '\0')
+        return (NULL);
+    while (str[i] != '\0' && !is_shell_space(str[i]) && str[i] != '$')
+        i++;
+    env_name = (char *)ft_calloc(i + 1, sizeof(char));
+    if (!env_name)
+        ft_quit(15, "failed to allocate memory");
+    ft_strlcpy(env_name, str, i + 1);
+    return (env_name);
+}
+
 
 static char *ft_strdup_until(char *str, char c)
 {
@@ -206,7 +258,7 @@ static t_list *ft_lstdup_until(t_list *lst, void *stop)
     }
     if (node)
         node = node->next;
-    else
+    if (!node)
         over = true;
     return (new_lst);
 }
@@ -243,6 +295,8 @@ static void exec_redirs(t_list *redirs)
     while (node)
     {
         redir = (t_redir *)node->content;
+        if (redir->filename[0] == '$')
+            replace_env_vars(&redir->filename);
         if (redir->fds[0] == -42)
         {
             if (redir->type == REDIR_INPUT)
@@ -276,13 +330,14 @@ static void wait_for_children(t_list *parsed_params)
 {
     t_parser        *content;
     t_list          *node;
-    int             status;
 
     node = parsed_params;
     while (node)
     {
         content = (t_parser *)node->content;
-        waitpid(content->pid, &status, 0);
+        if (waitpid(content->pid, &g_status, 0) == -1)
+            ft_quit(98, NULL); //forse e' meglio waitpid(0, , )
+        g_status = WEXITSTATUS(g_status);
         node = node->next;
     }
 }

@@ -6,14 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 18:13:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:32:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static void		replace_placeholders(t_list *parsed_params);
-static int8_t 	handle_env(t_list *lexered_params);
 
 t_list	*parser(t_list *lexered_params)
 {
@@ -38,16 +37,6 @@ t_list	*parser(t_list *lexered_params)
 	parsed_params = NULL;
 	prev_cmd_elem = NULL;
 	func_return = 0;
-	while (node)
-	{
-		content_lex = (t_lexer *)node->content;
-		if (content_lex->type == TOKEN && content_lex->str.token == ENV)
-			func_return = handle_env(node);
-		if (func_return == -1)
-			return (NULL);
-		node = node->next;
-	}
-	node = lexered_params;
 	content_par = new_elem(&size, node);
 	while (node)
 	{
@@ -67,7 +56,7 @@ t_list	*parser(t_list *lexered_params)
 				content_par = new_elem(&size, node->next);
 				node = node->next;
 				continue ;
-			}
+			}				
 			else if (content_lex->str.token == REDIR_L)
 				to_skip += handle_redir_l(node, content_par);
 			else if (content_lex->str.token == REDIR_R)
@@ -88,7 +77,6 @@ t_list	*parser(t_list *lexered_params)
 	ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
 	ft_lstclear(&lexered_params, &del_content_lexer);
 	data->lexered_params = NULL;
-	// TODO replace placeholders e' come se non funzionasse
 	replace_placeholders(parsed_params);
 	return (parsed_params);
 }
@@ -121,35 +109,9 @@ static void	replace_placeholders(t_list *parsed_params)
 					remove_num(&content_par->cmd_str, &i, RIGHT);
 				content_par->cmd_str[i] = ' ';
 			}
-			else if (content_par->cmd_str[i] == PH_INVALID_ENV)
-				content_par->cmd_str[i] = ' ';
 			i++;
 		}
 		node = node->next;
 	}
 }
 
-static int8_t	handle_env(t_list *lexered_params)
-{
-	char				*var_name;
-	char 				*env_var;
-	unsigned int 		j;
-	t_lexer				*next_cmd_elem;
-	t_token				next_token;
-
-	// placeholder per il $
-	next_cmd_elem = get_next_cmd_elem(lexered_params);
-	check_token_streak(&next_token, lexered_params);
-	if (next_token == ENV)
-		return (ft_parse_error('$'));
-	var_name = ft_strdup(next_cmd_elem->str.cmd);
-	if (!var_name)
-		ft_quit(15, "failed to allocate memory");
-	j = 0;
-	while (var_name[j] && !is_shell_space(var_name[j]))
-		j++;
-	var_name[j] = '\0';
-	env_var = getenv(var_name);
-	replace_env_var(&next_cmd_elem->str.cmd, env_var);
-	return (free(var_name), 0);
-}
