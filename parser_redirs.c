@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 19:41:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 20:04:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ static void	add_filename(char **filename, char *cmd)
 	while (name[i] != '\0' && !is_shell_space(name[i]))
 		i++;
 	name[i] = '\0';
-	printf("filename: %s\n", name);
 	free(*filename);
 	*filename = name;
 }

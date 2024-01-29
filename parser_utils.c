@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 19:43:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 20:08:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,40 +92,26 @@ void	remove_filename(char **str, unsigned int *starting_idx)
 
 void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
 {
-	unsigned int	i;
-	unsigned int	j;
-	size_t			size;
-	char			*new_str;
+	unsigned int	start;
+	unsigned int	end;
 
-	i = *starting_idx - (flag == LEFT) + (flag == RIGHT);
-	j = ft_strlen(&(*str)[*starting_idx]) + 1;
+	start = *starting_idx - 1;
+	end = *starting_idx + 1;
 	if (flag == LEFT)
 	{
-		while ((*str)[i] != '\0' && ft_isdigit((*str)[i]))
-			i--;
-		size = i + j + 1;
-		new_str = (char *)ft_calloc(size, sizeof(char)); // ls 1> fsdds
-		if (!new_str)
-			ft_quit(15, "failed to allocate memory");
-		ft_strlcpy(new_str, *str, i + 2);
-		ft_strlcat(new_str, *str + *starting_idx, size);
-		*starting_idx = i + 1;
+		while ((*str)[start] != '\0' && ft_isdigit((*str)[start]))
+			start--;
+		*str = ft_insert_str(*str, " ", start, *starting_idx);
+		*starting_idx = start + 1;
 	}
 	else
 	{
-		if ((*str)[i] == '&')
-			i++;
-		while ((*str)[i] != 0 && ft_isdigit((*str)[i]))
-			i++;
-		size = *starting_idx + (j - i) + 1;
-		new_str = (char *)ft_calloc(size, sizeof(char));
-		if (!new_str)
-			ft_quit(15, "failed to allocate memory");
-		ft_strlcpy(new_str, *str, *starting_idx + 2);
-		ft_strlcat(new_str, *str + i, size);
+		if ((*str)[end] == '&')
+			end++;
+		while ((*str)[end] != 0 && ft_isdigit((*str)[end]))
+			end++;
+		*str = ft_insert_str(*str, " ", *starting_idx, *starting_idx + end);
 	}
-	free(*str);
-	*str = new_str;
 }
 
 t_lexer	*get_next_cmd_elem(t_list *lexered_params)
