@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 20:47:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 22:15:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,71 +57,34 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params)
 	return (elem);
 }
 
-static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag)
+static unsigned int	get_x_between_pipes(t_list *node, uint8_t flag)
 {
 	unsigned int	n;
 	t_lexer			l_content;
 
 	n = 0;
-	while (lexered_params)
+	while (node)
 	{
-		l_content = *((t_lexer *)lexered_params->content);
+		l_content = *((t_lexer *)node->content);
 		if (flag == CMD_LEN && l_content.type == CMD)
 			n += ft_strlen(l_content.str.cmd) + 1; // per eventuali token
 		else if (l_content.type == TOKEN && l_content.str.token == PIPE)
 			break ;
-		lexered_params = lexered_params->next;
+		node = node->next;
 	}
 	return (n);
 }
 
-void	remove_filename(char **str, unsigned int *starting_idx)
-{
-	unsigned int	word_len;
-	unsigned int	i;
-
-	word_len = 0;
-	i = *starting_idx + 1;
-	while (is_shell_space((*str)[i]))
-		i++;
-	while ((*str)[i + word_len] != '\0' && !is_shell_space((*str)[i + word_len]))
-		word_len++;
-	*str = ft_insert_str(*str, " ", *starting_idx, i + word_len);
-	*starting_idx += word_len;
-}
-
-void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
-{
-	unsigned int	dist;
-
-	dist = *starting_idx;
-	if (flag == LEFT)
-	{
-		while ((*str)[dist - 1] != '\0' && ft_isdigit((*str)[dist - 1]))
-			dist--;
-		*str = ft_insert_str(*str, " ", dist, *starting_idx);
-		*starting_idx = dist;
-	}
-	else
-	{
-		if ((*str)[dist + 1] == '&')
-			dist++;
-		while ((*str)[dist + 1] != 0 && ft_isdigit((*str)[dist + 1]))
-			dist++;
-		*str = ft_insert_str(*str, " ", *starting_idx, *starting_idx + dist);
-	}
-}
-
-t_lexer	*get_next_cmd_elem(t_list *lexered_params)
+t_lexer	*get_next_cmd_elem(t_list *node)
 {
 	t_lexer	*elem;
 
-	while (lexered_params)
+	while (node)
 	{
-		elem = (t_lexer *)lexered_params->content;
+		elem = (t_lexer *)node->content;
 		if (elem->type == CMD)
 			return (elem);
-		lexered_params = lexered_params->next;
+		node = node->next;
 	}
 	return (NULL);
 }
@@ -132,19 +95,16 @@ bool	is_empty_cmd(void *content)
 	char	*tmp;
 
 	elem = (t_lexer *)content;
+	tmp = NULL;
 	if (elem->type == CMD)
 	{
 		tmp = ft_strtrim(elem->str.cmd, " \t\n");
 		if (!tmp)
 			ft_quit(15, "failed to allocate memory");
 		if (*tmp == '\0')
-		{
-			free(tmp);
-			return (true);
-		}
-		free(tmp);
+			return (free(tmp), true);
 	}
-	return (false);
+	return (free(tmp), false);
 }
 
 void	del_content_parser(void *content)

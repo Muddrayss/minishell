@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 20:46:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 22:11:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,26 @@ bool	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 	return (true * (next_token == REDIR_R));
 }
 
+static void	add_filename(char **filename, char *cmd)
+{
+	unsigned int	i;
+	char			*new_str;
+
+	// TODO gestire il caso in cui c'e' un token tipo '&' prima del filename
+	i = 0;
+	while (cmd[i] != '\0' && is_shell_space(cmd[i]))
+		i++;
+	new_str = ft_strdup(cmd + i);
+	if (!new_str)
+		ft_quit(12, "failed to allocate memory");
+	i = 0;
+	while (new_str[i] != '\0' && !is_shell_space(new_str[i]))
+		i++;
+	new_str[i] = '\0';
+	free(*filename);
+	*filename = new_str;
+}
+
 static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
 {
 	unsigned int	i;
@@ -134,22 +154,43 @@ static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
 	return (0);
 }
 
-static void	add_filename(char **filename, char *cmd)
+void	remove_filename(char **str, unsigned int *starting_idx)
 {
+	unsigned int	word_len;
 	unsigned int	i;
-	char			*new_str;
 
-	// TODO gestire il caso in cui c'e' un token tipo & prima del filename
-	i = 0;
-	while (cmd[i] != '\0' && is_shell_space(cmd[i]))
+	word_len = 0;
+	i = *starting_idx + 1;
+	while (is_shell_space((*str)[i]))
 		i++;
-	new_str = ft_strdup(cmd + i);
-	if (!new_str)
-		ft_quit(12, "failed to allocate memory");
-	i = 0;
-	while (new_str[i] != '\0' && !is_shell_space(new_str[i]))
-		i++;
-	new_str[i] = '\0';
-	free(*filename);
-	*filename = new_str;
+	while ((*str)[i + word_len] != '\0' && !is_shell_space((*str)[i + word_len]))
+		word_len++;
+	*str = ft_insert_str(*str, " ", *starting_idx, i + word_len);
+	if (!*str)
+		ft_quit(14, "failed to allocate memory");
+	*starting_idx += word_len;
+}
+
+void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
+{
+	unsigned int	dist;
+
+	dist = *starting_idx;
+	if (flag == LEFT)
+	{
+		while ((*str)[dist - 1] != '\0' && ft_isdigit((*str)[dist - 1]))
+			dist--;
+		*str = ft_insert_str(*str, " ", dist, *starting_idx);
+		*starting_idx = dist;
+	}
+	else
+	{
+		if ((*str)[dist + 1] == '&')
+			dist++;
+		while ((*str)[dist + 1] != 0 && ft_isdigit((*str)[dist + 1]))
+			dist++;
+		*str = ft_insert_str(*str, " ", *starting_idx, *starting_idx + dist);
+		if (!*str)
+			ft_quit(14, "failed to allocate memory");
+	}
 }

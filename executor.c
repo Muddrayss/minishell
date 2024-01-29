@@ -6,22 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 17:51:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 21:05:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void create_heredocs(t_list *parsed_params);
 static int parent(int fds[]);
-static bool check_last_subcmd(char *cmd_str);
 static void child(t_parser *content, int fds[], bool is_last, int original_stdin, int heredoc_fileno);
 static void exec_redirs(t_list *redirs);
-static char *ft_strdup_until(char *str, char c);
-static t_list *ft_lstdup_until(t_list *lst, void *stop);
 static void wait_for_children(t_list *parsed_params);
-static int get_matching_heredoc(int id1, int id2);
-static char *get_env_name(char *str);
 
 void executor(t_list *parsed_params)
 {
@@ -59,60 +53,11 @@ void executor(t_list *parsed_params)
         ft_quit(24, NULL);
 }
 
-
-static void create_heredocs(t_list *parsed_params)
-{
-    int         heredoc_fd;
-    static int  heredoc_fileno1 = 1;
-    int         heredoc_fileno2;
-    t_parser    *content;
-    t_list      *node;
-    t_redir     *redir;
-
-    while (parsed_params)
-    {
-        heredoc_fd = -1;
-        heredoc_fileno2 = 1;
-        content = (t_parser *)parsed_params->content;
-        node = content->redirs;
-        while (node)
-        {
-            if (heredoc_fd == -1 || *((char *)node->content) == PH_REDIR_STOP)
-            {
-                if (heredoc_fd != -1)       
-                    node = node->next;
-                close(heredoc_fd);
-                if (((t_redir *)node->content)->type == REDIR_HEREDOC)
-                {
-                    heredoc_fd = open(get_filename(heredoc_fileno1, heredoc_fileno2++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                    if (heredoc_fd == -1)
-                        ft_quit(96, NULL);  
-                }
-            }
-            redir = (t_redir *)node->content;
-            if (redir->type == REDIR_HEREDOC)
-                fill_heredoc(redir->filename, heredoc_fd);
-            node = node->next;
-        }
-        parsed_params = parsed_params->next;
-        heredoc_fileno1++;
-    }
-    close(heredoc_fd);
-}
-
 static int parent(int fds[])
-{
-    // int             status;
-    
+{    
     init_in_cmd_signals();
     if (close(fds[1]) == -1 || (fds[2] != -1 && close(fds[2]) == -1))
         ft_quit(29, NULL);
-    // wait3(&status, WUNTRACED, NULL);
-    // if (!WIFSTOPPED(status) && !WIFEXITED(status))
-    // {
-    //     kill(0, SIGINT);
-    //     exit(0);
-    // }
     return (fds[0]);
 }
 
@@ -168,122 +113,6 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         }
     }
     exit(g_status);
-}
-
-void replace_env_vars(char **str)
-{
-    char				*env_name;
-    int                 env_name_len;
-    char				*env_value;
-    unsigned int		i;
-
-	//TODO gestire segfault con solo "$"
-    i = 0;
-    while ((*str)[i] != '\0')
-    {
-        if ((*str)[i] == '$')
-        {
-            env_name = get_env_name(*str + i + 1); //fino a spazio, '\0' o '$'
-            if (env_name)
-            {
-                if (ft_strncmp(env_name, "?", 2) != 0)
-                    env_value = ft_getenv(env_name);
-                else
-                    env_value = ft_itoa(g_status);
-                env_name_len = ft_strlen(env_name);
-                *str = ft_insert_str(*str, env_value, i, i + env_name_len + 1);
-                free(env_name);
-                i += env_name_len;
-            }
-        }
-        i++;
-    }
-}
-
-static char *get_env_name(char *str)
-{
-    char	*env_name;
-    int		i;
-
-    i = 0;
-    if (!str || str[i] == '\0')
-        return (NULL);
-    while (str[i] != '\0' && !is_shell_space(str[i]) && str[i] != '$')
-        i++;
-    env_name = (char *)ft_calloc(i + 1, sizeof(char));
-    if (!env_name)
-        ft_quit(15, "failed to allocate memory");
-    ft_strlcpy(env_name, str, i + 1);
-    return (env_name);
-}
-
-
-static char *ft_strdup_until(char *str, char c)
-{
-    char                    *new_str;
-    size_t                  size;
-    static unsigned int     i = 0;
-
-    size = 0;
-    while (str[i + size] && str[i + size] != c)
-        size++;
-    size++;
-    new_str = (char *)ft_calloc(size, sizeof(char));
-    if (!new_str)
-       ft_quit(15, "failed to allocate memory");
-    ft_strlcpy(new_str, str + i, size);
-    i += size;
-    return (i++, new_str);
-}
-
-static t_list *ft_lstdup_until(t_list *lst, void *stop)
-{
-    t_list                  *new_lst;
-    static t_list           *node;
-    static bool             over = false;
-    t_list                  *new_node;
-
-    if (over == true)
-        return (NULL);
-    if (!node)
-        node = lst;
-    new_lst = NULL;
-    while (node && *((char *)(node->content)) != *((char *)stop))
-    {
-        new_node = ft_lstnew(node->content);
-        if (!new_node)
-            ft_quit(16, "failed to allocate memory");
-        ft_lstadd_back(&new_lst, new_node);
-        node = node->next;
-    }
-    if (node)
-        node = node->next;
-    if (!node)
-        over = true;
-    return (new_lst);
-}
-
-static int get_matching_heredoc(int id1, int id2)
-{
-    int fd;
-
-    fd = open(get_filename(id1, id2), O_RDONLY);
-    if (fd == -1)
-        ft_quit(28, NULL);
-    return (fd);
-}
-
-static bool check_last_subcmd(char *cmd_str)
-{
-    static unsigned int i = 0;
-
-    while (cmd_str[i])
-    {
-        if (cmd_str[i] == PH_SEMICOLON)
-            return (i++, false);
-        i++;
-    }
-    return (i++, true);
 }
 
 static void exec_redirs(t_list *redirs)

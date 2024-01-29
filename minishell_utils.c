@@ -6,25 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 20:43:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 22:19:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static char	*get_custom_bin(char *path);
-static char	*get_env_name(char *full_env);
 static char	*get_new_env(char *name, char *value);
-
-void	free_matrix(char **matrix)
-{
-	unsigned int	i;
-
-	i = -1;
-	while (matrix && matrix[++i])
-		free(matrix[i]);
-	free(matrix);
-}
 
 char	*get_cmd(char *path, char *cmd)
 {
@@ -54,7 +43,7 @@ char	*get_cmd(char *path, char *cmd)
 		free(full_path);
 		full_path = NULL;
 	}
-	free_matrix(dirs);
+	ft_free_matrix(dirs);
 	if (!full_path)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
@@ -90,9 +79,9 @@ static char	*get_custom_bin(char *path)
 			ft_putstr_fd("minishell: no such file or directory: ", 2);
 		else
 			ft_putstr_fd("minishell: error accessing file: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd("\n", 2);
 	}
-    ft_putstr_fd(path, 2);
-    ft_putstr_fd("\n", 2);
     return (free(tmp), free(full_path), NULL);
 }
 
@@ -131,60 +120,39 @@ void	ft_setenv(char *name, char *value, int8_t overwrite)
 	if (overwrite)
 	{
 		i = 0;
-		if (data->envp[i])
-			env_name = get_env_name(data->envp[i++]);
-		while (data->envp[i] && ft_strncmp(env_name, name, name_len) != 0)
-			env_name = get_env_name(data->envp[i++]);
+		while (data->envp[i])
+		{
+			env_name = ft_strdup_until(data->envp[i++], '=');
+			if (!env_name)
+				ft_quit(4, "failed to allocate memory");
+			if (ft_strncmp(env_name, name, name_len) == 0)
+				break ;
+		}
 		free(data->envp[i]);
 		data->envp[i] = get_new_env(name, value);
 	}
 	else
 	{
-		i = 0;
-		while(data->envp[i])
-			i++;
+		i = ft_matrixsize(data->envp);
 		new_env = malloc(sizeof(char *) * i + 2);
 		if (!new_env)
 			ft_quit(34, "failed to allocate memory");
 		new_env[i + 1] = NULL;
 		new_env = ft_strarrncpy(new_env, data->envp, i);
 		new_env[i] = get_new_env(name, value);
-		free_matrix(data->envp);
+		ft_free_matrix(data->envp);
 		data->envp = new_env;
 	}
 }
 
 static char	*get_new_env(char *name, char *value)
 {
-	size_t	value_len;
-	size_t	name_len;
-	size_t	size;
-	char	*env;
+	char	*new_env;
+	char	*tmp;
 
-	name_len = ft_strlen(name);
-	value_len = ft_strlen(value);
-	size = name_len + value_len + 2;
-	env = ft_calloc(size, sizeof(char)); //1 per = e 1 per '\0'
-	if (!env)
-		ft_quit(39, "failed to allocate memory");
-	ft_strlcpy(env, name, size);
-	env[name_len] = '=';
-	ft_strlcat(env, value, size);
-	return (env);
-}
-
-static char	*get_env_name(char *full_env)
-{
-	int 	i;
-	char	*env_name;
-
-	env_name = ft_calloc(ft_strlen(full_env) + 1, sizeof(char));
-	if (!env_name)
-		ft_quit(38, "failed to allocate memory");
-	i = 0;
-	while (full_env[i] != '\0' && full_env[i] != '=')
-		env_name[i] = full_env[i];
-	return (env_name);
+	tmp = ft_strjoin(name, "=");
+	new_env = ft_strjoin(tmp, value);
+	return (free(tmp), free(name), free(value), new_env);
 }
 
 bool	is_shell_space(char c)
@@ -192,54 +160,6 @@ bool	is_shell_space(char c)
 	if (c == ' ' || c == '\n' || c == '\t')
 		return (true);
 	return (false);
-}
-
-void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *))
-{
-	t_list	*tmp;
-	t_list	*prev;
-	t_list	*to_free;
-
-	tmp = *lst;
-	prev = NULL;
-	to_free = NULL;
-	while (tmp)
-	{
-		if (f(tmp->content) == true)
-		{
-			if (prev)
-				prev->next = tmp->next;
-			else
-				*lst = tmp->next;
-			to_free = tmp;
-		}
-		else
-		{
-			prev = tmp;
-			to_free = NULL;
-		}
-		tmp = tmp->next;
-		ft_lstdelone(to_free, del); // se to_free e' null, non fa nulla
-	}
-}
-
-char    *ft_insert_str(char *big, char *new, unsigned int start, unsigned int end)
-{
-    char            *new_str;
-    unsigned int    size;
-
-	if (start == end)
-		return (big);
-    size = ft_strlen(big) - (end - start) + ft_strlen(new) + 1;
-    new_str = (char *)ft_calloc(size, sizeof(char));
-    if (!new_str)
-        ft_quit(15, "failed to allocate memory");
-	else if (!big)
-		return (ft_strlcat(new_str, new, size), new_str);
-    ft_strlcat(new_str, big, start + 1);
-    ft_strlcat(new_str, new, size);
-    ft_strlcat(new_str, big + end, size);
-    return (free(big), new_str);
 }
 
 void	ft_quit(int id, char *msg)
@@ -265,7 +185,7 @@ void	ft_quit(int id, char *msg)
 	return ;
 }
 
-void clean_heredocs(void)
+void	clean_heredocs(void)
 {
 	t_data	*data;
     char    *tmpdir_name;
@@ -282,7 +202,7 @@ void clean_heredocs(void)
 void	free_data(t_data *data)
 {
 	if (data->cmd_args)
-		free_matrix(data->cmd_args);
+		ft_free_matrix(data->cmd_args);
 	if (data->cmd_path)
 		free(data->cmd_path);
 	if (data->lexered_params)

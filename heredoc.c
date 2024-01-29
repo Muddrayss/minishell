@@ -6,29 +6,56 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 17:55:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 21:59:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-bool is_heredoc(t_list *redirs)
-{
-    t_list  *node;
-    t_redir *redir;
+static char    *get_heredoc_filename(int id1, int id2);
+static void     fill_heredoc(char *limiter, int fd);
 
-    node = redirs;
-    while (node)
+void create_heredocs(t_list *parsed_params)
+{
+    int         heredoc_fd;
+    static int  heredoc_fileno1 = 1;
+    int         heredoc_fileno2;
+    t_parser    *content;
+    t_list      *node;
+    t_redir     *redir;
+
+    while (parsed_params)
     {
-        redir = (t_redir *)node->content;
-        if (redir->type == REDIR_HEREDOC)
-            return (true);
-        node = node->next;
+        heredoc_fd = -1;
+        heredoc_fileno2 = 1;
+        content = (t_parser *)parsed_params->content;
+        node = content->redirs;
+        while (node)
+        {
+            if (heredoc_fd == -1 || *((char *)node->content) == PH_REDIR_STOP)
+            {
+                if (heredoc_fd != -1)       
+                    node = node->next;
+                close(heredoc_fd);
+                if (((t_redir *)node->content)->type == REDIR_HEREDOC)
+                {
+                    heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                    if (heredoc_fd == -1)
+                        ft_quit(96, NULL);  
+                }
+            }
+            redir = (t_redir *)node->content;
+            if (redir->type == REDIR_HEREDOC)
+                fill_heredoc(redir->filename, heredoc_fd);
+            node = node->next;
+        }
+        parsed_params = parsed_params->next;
+        heredoc_fileno1++;
     }
-    return (false);
+    close(heredoc_fd);
 }
 
-char    *get_filename(int id1, int id2)
+static char    *get_heredoc_filename(int id1, int id2)
 {
     t_data      *data;
     char        *idx1;
@@ -55,7 +82,7 @@ char    *get_filename(int id1, int id2)
     return (free(idx1), free(idx2), filename);
 }
 
-void fill_heredoc(char *limiter, int fd)
+static void fill_heredoc(char *limiter, int fd)
 {
     char    *str;
     size_t  str_len;
@@ -69,7 +96,6 @@ void fill_heredoc(char *limiter, int fd)
         str = readline("> ");
         if (!str || g_status == 130)
             break ;
-        //TODO gestire caso in cui str ha una env var con $
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, MAX(str_len, limiter_len)) == 0)
             break ;
@@ -80,4 +106,30 @@ void fill_heredoc(char *limiter, int fd)
         str = NULL; //per evitare la double free
     }
     free(str);
+}
+
+bool is_heredoc(t_list *redirs)
+{
+    t_list  *node;
+    t_redir *redir;
+
+    node = redirs;
+    while (node)
+    {
+        redir = (t_redir *)node->content;
+        if (redir->type == REDIR_HEREDOC)
+            return (true);
+        node = node->next;
+    }
+    return (false);
+}
+
+int get_matching_heredoc(int id1, int id2)
+{
+    int fd;
+
+    fd = open(get_heredoc_filename(id1, id2), O_RDONLY);
+    if (fd == -1)
+        ft_quit(28, NULL);
+    return (fd);
 }

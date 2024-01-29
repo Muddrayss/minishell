@@ -3,20 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/01/25 15:33:32 by egualand         ###   ########.fr        #
+#    Updated: 2024/01/29 21:06:38 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
-SRCS = 	minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c executor.c heredoc.c
+SRCS = minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c executor.c executor_utils.c heredoc.c
 OBJS = $(SRCS:.c=.o)
 HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h error.h executor.h)
 
-CC = cc -g
+CC = cc -g #TODO remove -g
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 

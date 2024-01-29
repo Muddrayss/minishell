@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 14:40:53 by egualand          #+#    #+#             */
-/*   Updated: 2024/01/26 18:03:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 22:18:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+# include <stdbool.h>
+# include <stdint.h>
 
 typedef struct s_list
 {
@@ -46,10 +48,14 @@ char	*ft_strnstr(const char *big, const char *little, size_t len);
 int		ft_atoi(const char *nptr);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strdup(const char *s);
+char	*ft_strdup_until(char *s, char c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char 	**ft_strarr_dup(char **arr);
+char    *ft_insert_str(char *big, char *new, unsigned int start, unsigned int end);
+size_t	ft_matrixsize(char **matrix);
+void	ft_free_matrix(char **matrix);
 char	**ft_strarrncpy(char **dst, char **src, size_t n);
 char 	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
@@ -68,5 +74,7 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
+t_list  *ft_lstdup_until(t_list *lst, void *stop);
 
 #endif
