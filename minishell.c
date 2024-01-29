@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 15:05:01 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/29 15:25:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	minishell_loop()
 			continue ;
 	}
 }
-//va bene per comandi senza redirs, e senza here_doc
+//va bene per comandi interni senza redirs, e senza here_doc e senza salvare l'exit status in data
 void	exec_simple_cmd(char *path, char *cmd_str)
 {
 	pid_t	pid;

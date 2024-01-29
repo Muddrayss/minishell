@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 16:43:20 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:30:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,11 +151,6 @@ static void	add_filename(char **filename, char *cmd)
 	while (cmd[i + 1] != '\0' && !is_shell_space(cmd[i + 1]))
 		i++;
 	name[i] = '\0';
-	if (name[0] == PH_INVALID_ENV)
-	{
-		free(name);
-		name = NULL;
-	}
 	free(*filename);
 	*filename = name;
 }

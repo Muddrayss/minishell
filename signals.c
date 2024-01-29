@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/01/28 14:59:08 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/29 16:10:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void	in_cmd_sig_handler(int signo)
 
 void	init_signals(void)
 {
+	return ;
 	if (signal(SIGINT, &sig_handler) == SIG_ERR)
 		ft_quit(SIGINT_ERROR, "Signal error.");
 	if (signal(SIGQUIT, &sig_handler) == SIG_ERR)
@@ -58,6 +59,7 @@ void	init_signals(void)
 
 void	init_in_cmd_signals(void)
 {
+	return ;
 	if (signal(SIGINT, &in_cmd_sig_handler) == SIG_ERR)
 		ft_quit(SIGINT_ERROR, "Signal error.");
 	if (signal(SIGQUIT, &in_cmd_sig_handler) == SIG_ERR)

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 18:01:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:32:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,21 @@ void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *))
 		tmp = tmp->next;
 		ft_lstdelone(to_free, del); // se to_free e' null, non fa nulla
 	}
+}
+
+char    *ft_insert_str(char *big, char *new, unsigned int start, unsigned int end)
+{
+    char            *new_str;
+    unsigned int    size;
+
+    size = ft_strlen(big) - (end - start) + ft_strlen(new) + 1;
+    new_str = (char *)ft_calloc(size, sizeof(char));
+    if (!new_str)
+        ft_quit(15, "failed to allocate memory");
+    ft_strlcat(new_str, big, start + 1);
+    ft_strlcat(new_str, new, size);
+    ft_strlcat(new_str, big + end, size);
+    return (free(big), new_str);
 }
 
 void	ft_quit(int id, char *msg)

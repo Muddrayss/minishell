@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 18:13:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:42:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,35 +135,6 @@ void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
 		ft_strlcpy(new_str, *str, *starting_idx + 2);
 		ft_strlcat(new_str, *str + i, size);
 	}
-	free(*str);
-	*str = new_str;
-}
-
-void	replace_env_var(char **str, char *env_var)
-{
-	char				*new_str;
-	unsigned int		env_varname_len;
-	unsigned int		env_var_len;
-	unsigned int		size;
-	static char			placeholder = PH_INVALID_ENV;
-
-	env_var_len = ft_strlen(env_var);
-	env_var_len += (env_var_len == 0); // Skip placeholder '$'
-	env_varname_len = 1;
-	while ((*str)[env_varname_len] != '\0'
-		&& !is_shell_space((*str)[env_varname_len]))
-	{
-		env_varname_len++;
-	}
-	size = ft_strlen(*str) - env_varname_len + env_var_len + 1;
-	new_str = (char *)ft_calloc(size, sizeof(char));
-	if (!new_str)
-		ft_quit(15, "failed to allocate memory");
-	if (env_var)
-		ft_strlcat(new_str, env_var, size);
-	else
-		ft_strlcat(new_str, &placeholder, ft_strlen(new_str) + 2);
-	ft_strlcat(new_str, *str + env_varname_len, size);
 	free(*str);
 	*str = new_str;
 }
