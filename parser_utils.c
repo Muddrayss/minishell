@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 20:08:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 20:47:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,25 +92,23 @@ void	remove_filename(char **str, unsigned int *starting_idx)
 
 void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
 {
-	unsigned int	start;
-	unsigned int	end;
+	unsigned int	dist;
 
-	start = *starting_idx - 1;
-	end = *starting_idx + 1;
+	dist = *starting_idx;
 	if (flag == LEFT)
 	{
-		while ((*str)[start] != '\0' && ft_isdigit((*str)[start]))
-			start--;
-		*str = ft_insert_str(*str, " ", start, *starting_idx);
-		*starting_idx = start + 1;
+		while ((*str)[dist - 1] != '\0' && ft_isdigit((*str)[dist - 1]))
+			dist--;
+		*str = ft_insert_str(*str, " ", dist, *starting_idx);
+		*starting_idx = dist;
 	}
 	else
 	{
-		if ((*str)[end] == '&')
-			end++;
-		while ((*str)[end] != 0 && ft_isdigit((*str)[end]))
-			end++;
-		*str = ft_insert_str(*str, " ", *starting_idx, *starting_idx + end);
+		if ((*str)[dist + 1] == '&')
+			dist++;
+		while ((*str)[dist + 1] != 0 && ft_isdigit((*str)[dist + 1]))
+			dist++;
+		*str = ft_insert_str(*str, " ", *starting_idx, *starting_idx + dist);
 	}
 }
 

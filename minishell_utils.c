@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 19:29:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 20:43:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,10 +228,14 @@ char    *ft_insert_str(char *big, char *new, unsigned int start, unsigned int en
     char            *new_str;
     unsigned int    size;
 
+	if (start == end)
+		return (big);
     size = ft_strlen(big) - (end - start) + ft_strlen(new) + 1;
     new_str = (char *)ft_calloc(size, sizeof(char));
     if (!new_str)
         ft_quit(15, "failed to allocate memory");
+	else if (!big)
+		return (ft_strlcat(new_str, new, size), new_str);
     ft_strlcat(new_str, big, start + 1);
     ft_strlcat(new_str, new, size);
     ft_strlcat(new_str, big + end, size);

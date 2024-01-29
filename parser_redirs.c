@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 20:04:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 20:46:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,20 +137,19 @@ static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
 static void	add_filename(char **filename, char *cmd)
 {
 	unsigned int	i;
-	char			*name;
+	char			*new_str;
 
-	name = NULL;
 	// TODO gestire il caso in cui c'e' un token tipo & prima del filename
 	i = 0;
 	while (cmd[i] != '\0' && is_shell_space(cmd[i]))
 		i++;
-	name = ft_strdup(&cmd[i]);
-	if (!name)
-		ft_quit(16, "failed to allocate memory");
-	i = 1;
-	while (name[i] != '\0' && !is_shell_space(name[i]))
+	new_str = ft_strdup(cmd + i);
+	if (!new_str)
+		ft_quit(12, "failed to allocate memory");
+	i = 0;
+	while (new_str[i] != '\0' && !is_shell_space(new_str[i]))
 		i++;
-	name[i] = '\0';
+	new_str[i] = '\0';
 	free(*filename);
-	*filename = name;
+	*filename = new_str;
 }
