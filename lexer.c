@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/28 15:05:01 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:10:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ static t_token lexer_get_token(char c)
         {'|', PIPE},
         {'>', REDIR_R},
         {'<', REDIR_L},
-        {'$', ENV},
         {';', SEMICOLON},
         {'\'', QUOTE},
         {'\"', DQUOTE},
@@ -85,7 +84,7 @@ static bool is_token(char *str)
     int8_t			i;
 	static uint8_t	n_tokens;
     static char tokens[8] =
-        {'|', '>', '<', '$', ';', '\'', '\"', '&'};
+        {'|', '>', '<', ';', '\'', '\"', '&'};
 
     n_tokens = sizeof(tokens) / sizeof(tokens[0]);
 	i = -1;
