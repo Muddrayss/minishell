@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 17:30:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 19:41:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,11 @@ static void	add_filename(char **filename, char *cmd)
 	name = ft_strdup(&cmd[i]);
 	if (!name)
 		ft_quit(16, "failed to allocate memory");
-	i = 0;
-	while (cmd[i + 1] != '\0' && !is_shell_space(cmd[i + 1]))
+	i = 1;
+	while (name[i] != '\0' && !is_shell_space(name[i]))
 		i++;
 	name[i] = '\0';
+	printf("filename: %s\n", name);
 	free(*filename);
 	*filename = name;
 }

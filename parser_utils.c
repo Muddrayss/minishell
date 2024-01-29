@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 17:42:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/29 19:43:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,26 +79,15 @@ void	remove_filename(char **str, unsigned int *starting_idx)
 {
 	unsigned int	word_len;
 	unsigned int	i;
-	size_t			size;
-	char			*new_str;
 
 	word_len = 0;
 	i = *starting_idx + 1;
 	while (is_shell_space((*str)[i]))
 		i++;
-	while ((*str)[i] != '\0' && !is_shell_space((*str)[i]))
-	{
-		i++;
+	while ((*str)[i + word_len] != '\0' && !is_shell_space((*str)[i + word_len]))
 		word_len++;
-	}
-	size = ft_strlen(*str) - word_len + 2;
-	new_str = (char *)ft_calloc(size, sizeof(char));
-	if (!new_str)
-		ft_quit(15, "failed to allocate memory");
-	ft_strlcpy(new_str, *str, *starting_idx + 2);
-	ft_strlcat(new_str, *str + i, size);
-	free(*str);
-	*str = new_str;
+	*str = ft_insert_str(*str, " ", *starting_idx, i + word_len);
+	*starting_idx += word_len;
 }
 
 void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
@@ -112,7 +101,7 @@ void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
 	j = ft_strlen(&(*str)[*starting_idx]) + 1;
 	if (flag == LEFT)
 	{
-		while ((*str)[i] != 0 && ft_isdigit((*str)[i]))
+		while ((*str)[i] != '\0' && ft_isdigit((*str)[i]))
 			i--;
 		size = i + j + 1;
 		new_str = (char *)ft_calloc(size, sizeof(char)); // ls 1> fsdds
