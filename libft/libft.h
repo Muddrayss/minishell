@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 14:40:53 by egualand          #+#    #+#             */
-/*   Updated: 2024/01/30 15:26:16 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/30 21:20:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_strnstr(const char *big, const char *little, size_t len);
 int		ft_atoi(const char *nptr);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strdup(const char *s);
-char	*ft_strdup_until(char *s, char c);
+char    *ft_strdup_until(char *str, char *set, char *stopped_at);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
@@ -76,6 +76,6 @@ void 	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 void	ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
-t_list  *ft_lstdup_until(t_list *lst, void *stop);
+t_list  *ft_lstdup_until(t_list *lst, char *stop);
 
 #endif

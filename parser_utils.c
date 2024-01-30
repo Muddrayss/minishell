@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 17:59:14 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:43:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params)
 	elem->redirs = NULL;
 	elem->pid = -1;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 2;
-	printf("size: %zu\n", *size);
 	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)
 	{

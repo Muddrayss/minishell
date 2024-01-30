@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 16:46:47 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:56:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	ft_setenv(char *name, char *value, int8_t overwrite)
 		i = 0;
 		while (data->envp[i])
 		{
-			env_name = ft_strdup_until(data->envp[i++], '=');
+			env_name = ft_strdup_until(data->envp[i++], "=", NULL);
 			if (!env_name)
 				ft_quit(4, "failed to allocate memory");
 			if (ft_strncmp(env_name, name, name_len) == 0)

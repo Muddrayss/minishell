@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 17:20:53 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:46:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ t_list	*parser(t_list *lexered_params)
 				}
 				else
 				{
-					printf("cmd_str_final: %s\n", content_par->cmd_str);
 					ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
 					node = node->next;
 					content_par = new_elem(&size, node);

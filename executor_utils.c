@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 15:34:29 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:18:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ static char *get_env_name(char *str)
     ft_strlcpy(env_name, str, i + 1);
     return (env_name);
 }
-
-
 
 bool check_last_subcmd(char *cmd_str)
 {

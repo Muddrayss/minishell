@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 21:05:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/30 21:25:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,14 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
     int             heredoc_fileno2;
     pid_t           pid;
     bool            is_last_subcmd;
+    char            separator;
 
     if (fds[2] != -1 && (dup2(fds[2], STDIN_FILENO) == -1 || close(fds[2]) == -1))
         ft_quit(25, NULL);
     heredoc_fileno2 = 1;
     while (1)
     {
-        new_cmd_str = ft_strdup_until(content->cmd_str, PH_SEMICOLON); //fino a '\0' o PH_SEMICOLON
+        new_cmd_str = ft_strdup_until(content->cmd_str, "\323\321\320", &separator); //fino a '\0' o PH_SEMICOLON o PH_OR o PH_AND
         new_redirs = ft_lstdup_until(content->redirs, &ph_redir_stop);  //fino a NULL o PH_REDIR_STOP
         if ((!new_cmd_str || new_cmd_str[0] == '\0') && !new_redirs) //se c'e' una redir la stringa e' vuota ma devi comunque eseguire
             break ;
@@ -86,8 +87,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         if (pid == 0)
         {
             replace_env_vars(&new_cmd_str);
-            if (new_redirs)
-                exec_redirs(new_redirs);
+            exec_redirs(new_redirs);
             if (is_heredoc(new_redirs))
             {
                 if (dup2(get_matching_heredoc(heredoc_fileno, heredoc_fileno2), STDIN_FILENO) == -1)
@@ -107,11 +107,14 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
             //TODO aggiornare la env var con ft_stenv leggendo da un file
             waitpid(pid, &g_status, 0);
             g_status = WEXITSTATUS(g_status);
+            if ((separator == PH_AND && g_status != 0) || (separator == PH_OR && g_status == 0))
+                break ;
             free(new_cmd_str);
             if (dup2(original_stdin, STDIN_FILENO) == -1)
                 ft_quit(24, NULL);
         }
     }
+    free(new_cmd_str);
     exit(g_status);
 }
 
@@ -120,6 +123,8 @@ static void exec_redirs(t_list *redirs)
     t_list          *node;
     t_redir         *redir;
 
+    if (!redirs)
+        return ;
     node = redirs;
     while (node)
     {
