@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 14:55:04 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/30 15:28:23 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_list	*parser(t_list *lexered_params)
 	t_data			*data;
 	t_parser		*content_par;
 	t_list			*parsed_params;
+	t_list			*last_node;
 	t_list			*node;
 	size_t			size;
 	int8_t			to_skip;
@@ -32,6 +33,9 @@ t_list	*parser(t_list *lexered_params)
 	if (!lexered_params)
 		return (NULL);
 	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
+	last_node = ft_lstlast(lexered_params);
+	if (last_node && ((t_lexer *)last_node->content)->type == TOKEN)
+		ft_lstdel_last(&lexered_params, &del_content_lexer);
 	// TODO gestire caso tipo "> >" e "< <"
 	node = lexered_params;
 	parsed_params = NULL;
