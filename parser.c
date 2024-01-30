@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 15:28:23 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/30 17:20:53 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,24 @@ t_list	*parser(t_list *lexered_params)
 	t_lexer			*content_lex;
 	static char		ph_semicolon = PH_SEMICOLON;
 	static char		ph_redir_stop = PH_REDIR_STOP;
+	static char 	ph_or = PH_OR;
+	static char		ph_and = PH_AND;
+
+	//TODO controllare la token streak qui incima in vece che in handle_redir
 
 	data = get_data();
 	int func_return ;
 	if (!lexered_params)
 		return (NULL);
 	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
-	last_node = ft_lstlast(lexered_params);
-	if (last_node && ((t_lexer *)last_node->content)->type == TOKEN)
-		ft_lstdel_last(&lexered_params, &del_content_lexer);
+	while (1)
+	{
+		last_node = ft_lstlast(lexered_params);
+		if (last_node && ((t_lexer *)last_node->content)->type == TOKEN)
+			ft_lstdel_last(&lexered_params, &del_content_lexer);
+		else
+			break ;
+	}
 	// TODO gestire caso tipo "> >" e "< <"
 	node = lexered_params;
 	parsed_params = NULL;
@@ -56,18 +65,31 @@ t_list	*parser(t_list *lexered_params)
 		{
 			if (content_lex->str.token == PIPE)
 			{
-				ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
-				content_par = new_elem(&size, node->next);
-				node = node->next;
-				continue ;
+				if (((t_lexer *)node->next->content)->type == TOKEN && ((t_lexer *)node->next->content)->str.token == PIPE)
+				{
+					ft_strlcat(content_par->cmd_str, &ph_or, ft_strlen(content_par->cmd_str) + 2);
+					ft_lstadd_back(&content_par->redirs, ft_lstnew(&ph_redir_stop));
+					node = node->next;
+				}
+				else
+				{
+					printf("cmd_str_final: %s\n", content_par->cmd_str);
+					ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
+					node = node->next;
+					content_par = new_elem(&size, node);
+					continue ;
+				}
 			}				
 			else if (content_lex->str.token == REDIR_L)
 				to_skip += handle_redir_l(node, content_par);
 			else if (content_lex->str.token == REDIR_R)
 				to_skip += handle_redir_r(node, prev_cmd_elem, content_par);
-			else if (content_lex->str.token == SEMICOLON)
+			else if (content_lex->str.token == SEMICOLON || content_lex->str.token == AND)
 			{
-				ft_strlcat(content_par->cmd_str, &ph_semicolon, ft_strlen(content_par->cmd_str) + 2);
+				if (content_lex->str.token == SEMICOLON)
+					ft_strlcat(content_par->cmd_str, &ph_semicolon, ft_strlen(content_par->cmd_str) + 2);
+				else if (content_lex->str.token == AND)
+					ft_strlcat(content_par->cmd_str, &ph_and, ft_strlen(content_par->cmd_str) + 2);
 				ft_lstadd_back(&content_par->redirs, ft_lstnew(&ph_redir_stop));
 			}
 			// TODO valutare se fare qualche eccezione per i token di fila;

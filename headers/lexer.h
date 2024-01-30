@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 17:40:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/30 16:21:45 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@ typedef enum e_token
 	PIPE,
 	REDIR_R,
 	REDIR_L,
-	SLASH,
 	SEMICOLON,
 	QUOTE,
 	DQUOTE,
-	AND
+	AND,
 }				t_token;
 
 typedef enum e_elem_type

@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 14:39:54 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:02:19 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void create_heredocs(t_list *parsed_params)
     t_list      *node;
     t_redir     *redir;
 
+    heredoc_fd = -1;
     while (parsed_params)
     {
         heredoc_fileno2 = 1;
@@ -46,7 +47,7 @@ void create_heredocs(t_list *parsed_params)
         parsed_params = parsed_params->next;
         heredoc_fileno1++;
     }
-    close(heredoc_fd);
+    close(heredoc_fd); //TODO creare funzione reset fd che chiude un fd se e' diverso da -1 e lo setta a -1 una volta chiuso
 }
 
 static char    *get_heredoc_filename(int id1, int id2)

@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 17:10:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/30 16:19:19 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static t_token  lexer_get_token(char c);
-static bool 	is_token(char *str);
+static bool 	is_token(char *str, int *idx);
 
 t_list	*lexer(char *input)
 {
     t_data          *data;
-    unsigned int    i;
+    int               i;
     t_lexer   		*content;
     t_list         	*lexered_params;
 
@@ -28,7 +28,7 @@ t_list	*lexer(char *input)
     while (*input != '\0')
     {
         i = 0;
-        while (input[i] && !is_token(input + i))
+        while (input[i] && !is_token(input, &i))
             i++;
         if (i > 0)
         {
@@ -51,8 +51,10 @@ t_list	*lexer(char *input)
                 ft_quit(10, "failed to allocate memory");
 			content->type = TOKEN;
        	 	content->str.token = lexer_get_token(*input++);
-			ft_lstadd_back(&lexered_params, ft_lstnew(content));
-		}
+            if (content->str.token == AND)
+                input++;
+            ft_lstadd_back(&lexered_params, ft_lstnew(content));
+        }
     }
 	return (lexered_params);
 }
@@ -79,19 +81,23 @@ static t_token lexer_get_token(char c)
     return (EMPTY);
 }
 
-static bool is_token(char *str)
+static bool is_token(char *str, int *idx)
 {
     int8_t			i;
 	static uint8_t	n_tokens;
-    static char tokens[8] =
+    static char     tokens[8] =
         {'|', '>', '<', ';', '\'', '\"', '&'};
 
     n_tokens = sizeof(tokens) / sizeof(tokens[0]);
 	i = -1;
    	while (++i < n_tokens)
 	{
-		if (tokens[i] == *str)
+		if (tokens[i] == str[*idx])
+        {
+            if (str[*idx] == '&' && str[*idx + 1] != '&')
+                return ((*idx)++, false);
 			return (true);
+        }
 	}
 	return (false);
 }

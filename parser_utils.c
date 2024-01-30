@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 22:15:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/30 17:59:14 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params)
 	elem->redirs = NULL;
 	elem->pid = -1;
 	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 2;
+	printf("size: %zu\n", *size);
 	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
 	if (!elem->cmd_str)
 	{
@@ -60,15 +61,24 @@ t_parser	*new_elem(size_t *size, t_list *lexered_params)
 static unsigned int	get_x_between_pipes(t_list *node, uint8_t flag)
 {
 	unsigned int	n;
-	t_lexer			l_content;
+	t_lexer			*l_content;
+	t_lexer 		*l_content_next;
 
 	n = 0;
 	while (node)
 	{
-		l_content = *((t_lexer *)node->content);
-		if (flag == CMD_LEN && l_content.type == CMD)
-			n += ft_strlen(l_content.str.cmd) + 1; // per eventuali token
-		else if (l_content.type == TOKEN && l_content.str.token == PIPE)
+		l_content = (t_lexer *)node->content;
+		if (node->next)
+			l_content_next = (t_lexer *)node->next->content;
+		else
+			l_content_next = NULL;
+		if (flag == CMD_LEN && l_content->type == CMD)
+			n += ft_strlen(l_content->str.cmd) + 1;   // per eventuali token
+		else if ((l_content->type == TOKEN && l_content->str.token == PIPE)
+				&& l_content_next
+				&& (l_content_next->type == TOKEN && l_content_next->str.token == PIPE))
+			node = node->next;
+		else if (l_content->type == TOKEN && l_content->str.token == PIPE)
 			break ;
 		node = node->next;
 	}
