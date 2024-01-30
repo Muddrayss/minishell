@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 22:28:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/30 15:34:29 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void    replace_env_vars(char **str)
     char				*env_value;
     unsigned int		i;
 
-	//TODO gestire segfault con solo "$"
     i = 0;
     while ((*str)[i] != '\0')
     {
