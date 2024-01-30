@@ -19,12 +19,12 @@ char    *ft_insert_str(char *big, char *new, unsigned int start, unsigned int en
 
 	if (start == end)
 		return (big);
+	if (!big)
+		return (ft_strdup(new));
     size = ft_strlen(big) - (end - start) + ft_strlen(new) + 1;
     new_str = (char *)ft_calloc(size, sizeof(char));
     if (!new_str)
         return (NULL);
-	else if (!big)
-		return (ft_strlcat(new_str, new, size), new_str);
     ft_strlcat(new_str, big, start + 1);
     ft_strlcat(new_str, new, size);
     ft_strlcat(new_str, big + end, size);
