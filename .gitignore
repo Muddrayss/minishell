@@ -2,7 +2,7 @@ tmp/
 .vscode/
 libft/.vscode/
 libft/*.a
-*.tmp
+# *.tmp
 *.a
 .nfs*
 minishell

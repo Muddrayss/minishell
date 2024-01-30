@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 21:59:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:39:54 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,21 @@ void create_heredocs(t_list *parsed_params)
 
     while (parsed_params)
     {
-        heredoc_fd = -1;
         heredoc_fileno2 = 1;
         content = (t_parser *)parsed_params->content;
         node = content->redirs;
         while (node)
         {
-            if (heredoc_fd == -1 || *((char *)node->content) == PH_REDIR_STOP)
-            {
-                if (heredoc_fd != -1)       
-                    node = node->next;
-                close(heredoc_fd);
-                if (((t_redir *)node->content)->type == REDIR_HEREDOC)
-                {
-                    heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                    if (heredoc_fd == -1)
-                        ft_quit(96, NULL);  
-                }
-            }
+            if (*((char *)node->content) == PH_REDIR_STOP)
+                heredoc_fileno2++;
             redir = (t_redir *)node->content;
             if (redir->type == REDIR_HEREDOC)
+            {
+                heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                if (heredoc_fd == -1)
+                    ft_quit(96, NULL);
                 fill_heredoc(redir->filename, heredoc_fd);
+            }
             node = node->next;
         }
         parsed_params = parsed_params->next;
@@ -128,7 +122,7 @@ int get_matching_heredoc(int id1, int id2)
 {
     int fd;
 
-    fd = open(get_heredoc_filename(id1, id2), O_RDONLY);
+    fd = open(get_heredoc_filename(id1, id2), O_RDONLY, 0644);
     if (fd == -1)
         ft_quit(28, NULL);
     return (fd);

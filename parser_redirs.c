@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 22:11:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:56:16 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,10 +165,9 @@ void	remove_filename(char **str, unsigned int *starting_idx)
 		i++;
 	while ((*str)[i + word_len] != '\0' && !is_shell_space((*str)[i + word_len]))
 		word_len++;
-	*str = ft_insert_str(*str, " ", *starting_idx, i + word_len);
+	*str = ft_insert_str(*str, "", *starting_idx, i + word_len);
 	if (!*str)
 		ft_quit(14, "failed to allocate memory");
-	*starting_idx += word_len;
 }
 
 void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
@@ -180,7 +179,7 @@ void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
 	{
 		while ((*str)[dist - 1] != '\0' && ft_isdigit((*str)[dist - 1]))
 			dist--;
-		*str = ft_insert_str(*str, " ", dist, *starting_idx);
+		*str = ft_insert_str(*str, "", dist, *starting_idx);
 		*starting_idx = dist;
 	}
 	else
@@ -189,7 +188,7 @@ void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
 			dist++;
 		while ((*str)[dist + 1] != 0 && ft_isdigit((*str)[dist + 1]))
 			dist++;
-		*str = ft_insert_str(*str, " ", *starting_idx, *starting_idx + dist);
+		*str = ft_insert_str(*str, "", *starting_idx, *starting_idx + dist);
 		if (!*str)
 			ft_quit(14, "failed to allocate memory");
 	}

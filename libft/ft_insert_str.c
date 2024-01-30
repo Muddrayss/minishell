@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_insert_str.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 21:51:55 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 21:52:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:54:15 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ char    *ft_insert_str(char *big, char *new, unsigned int start, unsigned int en
     if (!new_str)
         return (NULL);
     ft_strlcat(new_str, big, start + 1);
-    ft_strlcat(new_str, new, size);
+    if (new[0] != '\0')
+        ft_strlcat(new_str, new, size);
     ft_strlcat(new_str, big + end, size);
     return (free(big), new_str);
 }
