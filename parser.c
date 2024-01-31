@@ -130,6 +130,7 @@ static void	replace_placeholders(t_list *parsed_params)
 	}
 }
 
+//potrebbe essere una macro
 static t_token	get_token(t_list *node)
 {
 	return (((t_lexer *)node->content)->token);
