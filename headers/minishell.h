@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:19:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 22:17:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ void		init_in_cmd_signals(void);
 void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
 char		*ft_getenv(char *env_name);
 void		ft_setenv(char *name, char *value, int8_t overwrite);
+int8_t		reset_fd(int *fd);
 
 #endif

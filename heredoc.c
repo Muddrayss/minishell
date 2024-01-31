@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:00:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 22:20:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void create_heredocs(t_list *parsed_params)
         parsed_params = parsed_params->next;
         heredoc_fileno1++;
     }
-    close(heredoc_fd); //TODO creare funzione reset fd che chiude un fd se e' diverso da -1 e lo setta a -1 una volta chiuso
+    reset_fd(&heredoc_fd); //TODO creare funzione reset fd che chiude un fd se e' diverso da -1 e lo setta a -1 una volta chiuso
 }
 
 static char    *get_heredoc_filename(int id1, int id2)

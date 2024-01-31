@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:50:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 22:13:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 
 static t_token  lexer_get_token(char c);
 static bool 	is_token(char *str, int *idx);
+static t_lexer  *new_content_lexer(void);
 
 t_list	*lexer(char *input)
 {
     t_data          *data;
-    int               i;
-    t_lexer   		content;
+    int             i;
+    t_lexer   		*content;
     t_list         	*lexered_params;
 
     data = get_data();
 	lexered_params = NULL;
     data->lexered_params = &lexered_params;
+    content = new_content_lexer();
     while (*input != '\0')
     {
         i = 0;
@@ -32,25 +34,37 @@ t_list	*lexer(char *input)
             i++;
         if (i > 0)
         {
-            content.token = 0;
-			content.cmd = (char *)malloc(sizeof(char) * (i + 1));
-			if (!content.cmd)
+			content->cmd = (char *)malloc(sizeof(char) * (i + 1));
+			if (!content->cmd)
 				ft_quit(8, "failed to allocate memory");
-            ft_strlcpy(content.cmd, input, i + 1);
-			ft_lstadd_back(&lexered_params, ft_lstnew(&content));
+            ft_strlcpy(content->cmd, input, i + 1);
+			ft_lstadd_back(&lexered_params, ft_lstnew(content));
+            content = new_content_lexer();
             input += i;
             i = 0;
         }
 		if (*input != '\0')
 		{
-            content.cmd = NULL;
-       	 	content.token = lexer_get_token(*input++);
-            if (content.token == AND)
+       	 	content->token = lexer_get_token(*input++);
+            if (content->token == AND)
                 input++;
-            ft_lstadd_back(&lexered_params, ft_lstnew(&content));
+            ft_lstadd_back(&lexered_params, ft_lstnew(content));
+            content = new_content_lexer();
         }
     }
 	return (lexered_params);
+}
+
+static  t_lexer *new_content_lexer(void)
+{
+    t_lexer	*content;
+
+    content = (t_lexer *)malloc(sizeof(t_lexer));
+    if (!content)
+        ft_quit(8, "failed to allocate memory");
+    content->cmd = NULL;
+    content->token = 0;
+    return (content);
 }
 
 static t_token lexer_get_token(char c)
@@ -93,5 +107,4 @@ void	del_content_lexer(void *content)
 
 	elem = (t_lexer *)content;
 	free(elem->cmd);
-	free(elem);
 }

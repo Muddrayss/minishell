@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:59:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 22:13:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_list	*parser(t_list *lexered_params)
 	int8_t			to_skip;
 	t_lexer			*prev_cmd_elem;
 	t_lexer			*content_lex;
-	static char		placeholders[4] = {PH_SEMICOLON, PH_REDIR_STOP, PH_OR, PH_AND};
 
 	//TODO controllare la token streak qui incima in vece che in handle_redir
 
@@ -56,8 +55,8 @@ t_list	*parser(t_list *lexered_params)
 		{
 			if (content_lex->token == PIPE)
 			{
-				if (get_token(node->next) == PIPE)
-					add_soft_separator(content_par, placeholders[2]);
+				if (node->next && get_token(node->next) == PIPE)
+					add_soft_separator(content_par, PH_OR);
 				else
 				{
 					ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
@@ -72,9 +71,9 @@ t_list	*parser(t_list *lexered_params)
 			else if (content_lex->token == REDIR_R)
 				to_skip += handle_redir_r(node, prev_cmd_elem, content_par);
 			else if (content_lex->token == SEMICOLON)
-				add_soft_separator(content_par, placeholders[0]);
+				add_soft_separator(content_par, PH_SEMICOLON);
 			else if (content_lex->token == AND)
-				add_soft_separator(content_par, placeholders[3]);
+				add_soft_separator(content_par, PH_AND);
 			// TODO valutare se fare qualche eccezione per i token di fila;
 			// TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un >
 			while (to_skip-- > 0)
@@ -84,15 +83,16 @@ t_list	*parser(t_list *lexered_params)
 	ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
 	ft_lstclear(&lexered_params, &del_content_lexer);
 	data->lexered_params = NULL;
-	replace_placeholders(parsed_params);
-	return (parsed_params);
+	return (replace_placeholders(parsed_params), parsed_params);
 }
 
 static void	add_soft_separator(t_parser *content_par, char placeholder)
 {
 	static char	ph_redir_stop = PH_REDIR_STOP;
+	char		ph;
 
-	ft_strlcat(content_par->cmd_str, &placeholder, ft_strlen(content_par->cmd_str) + 2);
+	ph = placeholder;
+	ft_strlcat(content_par->cmd_str, &ph, ft_strlen(content_par->cmd_str) + 2);
 	ft_lstadd_back(&content_par->redirs, ft_lstnew(&ph_redir_stop));
 }
 

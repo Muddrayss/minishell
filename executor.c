@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:03:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 22:20:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ void executor(t_list *parsed_params)
         node = node->next;
     }
     wait_for_children(parsed_params);
-    if (dup2(original_stdin, STDIN_FILENO) == -1 || close(original_stdin) == -1)
+    if (dup2(original_stdin, STDIN_FILENO) == -1 || reset_fd(&original_stdin) == -1)
         ft_quit(24, NULL);
 }
 
 static int parent(int fds[], int *heredoc_fileno)
 {    
     init_in_cmd_signals();
-    if (close(fds[1]) == -1 || (fds[2] != -1 && close(fds[2]) == -1))
+    if (reset_fd(&fds[1]) == -1 || (fds[2] != -1 && reset_fd(&fds[2]) == -1))
         ft_quit(29, NULL);
     return ((*heredoc_fileno)++, fds[0]);
 }
@@ -68,7 +68,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
     bool            is_last_subcmd;
     char            separator;
 
-    if (fds[2] != -1 && (dup2(fds[2], STDIN_FILENO) == -1 || close(fds[2]) == -1))
+    if (fds[2] != -1 && (dup2(fds[2], STDIN_FILENO) == -1 || reset_fd(&fds[2]) == -1))
         ft_quit(25, NULL);
     heredoc_fileno2 = 1;
     while (1)
@@ -86,7 +86,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
             replace_env_vars(&new_cmd_str);
             exec_redirs(new_redirs, heredoc_fileno, heredoc_fileno2);
             if (is_last_subcmd)
-                if (close(fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[1]) == -1)
+                if (reset_fd(&fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || reset_fd(&fds[1]) == -1)
                     ft_quit(27, NULL);
             exec(ft_getenv("PATH"), new_cmd_str);
         }
@@ -131,9 +131,9 @@ static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2)
             ft_quit(22, NULL);
         node = node->next;
     }
-    if ((dup2(redir->fds[0], STDIN_FILENO) == -1 || (redir->fds[0] != STDIN_FILENO && close(redir->fds[0]) == -1)))
+    if ((dup2(redir->fds[0], STDIN_FILENO) == -1 || (redir->fds[0] != STDIN_FILENO && reset_fd(&redir->fds[0]) == -1)))
         ft_quit(26, NULL);
-    if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || (redir->fds[1] != STDOUT_FILENO && close(redir->fds[1]) == -1))
+    if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || (redir->fds[1] != STDOUT_FILENO && reset_fd(&redir->fds[1]) == -1))
         ft_quit(24, NULL);
 }
 

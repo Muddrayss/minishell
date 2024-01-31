@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 15:25:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 21:42:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ static void	minishell_loop()
 		add_history(input);
 		params_head = lexer(input);
 		params_head = parser(params_head);
-		executor(params_head);
 		if (!params_head)
 			continue ;
+		executor(params_head);
 	}
 }
 //va bene per comandi interni senza redirs, e senza here_doc e senza salvare l'exit status in data
