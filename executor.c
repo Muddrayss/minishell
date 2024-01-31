@@ -6,15 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 21:25:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:03:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static int parent(int fds[]);
+static int parent(int fds[], int *heredoc_fileno);
 static void child(t_parser *content, int fds[], bool is_last, int original_stdin, int heredoc_fileno);
-static void exec_redirs(t_list *redirs);
+static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2);
 static void wait_for_children(t_list *parsed_params);
 
 void executor(t_list *parsed_params)
@@ -22,7 +22,6 @@ void executor(t_list *parsed_params)
     t_parser        *content;
     t_list          *node;
     int             fds[3];
-    int             prev_out_fd;
     int             original_stdin;
     static int      heredoc_fileno = 1;
 
@@ -30,35 +29,33 @@ void executor(t_list *parsed_params)
     if (original_stdin == -1)
         ft_quit(24, NULL);
     create_heredocs(parsed_params);
-    prev_out_fd = -1;
+    fds[2] = -1;
     node = parsed_params;
     while (node)
     {
         content = (t_parser *)node->content;
         if (pipe(fds) == -1)
             ft_quit(18, NULL);
-        fds[2] = prev_out_fd;
         content->pid = fork();
         if (content->pid == -1)
             ft_quit(19, NULL);
         if (content->pid == 0)
             child(content, fds, node->next == NULL, original_stdin, heredoc_fileno);
         else
-            prev_out_fd = parent(fds);
+            fds[2] = parent(fds, &heredoc_fileno);
         node = node->next;
-        heredoc_fileno++;
     }
     wait_for_children(parsed_params);
     if (dup2(original_stdin, STDIN_FILENO) == -1 || close(original_stdin) == -1)
         ft_quit(24, NULL);
 }
 
-static int parent(int fds[])
+static int parent(int fds[], int *heredoc_fileno)
 {    
     init_in_cmd_signals();
     if (close(fds[1]) == -1 || (fds[2] != -1 && close(fds[2]) == -1))
         ft_quit(29, NULL);
-    return (fds[0]);
+    return ((*heredoc_fileno)++, fds[0]);
 }
 
 static void child(t_parser *content, int fds[], bool is_last, int original_stdin, int heredoc_fileno)
@@ -87,38 +84,29 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         if (pid == 0)
         {
             replace_env_vars(&new_cmd_str);
-            exec_redirs(new_redirs);
-            if (is_heredoc(new_redirs))
-            {
-                if (dup2(get_matching_heredoc(heredoc_fileno, heredoc_fileno2), STDIN_FILENO) == -1)
-                    ft_quit(32, NULL);
-            }    
+            exec_redirs(new_redirs, heredoc_fileno, heredoc_fileno2);
             if (is_last_subcmd)
-            {
                 if (close(fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || close(fds[1]) == -1)
                     ft_quit(27, NULL);
-            }
             exec(ft_getenv("PATH"), new_cmd_str);
         }
         else
         {
-            if (is_heredoc(new_redirs))
-                heredoc_fileno2++;
+            heredoc_fileno2++;
             //TODO aggiornare la env var con ft_stenv leggendo da un file
             waitpid(pid, &g_status, 0);
             g_status = WEXITSTATUS(g_status);
+            free(new_cmd_str);
             if ((separator == PH_AND && g_status != 0) || (separator == PH_OR && g_status == 0))
                 break ;
-            free(new_cmd_str);
             if (dup2(original_stdin, STDIN_FILENO) == -1)
                 ft_quit(24, NULL);
         }
     }
-    free(new_cmd_str);
     exit(g_status);
 }
 
-static void exec_redirs(t_list *redirs)
+static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2)
 {
     t_list          *node;
     t_redir         *redir;
@@ -131,24 +119,19 @@ static void exec_redirs(t_list *redirs)
         redir = (t_redir *)node->content;
         if (redir->filename[0] == '$')
             replace_env_vars(&redir->filename);
-        if (redir->fds[0] == -42 && redir->type == REDIR_INPUT)
-        {
-                redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
-                if (redir->fds[0] == -1)
-                    ft_quit(21, NULL);
-        }
-        else if (redir->fds[1] == -42)
-        {
-                if ((redir->type == REDIR_OUTPUT))
-                    redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                else if (redir->type == REDIR_APPEND)
-                    redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-                if (redir->fds[1] == -1)
-                    ft_quit(22, NULL);
-        }
+        if (redir->type == REDIR_INPUT)
+            redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
+        else if (redir->type == REDIR_HEREDOC)
+            redir->fds[0] = get_matching_heredoc(heredoc_fileno, heredoc_fileno2);
+        else if (redir->type == REDIR_OUTPUT)
+            redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        else if (redir->type == REDIR_APPEND)
+            redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (redir->fds[1] == -1 || redir->fds[0] == -1)
+            ft_quit(22, NULL);
         node = node->next;
     }
-    if (redir->fds[0] != -42 && (dup2(redir->fds[0], STDIN_FILENO) == -1 || (redir->fds[0] != STDIN_FILENO && close(redir->fds[0]) == -1)))
+    if ((dup2(redir->fds[0], STDIN_FILENO) == -1 || (redir->fds[0] != STDIN_FILENO && close(redir->fds[0]) == -1)))
         ft_quit(26, NULL);
     if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || (redir->fds[1] != STDOUT_FILENO && close(redir->fds[1]) == -1))
         ft_quit(24, NULL);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/29 21:54:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:19:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void		free_matrix(char **matrix);
 void 		clean_heredocs();
 void 		ft_quit(int id, char *msg);
 void 		free_data(t_data *data);
-int8_t 		ft_parse_error(char token);
+void 		ft_parse_error(char token);
 bool		is_shell_space(char c);
 void		init_signals(void);
 void		init_in_cmd_signals(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 16:21:45 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:50:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,19 @@
 
 typedef enum e_token
 {
-	EMPTY = -1,
-	PIPE,
-	REDIR_R,
-	REDIR_L,
-	SEMICOLON,
-	QUOTE,
-	DQUOTE,
-	AND,
+	PIPE = '|',
+	REDIR_R = '>',
+	REDIR_L = '<',
+	SEMICOLON = ';',
+	QUOTE = '\'',
+	DQUOTE = '"',
+	AND = '&',
 }				t_token;
-
-typedef enum e_elem_type
-{
-	CMD,
-	TOKEN,
-}				t_elem_type;
 
 typedef struct s_lexer
 {
-	t_elem_type	type;
-	union		u_elem
-	{
-		char	*cmd;
-		t_token	token;
-	} str;
+	char	*cmd;
+	t_token	token;
 }				t_lexer;
 
 t_list			*lexer(char *input);

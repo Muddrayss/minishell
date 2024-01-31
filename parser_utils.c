@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 18:43:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:51:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,30 +25,31 @@ unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
 	while (tmp)
 	{
 		elem = (t_lexer *)tmp->content;
-		if (elem->type == TOKEN)
+		if (elem->token)
 			token_streak++;
 		else
 			break ;
 		tmp = tmp->next;
 	}
 	if (next_token && token_streak > 1)
-		*next_token = ((t_lexer *)lexered_params->next->content)->str.token;
+		*next_token = ((t_lexer *)lexered_params->next->content)->token;
 	else if (next_token)
-		*next_token = EMPTY;
+		*next_token = 0;
 	return (token_streak);
 }
 
-t_parser	*new_elem(size_t *size, t_list *lexered_params)
+t_parser	*new_elem(t_list *lexered_params)
 {
 	t_parser		*elem;
+	unsigned int	size;
 
 	elem = (t_parser *)malloc(sizeof(t_parser));
 	if (!elem)
 		ft_quit(10, "failed to allocate memory");
 	elem->redirs = NULL;
 	elem->pid = -1;
-	*size = get_x_between_pipes(lexered_params, CMD_LEN) + 2;
-	elem->cmd_str = (char *)ft_calloc(*size, sizeof(char));
+	size = get_x_between_pipes(lexered_params, CMD_LEN) + 2;
+	elem->cmd_str = (char *)ft_calloc(size, sizeof(char));
 	if (!elem->cmd_str)
 	{
 		free(elem);
@@ -71,13 +72,13 @@ static unsigned int	get_x_between_pipes(t_list *node, uint8_t flag)
 			l_content_next = (t_lexer *)node->next->content;
 		else
 			l_content_next = NULL;
-		if (flag == CMD_LEN && l_content->type == CMD)
-			n += ft_strlen(l_content->str.cmd) + 1;   // per eventuali token
-		else if ((l_content->type == TOKEN && l_content->str.token == PIPE)
+		if (flag == CMD_LEN && l_content->cmd)
+			n += ft_strlen(l_content->cmd) + 1;   // per eventuali token
+		else if ((l_content->token && l_content->token == PIPE)
 				&& l_content_next
-				&& (l_content_next->type == TOKEN && l_content_next->str.token == PIPE))
+				&& (l_content_next->token && l_content_next->token == PIPE))
 			node = node->next;
-		else if (l_content->type == TOKEN && l_content->str.token == PIPE)
+		else if (l_content->token && l_content->token == PIPE)
 			break ;
 		node = node->next;
 	}
@@ -91,7 +92,7 @@ t_lexer	*get_next_cmd_elem(t_list *node)
 	while (node)
 	{
 		elem = (t_lexer *)node->content;
-		if (elem->type == CMD)
+		if (elem->cmd)
 			return (elem);
 		node = node->next;
 	}
@@ -105,9 +106,9 @@ bool	is_empty_cmd(void *content)
 
 	elem = (t_lexer *)content;
 	tmp = NULL;
-	if (elem->type == CMD)
+	if (elem->cmd)
 	{
-		tmp = ft_strtrim(elem->str.cmd, " \t\n");
+		tmp = ft_strtrim(elem->cmd, " \t\n");
 		if (!tmp)
 			ft_quit(15, "failed to allocate memory");
 		if (*tmp == '\0')

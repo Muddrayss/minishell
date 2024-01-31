@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 18:18:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 03:50:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool check_last_subcmd(char *cmd_str)
 
     while (cmd_str[i])
     {
-        if (cmd_str[i] == PH_SEMICOLON)
+        if (cmd_str[i] == PH_SEMICOLON || cmd_str[i] == PH_OR || cmd_str[i] == PH_AND)
             return (i++, false);
         i++;
     }

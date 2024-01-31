@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:00:50 by craimond         ###   ########.fr       */
+/*   Created: 2024/01/31 04:23:41 by craimond          #+#    #+#             */
+/*   Updated: 2024/01/31 04:49:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+char	*ft_strcat(char *dest, char *src);
 
-# define EXEC_FAILURE 1
-# define COMMAND_NOT_FOUND 127
+char	*ft_strcat(char *dest, char *src)
+{
+	int	i;
+	int	j;
 
-void    executor(t_list *parsed_params);
-void    create_heredocs(t_list *parsed_params);
-int     get_matching_heredoc(int id1, int id2);
-void    replace_env_vars(char **str);
-bool    check_last_subcmd(char *cmd_str);
-
-#endif
+	i = -1;
+	j = -1;
+	while (dest[++j])
+		;
+	while (src[++i])
+		dest[i + j] = src[i];
+	dest[i + j] = '\0';
+	return (dest);
+}

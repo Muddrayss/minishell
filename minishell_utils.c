@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 18:56:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:19:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,12 +210,11 @@ void	free_data(t_data *data)
 	//TODO fare una funzione che chiude tutti i fd
 }
 
-int8_t	ft_parse_error(char token)
+void	ft_parse_error(char token)
 {
 	ft_putstr_fd("Parse error near '", 2);
 	ft_putchar_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
-	return (-1);
 }
 
 t_data *get_data(void)

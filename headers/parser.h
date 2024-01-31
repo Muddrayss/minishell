@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 16:55:46 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:29:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_list			*parser(t_list *lexered_params);
 bool			handle_redir_l(t_list *lexered_params, t_parser *content_par);
 bool			handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par);
 unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params);
-t_parser		*new_elem(size_t *size, t_list *lexered_params);
+t_parser		*new_elem(t_list *lexered_params);
 void			remove_filename(char **str, unsigned int *starting_idx);
 void			remove_num(char **str, unsigned int *starting_idx, uint8_t flag);
 void 			replace_env_var(char **str, char *env_var);

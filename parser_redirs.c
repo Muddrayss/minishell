@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 14:56:16 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:49:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool	handle_redir_l(t_list *lexered_params, t_parser *content_par)
 	if (token_streak == 2 && next_token == REDIR_L)
 	{
 		redir_content->type = REDIR_HEREDOC;
-		add_filename(&redir_content->filename, next_cmd_elem->str.cmd);
+		add_filename(&redir_content->filename, next_cmd_elem->cmd);
 	}
 	else
 	{
@@ -49,11 +49,11 @@ bool	handle_redir_l(t_list *lexered_params, t_parser *content_par)
 		{
 			if (next_cmd_elem)
 			{
-				if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT) == -1)
+				if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->cmd, RIGHT) == -1)
 				{
 					redir_content->type = REDIR_INPUT;
 					if (next_cmd_elem)
-						add_filename(&redir_content->filename, next_cmd_elem->str.cmd);
+						add_filename(&redir_content->filename, next_cmd_elem->cmd);
 				}
 			}
 		}	
@@ -88,10 +88,10 @@ bool	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 		return (true * (next_token == REDIR_R));
 	}
 	if (next_cmd_elem)
-		if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->str.cmd, RIGHT) == -1)
-			add_filename(&redir_content->filename, next_cmd_elem->str.cmd);
+		if (add_left_right_fds(&redir_content->fds[1], next_cmd_elem->cmd, RIGHT) == -1)
+			add_filename(&redir_content->filename, next_cmd_elem->cmd);
 	if (prev_cmd_elem)
-		add_left_right_fds(&redir_content->fds[0], prev_cmd_elem->str.cmd, LEFT);
+		add_left_right_fds(&redir_content->fds[0], prev_cmd_elem->cmd, LEFT);
 	if (redir_content->fds[1] == -42)
 	{
 		redir_content->type = REDIR_OUTPUT;

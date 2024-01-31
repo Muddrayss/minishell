@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 19:32:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:00:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,22 +101,6 @@ static void fill_heredoc(char *limiter, int fd)
         str = NULL; //per evitare la double free
     }
     free(str);
-}
-
-bool is_heredoc(t_list *redirs)
-{
-    t_list  *node;
-    t_redir *redir;
-
-    node = redirs;
-    while (node)
-    {
-        redir = (t_redir *)node->content;
-        if (redir->type == REDIR_HEREDOC)
-            return (true);
-        node = node->next;
-    }
-    return (false);
 }
 
 int get_matching_heredoc(int id1, int id2)

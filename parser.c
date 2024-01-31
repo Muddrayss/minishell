@@ -6,13 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/30 18:46:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/01/31 04:59:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static void		replace_placeholders(t_list *parsed_params);
+static t_token	get_token(t_list *node);
+static void		add_soft_separator(t_parser *content_par, char placeholder);
 
 t_list	*parser(t_list *lexered_params)
 {
@@ -21,80 +23,60 @@ t_list	*parser(t_list *lexered_params)
 	t_list			*parsed_params;
 	t_list			*last_node;
 	t_list			*node;
-	size_t			size;
 	int8_t			to_skip;
 	t_lexer			*prev_cmd_elem;
 	t_lexer			*content_lex;
-	static char		ph_semicolon = PH_SEMICOLON;
-	static char		ph_redir_stop = PH_REDIR_STOP;
-	static char 	ph_or = PH_OR;
-	static char		ph_and = PH_AND;
+	static char		placeholders[4] = {PH_SEMICOLON, PH_REDIR_STOP, PH_OR, PH_AND};
 
 	//TODO controllare la token streak qui incima in vece che in handle_redir
 
 	data = get_data();
-	int func_return ;
 	if (!lexered_params)
 		return (NULL);
 	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
-	while (1)
-	{
-		last_node = ft_lstlast(lexered_params);
-		if (last_node && ((t_lexer *)last_node->content)->type == TOKEN)
-			ft_lstdel_last(&lexered_params, &del_content_lexer);
-		else
-			break ;
-	}
+	last_node = ft_lstlast(lexered_params);
+	if (last_node && get_token(last_node))
+		return(ft_parse_error(get_token(last_node)), NULL);
 	// TODO gestire caso tipo "> >" e "< <"
 	node = lexered_params;
 	parsed_params = NULL;
 	prev_cmd_elem = NULL;
-	func_return = 0;
-	content_par = new_elem(&size, node);
+	content_par = new_elem(node);
 	while (node)
 	{
 		to_skip = 1;
 		content_lex = (t_lexer *)node->content;
-		if (content_lex->type == CMD)
+		if (content_lex->cmd)
 		{
-			ft_strlcat(content_par->cmd_str, content_lex->str.cmd, size);
+			ft_strcat(content_par->cmd_str, content_lex->cmd);
 			prev_cmd_elem = content_lex;
 			node = node->next;
 		}
-		else if (content_lex->type == TOKEN)
+		else if (content_lex->token)
 		{
-			if (content_lex->str.token == PIPE)
+			if (content_lex->token == PIPE)
 			{
-				if (((t_lexer *)node->next->content)->type == TOKEN && ((t_lexer *)node->next->content)->str.token == PIPE)
-				{
-					ft_strlcat(content_par->cmd_str, &ph_or, ft_strlen(content_par->cmd_str) + 2);
-					ft_lstadd_back(&content_par->redirs, ft_lstnew(&ph_redir_stop));
-					node = node->next;
-				}
+				if (get_token(node->next) == PIPE)
+					add_soft_separator(content_par, placeholders[2]);
 				else
 				{
 					ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
 					node = node->next;
-					content_par = new_elem(&size, node);
+					content_par = new_elem(node);
 					continue ;
 				}
+				node = node->next;
 			}				
-			else if (content_lex->str.token == REDIR_L)
+			else if (content_lex->token == REDIR_L)
 				to_skip += handle_redir_l(node, content_par);
-			else if (content_lex->str.token == REDIR_R)
+			else if (content_lex->token == REDIR_R)
 				to_skip += handle_redir_r(node, prev_cmd_elem, content_par);
-			else if (content_lex->str.token == SEMICOLON || content_lex->str.token == AND)
-			{
-				if (content_lex->str.token == SEMICOLON)
-					ft_strlcat(content_par->cmd_str, &ph_semicolon, ft_strlen(content_par->cmd_str) + 2);
-				else if (content_lex->str.token == AND)
-					ft_strlcat(content_par->cmd_str, &ph_and, ft_strlen(content_par->cmd_str) + 2);
-				ft_lstadd_back(&content_par->redirs, ft_lstnew(&ph_redir_stop));
-			}
+			else if (content_lex->token == SEMICOLON)
+				add_soft_separator(content_par, placeholders[0]);
+			else if (content_lex->token == AND)
+				add_soft_separator(content_par, placeholders[3]);
 			// TODO valutare se fare qualche eccezione per i token di fila;
 			// TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un >
-			if (func_return == -1)
-				return (NULL);
 			while (to_skip-- > 0)
 				node = node->next;
 		}
@@ -104,6 +86,14 @@ t_list	*parser(t_list *lexered_params)
 	data->lexered_params = NULL;
 	replace_placeholders(parsed_params);
 	return (parsed_params);
+}
+
+static void	add_soft_separator(t_parser *content_par, char placeholder)
+{
+	static char	ph_redir_stop = PH_REDIR_STOP;
+
+	ft_strlcat(content_par->cmd_str, &placeholder, ft_strlen(content_par->cmd_str) + 2);
+	ft_lstadd_back(&content_par->redirs, ft_lstnew(&ph_redir_stop));
 }
 
 static void	replace_placeholders(t_list *parsed_params)
@@ -138,5 +128,10 @@ static void	replace_placeholders(t_list *parsed_params)
 		}
 		node = node->next;
 	}
+}
+
+static t_token	get_token(t_list *node)
+{
+	return (((t_lexer *)node->content)->token);
 }
 
