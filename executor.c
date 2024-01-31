@@ -131,26 +131,20 @@ static void exec_redirs(t_list *redirs)
         redir = (t_redir *)node->content;
         if (redir->filename[0] == '$')
             replace_env_vars(&redir->filename);
-        if (redir->fds[0] == -42)
+        if (redir->fds[0] == -42 && redir->type == REDIR_INPUT)
         {
-            if (redir->type == REDIR_INPUT)
-            {
                 redir->fds[0] = open(redir->filename, O_RDONLY, 0644);
                 if (redir->fds[0] == -1)
                     ft_quit(21, NULL);
-            }
         }
         else if (redir->fds[1] == -42)
         {
-            if (redir->type == REDIR_OUTPUT || redir->type == REDIR_APPEND)
-            {
                 if ((redir->type == REDIR_OUTPUT))
                     redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
                 else if (redir->type == REDIR_APPEND)
                     redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
                 if (redir->fds[1] == -1)
                     ft_quit(22, NULL);
-            }
         }
         node = node->next;
     }
