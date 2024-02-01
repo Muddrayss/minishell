@@ -6,18 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 21:16:31 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 21:54:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 14:58:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-#include <stdio.h>
-
 char    *ft_strdup_until(char *str, char *set, char *stopped_at)
 {
     char                    *new_str;
-    static char             *old_str = NULL;
+    static char             *old_str;
     size_t                  size;
     static unsigned int     i = 0;
     char                    *tmp;
@@ -25,6 +23,10 @@ char    *ft_strdup_until(char *str, char *set, char *stopped_at)
     tmp = NULL;
     if (old_str != str)
         i = 0;
+    else if (str[i - 1])
+        i++;
+    else
+        return (NULL);
     size = 0;
     while (str[i + size])
     {
@@ -44,5 +46,5 @@ char    *ft_strdup_until(char *str, char *set, char *stopped_at)
     ft_strlcpy(new_str, str + i, size);
     i += size;
     old_str = str;
-    return (i++, new_str);
+    return (new_str);
 }

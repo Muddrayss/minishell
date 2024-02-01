@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 13:40:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 14:38:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,15 +114,15 @@ static void	replace_placeholders(t_list *parsed_params)
 			{
 				redir = (t_redir *)content_par->redirs->content;
 				if (redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
-					remove_num(&content_par->cmd_str, &i, LEFT);
+					content_par->cmd_str = remove_num(content_par->cmd_str, &i, LEFT);
 				if (redir->type == REDIR_INPUT || redir->type == REDIR_APPEND
 					|| redir->type == REDIR_OUTPUT || redir->type == REDIR_HEREDOC)
-					remove_filename(&content_par->cmd_str, &i);
+					content_par->cmd_str = remove_filename(content_par->cmd_str, i);
 				else if (redir->type == REDIR_INPUT_FD
 					|| redir->type == REDIR_OUTPUT_FD
 					|| redir->type == REDIR_APPEND_FD)
-					remove_num(&content_par->cmd_str, &i, RIGHT);
-				content_par->cmd_str[i] = ' ';
+					content_par->cmd_str = remove_num(content_par->cmd_str, &i, RIGHT);
+				printf("cmd_str1: %s\n", content_par->cmd_str);
 			}
 			i++;
 		}

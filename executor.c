@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 13:39:09 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/01 14:59:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void executor(t_list *parsed_params)
     original_stdin = dup(STDIN_FILENO);
     if (original_stdin == -1)
         ft_quit(24, NULL);
+    //fare fork dove si chiama create_heredocs
     create_heredocs(parsed_params);
     fds[2] = -1;
     node = parsed_params;
@@ -76,7 +77,6 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         new_redirs = ft_lstdup_until(content->redirs, &ph_redir_stop);  //fino a NULL o PH_REDIR_STOP
         if ((!new_cmd_str || new_cmd_str[0] == '\0') && !new_redirs) //se c'e' una redir la stringa e' vuota ma devi comunque eseguire
             break ;
-        printf("cmd_str: %s\n", new_cmd_str);
         is_last_subcmd = check_last_subcmd(content->cmd_str);
         pid = fork();
         if (pid == -1)

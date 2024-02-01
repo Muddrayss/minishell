@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 13:40:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 14:34:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,42 +154,44 @@ static int8_t	add_left_right_fds(int *fd, char *cmd, uint8_t flag)
 	return (0);
 }
 
-void	remove_filename(char **str, unsigned int *starting_idx)
+char	*remove_filename(char *str, unsigned int starting_idx)
 {
 	unsigned int	word_len;
 	unsigned int	i;
 
 	word_len = 0;
-	i = *starting_idx + 1;
-	while (is_shell_space((*str)[i]))
+	i = starting_idx + 1;
+	while (is_shell_space(str[i]))
 		i++;
-	while ((*str)[i + word_len] != '\0' && !is_shell_space((*str)[i + word_len]))
+	while (str[i + word_len] != '\0' && !is_shell_space(str[i + word_len]))
 		word_len++;
-	*str = ft_insert_str(*str, "", *starting_idx, i + word_len);
-	if (!*str)
+	str = ft_insert_str(str, "", starting_idx, i + word_len);
+	if (!str)
 		ft_quit(14, "failed to allocate memory");
+	return (str);
 }
 
-void	remove_num(char **str, unsigned int *starting_idx, uint8_t flag)
+char	*remove_num(char *str, unsigned int *starting_idx, uint8_t flag)
 {
 	unsigned int	dist;
 
 	dist = *starting_idx;
 	if (flag == LEFT)
 	{
-		while ((*str)[dist - 1] != '\0' && ft_isdigit((*str)[dist - 1]))
+		while (str[dist - 1] != '\0' && ft_isdigit(str[dist - 1]))
 			dist--;
-		*str = ft_insert_str(*str, "", dist, *starting_idx);
+		str = ft_insert_str(str, "", dist, *starting_idx);
 		*starting_idx = dist;
 	}
 	else
 	{
-		if ((*str)[dist + 1] == '&')
+		if (str[dist + 1] == '&')
 			dist++;
-		while ((*str)[dist + 1] != 0 && ft_isdigit((*str)[dist + 1]))
+		while (str[dist + 1] != 0 && ft_isdigit(str[dist + 1]))
 			dist++;
-		*str = ft_insert_str(*str, "", *starting_idx, *starting_idx + dist);
-		if (!*str)
-			ft_quit(14, "failed to allocate memory");
+		str = ft_insert_str(str, "", *starting_idx, *starting_idx + dist);
 	}
+	if (!str)
+		ft_quit(14, "failed to allocate memory");
+	return (str);
 }
