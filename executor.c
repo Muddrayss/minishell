@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 15:15:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 18:03:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,31 +30,33 @@ void executor(t_list *parsed_params)
         ft_quit(24, NULL);
     //TODO fare fork dove si chiama create_heredocs
     create_heredocs(parsed_params);
-    if (g_status == 130)
-        return ;
-    fds[2] = -1;
-    node = parsed_params;
-    while (node)
+    if (g_status != 130)
     {
-        content = (t_parser *)node->content;
-        if (pipe(fds) == -1)
-            ft_quit(18, NULL);
-        content->pid = fork();
-        if (content->pid == -1)
-            ft_quit(19, NULL);
-        if (content->pid == 0)
-            child(content, fds, node->next == NULL, original_stdin, heredoc_fileno);
-        else
-            fds[2] = parent(fds, &heredoc_fileno);
-        node = node->next;
+        set_sighandler(&newline_signal, SIG_IGN);
+        fds[2] = -1;
+        node = parsed_params;
+        while (node)
+        {
+            content = (t_parser *)node->content;
+            if (pipe(fds) == -1)
+                ft_quit(18, NULL);
+            content->pid = fork();
+            if (content->pid == -1)
+                ft_quit(19, NULL);
+            if (content->pid == 0)
+                child(content, fds, node->next == NULL, original_stdin, heredoc_fileno);
+            else
+                fds[2] = parent(fds, &heredoc_fileno);
+            node = node->next;
+        }
+        wait_for_children(parsed_params);
     }
-    wait_for_children(parsed_params);
     if (dup2(original_stdin, STDIN_FILENO) == -1 || reset_fd(&original_stdin) == -1)
         ft_quit(24, NULL);
 }
 
 static int parent(int fds[], int *heredoc_fileno)
-{    
+{
     if (reset_fd(&fds[1]) == -1 || (fds[2] != -1 && reset_fd(&fds[2]) == -1))
         ft_quit(29, NULL);
     return ((*heredoc_fileno)++, fds[0]);
@@ -85,6 +87,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
             ft_quit(26, NULL);
         if (pid == 0)
         {
+            set_sighandler(&display_and_quit_signal, &hide_and_abort_signal);
             replace_env_vars(&new_cmd_str);
             if (is_last_subcmd)
                 if (reset_fd(&fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || reset_fd(&fds[1]) == -1)
@@ -94,6 +97,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         }
         else
         {
+		    set_sighandler(SIG_IGN, SIG_IGN);
             heredoc_fileno2++;
             //TODO aggiornare la env var con ft_stenv leggendo da un file
             waitpid(pid, &g_status, 0);
@@ -107,6 +111,10 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
     }
     exit(g_status);
 }
+
+// nonno
+// -----------> figlio (int: ign | quit: handle)
+// --------------------------> nipote (cat)
 
 static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2)
 {

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 16:30:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 17:42:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ void create_heredocs(t_list *parsed_params)
                 heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2), O_WRONLY | O_CREAT | O_TRUNC, 0644);
                 fill_in_child(redir->filename, heredoc_fd);
                 if (g_status == 130)
-                    return ;
+                {
+                    reset_fd(&heredoc_fd);
+                    break ;
+                }
             }
             node = node->next;
         }
@@ -91,13 +94,13 @@ static void fill_in_child(char *limiter, int heredoc_fd)
         ft_quit(19, NULL);
     if (pid == 0)
     {
-        set_sighandler(SIG_DFL, &hide_signal);
+        set_sighandler(&display_and_quit_signal, SIG_IGN);
         fill_heredoc(limiter, heredoc_fd);
     }
     else
     {
         waitpid(pid, &status, 0);
-        if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+        if (WEXITSTATUS(status) == SIGINT)
             g_status = 130;
         else if (g_status == 130)
             g_status = 0;
