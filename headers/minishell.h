@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 22:17:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:23:10 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -60,8 +60,9 @@ void 		ft_quit(int id, char *msg);
 void 		free_data(t_data *data);
 void 		ft_parse_error(char token);
 bool		is_shell_space(char c);
-void		init_signals(void);
-void		init_in_cmd_signals(void);
+void		set_interactive_mode(void);
+void		set_heredoc_mode(void);
+void		set_default_mode(void);
 void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
 char		*ft_getenv(char *env_name);
 void		ft_setenv(char *name, char *value, int8_t overwrite);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 21:42:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:36:16 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,53 @@
 
 int	g_status;
 
-static void	init(char **envp, char **path);
+static void check_args(int argc, char **argv);
+static void	init_general(void);
+static void init_data(char **envp);
 static void minishell_loop(void);
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*path;
-	
-	(void)argc;
-	(void)argv;
-	init(envp, &path);
+	check_args(argc, argv);
+	init_data(envp);
+	init_general();
 	minishell_loop();
 }
 
-static void	init(char **envp, char **path)
+static void	check_args(int argc, char **argv)
+{
+	(void)argv;
+	if (argc > 1)
+	{
+		ft_putstr_fd("minishell: too many arguments\n", 2);
+		exit(1);
+	}
+}
+
+static void init_general(void)
+{
+	char	*path;
+	
+	path = getenv("PATH");
+	errno = 0;
+	g_status = 0;
+	exec_simple_cmd(path, "clear");
+	clean_heredocs();
+	exec_simple_cmd(path, "mkdir -p tmp");
+}
+
+static void	init_data(char **envp)
 {
 	t_data	*data;
 	
-	*path = getenv("PATH");
 	data = get_data();
-	errno = 0;
-	g_status = 0;
 	data->envp = ft_strarr_dup(envp);
 	data->cmd_args = NULL;
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
 	data->starting_dir = getenv("PWD");
-	exec_simple_cmd(*path, "clear");
-	clean_heredocs();
-	exec_simple_cmd(*path, "mkdir -p tmp");
 }
+
 
 static void	minishell_loop()
 {
@@ -52,7 +69,7 @@ static void	minishell_loop()
 
 	while (1)
 	{
-		init_signals();
+		set_interactive_mode();
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
 			ft_quit(123, "exit");
@@ -63,9 +80,11 @@ static void	minishell_loop()
 		params_head = parser(params_head);
 		if (!params_head)
 			continue ;
+		set_default_mode();
 		executor(params_head);
 	}
 }
+
 //va bene per comandi interni senza redirs, e senza here_doc e senza salvare l'exit status in data
 void	exec_simple_cmd(char *path, char *cmd_str)
 {
