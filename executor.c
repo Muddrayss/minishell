@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 13:11:31 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:39:09 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         new_redirs = ft_lstdup_until(content->redirs, &ph_redir_stop);  //fino a NULL o PH_REDIR_STOP
         if ((!new_cmd_str || new_cmd_str[0] == '\0') && !new_redirs) //se c'e' una redir la stringa e' vuota ma devi comunque eseguire
             break ;
+        printf("cmd_str: %s\n", new_cmd_str);
         is_last_subcmd = check_last_subcmd(content->cmd_str);
         pid = fork();
         if (pid == -1)
@@ -83,10 +84,10 @@ static void child(t_parser *content, int fds[], bool is_last, int original_stdin
         if (pid == 0)
         {
             replace_env_vars(&new_cmd_str);
-            exec_redirs(new_redirs, heredoc_fileno, heredoc_fileno2);
             if (is_last_subcmd)
                 if (reset_fd(&fds[0]) == -1 || (!is_last && dup2(fds[1], STDOUT_FILENO) == -1) || reset_fd(&fds[1]) == -1)
                     ft_quit(27, NULL);
+            exec_redirs(new_redirs, heredoc_fileno, heredoc_fileno2);
             exec(ft_getenv("PATH"), new_cmd_str);
         }
         else
@@ -128,12 +129,12 @@ static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2)
             redir->fds[1] = open(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (redir->fds[1] == -1 || redir->fds[0] == -1)
             ft_quit(22, NULL);
+        if (redir->fds[0] != -42 && ((dup2(redir->fds[0], STDIN_FILENO) == -1 || (redir->fds[0] != STDIN_FILENO && reset_fd(&redir->fds[0]) == -1))))
+            ft_quit(26, NULL);
+        if (redir->fds[1] != -42 && ((dup2(redir->fds[1], STDOUT_FILENO) == -1 || (redir->fds[1] != STDOUT_FILENO && reset_fd(&redir->fds[1]) == -1))))
+            ft_quit(24, NULL);
         node = node->next;
     }
-    if ((dup2(redir->fds[0], STDIN_FILENO) == -1 || (redir->fds[0] != STDIN_FILENO && reset_fd(&redir->fds[0]) == -1)))
-        ft_quit(26, NULL);
-    if (dup2(redir->fds[1], STDOUT_FILENO) == -1 || (redir->fds[1] != STDOUT_FILENO && reset_fd(&redir->fds[1]) == -1))
-        ft_quit(24, NULL);
 }
 
 static void wait_for_children(t_list *parsed_params)
