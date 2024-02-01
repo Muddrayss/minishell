@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 14:59:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:15:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ void executor(t_list *parsed_params)
     original_stdin = dup(STDIN_FILENO);
     if (original_stdin == -1)
         ft_quit(24, NULL);
-    //fare fork dove si chiama create_heredocs
+    //TODO fare fork dove si chiama create_heredocs
     create_heredocs(parsed_params);
+    if (g_status == 130)
+        return ;
     fds[2] = -1;
     node = parsed_params;
     while (node)

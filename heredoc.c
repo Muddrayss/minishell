@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 13:33:49 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:30:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static char    *get_heredoc_filename(int id1, int id2);
+static void     fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);
 
 void create_heredocs(t_list *parsed_params)
@@ -38,9 +39,9 @@ void create_heredocs(t_list *parsed_params)
             if (redir->type == REDIR_HEREDOC)
             {
                 heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                if (heredoc_fd == -1)
-                    ft_quit(96, NULL);
-                fill_heredoc(redir->filename, heredoc_fd);
+                fill_in_child(redir->filename, heredoc_fd);
+                if (g_status == 130)
+                    return ;
             }
             node = node->next;
         }
@@ -77,6 +78,32 @@ static char    *get_heredoc_filename(int id1, int id2)
     return (free(idx1), free(idx2), filename);
 }
 
+static void fill_in_child(char *limiter, int heredoc_fd)
+{
+    pid_t   pid;
+    int     status;
+
+    if (heredoc_fd == -1)
+        ft_quit(96, NULL);
+    set_sighandler(SIG_IGN, SIG_IGN);
+    pid = fork();
+    if (pid == -1)
+        ft_quit(19, NULL);
+    if (pid == 0)
+    {
+        set_sighandler(SIG_DFL, &hide_signal);
+        fill_heredoc(limiter, heredoc_fd);
+    }
+    else
+    {
+        waitpid(pid, &status, 0);
+        if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+            g_status = 130;
+        else if (g_status == 130)
+            g_status = 0;
+    }
+}
+
 static void fill_heredoc(char *limiter, int fd)
 {
     char    *str;
@@ -85,7 +112,6 @@ static void fill_heredoc(char *limiter, int fd)
   
     str = NULL;
     limiter_len = ft_strlen(limiter);
-    set_heredoc_mode();
     while (g_status != 130)
     {
         str = readline("> ");
@@ -104,6 +130,7 @@ static void fill_heredoc(char *limiter, int fd)
         str = NULL; //per evitare la double free
     }
     free(str);
+    exit(0);
 }
 
 int get_matching_heredoc(int id1, int id2)

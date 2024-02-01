@@ -3,65 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/01 13:35:28 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:30:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void sig_handler_interactive_mode(int signo) {
-    if (signo == SIGINT) {
-        g_status = 130;
-        ft_putstr_fd("\n", STDOUT_FILENO);
-        rl_on_new_line();
-        rl_replace_line("", 0);
-        rl_redisplay();
-    } else if (signo == SIGQUIT)
-	{
-        g_status = 131;
-        ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO); // Erase "^\" from terminal
-    }
-}
-
-static void sig_handler_heredoc(int signo) {
-    if (signo == SIGINT) {
-        g_status = 130;
-      	ft_putstr_fd("\n", STDOUT_FILENO);
-		rl_done = 1;
-    }
-   	else if (signo == SIGQUIT)
-	{
-		g_status = 131;
-		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
-	}
-}
-
-void set_interactive_mode(void)
+void    set_sighandler(void *handle_sigint, void *handle_sigquit) //int flags da shiftare
 {
-	// rl_catch_signals = 1;
-    if (signal(SIGINT, sig_handler_interactive_mode) == SIG_ERR)
-        ft_quit(SIGINT_ERROR, "Signal error.");
-    if (signal(SIGQUIT, sig_handler_interactive_mode) == SIG_ERR)
-        ft_quit(SIGQUIT_ERROR, "Signal error.");
+    if (signal(SIGINT, handle_sigint) == SIG_ERR)
+        ft_quit(25, NULL);
+    if (signal(SIGQUIT, handle_sigquit) == SIG_ERR)
+        ft_quit(26, NULL);
 }
 
-void set_heredoc_mode(void)
+//TODO da gestire ctrl+'\' in interactive mode che deve fare il core dump
+
+//per queste 3 funzioni sarebbe figo fare lo shift dei bit come in open
+//rendere quindi queste statiche e scegliere quale chiamare in base alla flag nel set_sighandler
+void    display_signal(int signo) //O_DISPLAY
 {
-    // rl_catch_signals = 0;
-    if (signal(SIGINT, sig_handler_heredoc) == SIG_ERR)
-        ft_quit(SIGINT_ERROR, "Signal error.");
-    if (signal(SIGQUIT, sig_handler_heredoc) == SIG_ERR)
-        ft_quit(SIGQUIT_ERROR, "Signal error.");
+    g_status = signo;
+    ft_putstr_fd("\n", STDOUT_FILENO);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();   
 }
 
-void set_default_mode(void)
+void    hide_signal(int signo) //O_HIDE
 {
-    // rl_catch_signals = 1;
-    if (signal(SIGINT, SIG_DFL) == SIG_ERR)
-        ft_quit(SIGINT_ERROR, "Signal error.");
-    if (signal(SIGQUIT, SIG_DFL) == SIG_ERR)
-        ft_quit(SIGQUIT_ERROR, "Signal error.");
+    g_status = signo;
+    ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
 }
+
+// void interactive_mode(int signo)
+// {
+//     if (signo == SIGINT)
+//     {
+//         g_status = 130;
+//         ft_putstr_fd("\n", STDOUT_FILENO);
+//         rl_on_new_line();
+//         rl_replace_line("", 0);
+//         rl_redisplay();
+//     }
+//     else if (signo == SIGQUIT)
+// 	{
+//         g_status = 131;
+//         ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
+//     }
+// }
+
+// void heredoc_mode(int signo)
+// {
+//     if (signo == SIGINT)
+//     {
+// 		ft_putstr_fd("\b\b  \b\b\n", STDOUT_FILENO);
+//         exit(130);
+//     }
+//    	else if (signo == SIGQUIT)
+// 	{
+// 		g_status = 131;
+// 		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
+// 	}
+// }

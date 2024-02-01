@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 14:38:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 15:49:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ static void	replace_placeholders(t_list *parsed_params)
 					|| redir->type == REDIR_OUTPUT_FD
 					|| redir->type == REDIR_APPEND_FD)
 					content_par->cmd_str = remove_num(content_par->cmd_str, &i, RIGHT);
-				printf("cmd_str1: %s\n", content_par->cmd_str);
 			}
 			i++;
 		}

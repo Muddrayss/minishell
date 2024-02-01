@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 13:36:16 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:17:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	minishell_loop()
 
 	while (1)
 	{
-		set_interactive_mode();
+		set_sighandler(&display_signal, &hide_signal);
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
 			ft_quit(123, "exit");
@@ -80,7 +80,7 @@ static void	minishell_loop()
 		params_head = parser(params_head);
 		if (!params_head)
 			continue ;
-		set_default_mode();
+		set_sighandler(SIG_DFL, SIG_DFL);
 		executor(params_head);
 	}
 }
