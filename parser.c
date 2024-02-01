@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 13:06:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:40:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static void		replace_placeholders(t_list *parsed_params);
-static t_token	get_token(t_list *node);
+static char	get_token(t_list *node);
 static void		add_soft_separator(t_parser *content_par, char placeholder);
 
 t_list	*parser(t_list *lexered_params)
@@ -131,7 +131,7 @@ static void	replace_placeholders(t_list *parsed_params)
 }
 
 //potrebbe essere una macro
-static t_token	get_token(t_list *node)
+static char	get_token(t_list *node)
 {
 	return (((t_lexer *)node->content)->token);
 }

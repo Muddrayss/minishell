@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:49:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:40:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	handle_redir_l(t_list *lexered_params, t_parser *content_par)
 {
 	t_redir				*redir_content;
 	t_lexer				*next_cmd_elem;
-	t_token				next_token;
+	char				next_token;
 	unsigned int		token_streak;
 	static const char	placeholder = PH_REDIR;
 
@@ -67,7 +67,7 @@ bool	handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *co
 {
 	t_redir				*redir_content;
 	t_lexer				*next_cmd_elem;
-	t_token				next_token;
+	char				next_token;
 	unsigned int		token_streak;
 	static const char	placeholder
 		 = PH_REDIR;

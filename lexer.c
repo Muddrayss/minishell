@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 22:13:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:40:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static t_token  lexer_get_token(char c);
+static char      lexer_get_token(char c);
 static bool 	is_token(char *str, int *idx);
 static t_lexer  *new_content_lexer(void);
 
@@ -67,11 +67,11 @@ static  t_lexer *new_content_lexer(void)
     return (content);
 }
 
-static t_token lexer_get_token(char c)
+static char     lexer_get_token(char c)
 {
     int8_t         	i;
 	static uint8_t	n_tokens;
-    static int8_t   tokens[7] = {PIPE, REDIR_R, REDIR_L, SEMICOLON, QUOTE, DQUOTE, AND};
+    static int8_t   tokens[9] = {PIPE, REDIR_R, REDIR_L, SEMICOLON, QUOTE, DQUOTE, AND, PARENTHESIS_L, PARENTHESIS_R};
     
 	n_tokens = sizeof(tokens) / sizeof(tokens[0]);
     i = -1;

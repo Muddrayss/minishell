@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 22:11:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:39:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,20 @@
 # include <stdbool.h>
 # include <stdint.h>
 
-typedef enum e_token
-{
-	PIPE = '|',
-	REDIR_R = '>',
-	REDIR_L = '<',
-	SEMICOLON = ';',
-	QUOTE = '\'',
-	DQUOTE = '"',
-	AND = '&',
-}				t_token;
+# define PIPE '|'
+# define REDIR_R '>'
+# define REDIR_L '<'
+# define SEMICOLON ';'
+# define QUOTE '\''
+# define DQUOTE '"'
+# define AND '&'
+# define PARENTHESIS_L '('
+# define PARENTHESIS_R ')'
 
 typedef struct s_lexer
 {
 	char	*cmd;
-	t_token	token;
+	char	token;
 }				t_lexer;
 
 t_list			*lexer(char *input);

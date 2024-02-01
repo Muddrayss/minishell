@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 13:54:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 21:13:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:40:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static unsigned int	get_x_between_pipes(t_list *lexered_params, uint8_t flag);
 
-unsigned int	check_token_streak(t_token *next_token, t_list *lexered_params)
+unsigned int	check_token_streak(char *next_token, t_list *lexered_params)
 {
 	unsigned int	token_streak;
 	t_lexer			*elem;
