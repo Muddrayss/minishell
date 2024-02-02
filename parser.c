@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 13:14:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 14:16:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void     fill_redir_append(t_list **redirs, char *str, uint8_t i);
 static void     fill_redir_output(t_list **redirs, char *str, uint8_t i);
 static t_redir  *init_redir(void);
 
-t_list	*parser(t_list *params_head)
+t_tree	*parser(t_list *params_head)
 {
     t_tree   *tree_head;
     t_list   *tree_tmp;

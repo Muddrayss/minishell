@@ -6,20 +6,17 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 11:41:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 14:16:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
 
-typedef struct s_list
-{
-    void			*content;
-    struct s_list	*next;
-    struct s_list	*prev;
-}					t_list;
-
+//str utils
+int     ft_strlen(char *str);
+void    ft_putstr_fd(char *s, int fd);
+char	**ft_split(const char *s, char c);
 //list utils
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_back(t_list **lst, t_list *new);

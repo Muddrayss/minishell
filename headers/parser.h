@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 12:47:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 13:55:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define PARSER_H
 
 # define CMD 				0
-# define SEMICOLON			1
+# define SEMICOLON			';'
 # define OR 				2
 # define AND 				3
 # define PIPELINE 			4
@@ -32,12 +32,10 @@
 # define BEFORE 0
 # define AFTER  1
 
-typedef struct s_redir
-{
-	int8_t		type;
-	int			fds[2];
-	char 		*filename; // o limiter in caso dell heredoc
-}t_redir;
+typedef struct s_redir		t_redir;
+typedef struct s_command	t_cmd;
+typedef struct s_branches 	t_branches;
+typedef struct s_tree		t_tree;
 
 typedef struct s_command
 {
@@ -57,5 +55,14 @@ typedef struct s_tree
 	t_cmd		cmd;
 	t_branches	branches;
 }t_tree;
+
+typedef struct s_redir
+{
+	int8_t		type;
+	int			fds[2];
+	char 		*filename; // o limiter in caso dell heredoc
+}t_redir;
+
+t_list	*parser(t_list *params_head);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 17:32:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 13:59:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static void	init_data(char **envp)
 static void	minishell_loop()
 {
 	char		*input;
-	t_list		*params_head;
+	t_list		*lexered_params;
+	t_tree		*execution_tree;
 
 	while (1)
 	{
@@ -76,11 +77,11 @@ static void	minishell_loop()
 		if (input[0] == '\0')
 			continue ;
 		add_history(input);
-		params_head = lexer(input);
-		params_head = parser(params_head);
-		if (!params_head)
+		lexered_params = lexer(input);
+		execution_tree = parser(lexered_params);
+		if (!execution_tree)
 			continue ;
-		executor(params_head);
+		executor(execution_tree);
 	}
 }
 
