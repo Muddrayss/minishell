@@ -6,14 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 16:12:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 11:42:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -30,6 +29,9 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include <stdbool.h>
+# include <stdint.h>
+# include "utils.h"
 
 typedef struct s_data
 {

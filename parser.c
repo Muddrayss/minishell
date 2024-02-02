@@ -6,132 +6,267 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 15:49:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 13:14:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void		replace_placeholders(t_list *parsed_params);
-static char	get_token(t_list *node);
-static void		add_soft_separator(t_parser *content_par, char placeholder);
+static void     fill_tree(t_list *params_head, t_tree **tree_head);
+static t_cmd    *init_cmd(char *cmd_str);
+static void     clear_redirs(char *cmd_str);
+static void     remove_nums(char *cmd_str, uint8_t i);
+static uint8_t  remove_filename(char *cmd_str, uint8_t i);
+static t_list   *fill_redirs(char *cmd_str);
+static void     fill_redir_input(t_list **redirs, char *str, uint8_t i);
+static void     fill_redir_heredoc(t_list **redirs, char *str, uint8_t i);
+static void     fill_redir_append(t_list **redirs, char *str, uint8_t i);
+static void     fill_redir_output(t_list **redirs, char *str, uint8_t i);
+static t_redir  *init_redir(void);
 
-t_list	*parser(t_list *lexered_params)
+t_list	*parser(t_list *params_head)
 {
-	t_data			*data;
-	t_parser		*content_par;
-	t_list			*parsed_params;
-	t_list			*last_node;
-	t_list			*node;
-	int8_t			to_skip;
-	t_lexer			*prev_cmd_elem;
-	t_lexer			*content_lex;
+    t_tree   *tree_head;
+    t_list   *tree_tmp;
+    t_list   *params_tmp;
+    t_lexer  *elem;
 
-	//TODO controllare la token streak qui incima in vece che in handle_redir
-
-	data = get_data();
-	if (!lexered_params)
-		return (NULL);
-	ft_lstdel_if(&lexered_params, &is_empty_cmd, &del_content_lexer);
-	last_node = ft_lstlast(lexered_params);
-	if (last_node && get_token(last_node))
-		return(ft_parse_error(get_token(last_node)), NULL);
-	// TODO gestire caso tipo "> >" e "< <"
-	node = lexered_params;
-	parsed_params = NULL;
-	prev_cmd_elem = NULL;
-	content_par = new_elem(node);
-	while (node)
-	{
-		to_skip = 1;
-		content_lex = (t_lexer *)node->content;
-		if (content_lex->cmd)
-		{
-			ft_strcat(content_par->cmd_str, content_lex->cmd);
-			prev_cmd_elem = content_lex;
-			node = node->next;
-		}
-		else if (content_lex->token)
-		{
-			if (content_lex->token == PIPE)
-			{
-				if (node->next && get_token(node->next) == PIPE)
-					add_soft_separator(content_par, PH_OR);
-				else
-				{
-					ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
-					node = node->next;
-					content_par = new_elem(node);
-					continue ;
-				}
-				node = node->next;
-			}				
-			else if (content_lex->token == REDIR_L)
-				to_skip += handle_redir_l(node, content_par);
-			else if (content_lex->token == REDIR_R)
-				to_skip += handle_redir_r(node, prev_cmd_elem, content_par);
-			else if (content_lex->token == SEMICOLON)
-				add_soft_separator(content_par, PH_SEMICOLON);
-			else if (content_lex->token == AND)
-				add_soft_separator(content_par, PH_AND);
-			// TODO valutare se fare qualche eccezione per i token di fila;
-			// TODO se ci sono piu token di fila fare un controllo. ad esempio non puo esserci un | subito dopo un >
-			while (to_skip-- > 0)
-				node = node->next;
-		}
-	}
-	ft_lstadd_back(&parsed_params, ft_lstnew(content_par));
-	ft_lstclear(&lexered_params, &del_content_lexer);
-	data->lexered_params = NULL;
-	return (replace_placeholders(parsed_params), parsed_params);
+    merge_separators(params_head);
+    // tree = malloc(sizeof(t_tree * ) * (ft_lstsize(params_head) + 1));
+    fill_tree(params_head, &tree_head);
+    return (tree_head);
 }
 
-static void	add_soft_separator(t_parser *content_par, char placeholder)
+static void     fill_tree(t_list *params_head, t_tree **tree_head)
 {
-	static char	ph_redir_stop = PH_REDIR_STOP;
-	char		ph;
+    t_lexer  *elem;
+    t_cmd    *elem_cmd;
+    int8_t   flag;
 
-	ph = placeholder;
-	ft_strlcat(content_par->cmd_str, &ph, ft_strlen(content_par->cmd_str) + 2);
-	ft_lstadd_back(&content_par->redirs, ft_lstnew(&ph_redir_stop));
+    elem = (t_lexer *)params_head->content;
+    if (elem->cmd_str || elem->token == SUBSHELL_END)
+    {
+        fill_tree(params_head->next, (*tree_head)->branches.branches_list);
+        elem_cmd = init_cmd(elem->cmd_str); //deve fare le redirs
+        ft_treeadd_below((*tree_head)->branches.branches_list, ft_treenew(elem->token, elem_cmd));
+        return ;
+    }
+    ft_treeadd_below(tree_head, ft_treenew(elem->token, NULL));
+    fill_tree(params_head->next, (*tree_head)->branches.branches_list);
 }
 
-static void	replace_placeholders(t_list *parsed_params)
+static t_cmd    *init_cmd(char *cmd_str)
 {
-	t_list			*node;
-	t_parser		*content_par;
-	t_redir			*redir;
-	unsigned int	i;
+    t_cmd   *cmd;
 
-	node = parsed_params;
-	while (node)
-	{
-		content_par = (t_parser *)node->content;
-		i = 0;
-		while (content_par->cmd_str[i] != '\0')
-		{
-			if (content_par->cmd_str[i] == PH_REDIR)
-			{
-				redir = (t_redir *)content_par->redirs->content;
-				if (redir->type == REDIR_APPEND || redir->type == REDIR_OUTPUT)
-					content_par->cmd_str = remove_num(content_par->cmd_str, &i, LEFT);
-				if (redir->type == REDIR_INPUT || redir->type == REDIR_APPEND
-					|| redir->type == REDIR_OUTPUT || redir->type == REDIR_HEREDOC)
-					content_par->cmd_str = remove_filename(content_par->cmd_str, i);
-				else if (redir->type == REDIR_INPUT_FD
-					|| redir->type == REDIR_OUTPUT_FD
-					|| redir->type == REDIR_APPEND_FD)
-					content_par->cmd_str = remove_num(content_par->cmd_str, &i, RIGHT);
-			}
-			i++;
-		}
-		node = node->next;
-	}
+    if (!cmd_str)
+        return (NULL);
+    cmd = malloc(sizeof(t_cmd));
+    cmd->redirs = fill_redirs(cmd_str);
+    clear_redirs(cmd_str);
+    cmd->cmd_str = cmd_str;
+    return (cmd);
+}
+ //rimpiazza anche tab e \n con spazi (cosi' dopo si potra' fare split con spazi)
+static void     clear_redirs(char *cmd_str)
+{
+    uint8_t i;
+
+    i = 0;
+    while (cmd_str[i])
+    {
+        if (cmd_str[i] == '<' || cmd_str[i] == '>')
+        {
+            cmd_str[i] = ' ';
+            remove_nums(cmd_str, i);
+            i = remove_filename(cmd_str, i);
+        }
+        if (is_shell_space(cmd_str[i])) //NON ELSE IF perche' remove filename incrementa la i uno di troppo
+            cmd_str[i] = ' ';
+        i++;
+    }
 }
 
-//potrebbe essere una macro
-static char	get_token(t_list *node)
+static void     remove_nums(char *cmd_str, uint8_t i)
 {
-	return (((t_lexer *)node->content)->token);
+    uint8_t j;
+
+    j = i;
+    i += 1;
+    j -= 1;
+    if (cmd_str[i] == '&')
+        i++;
+    while (cmd_str[i] && ft_isdigit(cmd_str[i]))
+        cmd_str[i++] = ' ';
+    while (cmd_str[j] && ft_isdigit(cmd_str[j]))
+        cmd_str[j--] = ' ';
 }
 
+static uint8_t  remove_filename(char *cmd_str, uint8_t i)
+{
+    while (cmd_str[i] && is_shell_space(cmd_str[i]))
+        cmd_str[i++] = ' ';
+    while (cmd_str[i] && !is_shell_space(cmd_str[i]))
+        cmd_str[i++] = ' ';
+    return (i);
+}
+
+static t_list  *fill_redirs(char *cmd_str)
+{
+    t_list      *redirs;
+    uint8_t     i;
+
+    i = 0;
+    while (cmd_str[i])
+    {
+        redirs = malloc(sizeof(t_list));
+        if (cmd_str[i] == '<')
+        {
+            if (cmd_str[i + 1] == '<')
+                fill_redir_heredoc(&redirs, cmd_str, i++);
+            else
+                fill_redir_input(&redirs, cmd_str, i);
+        }
+        if (cmd_str[i] == '>')
+        {
+            if (cmd_str[i + 1] == '>')
+                fill_redir_append(&redirs, cmd_str, i++);
+            else
+                fill_redir_output(&redirs, cmd_str, i);
+        }
+        i++;
+    }
+    return (redirs);
+}
+
+static void    fill_redir_input(t_list **redirs, char *str, uint8_t i)
+{
+    t_redir *node;
+
+    node = init_redir();
+    node->type = REDIR_INPUT_FD;
+    node->fds[0] = get_num(str, i, AFTER);
+    if (node->fds[0] == -42)
+    {
+        node->type = REDIR_INPUT;
+        node->filename = get_filename(str, i);
+    }
+    ft_lstadd_back(redirs, ft_lstnew(node));
+}
+
+static void     fill_redir_heredoc(t_list **redirs, char *str, uint8_t i)
+{
+    t_redir *node;
+
+    node = init_redir();
+    node->type = REDIR_HEREDOC;
+    node->filename = get_filename(str, i);
+    ft_lstadd_back(redirs, ft_lstnew(node));
+}
+
+static void     fill_redir_append(t_list **redirs, char *str, uint8_t i)
+{
+    t_redir *node;
+
+    node = init_redir();
+    node->type = REDIR_APPEND_FD;
+    node->fds[1] = get_num(str, i, AFTER);
+    node->fds[0] = get_num(str, i, BEFORE);
+    if (node->fds[1] == -42)
+    {
+        node->type = REDIR_APPEND;
+        node->filename = get_filename(str, i);
+    }
+    if (node->fds[0] == -42)
+        node->fds[0] = STDOUT_FILENO;
+    ft_lstadd_back(redirs, ft_lstnew(node));
+}
+
+static void     fill_redir_output(t_list **redirs, char *str, uint8_t i)
+{
+    t_redir *node;
+
+    node = init_redir();
+    node->type = REDIR_OUTPUT_FD;
+    node->fds[1] = get_num(str, i, AFTER);
+    node->fds[0] = get_num(str, i, BEFORE);
+    if (node->fds[1] == -42)
+    {
+        node->type = REDIR_OUTPUT;
+        node->filename = get_filename(str, i);
+    }
+    if (node->fds[0] == -42)
+        node->fds[0] = STDOUT_FILENO;
+    ft_lstadd_back(redirs, ft_lstnew(node));
+}
+
+static t_redir *init_redir(void)
+{
+    t_redir *redir;
+
+    redir = malloc(sizeof(t_redir));
+    redir->fds[0] = -42;
+    redir->fds[1] = -42;
+    redir->filename = NULL;
+    return (redir);
+}
+
+static void merge_separators(t_list **head)
+{
+    t_list  *node;
+    t_lexer *elem;
+    t_lexer *next_elem;
+    t_lexer *prev_elem;
+
+    node = *head;
+    while (node)
+    {
+        elem = (t_lexer *)node->content;
+        next_elem = (t_lexer *)node->next->content;
+        prev_elem = (t_lexer *)node->prev->content;
+        if (elem->token && is_separator(elem->token))
+        {
+            if (elem->token == AMPERSAND)
+            {
+                if (next_elem->token == AMPERSAND)
+                {
+                    elem->token = AND;
+                    ft_lstdelone(head, node->next, del_content_lexer);
+                }
+                else
+                    ft_strcat(elem->cmd_str, "&");
+            }
+            else if (elem->token == PIPE)
+            {
+                if (next_elem->token == PIPE)
+                {
+                    elem->token = OR;
+                    ft_lstdelone(head, node->next, del_content_lexer);
+                }
+                else
+                    elem->token = PIPELINE;
+            }
+            else if (elem->token == PARENTHESIS_L)
+                elem->token = SUBSHELL_START;
+            else if (elem->token == PARENTHESIS_R)
+                elem->token = SUBSHELL_END;
+        }
+        node = node->next;
+    }
+}
+
+static uint8_t  count_separators(t_list *node)
+{
+    uint8_t n_separators;
+    t_lexer *elem;
+
+    n_separators = 0;
+    while (node)
+    {
+        elem = (t_lexer *)node->content;
+        if (elem->token)
+            n_separators++;
+        node = node->next;
+    }
+    return (n_separators);
+}
