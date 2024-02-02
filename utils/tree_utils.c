@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 09:09:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 11:36:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 16:49:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,17 @@ t_tree	*ft_tree_last(t_tree *head)
         return (NULL);
     last = ft_lstlast(head->branches->branches_list);
     return (last);
+}
+
+ft_tree_size(t_tree *node, int size)
+{
+    t_list    *branches_list;
+
+    if (!node)
+        return (size);
+    if (node)
+        size++;
+    branches_list = node->branches.branches_list;
+    ft_tree_size(branches_list->prev, size);
+    ft_tree_size(branches_list->next, size);
 }
