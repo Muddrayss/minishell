@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/01 18:04:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:28:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 void    set_sighandler(void *handle_sigint, void *handle_sigquit) //int8_t flags da shiftare
 {
-    if (signal(SIGINT, handle_sigint) == SIG_ERR)
-        ft_quit(25, NULL);
-    if (signal(SIGQUIT, handle_sigquit) == SIG_ERR)
-        ft_quit(26, NULL);
+    signal_p(SIGINT, handle_sigint);
+    signal_p(SIGQUIT, handle_sigquit);
 }
 
 //TODO dopo ctr+c in heredoc si rompe tutto
@@ -54,34 +52,3 @@ void newline_signal(int signo)
     (void)signo;
     ft_putstr_fd("\n", STDOUT_FILENO);
 }
-
-// void interactive_mode(int signo)
-// {
-//     if (signo == SIGINT)
-//     {
-//         g_status = 130;
-//         ft_putstr_fd("\n", STDOUT_FILENO);
-//         rl_on_new_line();
-//         rl_replace_line("", 0);
-//         rl_redisplay();
-//     }
-//     else if (signo == SIGQUIT)
-// 	{
-//         g_status = 131;
-//         ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
-//     }
-// }
-
-// void heredoc_mode(int signo)
-// {
-//     if (signo == SIGINT)
-//     {
-// 		ft_putstr_fd("\b\b  \b\b\n", STDOUT_FILENO);
-//         exit(130);
-//     }
-//    	else if (signo == SIGQUIT)
-// 	{
-// 		g_status = 131;
-// 		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
-// 	}
-// }

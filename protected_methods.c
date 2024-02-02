@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:24:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:27:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,10 @@ pid_t    fork_p(void)
     if (pid == -1)
         ft_quit(8, NULL);
     return (pid);
+}
+
+void    signal_p(int signum, void (*handler)(int))
+{
+    if (signal(signum, handler) == SIG_ERR)
+        ft_quit(8, NULL);
 }

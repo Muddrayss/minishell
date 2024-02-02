@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:13:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:26:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ void    wait_p(int *status);
 void    waitpid_p(pid_t pid, int *status, int options);
 void    execve_p(const char *path, char *const argv[], char *const envp[]);
 void    fork_p(void);
+void    signal_p(int signum, void (*handler)(int));
 
 #endif
