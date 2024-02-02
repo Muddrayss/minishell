@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:43:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:45:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int    open_p(char *path, int flags, int8_t permissions)
     fd = open(path, flags, permissions);
     if (fd == -1)
         ft_quit(8, NULL);
-    return (*fd);
+    return (fd);
 }
 
 void    pipe_p(int pipefd[2])
