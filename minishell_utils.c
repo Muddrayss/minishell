@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 22:16:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:29:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,17 +222,4 @@ t_data *get_data(void)
 	static t_data data;
 
 	return (&data);
-}
-
-int8_t	reset_fd(int *fd)
-{
-	int8_t	ret;
-
-	ret = 0;
-	if (*fd != -1)
-	{
-		ret = close(*fd);
-		*fd = -1;
-	}
-	return (ret);
 }
