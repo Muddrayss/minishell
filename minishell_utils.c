@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:44:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:48:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void	ft_quit(int id, char *msg)
 	dprintf(2, RED "error : %d\n" DEFAULT, id); //to remove
 	if (errno != EINTR)
 	{
-		while (open_p("./tmp/print_sem", O_CREAT | O_EXCL, 0666) == EEXIST)
+		while (open("./tmp/print_sem", O_CREAT | O_EXCL, 0666) == EEXIST)
 			;
 		if (!msg)
 			ft_putstr_fd(strerror(errno), 2);

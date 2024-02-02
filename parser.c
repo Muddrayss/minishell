@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 14:18:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:53:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void     fill_tree(t_list *params_head, t_tree **tree_head)
     if (elem->cmd_str || elem->token == SUBSHELL_END)
     {
         fill_tree(params_head->next, (*tree_head)->branches.branches_list);
-        elem_cmd = init_cmd(elem->cmd_str); //deve fare le redirs
+        elem_cmd = init_cmd(elem->cmd_str);
         ft_treeadd_below((*tree_head)->branches.branches_list, ft_treenew(elem->token, elem_cmd));
         return ;
     }

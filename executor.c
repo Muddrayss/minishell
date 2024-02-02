@@ -6,11 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:17:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 18:56:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
+
+static void     launch_commands(t_tree *parsed_params, int8_t *flag);
+static void     exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2);
+static void     wait_for_children(t_tree *parsed_params);
+static uint32_t count_cmds(t_tree *node, int n_cmds);
 
 void    executor(t_tree *parsed_params)
 {
@@ -31,64 +36,28 @@ void    executor(t_tree *parsed_params)
     reset_fd(&original_stdin);
 }
 
-static int parent(int fds[], int *heredoc_fileno)
+//inorder traversal search
+static void launch_commands(t_tree *parsed_params, t_tree *parent_leaf, int8_t *flag)
 {
-    reset_fd(&fds[1]);
-    reset_fd(&fds[2]);
-    return ((*heredoc_fileno)++, fds[0]);
-}
+    t_list  *branches_list;
 
-static void child(t_parser *content, int fds[], bool is_last, int original_stdin, int heredoc_fileno)
-{
-    char            *new_cmd_str;
-    t_list          *new_redirs;
-    static char     ph_redir_stop = PH_REDIR_STOP;
-    int             heredoc_fileno2;
-    pid_t           pid;
-    bool            is_last_subcmd;
-    char            separator;
-
-    if (fds[2] != -1)
-        dup2_p(fds[2], STDIN_FILENO);
-    reset_fd(&fds[2]);
-    heredoc_fileno2 = 1;
-    while (1)
-    {
-        pid = fork_p();
-        if (pid == 0)
-        {
-            set_sighandler(&display_and_quit_signal, &hide_and_abort_signal);
-            replace_env_vars(&new_cmd_str);
-            if (is_last_subcmd)
-            {
-                reset_fd(&fds[0]);
-                if (!is_last)
-                    dup2_p(fds[1], STDOUT_FILENO);
-                reset_fd(&fds[1]);
-            }
-            exec_redirs(new_redirs, heredoc_fileno, heredoc_fileno2);
-            exec(ft_getenv("PATH"), new_cmd_str);
-        }
-        else
-        {
-		    set_sighandler(SIG_IGN, SIG_IGN);
-            heredoc_fileno2++;
-            //TODO aggiornare la env var con ft_stenv leggendo da un file
-            waitpid_p(pid, &g_status, 0);
-            g_status = WEXITSTATUS(g_status);
-            free(new_cmd_str);
-            if ((separator == PH_AND && g_status != 0) || (separator == PH_OR && g_status == 0))
-                break ;
-            dup2_p(original_stdin, STDIN_FILENO);
-        }
-    }
-    exit(g_status);
+    if (!parsed_params)
+        return ;
+    branches_list = parsed_params->branches.branches_list;
+    launch_commands(branches_list->prev, parsed_params, flag);
+    *flag = SECOND_CMD;
+    if (parsed_params->type == CMD)
+        exec_cmd(parsed_params, parent_leaf, flag); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
+    if ((parsed_params->type == AND && g_status == 0) || (parsed_params->type == OR && g_status != 0))
+        return ;
+    launch_commands(branches_list->next, parsed_params, flag);
+    *flag = FIRST_CMD;
 }
 
 static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2)
 {
-    t_list          *node;
-    t_redir         *redir;
+    t_list  *node;
+    t_redir *redir;
 
     if (!redirs)
         return ;
