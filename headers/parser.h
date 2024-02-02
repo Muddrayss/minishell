@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 13:55:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 15:00:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,6 @@ typedef struct s_redir
 	char 		*filename; // o limiter in caso dell heredoc
 }t_redir;
 
-t_list	*parser(t_list *params_head);
+t_tree	*parser(t_list *params_head);
 
 #endif
