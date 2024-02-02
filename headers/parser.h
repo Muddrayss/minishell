@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 15:00:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 16:27:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_command
 typedef struct s_branches 
 {
 	uint8_t		n_branches;
-	t_tree		**branches_list;
+	t_list		**branches_list;
 }t_branches;
 
 typedef struct s_tree

@@ -6,54 +6,110 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 17:42:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 16:40:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static char    *get_heredoc_filename(int id1, int id2);
+static char     *get_heredoc_filename(int id1, int id2);
+static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs);
+static char     **get_limiters_array(t_tree *node);
+static void     fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i);
 static void     fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);
 
-void create_heredocs(t_list *parsed_params)
+void create_heredocs(t_tree *tree, uint32_t heredoc_fileno1)
 {
     int         heredoc_fd;
-    static int  heredoc_fileno1 = 1;
-    int         heredoc_fileno2;
-    t_parser    *content;
-    t_list      *node;
+    uint32_t    heredoc_fileno2;
     t_redir     *redir;
+    char        **limiters_array;
+    uint32_t    n_heredocs;
+    uint32_t    i;
 
+    i = 0;
+    limiters_array = get_limiters_array(tree);
+    while (limiters_array[n_heredocs])
+        n_heredocs++;
+    heredoc_fileno2 = 1;
     heredoc_fd = -1;
-    while (parsed_params)
+    while (i < n_heredocs)
     {
-        heredoc_fileno2 = 1;
-        content = (t_parser *)parsed_params->content;
-        node = content->redirs;
-        while (node)
+        heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (heredoc_fd == -1)
+            ft_quit(27, NULL);
+        fill_in_child(limiters_array[i++], heredoc_fd);
+        if (g_status == 130)
         {
-            if (*((char *)node->content) == PH_REDIR_STOP)
-                heredoc_fileno2++;
-            redir = (t_redir *)node->content;
-            if (redir->type == REDIR_HEREDOC)
-            {
-                heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                fill_in_child(redir->filename, heredoc_fd);
-                if (g_status == 130)
-                {
-                    reset_fd(&heredoc_fd);
-                    break ;
-                }
-            }
-            node = node->next;
+            reset_fd(&heredoc_fd);
+            break ;
         }
-        parsed_params = parsed_params->next;
-        heredoc_fileno1++;
     }
-    reset_fd(&heredoc_fd); //TODO creare funzione reset fd che chiude un fd se e' diverso da -1 e lo setta a -1 una volta chiuso
+    free_matrix(limiters_array);
+    reset_fd(&heredoc_fd);
 }
 
+static char    **get_limiters_array(t_tree *node)
+{
+    uint32_t    n_heredocs;
+    char        **limiters_array;
+
+    n_heredocs = count_heredocs(node, 0);
+    limiters_array = (char **)malloc(sizeof(char *) * (n_heredocs + 1));
+    if (!limiters_array)
+        ft_quit(8, "failed to allocate memory");
+    limiters_array[n_heredocs] = NULL;
+    fill_limiters_array(node, limiters_array, 0);
+    return (limiters_array);
+}
+
+static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
+{
+    t_list      *redirs;
+    t_list      *branches_list;
+    t_redir     *content;
+
+    if (!node)
+        return ;
+    if (node->type == CMD)
+    {
+        redirs = node->cmd.redirs;
+        while (redirs)
+        {
+            content = (t_redir *)redirs->content;
+            if (content->type == REDIR_HEREDOC)
+                limiters_array[i++] = content->filename;
+            redirs = redirs->next;
+        }
+    }
+    branches_list = node->branches.branches_list;
+    fill_limiters_array(branches_list->prev, limiters_array, i);
+    fill_limiters_array(branches_list->next, limiters_array, i);
+}
+
+static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs)
+{
+    t_list      *redirs;
+    t_list      *branches_list;
+
+    if (!node)
+        return (n_heredocs);
+    if (node->type == CMD)
+    {
+        redirs = node->cmd.redirs;
+        while (redirs)
+        {
+            n_heredocs += (((t_redir *)(redirs->content))->type == REDIR_HEREDOC);
+            redirs = redirs->next;
+        }
+    }
+    branches_list = node->branches.branches_list;
+    count_heredocs(branches_list->prev, n_heredocs);
+    count_heredocs(branches_list->next, n_heredocs);
+}
+
+//usare strcat invece che strlcat
 static char    *get_heredoc_filename(int id1, int id2)
 {
     t_data      *data;

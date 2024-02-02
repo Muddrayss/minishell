@@ -6,16 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 18:03:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 16:02:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
-
-static int parent(int fds[], int *heredoc_fileno);
-static void child(t_parser *content, int fds[], bool is_last, int original_stdin, int heredoc_fileno);
-static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2);
-static void wait_for_children(t_list *parsed_params);
 
 void executor(t_list *parsed_params)
 {
@@ -23,13 +18,13 @@ void executor(t_list *parsed_params)
     t_list          *node;
     int             fds[3];
     int             original_stdin;
-    static int      heredoc_fileno = 1;
+    static int      heredoc_fileno1 = 1;
 
     original_stdin = dup(STDIN_FILENO);
     if (original_stdin == -1)
         ft_quit(24, NULL);
     //TODO fare fork dove si chiama create_heredocs
-    create_heredocs(parsed_params);
+    create_heredocs(parsed_params, heredoc_fileno1);
     if (g_status != 130)
     {
         set_sighandler(&newline_signal, SIG_IGN);
