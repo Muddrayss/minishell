@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:19:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:24:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,12 @@ void    execve_p(const char *path, char *const argv[], char *const envp[])
         ft_quit(8, NULL);
 }
 
-void    fork_p(void)
+pid_t    fork_p(void)
 {
-    if (fork() == -1)
+    pid_t    pid;
+
+    pid = fork();
+    if (pid == -1)
         ft_quit(8, NULL);
+    return (pid);
 }
