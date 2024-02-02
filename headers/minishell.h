@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 11:42:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 13:24:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void 		ft_quit(int id, char *msg);
 void 		free_data(t_data *data);
 void 		ft_parse_error(char token);
 bool		is_shell_space(char c);
-void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
 char		*ft_getenv(char *env_name);
 void		ft_setenv(char *name, char *value, int8_t overwrite);
 int8_t		reset_fd(int *fd);

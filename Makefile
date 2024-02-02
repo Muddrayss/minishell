@@ -6,32 +6,25 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/01 16:12:18 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/02 13:24:49 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
-SRCS = minishell.c minishell_utils.c lexer.c signals.c parser.c parser_utils.c parser_redirs.c executor.c executor_utils.c heredoc.c
+SRCS = minishell.c minishell_utils.c lexer.c signals.c parser.c executor.c executor_utils.c heredoc.c $(addprefix utils/, lst_utils.c tree_utils.c)
 OBJS = $(SRCS:.c=.o)
-HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h)
+HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h utils.h colors.h)
 
-CC = cc -g #TODO remove -g
-CFLAGS = -Wall -Wextra -Werror
+CC = cc
+CFLAGS = -Wall -Wextra -Werror -g #TODO remove -g
 RM = rm -f
 
 NAME = minishell
 
-LIBFT = libft.a
-LIBFT_DIR = ./libft
-LIBFT_LIB = $(LIBFT_DIR)/$(LIBFT)
-
 all: $(NAME)
 
-$(LIBFT_LIB):
-	@make bonus -C $(LIBFT_DIR) >/dev/null
-
-$(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
+$(NAME): $(OBJS) $(HEADERS)
 	@mkdir -p tmp
 	@$(CC) $(CFLAGS) $(OBJS) -I $(INCLUDES_DIR) -L $(LIBFT_DIR) -lft -lreadline -o $(NAME)
 	@echo "Compilation of $(NAME) done!"
@@ -42,12 +35,10 @@ $(NAME): $(OBJS) $(LIBFT_LIB) $(HEADERS)
 clean:
 	@$(RM) -r tmp
 	@$(RM) $(OBJS)
-	@make clean -C $(LIBFT_DIR) >/dev/null
 	@echo "Cleaning of $(NAME) done!"
 
 fclean: clean
 	@$(RM) $(NAME)
-	@make fclean -C $(LIBFT_DIR) >/dev/null
 	@echo "Full cleaning of $(NAME) done!"
 
 leaks: all
