@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 13:41:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:07:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ extern int g_status;
 # include "executor.h"
 # include "signals.h"
 # include "utils.h"
+# include "protected_methods.h"
 
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
 

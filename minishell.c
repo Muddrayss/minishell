@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 15:04:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:19:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,7 @@ void	exec_simple_cmd(char *path, char *cmd_str)
 {
 	pid_t	pid;
 
-	pid = fork();
-	if (pid == -1)
-		ft_quit(99, NULL);
+	pid = fork_p();
 	if (pid == 0)
 		exec(path, cmd_str);
 	wait(NULL);

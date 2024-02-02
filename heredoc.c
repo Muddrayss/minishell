@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 16:40:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/02 17:19:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ void create_heredocs(t_tree *tree, uint32_t heredoc_fileno1)
     heredoc_fd = -1;
     while (i < n_heredocs)
     {
-        heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (heredoc_fd == -1)
-            ft_quit(27, NULL);
+        heredoc_fd = open_p(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
         fill_in_child(limiters_array[i++], heredoc_fd);
         if (g_status == 130)
         {
@@ -105,8 +103,9 @@ static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs)
         }
     }
     branches_list = node->branches.branches_list;
-    count_heredocs(branches_list->prev, n_heredocs);
-    count_heredocs(branches_list->next, n_heredocs);
+    n_heredocs += count_heredocs(branches_list->prev, n_heredocs);
+    n_heredocs += count_heredocs(branches_list->next, n_heredocs);
+    return (n_heredocs);
 }
 
 //usare strcat invece che strlcat
@@ -142,12 +141,8 @@ static void fill_in_child(char *limiter, int heredoc_fd)
     pid_t   pid;
     int     status;
 
-    if (heredoc_fd == -1)
-        ft_quit(96, NULL);
     set_sighandler(SIG_IGN, SIG_IGN);
-    pid = fork();
-    if (pid == -1)
-        ft_quit(19, NULL);
+    pid = fork_p();
     if (pid == 0)
     {
         set_sighandler(&display_and_quit_signal, SIG_IGN);
@@ -155,7 +150,7 @@ static void fill_in_child(char *limiter, int heredoc_fd)
     }
     else
     {
-        waitpid(pid, &status, 0);
+        waitpid_p(pid, &status, 0);
         if (WEXITSTATUS(status) == SIGINT)
             g_status = 130;
         else if (g_status == 130)
@@ -196,8 +191,6 @@ int get_matching_heredoc(int id1, int id2)
 {
     int fd;
 
-    fd = open(get_heredoc_filename(id1, id2), O_RDONLY, 0644);
-    if (fd == -1)
-        ft_quit(28, NULL);
+    fd = open_p(get_heredoc_filename(id1, id2), O_RDONLY, 0644);
     return (fd);
 }

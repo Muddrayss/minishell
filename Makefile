@@ -6,15 +6,15 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/02 13:55:58 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/02 17:23:17 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
-SRCS = minishell.c minishell_utils.c lexer.c signals.c parser.c executor.c executor_utils.c heredoc.c $(addprefix utils/, str_utils lst_utils.c tree_utils.c)
+SRCS = minishell.c minishell_utils.c lexer.c signals.c parser.c executor.c executor_utils.c heredoc.c protected_methods.c $(addprefix utils/, str_utils lst_utils.c tree_utils.c)
 OBJS = $(SRCS:.c=.o)
-HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h utils.h colors.h)
+HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h utils.h protected_methods.c colors.h)
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g #TODO remove -g
