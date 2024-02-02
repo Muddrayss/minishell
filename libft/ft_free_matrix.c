@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   ft_free_matrix.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:00:50 by craimond         ###   ########.fr       */
+/*   Created: 2024/01/29 21:21:44 by craimond          #+#    #+#             */
+/*   Updated: 2024/01/29 22:00:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+#include "libft.h"
 
-# define EXEC_FAILURE 1
-# define COMMAND_NOT_FOUND 127
+void	ft_free_matrix(char **matrix)
+{
+	unsigned int	i;
 
-void    executor(t_list *parsed_params);
-void    create_heredocs(t_list *parsed_params);
-int     get_matching_heredoc(int id1, int id2);
-void    replace_env_vars(char **str);
-bool    check_last_subcmd(char *cmd_str);
-
-#endif
+	i = 0;
+	while (matrix && matrix[i])
+		free(matrix[i++]);
+	free(matrix);
+}

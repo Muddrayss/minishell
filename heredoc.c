@@ -3,69 +3,145 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 16:17:45 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/01 17:42:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-bool is_heredoc(t_list *redirs)
-{
-    t_list  *node;
-    t_redir *redir;
+static char    *get_heredoc_filename(int id1, int id2);
+static void     fill_in_child(char *limiter, int heredoc_fd);
+static void     fill_heredoc(char *limiter, int fd);
 
-    node = redirs;
-    while (node)
+void create_heredocs(t_list *parsed_params)
+{
+    int         heredoc_fd;
+    static int  heredoc_fileno1 = 1;
+    int         heredoc_fileno2;
+    t_parser    *content;
+    t_list      *node;
+    t_redir     *redir;
+
+    heredoc_fd = -1;
+    while (parsed_params)
     {
-        redir = (t_redir *)node->content;
-        if (redir->type == REDIR_HEREDOC)
-            return (true);
-        node = node->next;
+        heredoc_fileno2 = 1;
+        content = (t_parser *)parsed_params->content;
+        node = content->redirs;
+        while (node)
+        {
+            if (*((char *)node->content) == PH_REDIR_STOP)
+                heredoc_fileno2++;
+            redir = (t_redir *)node->content;
+            if (redir->type == REDIR_HEREDOC)
+            {
+                heredoc_fd = open(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                fill_in_child(redir->filename, heredoc_fd);
+                if (g_status == 130)
+                {
+                    reset_fd(&heredoc_fd);
+                    break ;
+                }
+            }
+            node = node->next;
+        }
+        parsed_params = parsed_params->next;
+        heredoc_fileno1++;
     }
-    return (false);
+    reset_fd(&heredoc_fd); //TODO creare funzione reset fd che chiude un fd se e' diverso da -1 e lo setta a -1 una volta chiuso
 }
 
-char    *get_filename(int id, t_data *data)
+static char    *get_heredoc_filename(int id1, int id2)
 {
-    char        *idx;
-    char        *tmp;
+    t_data      *data;
+    char        *idx1;
+    char        *idx2;
     char        *filename;
+    size_t      size;
 
-    idx = ft_itoa(id);
-    tmp = ft_strjoin(data->starting_dir, "/tmp/.heredoc_");
-    filename = ft_strjoin(tmp, idx);
-    free(tmp);
-    free(idx);
+    data = get_data();
+    idx1 = ft_itoa(id1);
+    idx2 = ft_itoa(id2);
+    size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx1) + ft_strlen(idx2) + 2;
+    filename = ft_calloc(size, sizeof(char));
     if (!filename)
-        ft_quit(22, "failed to allocate memory", data);
-    return (filename);
+    {
+        free(idx1);
+        free(idx2);
+        ft_quit(22, "failed to allocate memory");
+    }
+    ft_strlcpy(filename, data->starting_dir, size);
+    ft_strlcat(filename, "/tmp/.heredoc_", size);
+    ft_strlcat(filename, idx1, size);
+    ft_strlcat(filename, ".", size);
+    ft_strlcat(filename, idx2, size);
+    return (free(idx1), free(idx2), filename);
 }
 
-void fill_heredoc(char *limiter, int fd)
+static void fill_in_child(char *limiter, int heredoc_fd)
+{
+    pid_t   pid;
+    int     status;
+
+    if (heredoc_fd == -1)
+        ft_quit(96, NULL);
+    set_sighandler(SIG_IGN, SIG_IGN);
+    pid = fork();
+    if (pid == -1)
+        ft_quit(19, NULL);
+    if (pid == 0)
+    {
+        set_sighandler(&display_and_quit_signal, SIG_IGN);
+        fill_heredoc(limiter, heredoc_fd);
+    }
+    else
+    {
+        waitpid(pid, &status, 0);
+        if (WEXITSTATUS(status) == SIGINT)
+            g_status = 130;
+        else if (g_status == 130)
+            g_status = 0;
+    }
+}
+
+static void fill_heredoc(char *limiter, int fd)
 {
     char    *str;
     size_t  str_len;
     size_t  limiter_len;
   
-    g_signals.in_heredoc = 1;
     str = NULL;
     limiter_len = ft_strlen(limiter);
-    while (!g_signals.sigint)
+    while (g_status != 130)
     {
         str = readline("> ");
-        if (!str)
+        if (!str || g_status == 130)
+        {
+            ft_putstr_fd("\n", STDOUT_FILENO);
             break ;
+        }
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, MAX(str_len, limiter_len)) == 0)
             break ;
+        replace_env_vars(&str);
         ft_putstr_fd(str, fd);
         ft_putchar_fd('\n', fd);
         free(str);
         str = NULL; //per evitare la double free
     }
     free(str);
-    g_signals.in_heredoc = 0;
+    exit(0);
+}
+
+int get_matching_heredoc(int id1, int id2)
+{
+    int fd;
+
+    fd = open(get_heredoc_filename(id1, id2), O_RDONLY, 0644);
+    if (fd == -1)
+        ft_quit(28, NULL);
+    return (fd);
 }

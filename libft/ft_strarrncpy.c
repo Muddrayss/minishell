@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_strarrncpy.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/15 14:10:39 by egualand          #+#    #+#             */
-/*   Updated: 2024/01/30 15:22:31 by egualand         ###   ########.fr       */
+/*   Created: 2024/01/26 18:00:14 by craimond          #+#    #+#             */
+/*   Updated: 2024/01/30 14:17:47 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstlast(t_list *lst)
+char	**ft_strarrncpy(char **dst, char **src, size_t n)
 {
-	while (lst)
-	{
-		if (!lst->next)
-			break ;
-		lst = lst->next;
-	}
-	return (lst);
+    size_t	i;
+
+    i = -1;
+    while (++i < n)
+    {
+        dst[i] = ft_strdup(src[i]);
+        if (!dst[i])
+            return (ft_free_matrix(dst), NULL);
+    }
+    return (dst);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 14:39:07 by egualand          #+#    #+#             */
-/*   Updated: 2024/01/04 18:16:33 by egualand         ###   ########.fr       */
+/*   Updated: 2024/01/29 22:00:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,6 @@ static char	*ft_make_string(char const *s, size_t start, char c)
 	return (division);
 }
 
-static void	ft_clear(char **array, size_t arr_index)
-{
-	while (arr_index-- > 0)
-		free(array[arr_index]);
-	free(array);
-}
-
 static char	**ft_make_split(char **array, char const *s, char c)
 {
 	int	i;
@@ -83,10 +76,7 @@ static char	**ft_make_split(char **array, char const *s, char c)
 		{
 			array[arr_index++] = ft_make_string(s, i, c);
 			if (array[arr_index - 1] == NULL)
-			{
-				ft_clear(array, arr_index);
-				return (NULL);
-			}
+				return (ft_free_matrix(array), NULL);
 			in_arr = 1;
 		}
 		else if (s[i] == c)

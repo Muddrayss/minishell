@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/18 15:58:04 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:39:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,23 @@
 # include <stdbool.h>
 # include <stdint.h>
 
-typedef enum e_token
-{
-	EMPTY = -1,
-	PIPE,
-	REDIR_R,
-	REDIR_L,
-	ENV,
-}				t_token;
-
-typedef enum e_elem_type
-{
-	CMD,
-	TOKEN,
-}				t_elem_type;
+# define PIPE '|'
+# define REDIR_R '>'
+# define REDIR_L '<'
+# define SEMICOLON ';'
+# define QUOTE '\''
+# define DQUOTE '"'
+# define AND '&'
+# define PARENTHESIS_L '('
+# define PARENTHESIS_R ')'
 
 typedef struct s_lexer
 {
-	t_elem_type	type;
-	union		u_elem
-	{
-		char	*cmd;
-		t_token	token;
-	} str;
+	char	*cmd;
+	char	token;
 }				t_lexer;
 
-t_list			*lexer(char *input, t_data *data);
+t_list			*lexer(char *input);
 void			del_content_lexer(void *content);
 
 #endif

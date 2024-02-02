@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   ft_matrixsize.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:00:50 by craimond         ###   ########.fr       */
+/*   Created: 2024/01/29 21:36:41 by craimond          #+#    #+#             */
+/*   Updated: 2024/01/29 21:37:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+#include "libft.h"
 
-# define EXEC_FAILURE 1
-# define COMMAND_NOT_FOUND 127
+size_t	ft_matrixsize(char **matrix)
+{
+    size_t	size;
 
-void    executor(t_list *parsed_params);
-void    create_heredocs(t_list *parsed_params);
-int     get_matching_heredoc(int id1, int id2);
-void    replace_env_vars(char **str);
-bool    check_last_subcmd(char *cmd_str);
-
-#endif
+    size = 0;
+    while (matrix && matrix[size])
+        size++;
+    return (size);
+}

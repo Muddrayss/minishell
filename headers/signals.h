@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 04:00:50 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/01 16:04:13 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/01 18:03:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
-# define EXEC_FAILURE 1
-# define COMMAND_NOT_FOUND 127
-
-void    executor(t_list *parsed_params);
-void    create_heredocs(t_list *parsed_params);
-int     get_matching_heredoc(int id1, int id2);
-void    replace_env_vars(char **str);
-bool    check_last_subcmd(char *cmd_str);
+void    set_sighandler(void *handle_sigint, void *handle_sigquit);
+void    display_signal(int signo);
+void    display_and_quit_signal(int signo);
+void    hide_and_abort_signal(int signo);
+void    newline_signal(int signo);
 
 #endif

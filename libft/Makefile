@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/14 13:59:13 by egualand          #+#    #+#              #
-#    Updated: 2024/01/20 17:54:40 by egualand         ###   ########.fr        #
+#    Updated: 2024/01/31 04:26:42 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,10 @@ SRCS = 	ft_isalnum.c ft_isprint.c ft_memcmp.c ft_putchar_fd.c ft_split.c \
 		ft_strnstr.c ft_tolower.c ft_bzero.c ft_isascii.c ft_memmove.c \
 		ft_putnbr_fd.c ft_strdup.c  ft_strlen.c  ft_strrchr.c ft_toupper.c \
 		ft_calloc.c  ft_isdigit.c ft_memchr.c  ft_memset.c ft_putstr_fd.c \
-		ft_strjoin.c ft_strmapi.c ft_strtrim.c ft_striteri.c ft_strarr_dup.c
+		ft_strjoin.c ft_strmapi.c ft_strtrim.c ft_striteri.c ft_strarr_dup.c \
+		ft_strarrncpy.c ft_strdup_until.c ft_free_matrix.c ft_lstdel_if.c \
+		ft_matrixsize.c ft_insert_str.c ft_lstdup_until.c ft_strcat.c
 OBJS = $(SRCS:.c=.o)
-
 BONUS = ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c \
 		ft_lstdelone.c ft_lstiter.c ft_lstlast.c \
 		ft_lstmap.c ft_lstnew.c ft_lstsize.c

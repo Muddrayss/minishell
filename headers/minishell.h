@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/25 15:22:07 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/01 16:12:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -40,32 +40,29 @@ typedef struct s_data
 	t_list	**lexered_params;
 }			t_data;
 
-typedef struct s_signals
-{
-	int sigint;
-	int in_cmd;
-	int in_heredoc;
-}				t_signals;
-extern t_signals	g_signals;
+extern int g_status;
 
 # include "colors.h"
-# include "error.h"
 # include "lexer.h"
 # include "parser.h"
 # include "executor.h"
+# include "signals.h"
 
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
 
-char		*get_cmd(char *path, char *cmd, t_data *data);
-void		exec_simple_cmd(char *path, char *cmd_str, t_data *data);
-void  		exec(char *path, char *cmd_str, t_data *data);
+t_data		*get_data(void);
+char		*get_cmd(char *path, char *cmd);
+void		exec_simple_cmd(char *path, char *cmd_str);
+void  		exec(char *path, char *cmd_str);
 void		free_matrix(char **matrix);
-void clean_heredocs(t_data *data);
-void ft_quit(int id, char *msg, t_data *data);
+void 		clean_heredocs();
+void 		ft_quit(int id, char *msg);
 void 		free_data(t_data *data);
-int8_t 		ft_parse_error(char token);
+void 		ft_parse_error(char token);
 bool		is_shell_space(char c);
-void		init_signals(void);
 void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
+char		*ft_getenv(char *env_name);
+void		ft_setenv(char *name, char *value, int8_t overwrite);
+int8_t		reset_fd(int *fd);
 
 #endif
