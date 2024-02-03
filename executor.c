@@ -29,7 +29,7 @@ void    executor(t_tree *parsed_params)
     {
         set_sighandler(&newline_signal, SIG_IGN);
         fds[2] = -1;
-        launch_commands(parsed_params);
+        launch_commands(parsed_params, HEAD, FIRST_CMD);
         wait_for_children(parsed_params);
     }
     dup2(original_stdin, STDIN_FILENO);
@@ -37,20 +37,20 @@ void    executor(t_tree *parsed_params)
 }
 
 //inorder traversal search
-static void launch_commands(t_tree *parsed_params, t_tree *parent_leaf, int8_t *flag)
+static void launch_commands(t_tree *parsed_params, int8_t type, int8_t *flag)
 {
     t_list  *branches_list;
 
     if (!parsed_params)
         return ;
     branches_list = parsed_params->branches.branches_list;
-    launch_commands(branches_list->prev, parsed_params, flag);
+    launch_commands(branches_list->prev, parsed_params->type, flag);
     *flag = SECOND_CMD;
     if (parsed_params->type == CMD)
         exec_cmd(parsed_params, parent_leaf, flag); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
     if ((parsed_params->type == AND && g_status == 0) || (parsed_params->type == OR && g_status != 0))
         return ;
-    launch_commands(branches_list->next, parsed_params, flag);
+    launch_commands(branches_list->next, parsed_params->type, flag);
     *flag = FIRST_CMD;
 }
 
