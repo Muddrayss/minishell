@@ -120,7 +120,7 @@ static char    *get_heredoc_filename(int id1, int id2)
     data = get_data();
     idx1 = ft_itoa(id1);
     idx2 = ft_itoa(id2);
-    size = ft_strlen(data->starting_dir) + ft_strlen(HEREDOC_DIR) + ft_strlen(idx1) + ft_strlen(idx2) + 2;
+    size = ft_strlen(data->starting_dir) + ft_strlen("./tmp.heredoc_") + ft_strlen(idx1) + ft_strlen(idx2) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx1 || !idx2)
     {
