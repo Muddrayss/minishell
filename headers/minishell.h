@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:07:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 11:09:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,5 @@ void 		ft_parse_error(char token);
 bool		is_shell_space(char c);
 char		*ft_getenv(char *env_name);
 void		ft_setenv(char *name, char *value, int8_t overwrite);
-int8_t		reset_fd(int *fd);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 18:56:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 10:11:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void     launch_commands(t_tree *parsed_params, int8_t *flag);
+static void     launch_commands(t_tree *parsed_params, int8_t parent_type, int8_t *flag);
 static void     exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2);
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_cmds(t_tree *node, int n_cmds);
@@ -37,7 +37,7 @@ void    executor(t_tree *parsed_params)
 }
 
 //inorder traversal search
-static void launch_commands(t_tree *parsed_params, int8_t type, int8_t *flag)
+static void launch_commands(t_tree *parsed_params, int8_t parent_type, int8_t *flag)
 {
     t_list  *branches_list;
 
@@ -47,7 +47,7 @@ static void launch_commands(t_tree *parsed_params, int8_t type, int8_t *flag)
     launch_commands(branches_list->prev, parsed_params->type, flag);
     *flag = SECOND_CMD;
     if (parsed_params->type == CMD)
-        exec_cmd(parsed_params, parent_leaf, flag); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
+        exec_cmd(parsed_params, parent_type, flag); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
     if ((parsed_params->type == AND && g_status == 0) || (parsed_params->type == OR && g_status != 0))
         return ;
     launch_commands(branches_list->next, parsed_params->type, flag);

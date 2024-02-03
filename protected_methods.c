@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:45:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 11:14:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,14 @@ void    signal_p(int signum, void (*handler)(int))
 {
     if (signal(signum, handler) == SIG_ERR)
         ft_quit(8, NULL);
+}
+
+void    *calloc_p(size_t count, size_t size)
+{
+    void    *ptr;
+
+    ptr = calloc(count, size);
+    if (!ptr)
+        ft_quit(14, NULL);
+    return (ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 03:50:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:27:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,43 @@ void    replace_env_vars(char **str)
     }
 }
 
+char    *replace_env_vars(char *str)
+{
+    char        *env_name;
+    char        *env_value;
+    char        *start;
+    char        *tmp;
+    uint32_t    i;
+
+    while (1)
+    {
+        start = ft_strdup(&str[i]);
+        if (!start)
+            ft_quit(14, "failed to allocate memory");
+        tmp = ft_strchr(start, '$');
+        if (!tmp)
+            return (free(start), str);
+        env_name = get_env_name(tmp);
+        env_value = ft_getenv(env_name);
+        realloc_p(str, ft_strlen(str) - ft_strlen(env_name) + ft_strlen(env_value)); //senza + 1 perche' c'e' gia' il + 1 del carattere $ che non e' considerato nella len
+        ft_strlcpy(str, start, tmp - start + 1);
+        ft_strcat(str, env_value);
+        ft_strcat(str, tmp + ft_strlen(env_name));
+        i += tmp - start;
+        free(start);
+    }
+}
+
 static char *get_env_name(char *str)
 {
-    char	*env_name;
-    int		i;
+    char	    *env_name;
+    uint8_t     len;
 
-    i = 0;
-    if (!str || str[i] == '\0' || str[i] == '$' || is_shell_space(str[i]))
+    len = 0;
+    if (!str || str[len] == '\0' || str[len] == '$' || is_shell_space(str[len]))
         return (NULL);
-    while (str[i] != '\0' && !is_shell_space(str[i]) && str[i] != '$')
-        i++;
-    env_name = (char *)ft_calloc(i + 1, sizeof(char));
-    if (!env_name)
-        ft_quit(15, "failed to allocate memory");
-    ft_strlcpy(env_name, str, i + 1);
-    return (env_name);
+    while (str[len] != '\0' && !is_shell_space(str[len]) && str[len] != '$')
+        len++;
+    env_name = (char *)calloc_p(len + 1, sizeof(char));
+    return (ft_strcpy(env_name, str), env_name);
 }
