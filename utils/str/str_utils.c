@@ -58,9 +58,7 @@ char	**ft_split(const char *s, char c)
 		if (s[i] == c && s[i + 1] != c && s[i + 1] != '\0')
 			n_words++;
 	}
-	str_array = malloc(sizeof(char *) * (n_words + 1));
-	if (str_array == NULL)
-		return (NULL);
+	str_array = malloc_p(sizeof(char *) * (n_words + 1));
 	str_array[n_words] = NULL;
 	return (fill_matrix(n_words, s, c, str_array));
 }

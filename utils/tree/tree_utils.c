@@ -3,29 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   tree_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 09:09:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 13:24:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:59:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-t_tree	*ft_treenew(int8_t type, char *cmd)
+t_tree	*treenew_p(int8_t type, char *cmd)
 {
     t_tree	    *new_node;
     
-    new_node = malloc(sizeof(t_tree));
-    if (!new_node)
-        return (NULL);
+    new_node = malloc_p(sizeof(t_tree));
     new_node->type = type;
     new_node->cmd = cmd;
     new_node->branches = NULL;
     return (new_node);
 }
 
-void    ft_treeadd_below(t_tree **head, t_tree *new)
+void    treeadd_below(t_tree **head, t_tree *new)
 {
     t_tree	*last;
     
@@ -41,7 +39,7 @@ void    ft_treeadd_below(t_tree **head, t_tree *new)
     }
 }
 
-t_tree	*ft_tree_last(t_tree *head)
+t_tree	*tree_last(t_tree *head)
 {
     t_tree    *last;
 
@@ -51,7 +49,7 @@ t_tree	*ft_tree_last(t_tree *head)
     return (last);
 }
 
-ft_tree_size(t_tree *node, int size)
+uint32t tree_size(t_tree *node, uint32_t size)
 {
     t_list    *branches_list;
 
@@ -60,6 +58,7 @@ ft_tree_size(t_tree *node, int size)
     if (node)
         size++;
     branches_list = node->branches.branches_list;
-    ft_tree_size(branches_list->prev, size);
-    ft_tree_size(branches_list->next, size);
+    size += ft_tree_size(branches_list->prev, size);
+    size += ft_tree_size(branches_list->next, size);
+    return (size);
 }

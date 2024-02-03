@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 11:14:17 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:54:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,24 @@ void    *calloc_p(size_t count, size_t size)
     ptr = calloc(count, size);
     if (!ptr)
         ft_quit(14, NULL);
+    return (ptr);
+}
+
+void    *malloc_p(size_t size)
+{
+    void    *ptr;
+
+    ptr = malloc(size);
+    if (!ptr)
+        ft_quit(14, NULL);
+    return (ptr);
+}
+
+void    *realloc_p(void *ptr, size_t nmemb, int8_t size)
+{
+    void    *new_ptr;
+
+    free(ptr);
+    ptr = malloc_p(nmemb * size);
     return (ptr);
 }

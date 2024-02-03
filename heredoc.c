@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 13:32:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 14:00:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,14 @@ void create_heredocs(t_tree *tree, uint32_t heredoc_fileno1)
     t_redir     *redir;
     char        **limiters_array;
     uint32_t    n_heredocs;
-    uint32_t    i;
 
-    i = 0;
-    limiters_array = get_limiters_array(tree);
-    while (limiters_array[n_heredocs])
-        n_heredocs++;
+    limiters_array = get_limiters_array(tree, &n_heredocs);
     heredoc_fileno2 = 1;
     heredoc_fd = -1;
-    while (i < n_heredocs)
+    while (n_heredocs > 0)
     {
         heredoc_fd = open_p(get_heredoc_filename(heredoc_fileno1, heredoc_fileno2++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        fill_in_child(limiters_array[i++], heredoc_fd);
+        fill_in_child(limiters_array[--n_heredocs], heredoc_fd);
         if (g_status == 130)
         {
             reset_fd(&heredoc_fd);
@@ -48,18 +44,14 @@ void create_heredocs(t_tree *tree, uint32_t heredoc_fileno1)
     reset_fd(&heredoc_fd);
 }
 
-static char    **get_limiters_array(t_tree *node)
+static char    **get_limiters_array(t_tree *node, uint32_t *n_heredocs)
 {
-    uint32_t    n_heredocs;
     char        **limiters_array;
 
-    n_heredocs = count_heredocs(node, 0);
-    limiters_array = (char **)malloc(sizeof(char *) * (n_heredocs + 1));
-    if (!limiters_array)
-        ft_quit(8, "failed to allocate memory");
-    limiters_array[n_heredocs] = NULL;
-    fill_limiters_array(node, limiters_array, 0);
-    return (limiters_array);
+    *n_heredocs = count_heredocs(node, 0);
+    limiters_array = (char **)malloc_p(sizeof(char *) * (*n_heredocs + 1));
+    limiters_array[*n_heredocs] = NULL;
+    return (fill_limiters_array(node, limiters_array, 0), limiters_array);
 }
 
 static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
@@ -70,6 +62,7 @@ static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
 
     if (!node)
         return ;
+    fill_limiters_array(branches_list->prev, limiters_array, i);
     if (node->type == CMD)
     {
         redirs = node->cmd.redirs;
@@ -82,7 +75,6 @@ static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
         }
     }
     branches_list = node->branches.branches_list;
-    fill_limiters_array(branches_list->prev, limiters_array, i);
     fill_limiters_array(branches_list->next, limiters_array, i);
 }
 

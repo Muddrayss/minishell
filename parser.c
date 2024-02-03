@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:53:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:54:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_tree	*parser(t_list *params_head)
     t_lexer  *elem;
 
     merge_separators(params_head);
-    // tree = malloc(sizeof(t_tree * ) * (ft_lstsize(params_head) + 1));
+    // tree = malloc_p(sizeof(t_tree * ) * (ft_lstsize(params_head) + 1));
     fill_tree(params_head, &tree_head);
     return (tree_head);
 }
@@ -61,7 +61,7 @@ static t_cmd    *init_cmd(char *cmd_str)
 
     if (!cmd_str)
         return (NULL);
-    cmd = malloc(sizeof(t_cmd));
+    cmd = malloc_p(sizeof(t_cmd));
     cmd->redirs = fill_redirs(cmd_str);
     clear_redirs(cmd_str);
     cmd->cmd_str = cmd_str;
@@ -119,7 +119,7 @@ static t_list  *fill_redirs(char *cmd_str)
     i = 0;
     while (cmd_str[i])
     {
-        redirs = malloc(sizeof(t_list));
+        redirs = malloc_p(sizeof(t_list));
         if (cmd_str[i] == '<')
         {
             if (cmd_str[i + 1] == '<')
@@ -204,7 +204,7 @@ static t_redir *init_redir(void)
 {
     t_redir *redir;
 
-    redir = malloc(sizeof(t_redir));
+    redir = malloc_p(sizeof(t_redir));
     redir->fds[0] = -42;
     redir->fds[1] = -42;
     redir->filename = NULL;

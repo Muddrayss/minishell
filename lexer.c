@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 13:12:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:54:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_list	*lexer(char *input)
             i++;
         if (i > 0)
         {
-			content->cmd_str = (char *)malloc(sizeof(char) * (i + 1));
+			content->cmd_str = (char *)malloc_p(sizeof(char) * (i + 1));
 			if (!content->cmd_str)
 				ft_quit(8, "failed to allocate memory");
             ft_strlcpy(content->cmd_str, input, i + 1);
@@ -57,9 +57,7 @@ static  t_lexer *new_content_lexer(void)
 {
     t_lexer	*content;
 
-    content = (t_lexer *)malloc(sizeof(t_lexer));
-    if (!content)
-        ft_quit(8, "failed to allocate memory");
+    content = (t_lexer *)malloc_p(sizeof(t_lexer));
     content->cmd_str = NULL;
     content->token = 0;
     return (content);

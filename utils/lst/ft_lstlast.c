@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 13:22:31 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/03 13:22:51 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/03 14:01:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-t_list	*ft_lstlast(t_list *lst)
+t_list	*lstlast(t_list *lst)
 {
 	if (!lst)
 		return (NULL);
