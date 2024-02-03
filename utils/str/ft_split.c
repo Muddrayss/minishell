@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:34:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 20:24:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ char	**ft_split(const char *s, char c)
 
 	if (s == NULL || *s == '\0')
 	{
-		str_array = ft_calloc(sizeof(char *), 1);
-		if (str_array == NULL)
-			return (NULL);
+		str_array = calloc_p(sizeof(char *), 1);
 		return (str_array);
 	}
 	i = -1;

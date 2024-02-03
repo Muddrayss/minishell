@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 20:30:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ char	*get_cmd(char *path, char *cmd)
 	{
 		size = ft_strlen(dirs[i]) + ft_strlen(cmd) + 2;
 		full_path = malloc_p(size * sizeof(char));
-		ft_strlcpy(full_path, dirs[i], size);
-		ft_strlcat(full_path, "/", size);
-		ft_strlcat(full_path, cmd, size);
+		ft_strcpy(full_path, dirs[i]);
+		ft_strcat(full_path, "/");
+		ft_strcat(full_path, cmd);
 		if (access(full_path, X_OK) == 0)
 			break ;
 		free(full_path);
 		full_path = NULL;
 	}
-	ft_free_matrix(dirs);
+	ft_freematrix(dirs);
 	if (!full_path)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
@@ -177,6 +177,8 @@ void	ft_quit(int id, char *msg)
 	}
 	if (data)
 		free_data(data);
+	if (id == EXEC_FAILURE)
+		free(msg);
 	exit(id);
 }
 
@@ -208,7 +210,7 @@ void	free_data(t_data *data)
 void	ft_parse_error(char token)
 {
 	ft_putstr_fd("Parse error near '", 2);
-	ft_putchar_fd(token, 2);
+	write(2, &token, 1);
 	ft_putstr_fd("'\n", 2);
 }
 
