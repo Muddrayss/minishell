@@ -29,7 +29,7 @@ void    executor(t_tree *parsed_params)
     {
         set_sighandler(&newline_signal, SIG_IGN);
         fds[2] = -1;
-        launch_commands(parsed_params, HEAD, FIRST_CMD);
+        launch_commands(parsed_params, 0, 0);
         wait_for_children(parsed_params);
     }
     dup2(original_stdin, STDIN_FILENO);
