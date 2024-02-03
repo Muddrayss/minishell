@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   protected_methods.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:45:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:12:51 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int     dup_p(int fd);
 void    dup2_p(int oldfd, int newfd);
 void    close_p(int fd);
-void    reset_fd(int *fd);
+int8_t	reset_fd(int *fd);
 int     open_p(char *path, int flags, int8_t permissions);
 void    pipe_p(int pipefd[2]);
 void    wait_p(int *status);

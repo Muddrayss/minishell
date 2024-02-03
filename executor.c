@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 18:56:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:10:52 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void     launch_commands(t_tree *parsed_params, int8_t *flag);
+static void launch_commands(t_tree *parsed_params, int8_t type, int8_t *flag);
 static void     exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2);
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_cmds(t_tree *node, int n_cmds);

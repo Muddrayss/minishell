@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   str_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 13:24:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 14:14:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:24:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../headers/minishell.h"
 
 static char	**fill_matrix(int n_words, const char *s, char c, char **str_array);
 static void free_matrix(char **str_array);
