@@ -122,10 +122,11 @@ static char    *get_heredoc_filename(int id1, int id2)
     idx2 = ft_itoa(id2);
     size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx1) + ft_strlen(idx2) + 2;
     filename = ft_calloc(size, sizeof(char));
-    if (!filename)
+    if (!filename || !idx1 || !idx2)
     {
         free(idx1);
         free(idx2);
+        free(filename);
         ft_quit(22, "failed to allocate memory");
     }
     ft_strlcpy(filename, data->starting_dir, size);
