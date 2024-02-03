@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   lstadd_back.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 13:52:49 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/03 13:21:58 by egualand          #+#    #+#             */
+/*   Updated: 2024/02/03 19:53:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-char	*strdup_p(const char *s)
+void	lstadd_back(t_list **lst, t_list *new)
 {
-	char	*dst;
-	int		i;
+	t_list	*last;
 
-	dst = malloc_p(sizeof(char) * (ft_strlen(s) + 3));
-	i = 0;
-	while (s[i] != '\0')
-	{
-		dst[i] = s[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
+    if (!lst)
+        return ;
+	if (*lst == NULL)
+		*lst = new;
+	else
+    {
+        last = ft_lstlast(*lst);
+        last->next = new;
+        new->prev = last;
+    }
 }

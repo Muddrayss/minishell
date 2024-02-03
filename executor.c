@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 13:31:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 19:27:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,15 @@ void    executor(t_tree *parsed_params)
 //inorder traversal search
 static void launch_commands(t_tree *parsed_params, int8_t parent_type, int8_t *flag)
 {
-    t_list  *branches_list;
-
     if (!parsed_params)
         return ;
-    branches_list = parsed_params->branches.branches_list;
-    launch_commands(branches_list->prev, parsed_params->type, flag);
+    launch_commands(parsed_params->left, parsed_params->type, flag);
     *flag = SECOND_CMD;
     if (parsed_params->type == CMD)
         exec_cmd(parsed_params, parent_type, flag); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
     if ((parsed_params->type == AND && g_status == 0) || (parsed_params->type == OR && g_status != 0))
         return ;
-    launch_commands(branches_list->next, parsed_params->type, flag);
+    launch_commands(parsed_params->right, parsed_params->type, flag);
     *flag = FIRST_CMD;
 }
 
@@ -104,14 +101,12 @@ static void wait_for_children(t_tree *parsed_params)
 static uint32_t count_cmds(t_tree *node, int n_cmds)
 {
     uint32_t    n_cmds;
-    t_list      *branches_list;
 
     if (!node)
         return (n_cmds);
     if (node->type == CMD)
-        n_cmds += 1;
-    branches_list = node->branches.branches_list;
-    n_cmds += count_cmds(branches_list->prev, 0);
-    n_cmds += count_cmds(branches_list->next, 0);
+        n_cmds++;
+    n_cmds += count_cmds(node->left, 0);
+    n_cmds += count_cmds(node->right, 0);
     return (n_cmds);
 }

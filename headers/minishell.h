@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 13:30:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,6 @@
 # include <stdbool.h>
 # include <stdint.h>
 
-typedef struct s_list
-{
-    void			*content;
-    struct s_list	*next;
-    struct s_list	*prev;
-}t_list;
 typedef struct s_data
 {
 	char	*cmd_path;
@@ -49,13 +43,13 @@ typedef struct s_data
 
 extern int g_status;
 
-# include "colors.h"
 # include "lexer.h"
 # include "parser.h"
 # include "executor.h"
 # include "signals.h"
 # include "utils.h"
 # include "protected_methods.h"
+# include "colors.h"
 
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
 

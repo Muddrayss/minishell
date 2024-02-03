@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 13:54:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ char	*get_cmd(char *path, char *cmd)
 	{
 		size = ft_strlen(dirs[i]) + ft_strlen(cmd) + 2;
 		full_path = malloc_p(size * sizeof(char));
-		if (!full_path)
-			ft_quit(3, ft_strdup("failed to allocate memory"));
 		ft_strlcpy(full_path, dirs[i], size);
 		ft_strlcat(full_path, "/", size);
 		ft_strlcat(full_path, cmd, size);
@@ -135,8 +133,6 @@ void	ft_setenv(char *name, char *value, int8_t overwrite)
 	{
 		i = ft_matrixsize(data->envp);
 		new_env = malloc_p(sizeof(char *) * i + 2);
-		if (!new_env)
-			ft_quit(34, "failed to allocate memory");
 		new_env[i + 1] = NULL;
 		new_env = ft_strarrncpy(new_env, data->envp, i);
 		new_env[i] = get_new_env(name, value);

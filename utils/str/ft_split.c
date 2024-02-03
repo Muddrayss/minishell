@@ -1,16 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   str_utils.c                                        :+:      :+:    :+:   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/02 13:24:23 by craimond          #+#    #+#             */
-<<<<<<< HEAD:utils/str_utils.c
-/*   Updated: 2024/02/03 11:07:40 by craimond         ###   ########.fr       */
-=======
-/*   Updated: 2024/02/03 13:24:21 by egualand         ###   ########.fr       */
->>>>>>> 1e934ef56638257b23512a2c3c4192f920269cf4:utils/str/str_utils.c
+/*   Created: 2024/02/03 19:34:03 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +14,6 @@
 
 static char	**fill_matrix(int n_words, const char *s, char c, char **str_array);
 static void free_matrix(char **str_array);
-
-int     ft_strlen(char *str)
-{
-    int     i;
-
-    if (!str)
-        return (0);
-    i = 0;
-    while (str[i])
-        i++;
-    return (i);
-}
-
-void   ft_putstr_fd(char *s, int fd)
-{
-    write(fd, s, ft_strlen(s));
-}
 
 char	**ft_split(const char *s, char c)
 {
@@ -99,4 +78,3 @@ static char	**free_matrix(char **str_array, int g)
 		free(str_array[g]);
 	free(str_array);
 }
-

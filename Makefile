@@ -6,13 +6,18 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/02 17:23:17 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/03 19:58:00 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 INCLUDES_DIR = .
 
-SRCS = minishell.c minishell_utils.c lexer.c signals.c parser.c executor.c executor_utils.c heredoc.c protected_methods.c $(addprefix utils/, str_utils lst_utils.c tree_utils.c)
+SRCS = minishell.c minishell_utils.c lexer.c parser.c executor.c heredoc.c signals.c executor_utils.c protected_methods.c \
+		$(addprefix utils/, 
+			$(addprefix lst/, lstadd_back.c lstclear.c lstlast.c lstnew_p.c) \
+		 	$(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strlen.c) \
+			$(addprefix tree/, tree_size.c treeadd_below.c treeclear.c treenew_p.c)) \
+		
 OBJS = $(SRCS:.c=.o)
 HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h utils.h protected_methods.c colors.h)
 

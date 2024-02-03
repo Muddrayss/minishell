@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   treeadd_below.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 13:52:49 by egualand          #+#    #+#             */
+/*   Created: 2024/02/03 19:37:05 by craimond          #+#    #+#             */
 /*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-char	*strdup_p(const char *s)
+void    treeadd_below(t_tree **leaf, t_tree *new)
 {
-	char	*dst;
-	int		i;
-
-	dst = malloc_p(sizeof(char) * (ft_strlen(s) + 3));
-	i = 0;
-	while (s[i] != '\0')
-	{
-		dst[i] = s[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
+    if (!leaf)
+        return ;
+    if (*leaf == NULL)
+        *leaf = new;
+    else
+    {
+        if (!leaf->left)
+            leaf->left = new;
+        else
+            leaf->right = new;
+    }
 }

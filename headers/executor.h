@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 18:52:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 19:45:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define FIRST_CMD 0
 # define SECOND_CMD 1
 
-void    executor(t_list *parsed_params);
+void    executor(t_tree *parsed_params);
 void    create_heredocs(t_tree *tree, uint32_t heredoc_fileno1);
 int     get_matching_heredoc(int id1, int id2);
 void    replace_env_vars(char **str);

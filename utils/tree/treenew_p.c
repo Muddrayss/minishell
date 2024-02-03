@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   treenew_p.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 13:52:49 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/03 19:37:35 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/03 19:53:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-char	*strdup_p(const char *s)
+t_tree	*treenew_p(int8_t type, char *cmd)
 {
-	char	*dst;
-	int		i;
-
-	dst = malloc_p(sizeof(char) * (ft_strlen(s) + 3));
-	i = 0;
-	while (s[i] != '\0')
-	{
-		dst[i] = s[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
+    t_tree	    *new_node;
+    
+    new_node = malloc_p(sizeof(t_tree));
+    new_node->type = type;
+    new_node->cmd = cmd;
+    new_node->left = NULL;
+    new_node->right = NULL;
+    return (new_node);
 }

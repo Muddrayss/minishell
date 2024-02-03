@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/03 13:21:24 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/03 13:56:53 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/03 19:33:17 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/03 19:53:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-t_list	*lstnew_p(void *content)
+int     ft_strlen(char *str)
 {
-	t_list	*new_node;
+    int     i;
 
-	new_node = malloc_p(sizeof(t_list));
-	new_node->content = content;
-	new_node->next = NULL;
-    new_node->prev = NULL;
-	return (new_node);
+    if (!str)
+        return (0);
+    i = 0;
+    while (str[i])
+        i++;
+    return (i);
 }

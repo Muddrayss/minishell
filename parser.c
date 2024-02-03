@@ -6,13 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 13:54:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 19:24:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void     fill_tree(t_list *params_head, t_tree **tree_head);
+static void     *fill_tree(t_list *params, t_tree *tree_head, int is_first);
+static t_list	*skip_parenthesis(t_list *params);
 static t_cmd    *init_cmd(char *cmd_str);
 static void     clear_redirs(char *cmd_str);
 static void     remove_nums(char *cmd_str, uint8_t i);
@@ -33,26 +34,56 @@ t_tree	*parser(t_list *params_head)
 
     merge_separators(params_head);
     // tree = malloc_p(sizeof(t_tree * ) * (ft_lstsize(params_head) + 1));
-    fill_tree(params_head, &tree_head);
+	tree_head = treenew_p(0, 0);
+    fill_tree(params_head, &tree_head, true);
     return (tree_head);
 }
 
-static void     fill_tree(t_list *params_head, t_tree **tree_head)
+static void     *fill_tree(t_list *params, t_tree *tree_head, int is_first)
 {
-    t_lexer  *elem;
-    t_cmd    *elem_cmd;
-    int8_t   flag;
+	t_lexer	*elem;
+	t_list	*first_occ;
 
-    elem = (t_lexer *)params_head->content;
-    if (elem->cmd_str || elem->token == SUBSHELL_END)
-    {
-        fill_tree(params_head->next, (*tree_head)->branches.branches_list);
-        elem_cmd = init_cmd(elem->cmd_str);
-        ft_treeadd_below((*tree_head)->branches.branches_list, ft_treenew(elem->token, elem_cmd));
-        return ;
-    }
-    ft_treeadd_below(tree_head, ft_treenew(elem->token, NULL));
-    fill_tree(params_head->next, (*tree_head)->branches.branches_list);
+	elem = (t_lexer *)params->content;
+	first_occ = NULL;
+	if (elem->token)
+	{
+		if (elem->token ==  SUBSHELL_END)
+			return (tree_head);
+		else if (elem->token == SUBSHELL_START)
+		{
+			first_occ = params;
+			params = skip_parenthesis(params);
+		}
+		treeadd_below(&tree_head, treenew_p(elem->token, 0));
+		if (first_occ)
+			fill_tree(first_occ, tree_head->left, true); //fills the subshell
+		else
+			fill_tree(params->prev, tree_head->left, false);
+		treeadd_below(&tree_head->right, fill_tree(params->next, tree_head->right, true));
+		return (tree_head);
+	}
+	if (is_first == false)
+		return (treenew_p(elem->cmd_str, 0));
+	fill_tree(params->next, tree_head, false);
+}
+
+static t_list	*skip_parenthesis(t_list *params)
+{
+	uint32_t	n_open;
+	t_lexer		*elem;
+
+	n_open = 0;
+	while (n_open)
+	{
+		elem = (t_lexer *)params->content;
+		if (elem->token == SUBSHELL_START)
+			n_open++;
+		else if (elem->token == SUBSHELL_END)
+			n_open--;
+		params = params->next;
+	}
+	return (params);
 }
 
 static t_cmd    *init_cmd(char *cmd_str)
@@ -163,7 +194,7 @@ static void     fill_redir_heredoc(t_list **redirs, char *str, uint8_t i)
     node->filename = get_filename(str, i);
     ft_lstadd_back(redirs, ft_lstnew(node));
 }
-
+//TODO da mergiare con fill_redir_output
 static void     fill_redir_append(t_list **redirs, char *str, uint8_t i)
 {
     t_redir *node;
