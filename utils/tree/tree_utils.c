@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tree_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 09:09:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 16:49:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:24:38 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../headers/minishell.h"
 
 t_tree	*ft_treenew(int8_t type, char *cmd)
 {

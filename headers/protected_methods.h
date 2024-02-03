@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 11:15:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:30:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int     dup_p(int fd);
 void    dup2_p(int oldfd, int newfd);
 void    close_p(int fd);
-void    reset_fd(int *fd);
+int8_t	reset_fd(int *fd);
 void    *calloc_p(size_t count, size_t size);
 int     open_p(char *path, int flags, int8_t permissions);
 void    pipe_p(int pipefd[2]);

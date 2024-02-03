@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/02 17:19:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/03 13:32:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static char    *get_heredoc_filename(int id1, int id2)
         ft_quit(22, "failed to allocate memory");
     }
     ft_strcpy(filename, data->starting_dir);
-    ft_strcat(filename, HEREDOC_DIR);
+    ft_strcat(filename, "./tmp.heredoc_");
     ft_strcat(filename, idx1);
     ft_strcat(filename, ".");
     ft_strcat(filename, idx2);
