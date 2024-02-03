@@ -61,16 +61,3 @@ static char *get_env_name(char *str)
     ft_strlcpy(env_name, str, i + 1);
     return (env_name);
 }
-
-bool check_last_subcmd(char *cmd_str)
-{
-    static unsigned int i = 0;
-
-    while (cmd_str[i])
-    {
-        if (cmd_str[i] == PH_SEMICOLON || cmd_str[i] == PH_OR || cmd_str[i] == PH_AND)
-            return (i++, false);
-        i++;
-    }
-    return (i++, true);
-}
