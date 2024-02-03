@@ -120,20 +120,21 @@ static char    *get_heredoc_filename(int id1, int id2)
     data = get_data();
     idx1 = ft_itoa(id1);
     idx2 = ft_itoa(id2);
-    size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx1) + ft_strlen(idx2) + 2;
+    size = ft_strlen(data->starting_dir) + ft_strlen(HEREDOC_DIR) + ft_strlen(idx1) + ft_strlen(idx2) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx1 || !idx2)
     {
+        //complex return con tutti i free e ft_quit
         free(idx1);
         free(idx2);
         free(filename);
         ft_quit(22, "failed to allocate memory");
     }
-    ft_strlcpy(filename, data->starting_dir, size);
-    ft_strlcat(filename, "/tmp/.heredoc_", size);
-    ft_strlcat(filename, idx1, size);
-    ft_strlcat(filename, ".", size);
-    ft_strlcat(filename, idx2, size);
+    ft_strcpy(filename, data->starting_dir);
+    ft_strcat(filename, HEREDOC_DIR);
+    ft_strcat(filename, idx1);
+    ft_strcat(filename, ".");
+    ft_strcat(filename, idx2);
     return (free(idx1), free(idx2), filename);
 }
 
