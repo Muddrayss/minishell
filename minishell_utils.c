@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 17:19:23 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/04 18:44:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static char	*get_custom_bin(char *path)
 	else
 		full_path = ft_strdup(path);
 	if (!full_path)
-		ft_quit(37, "failed to allocate memory");
+		ft_quit(3, "failed to allocate memory");
 	if (access(full_path, X_OK) == 0)
     	return (free(tmp), full_path);
 	else

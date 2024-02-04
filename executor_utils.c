@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:31:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 18:44:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void    replace_env_vars(char **str)
                 env_name_len = ft_strlen(env_name);
                 *str = ft_insert_str(*str, env_value, i, i + env_name_len + 1);
                 if (!*str)
-                    ft_quit(14, "failed to allocate memory");
+                    ft_quit(3, "failed to allocate memory");
                 free(env_name);
                 i += env_name_len;
             }
@@ -58,7 +58,7 @@ char    *replace_env_vars(char *str)
     {
         start = ft_strdup(&str[i]);
         if (!start)
-            ft_quit(14, "failed to allocate memory");
+            ft_quit(3, "failed to allocate memory");
         tmp = ft_strchr(start, '$');
         if (!tmp)
             return (free(start), str);

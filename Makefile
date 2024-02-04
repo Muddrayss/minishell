@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/04 17:04:23 by egualand         ###   ########.fr        #
+#    Updated: 2024/02/04 19:22:12 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = minishell.c minishell_utils.c lexer.c parser.c executor.c heredoc.c signals.c executor_utils.c protected_methods.c \
+SRCS = minishell.c minishell_utils.c lexer.c parser.c executor.c heredoc.c signals.c envp_utils.c executor_utils.c protected_methods.c \
 		$(addprefix utils/, \
 			$(addprefix lst/, lstadd_back.c lstclear.c lstlast.c lstnew_p.c lstremoveone.c) \
 		 	$(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strnstr.c ft_strncmp.c ) \
@@ -18,7 +18,7 @@ SRCS = minishell.c minishell_utils.c lexer.c parser.c executor.c heredoc.c signa
 			$(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c))
 		
 OBJS = $(SRCS:.c=.o)
-HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h utils.h protected_methods.h colors.h)
+HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h envp_utils.h utils.h protected_methods.h colors.h)
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g #TODO remove -g
