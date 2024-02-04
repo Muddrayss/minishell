@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 18:44:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 20:11:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,79 +82,6 @@ static char	*get_custom_bin(char *path)
 	}
     return (free(tmp), free(full_path), NULL);
 }
-
-char	*ft_getenv(char *env_name)
-{
-	t_data	*data;
-	char	*env_value;
-	int		env_name_len;
-	int		i;
-
-	data = get_data();
-	env_value = NULL;
-	env_name_len = ft_strlen(env_name);
-	i = 0;
-	while (ft_strncmp(data->envp[i], env_name, env_name_len) != 0)
-		i++;
-	if (data->envp[i] != NULL)
-	{
-		env_value = ft_strdup(data->envp[i] + env_name_len + 1); //per saltare il nome e l'=
-		if (!env_value)
-			ft_quit(3, "failed to allocate memory");
-	}
-	return (env_value);
-}
-
-void	ft_setenv(char *name, char *value, bool overwrite)
-{
-	t_data	*data;
-	size_t	name_len;
-	int		i;
-	char	*env_name;
-	char	**new_env;
-
-	data = get_data();
-	name_len = ft_strlen(name);
-	if (overwrite == true)
-	{
-		i = 0;
-		while (data->envp[i])
-		{
-			env_name = get_env_name
-			if (ft_strncmp(env_name, name, MAX(env_name_len, name_len)) == 0)
-				break ;
-		}
-		free(data->envp[i]);
-		data->envp[i] = get_new_env(name, value);
-	}
-	else
-	{
-		i = ft_matrixsize(data->envp);
-		new_env = malloc_p(sizeof(char *) * i + 2);
-		new_env[i + 1] = NULL;
-		new_env = ft_strarrncpy(new_env, data->envp, i);
-		new_env[i] = get_new_env(name, value);
-		ft_freematrix(data->envp);
-		data->envp = new_env;
-	}
-}
-
-// static char	*get_new_env(char *name, char *value)
-// {
-// 	char	*new_env;
-// 	char	*tmp;
-
-// 	tmp = ft_strjoin(name, "=");
-// 	free(name);
-// 	if (!tmp)
-// 		return(free(value), ft_quit(3, "failed to allocate memory"), NULL);
-// 	new_env = ft_strjoin(tmp, value);
-// 	free(tmp);
-// 	free(value);
-// 	if (!new_env)
-// 		return(ft_quit(3, "failed to allocate memory"), NULL);
-// 	return (new_env);
-// }
 
 bool	is_shell_space(char c)
 {

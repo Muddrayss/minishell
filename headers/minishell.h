@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 17:29:16 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/04 20:26:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # include "parser.h"
 # include "executor.h"
 # include "signals.h"
-# include "hashtable.h"
+# include "envp_utils.h"
 # include "utils.h"
 # include "protected_methods.h"
 # include "colors.h"
@@ -46,7 +46,7 @@ typedef struct s_data
 {
 	char	*cmd_path;
 	char	**cmd_args;
-	char	**envp;
+	t_list	*envp;
 	char	*starting_dir;
 	t_list	**lexered_params;
 }t_data;
@@ -65,7 +65,5 @@ void 		ft_quit(int id, char *msg);
 void 		free_data(t_data *data);
 void 		ft_parse_error(char token);
 bool		is_shell_space(char c);
-char		*ft_getenv(char *env_name);
-void		ft_setenv(char *name, char *value, int8_t overwrite);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 17:23:00 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/04 19:17:09 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 20:24:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-uint8_t hash(char *str) //gli va passato il nome con '=' incluso (come getenv("PATH=")) altrimenti non funziona strncmp
+uint8_t hash(char *str)
 {
 	uint32_t	len;
 	uint64_t	hash_value;
@@ -28,43 +28,40 @@ uint8_t hash(char *str) //gli va passato il nome con '=' incluso (come getenv("P
 	return (hash_value % HASH_SIZE);
 }
 
-void	envp_insert(char *env)
+//TODO gestire l'overwrite di setenv (hashing non solo con l'env_name?)
+void	ft_setenv(char *env_name, char *env_value)
 {
 	uint8_t 	index;
-	char		*env_name;
-	char		*env_value;
 	t_list		*envp;
+	t_envp		*elem;
 
 	envp = get_data()->envp;
-	env_name = ft_strdup(str);
-	if (!env_name)
-		ft_quit(3, "failed to allocate memory");
-	env_value = strchr(str, '=') + 1;
-	env_name[env_value - str] = '\0'; //preserva l'uguale
 	index = hash(env_name);
-	free(env_name);
-	envp[index] = lstadd_back(&envp[index], lstnew_p(ft_strdup(env_value))); //faccio strdup così posso fare free su lstremoveone in envp_delete
+	elem = malloc_p(sizeof(t_envp));
+	elem->name = env_name;
+	elem->value = env_value;
+	envp[index] = lstadd_back(&envp[index], lstnew_p(elem));
 }
 
-char	*envp_get(char *env_name) //gli va passato il nome con '=' incluso (come getenv("PATH=")) altrimenti non funziona strncmp
+char	*ft_getenv(char *env_name)
 {
 	uint8_t 	index;
 	char		*elem;
 	t_list		*envp;
 
 	envp = get_data()->envp;
-	index = hash(str);
+	index = hash(env_name);
 	while (envp[index])
 	{
 		elem = (char *)envp[index]->content;
-		if (ft_strncmp(str, elem, ft_strlen(str) + 1) == 0)
+		if (ft_strcmp(env_name, elem->name) == 0)
 			return (elem->value);
 		envp[index] = envp[index]->next;
 	}
 	return (NULL);
 }
 
-void envp_delete(char *env_name) //gli va passato il nome con '=' incluso (come getenv("PATH=")) altrimenti non funziona strncmp
+void	ft_unsetenv(char *env_name)
 {
 	uint8_t 	index;
 	char		*elem;
@@ -75,7 +72,7 @@ void envp_delete(char *env_name) //gli va passato il nome con '=' incluso (come 
 	while (envp[index])
 	{
 		elem = (char *)envp[index]->content;
-		if (ft_strncmp(env_name, elem, ft_strlen(env_name) + 1) == 0)
+		if (ft_strcmp(env_name, elem->name) == 0)
 		{
 			lstremoveone(&envp[index], &free);
 			return ;
@@ -86,12 +83,23 @@ void envp_delete(char *env_name) //gli va passato il nome con '=' incluso (come 
 
 t_list *envp_init(char **envp)
 {
-	t_list *new_envp;
+	t_list 		*new_envp;
+	char		*env_name;
+	char		*env_value;
+	uint16_t 	separator_idx;
 
 	if (!envp)
 		return (NULL);
 	new_envp = malloc_p(sizeof(t_list) * HASH_SIZE);
 	while (*envp)
-		envp_insert(*(envp++), new_envp);
+	{
+		//metto un \0 al posto del = per avere il nome e il valore separati (senza fare malloc
+		env_value = ft_strchr(*envp, '=') + 1;
+		separator_idx = env_value - *envp - 1;
+		(*envp)[separator_idx] = '\0';
+		env_name = *envp;
+		ft_setenv(env_name, env_value);
+		envp++;
+	}
 	return (new_envp);
 }
