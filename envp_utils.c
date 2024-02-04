@@ -28,7 +28,8 @@ uint8_t hash(char *str)
 	return (hash_value % HASH_SIZE);
 }
 
-//TODO gestire l'overwrite di setenv (hashing non solo con l'env_name?)
+//non deve fare lstaddback, ma controllare ogni nodo. altrimenti non rimpiazza  
+//se con flag replace allora rimpiazza, altrimenti lascia la already existing
 void	ft_setenv(char *env_name, char *env_value)
 {
 	uint8_t 	index;
