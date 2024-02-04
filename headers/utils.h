@@ -22,6 +22,8 @@ char    *ft_strjoin(char const *s1, char const *s2);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char    *ft_strcpy(char *dst, const char *src);
 char    *ft_strcat(char *dst, const char *src);
+int	    ft_strncmp(const char *s1, const char *s2, size_t n);
+
 
 void    *ft_calloc(size_t count, size_t size);
 void	ft_freematrix(char **matrix);

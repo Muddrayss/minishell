@@ -25,6 +25,7 @@ void    execve_p(const char *path, char *const argv[], char *const envp[]);
 void    wait_p(int *status);
 void    waitpid_p(pid_t pid, int *status, int options);
 void    signal_p(int signum, void (*handler)(int));
+char    *getenv_p(const char *name);
 int8_t	reset_fd(int *fd);
 
 #endif
