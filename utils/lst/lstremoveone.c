@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   lstremoveone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/03 19:33:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 16:45:43 by egualand         ###   ########.fr       */
+/*   Created: 2024/02/04 15:28:08 by egualand          #+#    #+#             */
+/*   Updated: 2024/02/04 15:28:50 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-size_t     ft_strlen(char *str)
+void	lstremoveone(t_list *to_remove, void (*del)(void *))
 {
-    size_t     i;
+    t_list *tmp;
 
-    if (!str)
-        return (0);
-    i = 0;
-    while (str[i])
-        i++;
-    return (i);
+    tmp = to_remove->next;
+    to_remove->next = tmp->next;
+    tmp->next = NULL;
+    lstdelone(to_remove, del);
 }

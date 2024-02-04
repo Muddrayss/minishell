@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 14:15:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:51:51 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ t_list	*lexer(char *input)
         if (i > 0)
         {
 			content->cmd_str = (char *)malloc_p(sizeof(char) * (i + 1));
-            ft_strlcpy(content->cmd_str, input, i + 1);
-			ft_lstadd_back(&lexered_params, ft_lstnew(content));
+            ft_strcpy(content->cmd_str, input);
+			lstadd_back(&lexered_params, lstnew_p(content));
             content = new_content_lexer();
             input += i;
         }
 		if (input[0] != '\0')
 		{
        	 	content->token = lexer_get_token(*input++);
-            ft_lstadd_back(&lexered_params, ft_lstnew(content));
+            lstadd_back(&lexered_params, lstnew_p(content));
             content = new_content_lexer();
         }
     }

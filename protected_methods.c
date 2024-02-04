@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   protected_methods.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:41:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:53:23 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,16 @@ void    signal_p(int signum, void (*handler)(int))
 {
     if (signal(signum, handler) == SIG_ERR)
         ft_quit(8, NULL);
+}
+
+char    *getenv_p(const char *name)
+{
+    char    *env_value;
+
+    env_value = getenv(name);
+    if (!env_value)
+        ft_quit(8, NULL);
+    return (env_value);
 }
 
 void    reset_fd(int *fd)

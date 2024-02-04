@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:34:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 20:24:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:51:26 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
 static char	**fill_matrix(int n_words, const char *s, char c, char **str_array);
-static void free_matrix(char **str_array);
 
 char	**ft_split(const char *s, char c)
 {
@@ -23,7 +22,9 @@ char	**ft_split(const char *s, char c)
 
 	if (s == NULL || *s == '\0')
 	{
-		str_array = calloc_p(sizeof(char *), 1);
+		str_array = ft_calloc(sizeof(char *), 1);
+		if (str_array == NULL)
+			return (NULL);
 		return (str_array);
 	}
 	i = -1;
@@ -35,7 +36,9 @@ char	**ft_split(const char *s, char c)
 		if (s[i] == c && s[i + 1] != c && s[i + 1] != '\0')
 			n_words++;
 	}
-	str_array = malloc_p(sizeof(char *) * (n_words + 1));
+	str_array = malloc(sizeof(char *) * (n_words + 1));
+	if (str_array == NULL)
+		return (NULL);
 	str_array[n_words] = NULL;
 	return (fill_matrix(n_words, s, c, str_array));
 }
@@ -57,7 +60,7 @@ static char	**fill_matrix(int n_words, const char *s, char c, char **str_array)
 			len++;
 		str_array[g] = malloc(sizeof(char) * (len + 1));
 		if (str_array[g] == NULL)
-			return (free_matrix(str_array), NULL);
+			return (ft_freematrix(str_array), NULL);
 		str_array[g][len++] = '\0';
 		i = len - 1;
 		while (--len > 0)
@@ -65,14 +68,4 @@ static char	**fill_matrix(int n_words, const char *s, char c, char **str_array)
 		s += i;
 	}
 	return (str_array);
-}
-
-static char	**free_matrix(char **str_array, int g)
-{
-    int i;
-
-    i = -1;
-	while (str_array && str_array[++g])
-		free(str_array[g]);
-	free(str_array);
 }

@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 13:52:49 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:57:30 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-char	*strdup_p(const char *s)
+char	*ft_strdup(const char *s)
 {
 	char	*dst;
 	int		i;
 
-	dst = malloc_p(sizeof(char) * (ft_strlen(s) + 3));
+	dst = malloc(sizeof(char) * (ft_strlen(s) + 3));
+	if (dst == NULL)
+		return (NULL);
 	i = 0;
 	while (s[i] != '\0')
 	{

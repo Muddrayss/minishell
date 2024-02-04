@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   treenew_p.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:37:35 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:53:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:44:56 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-t_tree	*treenew_p(int8_t type, char *cmd)
+t_tree	*treenew_p(int8_t type, t_cmd *cmd)
 {
     t_tree	    *new_node;
     

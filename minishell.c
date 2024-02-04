@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 20:10:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:55:28 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void init_general(void)
 {
 	char	*path;
 	
-	path = getenv("PATH");
+	path = getenv_p("PATH");
 	errno = 0;
 	g_status = 0;
 	exec_simple_cmd(path, "clear");
@@ -54,11 +54,13 @@ static void	init_data(char **envp)
 	t_data	*data;
 	
 	data = get_data();
-	data->envp = ft_strarr_dup(envp);
 	data->cmd_args = NULL;
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
-	data->starting_dir = getenv("PWD");
+	data->envp = ft_strarr_dup(envp);
+	if (!data->envp)
+		ft_quit(3, "Failed to allocate memory");
+	data->starting_dir = getenv_p("PWD");
 }
 
 

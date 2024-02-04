@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
+#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/03 20:23:02 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/04 15:46:03 by egualand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = minishell.c minishell_utils.c lexer.c parser.c executor.c heredoc.c signals.c executor_utils.c protected_methods.c \
 		$(addprefix utils/, \
-			$(addprefix lst/, lstadd_back.c lstclear.c lstlast.c lstnew_p.c) \
-		 	$(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strnstr.c ft_strarr_dup.c) \
+			$(addprefix lst/, lstadd_back.c lstclear.c lstlast.c lstnew_p.c lstremoveone.c) \
+		 	$(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strnstr.c ft_strncmp.c ) \
 			$(addprefix tree/, tree_size.c treeadd_below.c treeclear.c treenew_p.c) \
 			$(addprefix general/, ft_freematrix.c))
 		

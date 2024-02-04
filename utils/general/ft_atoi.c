@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/03 19:33:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 16:45:43 by egualand         ###   ########.fr       */
+/*   Created: 2024/02/04 16:59:54 by egualand          #+#    #+#             */
+/*   Updated: 2024/02/04 16:59:57 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-size_t     ft_strlen(char *str)
+unsigned int	ft_atou(char *nptr)
 {
-    size_t     i;
+	size_t 	n;
+	char	sign;
 
-    if (!str)
-        return (0);
-    i = 0;
-    while (str[i])
-        i++;
-    return (i);
+	n = 0;
+	while (*nptr == ' ' || (*nptr >= '\t' && *nptr <= '\r'))
+		nptr++;
+	sign = nptr[0];
+	if (*nptr == '-' || *nptr == '+')
+		nptr++;
+	while (*nptr != '\0' && *nptr <= '9' && *nptr >= '0')
+	{
+		n *= 10;
+		n += (*nptr - 48);
+		nptr++;
+	}
+	n = (-n) * (sign == '-') + (n) * (sign != '-');
+	if (n > UINT_MAX)
+		return (UINT_MAX);
+	return (n);
 }

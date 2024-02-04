@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   protected_methods.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:52:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:56:34 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ void    wait_p(int *status);
 void    waitpid_p(pid_t pid, int *status, int options);
 void    signal_p(int signum, void (*handler)(int));
 char    *getenv_p(const char *name);
-int8_t	reset_fd(int *fd);
+void	reset_fd(int *fd);
 
 #endif

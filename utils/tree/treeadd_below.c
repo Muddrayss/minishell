@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   treeadd_below.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:37:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:58:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:29:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

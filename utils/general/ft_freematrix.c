@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_freematrix.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:21:37 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 20:22:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 15:29:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
