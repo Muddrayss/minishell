@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:27:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 17:08:29 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static uint32_t count_cmds(t_tree *node, int n_cmds);
 
 void    executor(t_tree *parsed_params)
 {
-    int             fds[3];
     int             original_stdin;
     static int      heredoc_fileno1 = 1;
 
@@ -28,7 +27,6 @@ void    executor(t_tree *parsed_params)
     if (g_status != 130)
     {
         set_sighandler(&newline_signal, SIG_IGN);
-        fds[2] = -1;
         launch_commands(parsed_params, 0, 0);
         wait_for_children(parsed_params);
     }

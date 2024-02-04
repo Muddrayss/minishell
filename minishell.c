@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 15:55:28 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/04 17:46:45 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	init_data(char **envp)
 	data->cmd_args = NULL;
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
-	data->envp = ft_strarr_dup(envp);
+	data->envp = hashtable_init(envp);
 	if (!data->envp)
 		ft_quit(3, "Failed to allocate memory");
 	data->starting_dir = getenv_p("PWD");

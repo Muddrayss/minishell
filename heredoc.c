@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:26:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/04 17:02:29 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
     fill_limiters_array(node->right, limiters_array, i);
     if (node->type == CMD)
     {
-        redirs = node->cmd.redirs;
+        redirs = node->cmd->redirs;
         while (redirs)
         {
             content = (t_redir *)redirs->content;
@@ -82,7 +82,7 @@ static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs)
         return (n_heredocs);
     if (node->type == CMD)
     {
-        redirs = node->cmd.redirs;
+        redirs = node->cmd->redirs;
         while (redirs)
         {
             n_heredocs += (((t_redir *)(redirs->content))->type == REDIR_HEREDOC);

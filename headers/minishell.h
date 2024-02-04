@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 16:58:48 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/04 17:29:16 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # include "parser.h"
 # include "executor.h"
 # include "signals.h"
+# include "hashtable.h"
 # include "utils.h"
 # include "protected_methods.h"
 # include "colors.h"

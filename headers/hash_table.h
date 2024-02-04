@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_matrixsize.c                                    :+:      :+:    :+:   */
+/*   hash_table.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/04 14:02:47 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/04 15:29:21 by egualand         ###   ########.fr       */
+/*   Created: 2024/02/04 17:21:31 by egualand          #+#    #+#             */
+/*   Updated: 2024/02/04 17:54:57 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#ifndef HASH_TABLE_H
+# define HASH_TABLE_H
 
-size_t	ft_matrixsize(char **matrix)
+# define HASH_TABLE_SIZE 256
+
+typedef struct s_envp
 {
-	size_t	i;
+	char *name;
+	char *value;
+} t_envp;
 
-	i = 0;
-	while (matrix[i])
-		i++;
-	return (i);
-}
+uint8_t hash(char *name);
+
+#endif

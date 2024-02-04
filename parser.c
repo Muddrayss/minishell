@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 16:59:35 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/04 17:08:04 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,7 @@ static char	*get_filename(char *str, uint32_t idx_redir)
 		len++;
 	filename = calloc_p(len + 1, sizeof(char));
 	ft_strlcpy(filename, &str[i], len + 1);
+	return (filename);
 }
 
 static void    fill_redir_input(t_list **redirs, char *str, uint32_t i)
@@ -304,7 +305,6 @@ static void merge_separators(t_list **head)
     t_lexer *elem;
     t_lexer *next_elem;
     t_lexer *prev_elem;
-    t_list  *temp;
 
     node = *head;
     while (node)

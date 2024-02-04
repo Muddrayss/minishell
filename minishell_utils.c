@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 16:02:45 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/04 17:19:23 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,41 +105,39 @@ char	*ft_getenv(char *env_name)
 	return (env_value);
 }
 
-// void	ft_setenv(char *name, char *value, int8_t overwrite)
-// {
-// 	t_data	*data;
-// 	size_t	name_len;
-// 	int		i;
-// 	char	*env_name;
-// 	char	**new_env;
+void	ft_setenv(char *name, char *value, bool overwrite)
+{
+	t_data	*data;
+	size_t	name_len;
+	int		i;
+	char	*env_name;
+	char	**new_env;
 
-// 	data = get_data();
-// 	name_len = ft_strlen(name);
-// 	if (overwrite)
-// 	{
-// 		i = 0;
-// 		while (data->envp[i])
-// 		{
-// 			env_name = ft_strdup_until(data->envp[i++], "=", NULL);
-// 			if (!env_name)
-// 				ft_quit(4, "failed to allocate memory");
-// 			if (ft_strncmp(env_name, name, name_len) == 0)
-// 				break ;
-// 		}
-// 		free(data->envp[i]);
-// 		data->envp[i] = get_new_env(name, value);
-// 	}
-// 	else
-// 	{
-// 		i = ft_matrixsize(data->envp);
-// 		new_env = malloc_p(sizeof(char *) * i + 2);
-// 		new_env[i + 1] = NULL;
-// 		new_env = ft_strarrncpy(new_env, data->envp, i);
-// 		new_env[i] = get_new_env(name, value);
-// 		ft_freematrix(data->envp);
-// 		data->envp = new_env;
-// 	}
-// }
+	data = get_data();
+	name_len = ft_strlen(name);
+	if (overwrite == true)
+	{
+		i = 0;
+		while (data->envp[i])
+		{
+			env_name = get_env_name
+			if (ft_strncmp(env_name, name, MAX(env_name_len, name_len)) == 0)
+				break ;
+		}
+		free(data->envp[i]);
+		data->envp[i] = get_new_env(name, value);
+	}
+	else
+	{
+		i = ft_matrixsize(data->envp);
+		new_env = malloc_p(sizeof(char *) * i + 2);
+		new_env[i + 1] = NULL;
+		new_env = ft_strarrncpy(new_env, data->envp, i);
+		new_env[i] = get_new_env(name, value);
+		ft_freematrix(data->envp);
+		data->envp = new_env;
+	}
+}
 
 // static char	*get_new_env(char *name, char *value)
 // {
