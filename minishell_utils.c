@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 17:16:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 19:11:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,16 @@ void	free_data(t_data *data)
 	lstclear(data->lexered_params, &del_content_lexer);
 	treeclear(data->parsed_params, &del_content_parser);
 	envp_table_clear(data->envp_table);
-	//TODO fare una funzione che chiude tutti i fd
+	close_all_fds();
+}
+
+void	close_all_fds(void)
+{
+	int		i;
+
+	i = 0;
+	while (i < MAX_FDS)
+		close(i++); //senza controllare se fallisce close perche' ovviamente fallira' il 99% delle volte
 }
 
 void	ft_parse_error(char token)

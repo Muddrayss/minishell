@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 17:16:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 19:11:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_data
 extern int g_status;
 
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
+# define MAX_FDS 1024
 
 t_data	*get_data(void);
 char	*get_cmd(char *path, char *cmd);
@@ -65,6 +66,7 @@ void 	exec(char *path, char *cmd_str);
 void 	clean_heredocs();
 void 	ft_quit(int id, char *msg);
 void 	free_data(t_data *data);
+void	close_all_fds(void);
 void 	ft_parse_error(char token);
 void	ft_syntax_error(char token);
 bool	is_shell_space(char c);
