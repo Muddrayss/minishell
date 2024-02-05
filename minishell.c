@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 20:16:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 10:50:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,10 @@ static void	init_data(char **envp)
 	data->cmd_args = NULL;
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
-	data->envp = envp_init(envp);
-	if (!data->envp)
-		ft_quit(3, "Failed to allocate memory");
 	data->starting_dir = getenv_p("PWD");
+	data->envp_matrix = NULL;
+	data->envp_table = envp_table_init(envp);
 }
-
 
 static void	minishell_loop()
 {

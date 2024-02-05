@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envp_utils.c                                       :+:      :+:    :+:   */
+/*   envp_table.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/04 17:23:00 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/04 20:24:20 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/05 10:45:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,36 +28,49 @@ uint8_t hash(char *str)
 	return (hash_value % HASH_SIZE);
 }
 
-//non deve fare lstaddback, ma controllare ogni nodo. altrimenti non rimpiazza  
-//se con flag replace allora rimpiazza, altrimenti lascia la already existing
-void	ft_setenv(char *env_name, char *env_value)
+void	ft_setenv(char *env_name, char *env_value, bool replace)
 {
 	uint8_t 	index;
-	t_list		*envp;
+	t_list		*table;
 	t_envp		*elem;
 
-	envp = get_data()->envp;
+	table = get_data()->envp_table;
 	index = hash(env_name);
 	elem = malloc_p(sizeof(t_envp));
 	elem->name = env_name;
 	elem->value = env_value;
-	envp[index] = lstadd_back(&envp[index], lstnew_p(elem));
+	while (table[index])
+	{
+		if (ft_strcmp(env_name, table[index]->content->name) == 0 && replace)
+		{
+			table[index]->content = elem;
+			update_env_matrix(elem, REPLACE);
+			break ;
+		}
+		table[index] = table[index]->next;
+	}
+	if (!table[index])
+	{
+		table = get_data()->envp_table;
+		lstadd_back(&table[index], lstnew_p(elem));
+		update_env_matrix(elem, ADD);
+	}
 }
 
 char	*ft_getenv(char *env_name)
 {
 	uint8_t 	index;
 	char		*elem;
-	t_list		*envp;
+	t_list		*table;
 
-	envp = get_data()->envp;
+	table = get_data()->envp_table;
 	index = hash(env_name);
-	while (envp[index])
+	while (table[index])
 	{
-		elem = (char *)envp[index]->content;
+		elem = (char *)table[index]->content;
 		if (ft_strcmp(env_name, elem->name) == 0)
 			return (elem->value);
-		envp[index] = envp[index]->next;
+		table[index] = table[index]->next;
 	}
 	return (NULL);
 }
@@ -66,32 +79,33 @@ void	ft_unsetenv(char *env_name)
 {
 	uint8_t 	index;
 	char		*elem;
-	t_list		*envp;
+	t_list		*table;
 
-	envp = get_data()->envp;
+	table = get_data()->envp;
 	index = hash(env_name);
-	while (envp[index])
+	while (table[index])
 	{
-		elem = (char *)envp[index]->content;
+		elem = (char *)table[index]->content;
 		if (ft_strcmp(env_name, elem->name) == 0)
 		{
-			lstremoveone(&envp[index], &free);
-			return ;
+			lstremoveone(&table[index], &free);
+			update_env_matrix(elem, REMOVE);
+			break ;
 		}
-		envp[index] = envp[index]->next;
+		table[index] = table[index]->next;
 	}
 }
 
-t_list *envp_init(char **envp)
+t_list *envp_table_init(char **envp) //gli viene passata la envp originale
 {
-	t_list 		*new_envp;
+	t_list 		*new_envp_table;
 	char		*env_name;
 	char		*env_value;
 	uint16_t 	separator_idx;
 
 	if (!envp)
 		return (NULL);
-	new_envp = malloc_p(sizeof(t_list) * HASH_SIZE);
+	new_envp_table = malloc_p(sizeof(t_list) * HASH_SIZE);
 	while (*envp)
 	{
 		//metto un \0 al posto del = per avere il nome e il valore separati (senza fare malloc
@@ -102,5 +116,5 @@ t_list *envp_init(char **envp)
 		ft_setenv(env_name, env_value);
 		envp++;
 	}
-	return (new_envp);
+	return (new_envp_table);
 }
