@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:58:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 17:16:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,13 @@ void	free_data(t_data *data)
 void	ft_parse_error(char token)
 {
 	ft_putstr_fd("Parse error near '", 2);
+	write(2, &token, 1);
+	ft_putstr_fd("'\n", 2);
+}
+
+void	ft_syntax_error(char token)
+{
+	ft_putstr_fd("Syntax error near '", 2);
 	write(2, &token, 1);
 	ft_putstr_fd("'\n", 2);
 }

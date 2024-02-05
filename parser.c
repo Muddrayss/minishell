@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 17:11:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 17:14:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_tree	*parser(t_list *lexered_params)
 {
     t_tree   *parsed_params;
 
+    check_syntax(lexered_params);
     merge_separators(&lexered_params);
     // tree = malloc_p(sizeof(t_tree * ) * (ft_lstsize(params_head) + 1));
 	parsed_params = treenew_p(0, NULL);
@@ -36,28 +37,28 @@ t_tree	*parser(t_list *lexered_params)
     return (parsed_params);
 }
 
-static t_tree   *fill_tree(t_list *params, t_tree *node)
+static t_tree   *fill_tree(t_list *lexered_params, t_tree *node)
 {
 	t_lexer *elem; //comando di sinistra
     t_lexer *next_elem; //token
 
-    elem = (t_lexer *)params->content;
-    next_elem = (t_lexer *)params->next->content;
+    elem = (t_lexer *)lexered_params->content;
+    next_elem = (t_lexer *)lexered_params->next->content;
     treeadd_below(&node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str))); //se node e' NULL, crea la testa
     if (elem->token == SUBSHELL_START)
     {
-        treeadd_below(&node->left, fill_tree(params->next->next, NULL));
-        treeadd_below(&node->right, fill_tree(skip_parenthesis(params), NULL));
+        treeadd_below(&node->left, fill_tree(lexered_params->next->next, NULL));
+        treeadd_below(&node->right, fill_tree(skip_parenthesis(lexered_params), NULL));
     }
     else
     {
         treeadd_below(&node->left, treenew_p(elem->token, init_cmd(elem->cmd_str)));
-        treeadd_below(&node->right, fill_tree(params->next->next, NULL));
+        treeadd_below(&node->right, fill_tree(lexered_params->next->next, NULL));
     }
     return (node);
 }
 
-static t_list	*skip_parenthesis(t_list *params)
+static t_list	*skip_parenthesis(t_list *lexered_params)
 {
 	uint32_t	n_open;
 	t_lexer		*elem;
@@ -65,14 +66,14 @@ static t_list	*skip_parenthesis(t_list *params)
 	n_open = 0;
 	while (n_open)
 	{
-		elem = (t_lexer *)params->content;
+		elem = (t_lexer *)lexered_params->content;
 		if (elem->token == SUBSHELL_START)
 			n_open++;
 		else if (elem->token == SUBSHELL_END)
 			n_open--;
-		params = params->next;
+		lexered_params = lexered_params->next;
 	}
-	return (params);
+	return (lexered_params);
 }
 
 static t_cmd    *init_cmd(char *cmd_str)
@@ -267,7 +268,7 @@ static t_redir *init_redir(void)
     return (redir);
 }
 
-static void merge_separators(t_list **head)
+static void merge_separators(t_list **lexered_params)
 {
     t_list  *node;
     t_lexer *elem;
