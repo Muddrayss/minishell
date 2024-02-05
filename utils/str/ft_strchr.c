@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 11:45:36 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:45:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 12:00:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr( char *s, int c)
 {
     while (*s && *s != c)
         s++;

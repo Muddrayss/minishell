@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:34:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 15:51:26 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:58:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static char	**fill_matrix(int n_words, const char *s, char c, char **str_array);
+static char	**fill_matrix(int n_words, char *s, char c, char **str_array);
 
-char	**ft_split(const char *s, char c)
+char	**ft_split(char *s, char c)
 {
 	int		n_words;
 	int		i;
@@ -43,7 +43,7 @@ char	**ft_split(const char *s, char c)
 	return (fill_matrix(n_words, s, c, str_array));
 }
 
-static char	**fill_matrix(int n_words, const char *s, char c, char **str_array)
+static char	**fill_matrix(int n_words, char *s, char c, char **str_array)
 {
 	int	g;
 	int	i;

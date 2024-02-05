@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 10:59:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void    signal_p(int signum, void (*handler)(int))
         ft_quit(8, NULL);
 }
 
-char    *getenv_p(const char *name)
+char    *getenv_p( char *name)
 {
     char    *env_value;
 

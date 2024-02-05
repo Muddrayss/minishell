@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tree_size.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:36:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 15:29:21 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/05 12:00:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-uint32t tree_size(t_tree *node, uint32_t size)
+uint32_t tree_size(t_tree *node, uint32_t size)
 {
     if (!node)
         return (size);
