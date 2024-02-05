@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/02 17:28:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 19:15:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void    set_sighandler(void *handle_sigint, void *handle_sigquit) //int8_t flags
 
 //TODO dopo ctr+c in heredoc si rompe tutto
 
+//TODO effettivamente e' piu' clean fare diverse mode come heredoc_mode, interactive_mode, silent_mode
 
 //per queste 3 funzioni sarebbe figo fare lo shift dei bit come in open
 //rendere quindi queste statiche e scegliere quale chiamare in base alla flag nel set_sighandler
@@ -47,7 +48,7 @@ void    hide_and_abort_signal(int signo) //O_DCORE
     exit(signo);
 }
 
-void newline_signal(int signo)
+void    newline_signal(int signo)
 {
     (void)signo;
     ft_putstr_fd("\n", STDOUT_FILENO);
