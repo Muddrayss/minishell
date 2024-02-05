@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:02:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:11:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool i
 static t_redir  *init_redir(void);
 static void     merge_separators(t_list **head);
 static uint32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
-static void     del_content_parser(void *content);
 
 t_tree	*parser(t_list *lexered_params)
 {
@@ -320,4 +319,12 @@ void    del_content_parser(void *content)
     lstclear(&elem->cmd->redirs, &del_content_redirs);
     free(elem->cmd->cmd_str);
     free(elem->cmd);
+}
+
+void    del_content_redirs(void *content)
+{
+    t_redir *elem;
+
+    elem = (t_redir *)content;
+    free(elem->filename);
 }

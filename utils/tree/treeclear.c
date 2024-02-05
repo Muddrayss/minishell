@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:42:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 15:47:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:16:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 #include "../../headers/minishell.h"
 
-void	treeclear(t_tree *tree, void (*del)(void *))
+void	treeclear(t_tree **tree, void (*del)(void *))
 {
-    if (tree == NULL)
+    if (*tree == NULL)
         return ;
-    treeclear(tree->left);
-    treeclear(tree->right);
-    del(tree->content);
-    free(tree);
+    treeclear(&(*tree)->left, del);
+    treeclear(&(*tree)->right, del);
+    del(*tree);
+    free(*tree);
+    *tree = NULL;
 }

@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 17:21:31 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/05 16:06:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:12:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HASH_TABLE_H
 # define HASH_TABLE_H
 
-# define HASH_TABLE_SIZE 256
+# define HASH_TABLE_SIZE 255  //non 256 altrimenti va in loop infinito envp_table_clear
 # define REMOVE -1
 # define REPLACE 0
 # define ADD 1

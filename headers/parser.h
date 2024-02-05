@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:02:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:11:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ typedef struct s_redir
 
 t_tree	*parser(t_list *params_head);
 void    del_content_parser(void *content);
+void    del_content_redirs(void *content);
 
 #endif
