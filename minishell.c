@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:18:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:49:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void init_general(void)
 {
 	char	*path;
 	
-	path = getenv_p("PATH");
+	path = ft_getenv("PATH");
 	errno = 0;
 	g_status = 0;
 	exec_simple_cmd(path, "clear");
@@ -57,8 +57,10 @@ static void	init_data(char **envp)
 	data->cmd_args = NULL;
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
-	data->starting_dir = getenv_p("PWD");
-	data->envp_matrix = NULL;
+	data->starting_dir = getenv("PWD");
+	if (!data->starting_dir)
+		ft_quit(ERR_ENV, "Failed to get current working directory\nEnv var PWD likely not set");
+	data->envp_matrix = calloc_p(ft_matrixsize(envp) + 1, sizeof(char *));
 	envp_table_init(envp);
 }
 
@@ -73,7 +75,7 @@ static void	minishell_loop()
 		set_sighandler(&display_signal, SIG_IGN);
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
-			ft_quit(123, "exit");
+			ft_quit(123, "exit"); 
 		if (input[0] == '\0')
 			continue ;
 		add_history(input);
@@ -105,7 +107,7 @@ void  exec(char *path, char *cmd_str)
 	cmd_args = ft_split(cmd_str, ' ');
 	data->cmd_args = cmd_args;
 	if (!cmd_args)
-		ft_quit(5, "Failed to allocate memory");
+		ft_quit(ERR_MALLOC, "Failed to allocate memory");
 	if (!cmd_args[0])
 	{
 		free_data(data);

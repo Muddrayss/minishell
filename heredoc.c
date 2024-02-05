@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 15:37:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:54:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ static char    *get_heredoc_filename(int id1, int id2)
     size = ft_strlen(data->starting_dir) + ft_strlen("./tmp.heredoc_") + ft_strlen(idx1) + ft_strlen(idx2) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx1 || !idx2)
-        return (free(idx1), free(idx2), free(filename), ft_quit(22, "failed to allocate memory"), NULL);
+        return (free(idx1), free(idx2), free(filename), ft_quit(ERR_MALLOC, "failed to allocate memory"), NULL);
     ft_strcpy(filename, data->starting_dir);
     ft_strcat(filename, "./tmp.heredoc_");
     ft_strcat(filename, idx1);

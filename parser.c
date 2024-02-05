@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:11:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 17:11:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,20 +277,22 @@ static void merge_separators(t_list **head)
     node = *head;
     while (node)
     {
+        next_elem = NULL;
+        prev_elem = NULL;
         elem = (t_lexer *)node->content;
-        next_elem = (t_lexer *)node->next->content;
-        prev_elem = (t_lexer *)node->prev->content;
+        if (node->next)
+            next_elem = (t_lexer *)node->next->content;
+        if (node->prev)
+            prev_elem = (t_lexer *)node->prev->content;
         if (elem->token)
         {
             if (elem->token == AMPERSAND)
             {
                 if (next_elem->token == AMPERSAND)
-                {
                     elem->token = AND;
-                    lstremoveone(node->next, del_content_lexer);
-                }
                 else
                     ft_strcat(prev_elem->cmd_str, "&");
+                lstremoveone(node->next, del_content_lexer);
             }
             else if (elem->token == PIPE)
             {

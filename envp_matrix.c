@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:06:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:44:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	**env_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_
 		{
 			new_matrix[i] = ft_calloc(name_len + value_len + 2, sizeof(char));
 			if (!new_matrix[i])
-				return (ft_freematrix(new_matrix), ft_quit(3, "failed to allocate memory"), NULL);
+				return (ft_freematrix(new_matrix), ft_quit(ERR_MALLOC, "failed to allocate memory"), NULL);
 			ft_strcpy(new_matrix[i], elem.name);
 			new_matrix[i][name_len] = '=';
 			ft_strcat(new_matrix[i], elem.value);
@@ -87,13 +87,13 @@ char	**env_matrix_add(char **matrix, t_envp  elem, uint32_t name_len, uint32_t v
 
 	size = ft_matrixsize(matrix) + 2;
 	new_matrix = malloc_p(sizeof(char *) * size);
-	new_matrix[size] = NULL;
+	new_matrix[size - 1] = NULL;
 	i = -1;
 	while (matrix[++i])
 		new_matrix[i] = matrix[i];
 	new_matrix[i] = ft_calloc(name_len + value_len + 2, sizeof(char)); //NON protected altrimenti non facciamo il free della matrice
 	if (!new_matrix[i])
-		return (ft_freematrix(new_matrix), ft_quit(3, "failed to allocate memory"), NULL);
+		return (ft_freematrix(new_matrix), ft_quit(ERR_MALLOC, "failed to allocate memory"), NULL);
 	ft_strcpy(new_matrix[i], elem.name);
 	new_matrix[i][name_len] = '=';
 	ft_strcat(new_matrix[i], elem.value);

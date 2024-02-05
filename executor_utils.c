@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:50:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:44:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char    *replace_env_vars(char *str)
     {
         start = ft_strdup(&str[i]);
         if (!start)
-            ft_quit(3, "failed to allocate memory");
+            ft_quit(ERR_MALLOC, "failed to allocate memory");
         tmp = ft_strchr(start, '$');
         if (!tmp)
             return (free(start), str);

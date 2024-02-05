@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:42:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:16:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:59:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	treeclear(t_tree **tree, void (*del)(void *))
 {
-    if (*tree == NULL)
+    if (!tree || *tree == NULL)
         return ;
     treeclear(&(*tree)->left, del);
     treeclear(&(*tree)->right, del);

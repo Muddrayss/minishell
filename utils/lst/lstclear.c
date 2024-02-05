@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 13:45:40 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/05 11:55:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:59:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	lstclear(t_list **lst, void (*del)(void *))
 {
-	if (*lst == NULL || del == NULL || lst == NULL)
+	if (!lst || !*lst || !del)
 		return ;
 	if ((*lst)->next != NULL)
 		lstclear(&(*lst)->next, del);

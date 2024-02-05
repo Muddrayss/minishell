@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:05:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:21:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void    envp_table_init(char **envp) //gli viene passata la envp originale
 	uint16_t 	separator_idx;
 
     //onn c'e' bisogno di contorllare se envp == NULL perche' la prendiamo con getenv_p
-	get_data()->envp_table = malloc_p(sizeof(t_list *) * HASH_TABLE_SIZE);
+	get_data()->envp_table = calloc_p(HASH_TABLE_SIZE, sizeof(t_list *));
 	while (*envp)
 	{
 		//metto un \0 al posto del = per avere il nome e il valore separati (senza fare malloc

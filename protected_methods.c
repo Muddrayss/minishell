@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:43:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ void    *malloc_p(size_t size)
 
     ptr = malloc(size);
     if (!ptr)
-        ft_quit(14, NULL);
+        ft_quit(ERR_MALLOC, NULL);
     return (ptr);
 }
 
-void    *calloc_p(size_t count, size_t size)
+void    *calloc_p(size_t nmemb, size_t size)
 {
     void    *ptr;
 
-    ptr = calloc(count, size);
+    ptr = calloc(nmemb, size);
     if (!ptr)
-        ft_quit(14, NULL);
+        ft_quit(ERR_MALLOC, NULL);
     return (ptr);
 }
 
@@ -38,21 +38,21 @@ int    open_p(char *path, int flags, uint16_t permissions)
 
     fd = open(path, flags, permissions);
     if (fd == -1)
-        ft_quit(8, NULL);
+        ft_quit(ERR_FD, NULL);
     return (fd);
 }
 
 void    close_p(int fd)
 {
     if (close(fd) == -1)
-        ft_quit(8, NULL);
+        ft_quit(ERR_FD, NULL);
 }
 
 
-void    pipe_p(int pipefd[2])
+void    pipe_p(int fds[2])
 {
-    if (pipe(pipefd) == -1)
-        ft_quit(8, NULL);
+    if (pipe(fds) == -1)
+        ft_quit(ERR_FD, NULL);
 }
 
 pid_t    fork_p(void)
@@ -61,7 +61,7 @@ pid_t    fork_p(void)
 
     pid = fork();
     if (pid == -1)
-        ft_quit(8, NULL);
+        ft_quit(ERR_FORK, NULL);
     return (pid);
 }
 
@@ -71,42 +71,32 @@ int    dup_p(int fd)
 
     newfd = dup(fd);
     if (newfd == -1)
-        ft_quit(8, NULL);
+        ft_quit(ERR_FD, NULL);
     return (newfd);
 }
 
 void    dup2_p(int oldfd, int newfd)
 {
     if (dup2(oldfd, newfd) == -1)
-        ft_quit(8, NULL);
+        ft_quit(ERR_FD, NULL);
 }
 
 void    wait_p(int *status)
 {
     if (wait(status) == -1)
-        ft_quit(8, NULL);
+        ft_quit(ERR_WAIT, NULL);
 }
 
 void    waitpid_p(pid_t pid, int *status, int options)
 {
     if (waitpid(pid, status, options) == -1)
-        ft_quit(8, NULL);
+        ft_quit(ERR_WAIT, NULL);
 }
 
 void    signal_p(int signum, void (*handler)(int))
 {
     if (signal(signum, handler) == SIG_ERR)
-        ft_quit(8, NULL);
-}
-
-char    *getenv_p( char *name)
-{
-    char    *env_value;
-
-    env_value = getenv(name);
-    if (!env_value)
-        ft_quit(8, NULL);
-    return (env_value);
+        ft_quit(ERR_SIGSETUP, NULL);
 }
 
 void    reset_fd(int *fd)

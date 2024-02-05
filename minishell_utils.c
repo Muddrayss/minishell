@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:15:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:58:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@ char	*get_cmd(char *path, char *cmd)
 	unsigned int	i;
 	unsigned int	size;
 
+	if (!path || !cmd)
+		return (NULL);
 	if (ft_strnstr(cmd, "/", 1) || ft_strnstr(cmd, "./", 2) || ft_strnstr(cmd, "../", 3))
 		return (get_custom_bin(cmd));
 	dirs = ft_split(path, ':');
 	if (!dirs)
-		ft_quit(3, "failed to allocate memory");
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
 	full_path = NULL;
 	i = -1;
 	while (dirs[++i])
@@ -66,7 +68,7 @@ static char	*get_custom_bin(char *path)
 	else
 		full_path = ft_strdup(path);
 	if (!full_path)
-		ft_quit(3, "failed to allocate memory");
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
 	if (access(full_path, X_OK) == 0)
     	return (free(tmp), full_path);
 	else
@@ -123,12 +125,12 @@ void	clean_heredocs(void)
 	data = get_data();
     tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
 	if (!tmpdir_name)
-		ft_quit(3, "failed to allocate memory");
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
 	cmd = ft_strjoin("rm -rf ", tmpdir_name);
 	free(tmpdir_name);
 	if (!cmd)
-		ft_quit(3, "failed to allocate memory");
-    exec_simple_cmd(getenv_p("PATH"), cmd);
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
+    exec_simple_cmd(getenv("PATH"), cmd);
 	free(cmd);
 }
 
@@ -137,7 +139,6 @@ void	free_data(t_data *data)
 	ft_freematrix(data->cmd_args);
 	ft_freematrix(data->envp_matrix);
 	free(data->cmd_path);
-	free(data->starting_dir);
 	lstclear(data->lexered_params, &del_content_lexer);
 	treeclear(data->parsed_params, &del_content_parser);
 	envp_table_clear(data->envp_table);

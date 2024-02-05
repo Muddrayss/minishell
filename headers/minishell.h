@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:00:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:28:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # include "envp_utils.h"
 # include "utils.h"
 # include "protected_methods.h"
+# include "errors.h"
 # include "colors.h"
 
 typedef struct s_data
