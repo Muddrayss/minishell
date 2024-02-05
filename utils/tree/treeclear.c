@@ -6,8 +6,20 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:42:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 15:42:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 15:47:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //TODO: implement treeclear
+
+#include "../../headers/minishell.h"
+
+void	treeclear(t_tree *tree, void (*del)(void *))
+{
+    if (tree == NULL)
+        return ;
+    treeclear(tree->left);
+    treeclear(tree->right);
+    del(tree->content);
+    free(tree);
+}

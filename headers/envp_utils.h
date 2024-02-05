@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 17:21:31 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/05 11:29:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:06:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace);
 char	*ft_getenv(char *env_name);
 void	ft_unsetenv(char *env_name);
 void    envp_table_init(char **envp);
+void	envp_table_clear(t_list **table);
 
 // void    ft_printenv(void); forse serve per il comando env
 

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 20:11:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:06:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,12 +134,13 @@ void	clean_heredocs(void)
 
 void	free_data(t_data *data)
 {
-	if (data->cmd_args)
-		ft_freematrix(data->cmd_args);
-	if (data->cmd_path)
-		free(data->cmd_path);
-	if (data->lexered_params)
-		lstclear(data->lexered_params, &del_content_lexer);
+	ft_freematrix(data->cmd_args);
+	ft_freematrix(data->envp_matrix);
+	free(data->cmd_path);
+	free(data->starting_dir);
+	lstclear(data->lexered_params, &del_content_lexer);
+	lstclear(data->parsed_params, &del_content_parser);
+	envp_table_clear(data->envp_table);
 	//TODO fare una funzione che chiude tutti i fd
 }
 

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 15:37:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 16:00:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_data
 	char	**envp_matrix;
 	char	*starting_dir;
 	t_list	**lexered_params;
+	t_tree  **parsed_params;
 }t_data;
 
 extern int g_status;
