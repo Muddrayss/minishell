@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 13:37:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 14:48:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,34 +39,25 @@ t_tree	*parser(t_list *params_head)
     return (tree_head);
 }
 
-static void     *fill_tree(t_list *params, t_tree *tree_head, int is_first)
+static void     *fill_tree(t_list *params, t_tree *node)
 {
-	t_lexer	*elem;
-	t_list	*first_occ;
+	t_lexer *elem; //comando di sinistra
+    t_lexer *next_elem; //token
 
-	elem = (t_lexer *)params->content;
-	first_occ = NULL;
-	if (elem->token)
-	{
-		if (elem->token ==  SUBSHELL_END)
-			return (tree_head);
-		else if (elem->token == SUBSHELL_START)
-		{
-			first_occ = params;
-			params = skip_parenthesis(params);
-		}
-		treeadd_below(&tree_head, treenew_p(elem->token, NULL));
-		if (first_occ)
-			fill_tree(first_occ, tree_head->left, true); //fills the subshell
-		else
-			fill_tree(params->prev, tree_head->left, false);
-		treeadd_below(&tree_head->right, fill_tree(params->next, tree_head->right, true));
-		return (tree_head);
-	}
-	if (is_first == false)
-		return (treenew_p(CMD, init_cmd(elem->cmd_str)));
-	fill_tree(params->next, tree_head, false);
-    return (tree_head);
+    elem = (t_lexer *)params->content;
+    next_elem = (t_lexer *)params->next->content;
+    treeadd_below(node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str))); //se node e' NULL, crea la testa
+    if (elem->token == SUBSHELL_START)
+    {
+        treeadd_below(node->left, fill_tree(params->next->next, NULL));
+        treeadd_below(node->right, fill_tree(skip_parenthesis(params), NULL));
+    }
+    else
+    {
+        treeadd_below(node->left, treenew_p(elem->token, init_cmd(elem->cmd_str)));
+        treeadd_below(node->right, fill_tree(params->next->next, NULL));
+    }
+    return (node);
 }
 
 static t_list	*skip_parenthesis(t_list *params)
