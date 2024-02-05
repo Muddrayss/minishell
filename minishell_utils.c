@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 19:11:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 19:20:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,11 +147,11 @@ void	free_data(t_data *data)
 
 void	close_all_fds(void)
 {
-	int		i;
+	int		fd;
 
-	i = 0;
-	while (i < MAX_FDS)
-		close(i++); //senza controllare se fallisce close perche' ovviamente fallira' il 99% delle volte
+	fd = 1; //senza chiudere stdin e stdout
+	while (++fd < MAX_FDS)
+		reset_fd(&fd);
 }
 
 void	ft_parse_error(char token)
