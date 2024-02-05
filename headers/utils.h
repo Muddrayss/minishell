@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:34:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:46:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ size_t 			ft_strlcpy(char *dst, const char *src, size_t size);
 char 			*ft_strcat(char *dst, const char *src);
 int	    		ft_strncmp(const char *s1, const char *s2, size_t n);
 int	            ft_strcmp(char *s1, char *s2);
+char	        *ft_strchr(const char *s, int c);
 
 void    		*ft_calloc(size_t count, size_t size);
 void			ft_freematrix(char **matrix);

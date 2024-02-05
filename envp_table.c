@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:36:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:45:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ void    envp_table_init(char **envp) //gli viene passata la envp originale
 	char		*env_value;
 	uint16_t 	separator_idx;
 
-	if (!envp)
-		return (NULL);
+    //onn c'e' bisogno di contorllare se envp == NULL perche' la prendiamo con getenv_p
 	get_data()->envp_table = malloc_p(sizeof(t_list *) * HASH_TABLE_SIZE);
 	while (*envp)
 	{

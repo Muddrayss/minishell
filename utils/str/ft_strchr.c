@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lstremoveone.c                                     :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/04 15:28:08 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/05 11:43:26 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/05 11:45:36 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/05 11:45:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "headers/minishell.h"
 
-void	lstremoveone(t_list *to_remove, void (*del)(void *))
+char	*ft_strchr(const char *s, int c)
 {
-    t_list *prev;
-    t_list *next;
-
-    prev = to_remove->prev;
-    next = to_remove->next;
-    prev->next = next;
-    next->prev = prev;
-    to_remove->next = NULL;
-    to_remove->prev = NULL;
-    lstdelone(to_remove, del);
+    while (*s && *s != c)
+        s++;
+    if (*s == c)
+        return ((char *)s);
+    return (NULL);
 }
