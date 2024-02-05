@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 10:50:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:18:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	init_data(char **envp)
 	data->lexered_params = NULL;
 	data->starting_dir = getenv_p("PWD");
 	data->envp_matrix = NULL;
-	data->envp_table = envp_table_init(envp);
+	envp_table_init(envp);
 }
 
 static void	minishell_loop()
@@ -118,7 +118,7 @@ void  exec(char *path, char *cmd_str)
 		exit(COMMAND_NOT_FOUND);
 	}
 	else
-		execve(data->cmd_path, cmd_args, data->envp);
+		execve(data->cmd_path, cmd_args, data->envp_matrix);
 	if (errno != ENOEXEC)
 		ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_args[0]));
 	exit(0);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 10:45:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:36:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 uint8_t hash(char *str)
 {
-	uint32_t	len;
 	uint64_t	hash_value;
 	uint32_t	i;
 
@@ -25,52 +24,57 @@ uint8_t hash(char *str)
 		hash_value *= 33;
 		hash_value += str[i++];
 	}
-	return (hash_value % HASH_SIZE);
+	return (hash_value % HASH_TABLE_SIZE);
 }
 
-void	ft_setenv(char *env_name, char *env_value, bool replace)
+void	ft_setenv(char *env_name, char *env_value, bool replace) //da passargli il nome senza =
 {
 	uint8_t 	index;
-	t_list		*table;
-	t_envp		*elem;
+	t_list		**table;
+    t_list      *bucket;
+    t_envp      *elem;
+	t_envp		*new_elem;
 
 	table = get_data()->envp_table;
 	index = hash(env_name);
-	elem = malloc_p(sizeof(t_envp));
-	elem->name = env_name;
-	elem->value = env_value;
-	while (table[index])
+	new_elem = malloc_p(sizeof(t_envp));
+	new_elem->name = env_name;
+	new_elem->value = env_value;
+    bucket = table[index];
+	while (bucket) //cerca se e' gia' presente
 	{
-		if (ft_strcmp(env_name, table[index]->content->name) == 0 && replace)
+        elem = (t_envp *)bucket->content;
+		if (ft_strcmp(env_name, elem->name) == 0 && replace) //va bene strcmp perche' compara anche il '\0
 		{
-			table[index]->content = elem;
-			update_env_matrix(elem, REPLACE);
-			break ;
+			bucket->content = new_elem;
+			update_env_matrix(*new_elem, REPLACE);
+			return ;
 		}
-		table[index] = table[index]->next;
+		bucket = bucket->next;
 	}
-	if (!table[index])
+	if (!bucket) //se non e' presente lo aggiunge
 	{
-		table = get_data()->envp_table;
-		lstadd_back(&table[index], lstnew_p(elem));
-		update_env_matrix(elem, ADD);
+		lstadd_back(&table[index], lstnew_p(new_elem));
+		update_env_matrix(*new_elem, ADD);
 	}
 }
 
 char	*ft_getenv(char *env_name)
 {
 	uint8_t 	index;
-	char		*elem;
-	t_list		*table;
+	t_envp		*elem;
+	t_list		**table;
+    t_list      *bucket;
 
 	table = get_data()->envp_table;
 	index = hash(env_name);
-	while (table[index])
+    bucket = table[index];
+    while (bucket)
 	{
-		elem = (char *)table[index]->content;
+		elem = (t_envp *)bucket->content;
 		if (ft_strcmp(env_name, elem->name) == 0)
 			return (elem->value);
-		table[index] = table[index]->next;
+		bucket = bucket->next;
 	}
 	return (NULL);
 }
@@ -78,34 +82,35 @@ char	*ft_getenv(char *env_name)
 void	ft_unsetenv(char *env_name)
 {
 	uint8_t 	index;
-	char		*elem;
-	t_list		*table;
+	t_envp		*elem;
+	t_list		**table;
+    t_list      *bucket;
 
-	table = get_data()->envp;
+	table = get_data()->envp_table;
 	index = hash(env_name);
-	while (table[index])
+    bucket = table[index];
+	while (bucket)
 	{
-		elem = (char *)table[index]->content;
+		elem = (t_envp *)bucket->content;
 		if (ft_strcmp(env_name, elem->name) == 0)
 		{
-			lstremoveone(&table[index], &free);
-			update_env_matrix(elem, REMOVE);
+			lstremoveone(bucket, &free);
+			update_env_matrix(*elem, REMOVE);
 			break ;
 		}
-		table[index] = table[index]->next;
+		bucket = bucket->next;
 	}
 }
 
-t_list *envp_table_init(char **envp) //gli viene passata la envp originale
+void    envp_table_init(char **envp) //gli viene passata la envp originale
 {
-	t_list 		*new_envp_table;
 	char		*env_name;
 	char		*env_value;
 	uint16_t 	separator_idx;
 
 	if (!envp)
 		return (NULL);
-	new_envp_table = malloc_p(sizeof(t_list) * HASH_SIZE);
+	get_data()->envp_table = malloc_p(sizeof(t_list *) * HASH_TABLE_SIZE);
 	while (*envp)
 	{
 		//metto un \0 al posto del = per avere il nome e il valore separati (senza fare malloc
@@ -113,8 +118,7 @@ t_list *envp_table_init(char **envp) //gli viene passata la envp originale
 		separator_idx = env_value - *envp - 1;
 		(*envp)[separator_idx] = '\0';
 		env_name = *envp;
-		ft_setenv(env_name, env_value);
+		ft_setenv(env_name, env_value, false); //all'inizio non ci possono essere doppioni
 		envp++;
 	}
-	return (new_envp_table);
 }

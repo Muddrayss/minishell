@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 17:47:00 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:34:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@ char    		*ft_strcpy(char *dst, const char *src);
 size_t 			ft_strlcpy(char *dst, const char *src, size_t size);
 char 			*ft_strcat(char *dst, const char *src);
 int	    		ft_strncmp(const char *s1, const char *s2, size_t n);
+int	            ft_strcmp(char *s1, char *s2);
 
 void    		*ft_calloc(size_t count, size_t size);
 void			ft_freematrix(char **matrix);
 size_t			ft_matrixsize(char **matrix);
 int				ft_isdigit(int c);
 unsigned int 	ft_atou(char *nptr);
+char            *ft_itoa(int n);
 
 t_list			*lstnew_p(void *content);
 void			lstadd_back(t_list **lst, t_list *new);

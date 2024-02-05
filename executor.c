@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 17:08:29 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:01:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void     launch_commands(t_tree *parsed_params, int8_t parent_type, int8_t *flag);
 static void     exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2);
+static void     exec_cmd();
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_cmds(t_tree *node, int n_cmds);
 
@@ -47,6 +48,12 @@ static void launch_commands(t_tree *parsed_params, int8_t parent_type, int8_t *f
         return ;
     launch_commands(parsed_params->right, parsed_params->type, flag);
     *flag = FIRST_CMD;
+}
+
+static void exec_cmd()
+{
+    //TODO
+    exec_redirs(NULL, 0, 0);
 }
 
 static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2)
@@ -98,8 +105,6 @@ static void wait_for_children(t_tree *parsed_params)
 
 static uint32_t count_cmds(t_tree *node, int n_cmds)
 {
-    uint32_t    n_cmds;
-
     if (!node)
         return (n_cmds);
     if (node->type == CMD)

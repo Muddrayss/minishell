@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   protected_methods.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 15:53:23 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/05 10:59:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void    *calloc_p(size_t count, size_t size)
     return (ptr);
 }
 
-int    open_p(char *path, int flags, int8_t permissions)
+int    open_p(char *path, int flags, uint16_t permissions)
 {
     int    fd;
 
@@ -78,12 +78,6 @@ int    dup_p(int fd)
 void    dup2_p(int oldfd, int newfd)
 {
     if (dup2(oldfd, newfd) == -1)
-        ft_quit(8, NULL);
-}
-
-void    execve_p(const char *path, char *const argv[], char *const envp[])
-{
-    if (execve(path, argv, envp) == -1)
         ft_quit(8, NULL);
 }
 

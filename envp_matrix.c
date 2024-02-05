@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 10:49:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:06:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	update_env_matrix(t_envp elem, int8_t remove_add_replace) //se l'elemento d
 	uint32_t    value_len;
 
 	matrix = get_data()->envp_matrix;
-	name_len = ft_strlen(elem->name);
-	value_len = ft_strlen(elem->value);
+	name_len = ft_strlen(elem.name);
+	value_len = ft_strlen(elem.value);
 	if (remove_add_replace == REMOVE)
-		get_data()->envp_matrix = env_matrix_remove(matrix, elem->name, name_len);
+		get_data()->envp_matrix = env_matrix_remove(matrix, elem.name, name_len);
 	else if (remove_add_replace == ADD)
 		get_data()->envp_matrix = env_matrix_add(matrix, elem, name_len, value_len);
 	else if (remove_add_replace == REPLACE)
@@ -35,6 +35,7 @@ char	**env_matrix_remove(char **matrix, char *env_name, uint32_t name_len)
 {
 	char		**new_matrix;
 	uint32_t	i;
+    size_t      size;
 
 	i = -1;
 	size = ft_matrixsize(matrix) + 0;
@@ -50,10 +51,11 @@ char	**env_matrix_remove(char **matrix, char *env_name, uint32_t name_len)
 	return (new_matrix);
 }
 
-char	**env_matrix_replace(char **matrix, t_envp *elem, uint32_t name_len, uint32_t value_len)
+char	**env_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_t value_len)
 {
 	char		**new_matrix;
 	uint32_t	i;
+    size_t      size;
 
 	size = ft_matrixsize(matrix) + 1;
 	new_matrix = malloc_p(sizeof(char *) * size);
@@ -61,14 +63,14 @@ char	**env_matrix_replace(char **matrix, t_envp *elem, uint32_t name_len, uint32
 	i = -1;
 	while (matrix[++i])
 	{
-		if (ft_strncmp(matrix[i], elem->name, name_len + 1) == 0)
+		if (ft_strncmp(matrix[i], elem.name, name_len + 1) == 0)
 		{
-			new_matrix[i] = ft_calloc(sizeof(char) * (name_len + value_len + 2));
+			new_matrix[i] = ft_calloc(name_len + value_len + 2, sizeof(char));
 			if (!new_matrix[i])
 				return (ft_freematrix(new_matrix), ft_quit(3, "failed to allocate memory"), NULL);
-			ft_strcpy(new_matrix[i], elem->name);
+			ft_strcpy(new_matrix[i], elem.name);
 			new_matrix[i][name_len] = '=';
-			ft_strcat(new_matrix[i], elem->value);
+			ft_strcat(new_matrix[i], elem.value);
 			free(matrix[i]);
 		}
 		else
@@ -77,10 +79,11 @@ char	**env_matrix_replace(char **matrix, t_envp *elem, uint32_t name_len, uint32
 	return (new_matrix);
 }
 
-char	**env_matrix_add(char **matrix, t_elem	*elem, uint32_t name_len, uint32_t value_len)
+char	**env_matrix_add(char **matrix, t_envp  elem, uint32_t name_len, uint32_t value_len)
 {
 	char		**new_matrix;
 	uint32_t	i;
+    size_t      size;
 
 	size = ft_matrixsize(matrix) + 2;
 	new_matrix = malloc_p(sizeof(char *) * size);
@@ -88,11 +91,11 @@ char	**env_matrix_add(char **matrix, t_elem	*elem, uint32_t name_len, uint32_t v
 	i = -1;
 	while (matrix[++i])
 		new_matrix[i] = matrix[i];
-	new_matrix[i] = ft_calloc(sizeof(char) * (name_len + value_len + 2)); //NON protected altrimenti non facciamo il free della matrice
+	new_matrix[i] = ft_calloc(name_len + value_len + 2, sizeof(char)); //NON protected altrimenti non facciamo il free della matrice
 	if (!new_matrix[i])
 		return (ft_freematrix(new_matrix), ft_quit(3, "failed to allocate memory"), NULL);
-	ft_strcpy(new_matrix[i], elem->name);
+	ft_strcpy(new_matrix[i], elem.name);
 	new_matrix[i][name_len] = '=';
-	ft_strcat(new_matrix[i], elem->value);
+	ft_strcat(new_matrix[i], elem.value);
 	return (new_matrix);
 }

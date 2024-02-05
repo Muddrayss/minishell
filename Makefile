@@ -6,14 +6,14 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/05 10:51:20 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/05 11:34:38 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = minishell.c minishell_utils.c lexer.c parser.c executor.c heredoc.c signals.c envp_matrix.c envp_table.c executor_utils.c protected_methods.c \
 		$(addprefix utils/, \
 			$(addprefix lst/, lstadd_back.c lstclear.c lstlast.c lstnew_p.c lstremoveone.c) \
-		 	$(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strnstr.c ft_strncmp.c ) \
+		 	$(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c) \
 			$(addprefix tree/, tree_size.c treeadd_below.c treeclear.c treenew_p.c) \
 			$(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c ft_matrixsize.c))
 		

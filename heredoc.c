@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 18:10:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:04:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void     fill_heredoc(char *limiter, int fd);
 void create_heredocs(t_tree *tree, uint32_t heredoc_fileno1)
 {
     int         heredoc_fd;
-    t_redir     *redir;
     char        **limiters_array;
     uint32_t    n_heredocs;
 
@@ -157,11 +156,12 @@ static void fill_heredoc(char *limiter, int fd)
             break ;
         }
         str_len = ft_strlen(str);
+        //se aggiungessimo il \n al limiter basterebbe fare strncmp con limiter_len + 1
         if (ft_strncmp(limiter, str, MAX(str_len, limiter_len)) == 0)
             break ;
         replace_env_vars(&str);
         ft_putstr_fd(str, fd);
-        ft_putchar_fd('\n', fd);
+        write(fd, "\n", 1);
         free(str);
         str = NULL; //per evitare la double free
     }
