@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:27:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 15:37:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_data		*get_data(void);
 char		*get_cmd(char *path, char *cmd);
 void		exec_simple_cmd(char *path, char *cmd_str);
 void  		exec(char *path, char *cmd_str);
-void		free_matrix(char **matrix);
 void 		clean_heredocs();
 void 		ft_quit(int id, char *msg);
 void 		free_data(t_data *data);

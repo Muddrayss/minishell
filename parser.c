@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 14:48:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 15:35:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void     *fill_tree(t_list *params, t_tree *tree_head, int is_first);
+static t_tree   *fill_tree(t_list *params, t_tree *node);
 static t_list   *skip_parenthesis(t_list *params);
 static t_cmd    *init_cmd(char *cmd_str);
 static void     clear_redirs(t_list *redirs, char *cmd_str);
@@ -28,34 +28,34 @@ static bool     is_separator(char token);
 static void     merge_separators(t_list **head);
 static uint32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
 
-t_tree	*parser(t_list *params_head)
+t_tree	*parser(t_list *lexered_params)
 {
-    t_tree   *tree_head;
+    t_tree   *parsed_params;
 
-    merge_separators(&params_head);
+    merge_separators(&lexered_params);
     // tree = malloc_p(sizeof(t_tree * ) * (ft_lstsize(params_head) + 1));
-	tree_head = treenew_p(0, NULL);
-    fill_tree(params_head, tree_head, true);
-    return (tree_head);
+	parsed_params = treenew_p(0, NULL);
+    fill_tree(lexered_params, parsed_params);
+    return (parsed_params);
 }
 
-static void     *fill_tree(t_list *params, t_tree *node)
+static t_tree   *fill_tree(t_list *params, t_tree *node)
 {
 	t_lexer *elem; //comando di sinistra
     t_lexer *next_elem; //token
 
     elem = (t_lexer *)params->content;
     next_elem = (t_lexer *)params->next->content;
-    treeadd_below(node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str))); //se node e' NULL, crea la testa
+    treeadd_below(&node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str))); //se node e' NULL, crea la testa
     if (elem->token == SUBSHELL_START)
     {
-        treeadd_below(node->left, fill_tree(params->next->next, NULL));
-        treeadd_below(node->right, fill_tree(skip_parenthesis(params), NULL));
+        treeadd_below(&node->left, fill_tree(params->next->next, NULL));
+        treeadd_below(&node->right, fill_tree(skip_parenthesis(params), NULL));
     }
     else
     {
-        treeadd_below(node->left, treenew_p(elem->token, init_cmd(elem->cmd_str)));
-        treeadd_below(node->right, fill_tree(params->next->next, NULL));
+        treeadd_below(&node->left, treenew_p(elem->token, init_cmd(elem->cmd_str)));
+        treeadd_below(&node->right, fill_tree(params->next->next, NULL));
     }
     return (node);
 }
@@ -78,7 +78,6 @@ static t_list	*skip_parenthesis(t_list *params)
 	return (params);
 }
 
-// Defined but N-E-V-E-R used
 static t_cmd    *init_cmd(char *cmd_str)
 {
     t_cmd   *cmd;
@@ -195,7 +194,7 @@ static uint32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after)
     return (num);
 }
 
-static char	*get_filename(char *str, uint32_t idx_redir)
+static char *get_filename(char *str, uint32_t idx_redir)
 {
 	char 		*filename;
 	uint32_t 	len;

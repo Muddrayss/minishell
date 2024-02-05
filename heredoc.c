@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:53:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 15:37:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void create_heredocs(t_tree *tree, uint32_t heredoc_fileno1)
             break ;
         }
     }
-    free_matrix(limiters_array);
+    ft_freematrix(limiters_array);
     reset_fd(&heredoc_fd);
 }
 
