@@ -6,12 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 17:14:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 17:43:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
+static int8_t   check_syntax(t_list *lexered_params);
+static void     merge_separators(t_list **head);
+static void     merge_ampersands(t_list *elem);
+static void     merge_pipes(t_list *elem);
 static t_tree   *fill_tree(t_list *params, t_tree *node);
 static t_list   *skip_parenthesis(t_list *params);
 static t_cmd    *init_cmd(char *cmd_str);
@@ -22,7 +26,6 @@ static t_list   *fill_redirs(char *cmd_str);
 static void     fill_redir_input(t_list **redirs, char *str, uint32_t i, bool is_heredoc);
 static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append);
 static t_redir  *init_redir(void);
-static void     merge_separators(t_list **head);
 static uint32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
 
 t_tree	*parser(t_list *lexered_params)
@@ -35,6 +38,13 @@ t_tree	*parser(t_list *lexered_params)
 	parsed_params = treenew_p(0, NULL);
     fill_tree(lexered_params, parsed_params);
     return (parsed_params);
+}
+
+static int8_t   check_syntax(t_list *lexered_params)
+{
+    //TODO 
+    (void)lexered_params;
+    return (0);
 }
 
 static t_tree   *fill_tree(t_list *lexered_params, t_tree *node)
@@ -272,39 +282,17 @@ static void merge_separators(t_list **lexered_params)
 {
     t_list  *node;
     t_lexer *elem;
-    t_lexer *next_elem;
-    t_lexer *prev_elem;
 
-    node = *head;
+    node = *lexered_params;
     while (node)
     {
-        next_elem = NULL;
-        prev_elem = NULL;
         elem = (t_lexer *)node->content;
-        if (node->next)
-            next_elem = (t_lexer *)node->next->content;
-        if (node->prev)
-            prev_elem = (t_lexer *)node->prev->content;
         if (elem->token)
         {
             if (elem->token == AMPERSAND)
-            {
-                if (next_elem->token == AMPERSAND)
-                    elem->token = AND;
-                else
-                    ft_strcat(prev_elem->cmd_str, "&");
-                lstremoveone(node->next, del_content_lexer);
-            }
+                merge_ampersands(node);
             else if (elem->token == PIPE)
-            {
-                if (next_elem->token == PIPE)
-                {
-                    elem->token = OR;
-                    lstremoveone(node->next, del_content_lexer);
-                }
-                else
-                    elem->token = PIPELINE;
-            }
+                merge_pipes(node);
             else if (elem->token == PARENTHESIS_L)
                 elem->token = SUBSHELL_START;
             else if (elem->token == PARENTHESIS_R)
@@ -312,6 +300,39 @@ static void merge_separators(t_list **lexered_params)
         }
         node = node->next;
     }
+}
+
+static void merge_ampersands(t_list *node)
+{
+    t_lexer *elem;
+    t_lexer *next_elem;
+    t_lexer *prev_elem;
+
+    //vanno in segfault se non ci sono due elementi prima e dopo (quindi e' da fare attentamente il check_syntax())
+    elem = (t_lexer *)node->content;
+    next_elem = (t_lexer *)node->next->content;
+    prev_elem = (t_lexer *)node->prev->content;
+    if (next_elem->token == AMPERSAND)
+        elem->token = AND;
+    else
+        ft_strcat(prev_elem->cmd_str, "&");
+    lstremoveone(node->next, &del_content_lexer);
+}
+
+static void merge_pipes(t_list *node)
+{
+    t_lexer *elem;
+    t_lexer *next_elem;
+
+    elem = (t_lexer *)node->content;
+    next_elem = (t_lexer *)node->next->content;
+    if (next_elem->token == PIPE)
+    {
+        elem->token = OR;
+        lstremoveone(node->next, del_content_lexer);
+    }
+    else
+        elem->token = PIPELINE;
 }
 
 void    del_content_parser(void *content)
