@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:46:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:57:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 # define UTILS_H
 
 void    		ft_putstr_fd(char *s, int fd);
-char    		*ft_strdup(const char *s);
-char			**ft_split(const char *s, char c);
-size_t			ft_strlen(const char *s);
-char    		*ft_strjoin(char const *s1, char const *s2);
-char			*ft_strnstr(const char *big, const char *little, size_t len);
-char    		*ft_strcpy(char *dst, const char *src);
-size_t 			ft_strlcpy(char *dst, const char *src, size_t size);
-char 			*ft_strcat(char *dst, const char *src);
-int	    		ft_strncmp(const char *s1, const char *s2, size_t n);
+char    		*ft_strdup(char *s);
+char			**ft_split(char *s, char c);
+size_t			ft_strlen(char *s);
+char    		*ft_strjoin(char *s1, char *s2);
+char			*ft_strnstr(char *big, char *little, size_t len);
+char    		*ft_strcpy(char *dst, char *src);
+size_t 			ft_strlcpy(char *dst, char *src, size_t size);
+char 			*ft_strcat(char *dst, char *src);
+int	    		ft_strncmp(char *s1, char *s2, size_t n);
 int	            ft_strcmp(char *s1, char *s2);
-char	        *ft_strchr(const char *s, int c);
+char	        *ft_strchr(char *s, int c);
 
 void    		*ft_calloc(size_t count, size_t size);
 void			ft_freematrix(char **matrix);

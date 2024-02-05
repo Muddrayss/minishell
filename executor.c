@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:01:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:53:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void exec_redirs(t_list *redirs, int heredoc_fileno, int heredoc_fileno2)
     {
         redir = (t_redir *)node->content;
         if (redir->filename[0] == '$')
-            replace_env_vars(&redir->filename);
+            redir->filename = replace_env_vars(redir->filename);
         if (redir->type == REDIR_INPUT)
             redir->fds[0] = open_p(redir->filename, O_RDONLY, 0644);
         else if (redir->type == REDIR_HEREDOC)

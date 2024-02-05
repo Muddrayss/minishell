@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:04:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:53:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ static void fill_heredoc(char *limiter, int fd)
         //se aggiungessimo il \n al limiter basterebbe fare strncmp con limiter_len + 1
         if (ft_strncmp(limiter, str, MAX(str_len, limiter_len)) == 0)
             break ;
-        replace_env_vars(&str);
+        str = replace_env_vars(str);
         ft_putstr_fd(str, fd);
         write(fd, "\n", 1);
         free(str);

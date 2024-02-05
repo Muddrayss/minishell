@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/03 19:45:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:53:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 void    executor(t_tree *parsed_params);
 void    create_heredocs(t_tree *tree, uint32_t heredoc_fileno1);
 int     get_matching_heredoc(int id1, int id2);
-void    replace_env_vars(char **str);
+char    *replace_env_vars(char *str);
 bool    check_last_subcmd(char *cmd_str);
 
 #endif

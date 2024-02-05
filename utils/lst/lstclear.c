@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lstclear.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 13:45:40 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/04 15:29:05 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/05 11:55:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	lstclear(t_list **lst, void (*del)(void *))
 	if (*lst == NULL || del == NULL || lst == NULL)
 		return ;
 	if ((*lst)->next != NULL)
-		ft_lstclear(&(*lst)->next, del);
+		lstclear(&(*lst)->next, del);
 	del((*lst)->content);
 	free(*lst);
 	*lst = NULL;
