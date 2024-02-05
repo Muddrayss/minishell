@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 18:36:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 18:39:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,9 +161,9 @@ static t_list  *fill_redirs(char *cmd_str)
     uint32_t     i;
 
     i = 0;
+    redirs = malloc_p(sizeof(t_list));
     while (cmd_str[i])
     {
-        redirs = malloc_p(sizeof(t_list));
         if (cmd_str[i] == '<')
         {
             if (cmd_str[i + 1] == '<')
