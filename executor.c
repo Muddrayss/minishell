@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:53:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 19:00:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void     exec_cmd();
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_cmds(t_tree *node, int n_cmds);
 
+//E" NORMALE CHE CRASHI NELL'EXECUTOR!!!! ANCORA NON E' STATO AGGIUSTATO ALL'ALBERO
 void    executor(t_tree *parsed_params)
 {
     int             original_stdin;
@@ -45,7 +46,7 @@ static void launch_commands(t_tree *parsed_params, int8_t parent_type, int8_t *f
     if (parsed_params->type == CMD)
         exec_cmd(parsed_params, parent_type, flag); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
     if ((parsed_params->type == AND && g_status == 0) || (parsed_params->type == OR && g_status != 0))
-        return ;
+        return ; //breaka e non esegue i comandi successivo
     launch_commands(parsed_params->right, parsed_params->type, flag);
     *flag = FIRST_CMD;
 }
