@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 17:43:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 18:36:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int8_t   check_syntax(t_list *lexered_params);
 static void     merge_separators(t_list **head);
 static void     merge_ampersands(t_list *elem);
 static void     merge_pipes(t_list *elem);
-static t_tree   *fill_tree(t_list *params, t_tree *node);
+static t_tree   *fill_tree(t_list *lexered_params);
 static t_list   *skip_parenthesis(t_list *params);
 static t_cmd    *init_cmd(char *cmd_str);
 static void     clear_redirs(t_list *redirs, char *cmd_str);
@@ -35,8 +35,7 @@ t_tree	*parser(t_list *lexered_params)
     check_syntax(lexered_params);
     merge_separators(&lexered_params);
     // tree = malloc_p(sizeof(t_tree * ) * (ft_lstsize(params_head) + 1));
-	parsed_params = treenew_p(0, NULL);
-    fill_tree(lexered_params, parsed_params);
+    parsed_params = fill_tree(lexered_params);
     return (parsed_params);
 }
 
@@ -47,23 +46,27 @@ static int8_t   check_syntax(t_list *lexered_params)
     return (0);
 }
 
-static t_tree   *fill_tree(t_list *lexered_params, t_tree *node)
+static t_tree   *fill_tree(t_list *lexered_params)
 {
+    t_tree  *node;
 	t_lexer *elem; //comando di sinistra
     t_lexer *next_elem; //token
 
+    node = NULL;
     elem = (t_lexer *)lexered_params->content;
+    if (!lexered_params->next) //se c'e' solo un elemento sei alla foglia quindi lo ritorni cosi' com'e' senza controlalre a destra
+        return (treenew_p(elem->token, init_cmd(elem->cmd_str)));
     next_elem = (t_lexer *)lexered_params->next->content;
     treeadd_below(&node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str))); //se node e' NULL, crea la testa
     if (elem->token == SUBSHELL_START)
     {
-        treeadd_below(&node->left, fill_tree(lexered_params->next->next, NULL));
-        treeadd_below(&node->right, fill_tree(skip_parenthesis(lexered_params), NULL));
+        treeadd_below(&node->left, fill_tree(lexered_params->next->next));
+        treeadd_below(&node->right, fill_tree(skip_parenthesis(lexered_params)));
     }
     else
     {
         treeadd_below(&node->left, treenew_p(elem->token, init_cmd(elem->cmd_str)));
-        treeadd_below(&node->right, fill_tree(lexered_params->next->next, NULL));
+        treeadd_below(&node->right, fill_tree(lexered_params->next->next));
     }
     return (node);
 }
