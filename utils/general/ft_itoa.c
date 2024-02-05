@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 11:02:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 15:40:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/05 15:41:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 static int	nbr_len(long n);
 
