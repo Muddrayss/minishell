@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:44:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:21:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	**env_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_
 	{
 		if (ft_strncmp(matrix[i], elem.name, name_len + 1) == 0)
 		{
-			new_matrix[i] = ft_calloc(name_len + value_len + 2, sizeof(char));
+			new_matrix[i] = (char *)malloc(sizeof(char) * name_len + value_len + 2); //NON protected altrimenti non facciamo il free della matrice
 			if (!new_matrix[i])
 				return (ft_freematrix(new_matrix), ft_quit(ERR_MALLOC, "failed to allocate memory"), NULL);
 			ft_strcpy(new_matrix[i], elem.name);

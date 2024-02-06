@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 19:00:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:13:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void    executor(t_tree *parsed_params)
     reset_fd(&original_stdin);
 }
 
-//inorder traversal search
+//inorder traversal search (L, N, R)
 static void launch_commands(t_tree *parsed_params, int8_t parent_type, int8_t *flag)
 {
     if (!parsed_params)

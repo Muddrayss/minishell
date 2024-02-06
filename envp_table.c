@@ -6,11 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 01:06:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:18:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
+
+//ho visto che anche il bash originale fa cosi' per le variabili d'ambiente
+//le conserva in una hashtable (perche' per getenv e' molto piu veloce di una matrice)
+//e quando deve passarle ad un comando sotto forma di envp (char **) le trasforma copiandole tutte
+//infatti se guardi le env non hanno un ordine particolare tipo alfabetico perche' sono state inserite in una hashtable
 
 uint8_t hash(char *str)
 {
@@ -28,7 +33,8 @@ uint8_t hash(char *str)
 	return (hash_value % HASH_TABLE_SIZE);
 }
 
-void	ft_setenv(char *env_name, char *env_value, bool replace) //da passargli il nome senza =
+//a differenza di setenv e getenv originali il nome gli va passato senza '=' perche' viene tagliato da envp_table_init
+void	ft_setenv(char *env_name, char *env_value, bool replace)
 {
 	uint8_t 	index;
 	t_list		**table;
@@ -42,7 +48,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace) //da passargli il 
 	new_elem->name = env_name;
 	new_elem->value = env_value;
     bucket = table[index];
-	while (bucket) //cerca se e' gia' presente
+	while (bucket) //ci entra solo se c'e' una collision
 	{
         elem = (t_envp *)bucket->content;
 		if (ft_strcmp(env_name, elem->name) == 0 && replace) //va bene strcmp perche' compara anche il '\0
@@ -110,7 +116,7 @@ void    envp_table_init(char **envp) //gli viene passata la envp originale
 	uint16_t 	separator_idx;
 
     //onn c'e' bisogno di contorllare se envp == NULL perche' la prendiamo con getenv_p
-	get_data()->envp_table = calloc_p(HASH_TABLE_SIZE, sizeof(t_list *));
+	get_data()->envp_table = calloc_p(HASH_TABLE_SIZE, sizeof(t_list *)); //uso calloc cosi' inizializza tutti i bucket a NULL
 	while (*envp)
 	{
 		//metto un \0 al posto del = per avere il nome e il valore separati (senza fare malloc
