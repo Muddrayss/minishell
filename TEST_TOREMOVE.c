@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 00:41:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 01:03:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 11:45:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,12 @@
 uint8_t hash(char *str)
 {
 	uint32_t	hash_value; //tanto va in overfow o underflow
-	uint32_t	i;
 
 	hash_value = 5381;
-	i = 0;
-	while (str[i])
+	while (*str)
 	{
 		hash_value *= 33;
-		hash_value += str[i++];
-        hash_value++;
+		hash_value = ((hash_value << 5) + hash_value) + *str++;
 	}
 	return (hash_value % 255);
 }
@@ -36,7 +33,10 @@ int main(int argc, char **argv, char **envp)
 {
     char *i;
     int array[255];
+    int n_collisions = 0;
+    char **start;
 
+    start = envp;
     memset(array, 0, sizeof(array));
     while (*envp)
     {
@@ -47,8 +47,12 @@ int main(int argc, char **argv, char **envp)
     }
     for (int j = 0; j < 255; j++)
     {
+        if (start[j] == NULL)
+            break;
+        printf("env_var = %s, pos = %d\n", start[j], hash(start[j]));
         if (array[j] > 1)
-            printf("Collisione da %d elem\n", array[j]);
+            n_collisions++;
     }
+    printf("n of buckets with collisions = %d\n", n_collisions);
     return (0);
 }
