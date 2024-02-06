@@ -3,34 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:54:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 17:37:08 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static char     *get_heredoc_filename(int id1, int id2);
 static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs);
-static char     **get_limiters_array(t_tree *node, uint32_t *n_heredocs);
+static char     **get_limiters_array(t_tree *node);
 static void     fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i);
 static void     fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);
 
-void create_heredocs(t_tree *tree, uint32_t heredoc_fileno1)
+void create_heredocs(t_tree *tree)
 {
+    static int  heredoc_fileno = 0;
     int         heredoc_fd;
     char        **limiters_array;
-    uint32_t    n_heredocs;
+    uint32_t i;
 
-    limiters_array = get_limiters_array(tree, &n_heredocs);
+    limiters_array = get_limiters_array(tree);
     heredoc_fd = -1;
-    while (n_heredocs > 0)
+    i = 0;
+    while (limiters_array[i])
     {
-        heredoc_fd = open_p(get_heredoc_filename(heredoc_fileno1, n_heredocs), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        fill_in_child(limiters_array[--n_heredocs], heredoc_fd);
+        heredoc_fd = open_p(get_heredoc_filename(heredoc_fileno++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        fill_in_child(limiters_array[i], heredoc_fd);
         if (g_status == 130)
         {
             reset_fd(&heredoc_fd);
@@ -41,16 +42,19 @@ void create_heredocs(t_tree *tree, uint32_t heredoc_fileno1)
     reset_fd(&heredoc_fd);
 }
 
-static char    **get_limiters_array(t_tree *node, uint32_t *n_heredocs)
+static char    **get_limiters_array(t_tree *node)
 {
     char        **limiters_array;
+    uint32_t    n_heredocs;
 
-    *n_heredocs = count_heredocs(node, 0);
-    limiters_array = (char **)malloc_p(sizeof(char *) * (*n_heredocs + 1));
-    limiters_array[*n_heredocs] = NULL;
-    return (fill_limiters_array(node, limiters_array, 0), limiters_array);
+    n_heredocs = count_heredocs(node, 0);
+    limiters_array = (char **)malloc_p(sizeof(char *) * (n_heredocs + 1));
+    limiters_array[n_heredocs] = NULL;
+    fill_limiters_array(node, limiters_array, 0);
+    return (limiters_array);
 }
 
+//inorder traversal search (L, N, R)
 static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
 {
     t_list      *redirs;
@@ -58,7 +62,7 @@ static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
 
     if (!node)
         return ;
-    fill_limiters_array(node->right, limiters_array, i);
+    fill_limiters_array(node->left, limiters_array, i);
     if (node->type == CMD)
     {
         redirs = node->cmd->redirs;
@@ -70,7 +74,7 @@ static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
             redirs = redirs->next;
         }
     }
-    fill_limiters_array(node->left, limiters_array, i);
+    fill_limiters_array(node->right, limiters_array, i);
 }
 
 static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs)
@@ -94,27 +98,23 @@ static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs)
 }
 
 //usare strcat invece che strlcat
-static char    *get_heredoc_filename(int id1, int id2)
+char    *get_heredoc_filename(int id)
 {
     t_data      *data;
-    char        *idx1;
-    char        *idx2;
+    char        *idx;
     char        *filename;
     size_t      size;
 
     data = get_data();
-    idx1 = ft_itoa(id1);
-    idx2 = ft_itoa(id2);
-    size = ft_strlen(data->starting_dir) + ft_strlen("./tmp.heredoc_") + ft_strlen(idx1) + ft_strlen(idx2) + 2;
+    idx = ft_itoa(id);
+    size = ft_strlen(data->starting_dir) + ft_strlen("./tmp.heredoc_") + ft_strlen(idx) + 2;
     filename = ft_calloc(size, sizeof(char));
-    if (!filename || !idx1 || !idx2)
-        return (free(idx1), free(idx2), free(filename), ft_quit(ERR_MALLOC, "failed to allocate memory"), NULL);
+    if (!filename || !idx)
+        return (free(idx), free(filename), ft_quit(ERR_MALLOC, "failed to allocate memory"), NULL);
     ft_strcpy(filename, data->starting_dir);
     ft_strcat(filename, "./tmp.heredoc_");
-    ft_strcat(filename, idx1);
-    ft_strcat(filename, ".");
-    ft_strcat(filename, idx2);
-    return (free(idx1), free(idx2), filename);
+    ft_strcat(filename, idx);
+    return (free(idx), filename);
 }
 
 static void fill_in_child(char *limiter, int heredoc_fd)
@@ -167,12 +167,4 @@ static void fill_heredoc(char *limiter, int fd)
     }
     free(str);
     exit(0);
-}
-
-int get_matching_heredoc(int id1, int id2)
-{
-    int fd;
-
-    fd = open_p(get_heredoc_filename(id1, id2), O_RDONLY, 0644);
-    return (fd);
 }

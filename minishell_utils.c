@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 14:40:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/06 17:49:40 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ char *get_cmd(char *path, char *cmd)
     ft_freematrix(dirs);
     if (!full_path)
 	{
-        ft_putstr_fd("minishell: command not found: ", 2);
+        ft_putstr_fd("minishell: command not found: '", 2);
         ft_putstr_fd(cmd, 2);
-        ft_putstr_fd("\n", 2);
+        ft_putstr_fd("'\n", 2);
     }
     return (full_path);
 }
@@ -50,7 +50,7 @@ static bool is_custom_bin(char *cmd)
 	
 	i = -1;
 	while (prefix[++i])	
-		if (ft_strnstr(cmd, prefix[i], ft_strlen(prefix[i])) == 0)
+		if (ft_strnstr(cmd, prefix[i], ft_strlen(prefix[i])) != 0)
 			return (true);
 	return (false);
 } 
@@ -166,7 +166,7 @@ void	ft_quit(int id, char *msg)
 	exit(id);
 }
 
-void	clean_heredocs(void)
+void	clean_heredocs(char *path)
 {
 	t_data	*data;
     char    *tmpdir_name;
@@ -180,7 +180,7 @@ void	clean_heredocs(void)
 	free(tmpdir_name);
 	if (!cmd)
 		ft_quit(ERR_MALLOC, "failed to allocate memory");
-    exec_simple_cmd(getenv("PATH"), cmd);
+    exec_simple_cmd(path, cmd);
 	free(cmd);
 }
 

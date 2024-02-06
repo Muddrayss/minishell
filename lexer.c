@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 12:10:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 17:59:33 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_list	*lexer(char *input)
     //TODO gestire ' e "" qui. aggiungere alla cmd_str invece che a TOKEN (flag stop?)
     while (*input != '\0')
     {
+        printf("input: %s\n", input);
         cmd_len = 0;
         while (input[cmd_len] && !is_token(input[cmd_len]))
             cmd_len++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:49:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 17:57:52 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,6 @@ static void	check_args(int argc, char **argv)
 	}
 }
 
-static void init_general(void)
-{
-	char	*path;
-	
-	path = ft_getenv("PATH");
-	errno = 0;
-	g_status = 0;
-	exec_simple_cmd(path, "clear");
-	clean_heredocs();
-	exec_simple_cmd(path, "mkdir -p tmp");
-}
-
 static void	init_data(char **envp)
 {
 	t_data	*data;
@@ -62,6 +50,18 @@ static void	init_data(char **envp)
 		ft_quit(ERR_ENV, "Failed to get current working directory\nEnv var PWD likely not set");
 	data->envp_matrix = calloc_p(ft_matrixsize(envp) + 1, sizeof(char *));
 	envp_table_init(envp);
+}
+
+static void init_general(void)
+{
+	char	*path;
+	
+	path = ft_getenv("PATH");
+	errno = 0;
+	g_status = 0;
+	exec_simple_cmd(path, "clear");
+	clean_heredocs(path);
+	exec_simple_cmd(path, "mkdir -p tmp");
 }
 
 static void	minishell_loop()
@@ -80,6 +80,11 @@ static void	minishell_loop()
 			continue ;
 		add_history(input);
 		lexered_params = lexer(input);
+		if (!lexered_params)
+		{	
+			printf("lexer failed\n");
+			continue ;
+		}
 		execution_tree = parser(lexered_params);
 		if (!execution_tree)
 			continue ;

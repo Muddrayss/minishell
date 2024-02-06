@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 12:11:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:33:03 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static t_tree   *fill_tree(t_list *lexered_params)
 
     node = NULL;
     elem = (t_lexer *)lexered_params->content;
-    if (!lexered_params->next) //se c'e' solo un elemento sei alla foglia quindi lo ritorni cosi' com'e' senza controlalre a destra
+    if (!lexered_params->next) //se c'e' solo un elemento sei alla foglia quindi lo ritorni cosi' com'e' senza controllare a destra
         return (treenew_p(elem->token, init_cmd(elem->cmd_str)));
     next_elem = (t_lexer *)lexered_params->next->content;
     treeadd_below(&node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str))); //se node e' NULL, crea la testa

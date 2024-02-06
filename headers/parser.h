@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 12:07:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:32:52 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@
 # define BEFORE 0
 # define AFTER  1
 
-typedef struct s_redir		t_redir;
-typedef struct s_command	t_cmd;
-typedef struct s_tree		t_tree;
-
 typedef struct s_command
 {
 	char	*cmd_str;
@@ -44,10 +40,10 @@ typedef struct s_command
 
 typedef struct s_tree
 {
-	int8_t		type;
-	t_cmd		*cmd;
-	t_tree		*left;
-	t_tree		*right;
+	int8_t			type;
+	t_cmd			*cmd;
+	struct s_tree 	*left;
+	struct s_tree	*right;
 }t_tree;
 
 typedef struct s_redir
