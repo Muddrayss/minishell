@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 17:31:45 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/06 19:13:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ static void     dup_and_close(int *to_dup_old, int to_dup_new, int *to_close);
 static void     exec_cmd(t_tree *elem, int8_t prev, int8_t next);
 static void     exec_redirs(t_list *redirs, int heredoc_fileno);
 static void     wait_for_children(t_tree *parsed_params);
-static uint32_t count_cmds(t_tree *node, int n_cmds);
+static uint32_t count_x(t_tree *node, int n, int8_t type);
 
-//E" NORMALE CHE CRASHI NELL'EXECUTOR!!!! ANCORA NON E' STATO AGGIUSTATO ALL'ALBERO
 void    executor(t_tree *parsed_params)
 {
     int             original_stdin;
@@ -54,7 +53,7 @@ static void launch_commands(t_tree *node, int8_t prev_separator_type, int8_t nex
 static void exec_cmd(t_tree *elem, int8_t prev, int8_t next)
 {
     pid_t       pid;
-    static int  fds[3];
+    static int  fds[3] = {-1, -1, -1}; //cosi' resetfd non li prova a chiudere
 
     if (next == PIPELINE)
         pipe_p(fds);
@@ -62,7 +61,7 @@ static void exec_cmd(t_tree *elem, int8_t prev, int8_t next)
     if (pid == 0)
         child(elem, fds, prev, next);
     else
-        parent(pid, fds, prev == PIPELINE);
+        parent(pid, fds, next == PIPELINE);
 }
 
 static void child(t_tree *elem, int fds[2], int8_t prev, int8_t next)
@@ -82,12 +81,17 @@ static void child(t_tree *elem, int fds[2], int8_t prev, int8_t next)
     exec(get_data()->cmd_path, cmd_str);
 }
 
-static void parent(pid_t pid, int fds[3], bool is_after_pipeline)
+static void parent(pid_t pid, int fds[3], bool is_before_pipeline)
 {
     reset_fd(&fds[1]);
     fds[2] = fds[0];
-    if (!is_after_pipeline)
-        waitpid(pid, &g_status, 0);
+    if (!is_before_pipeline)
+    {
+        waitpid_p(pid, &g_status, 0);
+        g_status = WEXITSTATUS(g_status);
+        reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
+        reset_fd(&fds[2]);
+    }
 }
 
 static void dup_and_close(int *to_dup_old, int to_dup_new, int *to_close)
@@ -132,25 +136,25 @@ static void exec_redirs(t_list *redirs, int heredoc_fileno)
     }
 }
 
-static void wait_for_children(t_tree *parsed_params)
+static void wait_for_children(t_tree *parsed_params) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
 {
-    uint32_t    n_cmds;
+    uint32_t    n_pipelines;
 
-    n_cmds = count_cmds(parsed_params, 0);
-    while (n_cmds--)
+    n_pipelines = count_x(parsed_params, 0, PIPELINE);
+    while (n_pipelines--)
     {
         waitpid_p(0, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
     }
 }
 
-static uint32_t count_cmds(t_tree *node, int n_cmds)
+static uint32_t count_x(t_tree *node, int n, int8_t type)
 {
     if (!node)
-        return (n_cmds);
-    if (node->type == CMD)
-        n_cmds++;
-    n_cmds += count_cmds(node->left, 0);
-    n_cmds += count_cmds(node->right, 0);
-    return (n_cmds);
+        return (n);
+    if (node->type == type)
+        n++;
+    n += count_x(node->left, 0, type);
+    n += count_x(node->right, 0, type);
+    return (n);
 }

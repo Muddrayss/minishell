@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 17:57:52 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/06 18:51:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,6 @@ static void	minishell_loop()
 			continue ;
 		add_history(input);
 		lexered_params = lexer(input);
-		if (!lexered_params)
-		{	
-			printf("lexer failed\n");
-			continue ;
-		}
 		execution_tree = parser(lexered_params);
 		if (!execution_tree)
 			continue ;
