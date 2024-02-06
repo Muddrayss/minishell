@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 12:05:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:39:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static char	*get_custom_bin(char *path);
-// static char	*get_new_env(char *name, char *value);
+static void	throw_file_error(char *file);
 
-char	*get_cmd(char *path, char *cmd)
+char	*get_cmd(char *path, char *cmd) //TODO migliorare in termini di readability
 {
 	char			**dirs;
 	char			*full_path;
@@ -57,10 +57,14 @@ static char	*get_custom_bin(char *path)
 {
 	char	*full_path;
 	char	*tmp;
+	char    *tmp2;
 
 	full_path = NULL;
-	tmp = ft_getenv("PWD");
-	ft_strcat(tmp, "/");
+	tmp2 = ft_getenv("PWD");
+	tmp = ft_strjoin(tmp2, "/"); //abbastanza ridicolo dover usare strjoin per aggiungere un carattere
+	free(tmp2);
+	if (!tmp)
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
 	if (ft_strncmp(path, "../", 3) == 0)
 		full_path = ft_strjoin(tmp, path);
 	else if (ft_strncmp(path, "./", 2) == 0)
@@ -72,20 +76,28 @@ static char	*get_custom_bin(char *path)
 	if (access(full_path, X_OK) == 0)
     	return (free(tmp), full_path);
 	else
-	{
-		if (errno == EACCES)
-			ft_putstr_fd("minishell: permission denied: ", 2);
-		else if (errno == ENOENT)
-			ft_putstr_fd("minishell: no such file or directory: ", 2);
-		else
-			ft_putstr_fd("minishell: error accessing file: ", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd("\n", 2);
-	}
+		throw_file_error(path);
     return (free(tmp), free(full_path), NULL);
 }
 
-bool	is_shell_space(char c)
+//quanto cazzo e' bello unire stringhe in C porca puttana. per unire 2 stringhe e 1 carattere novantamila malloc
+static void	throw_file_error(char *file)
+{
+	char	*tmp;
+	char	*error_str;
+	
+	tmp = ft_strjoin("minishell: Error opening file '", file);
+	if (!tmp)
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
+	error_str = ft_strjoin(tmp, "'");
+	free(tmp);
+	if (!error_str)
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
+	perror(error_str); //viene tipo: minishell: Error opening file 'file.txt': No such file or directory
+	free(error_str);
+}
+
+bool	is_shell_space(char c) //meglio cosi' altrimenti complicated conditional
 {
 	static char 	shell_spaces[] = {' ', '\n', '\t'};
 	static uint8_t	n_spaces = sizeof(shell_spaces) / sizeof(shell_spaces[0]);
