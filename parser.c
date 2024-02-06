@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 18:48:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:11:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,13 +293,13 @@ static void merge_separators(t_list **lexered_params)
         elem = (t_lexer *)node->content;
         if (elem->token)
         {
-            if (elem->token == AMPERSAND)
+            if (elem->token == '&')
                 merge_ampersands(node);
-            else if (elem->token == PIPE)
+            else if (elem->token == '|')
                 merge_pipes(node);
-            else if (elem->token == PARENTHESIS_L)
+            else if (elem->token == '(')
                 elem->token = SUBSHELL_START;
-            else if (elem->token == PARENTHESIS_R)
+            else if (elem->token == ')')
                 elem->token = SUBSHELL_END;
         }
         node = node->next;
@@ -316,7 +316,7 @@ static void merge_ampersands(t_list *node)
     elem = (t_lexer *)node->content;
     next_elem = (t_lexer *)node->next->content;
     prev_elem = (t_lexer *)node->prev->content;
-    if (next_elem->token == AMPERSAND)
+    if (next_elem->token == '&')
         elem->token = AND;
     else
         ft_strcat(prev_elem->cmd_str, "&");
@@ -330,7 +330,7 @@ static void merge_pipes(t_list *node)
 
     elem = (t_lexer *)node->content;
     next_elem = (t_lexer *)node->next->content;
-    if (next_elem->token == PIPE)
+    if (next_elem->token == '|')
     {
         elem->token = OR;
         lstremoveone(node->next, del_content_lexer);

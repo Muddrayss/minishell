@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 19:20:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:05:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,14 @@ static char	*get_custom_bin(char *path)
 
 bool	is_shell_space(char c)
 {
-	if (c == ' ' || c == '\n' || c == '\t')
-		return (true);
+	static char 	shell_spaces[] = {' ', '\n', '\t'};
+	static uint8_t	n_spaces = sizeof(shell_spaces) / sizeof(shell_spaces[0]);
+	uint8_t			i;
+
+	i = 0;
+	while (i < n_spaces)
+		if (c == shell_spaces[i++])
+			return (true);
 	return (false);
 }
 

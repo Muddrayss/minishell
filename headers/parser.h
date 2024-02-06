@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:11:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:07:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define PARSER_H
 
 # define CMD 				0
-# define SEMICOLON			';'
+# define SEMICOLON			1
 # define OR 				2
 # define AND 				3
 # define PIPELINE 			4

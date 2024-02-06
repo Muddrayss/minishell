@@ -3,88 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/04 15:51:51 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:10:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static char     lexer_get_token(char c);
-static bool 	is_token(char *str, int idx);
-static t_lexer  *new_content_lexer(void);
+static bool 	is_token(char c);
+static void 	lexer_add_cmd(t_list *lexered_params, uint32_t cmd_len, char *input);
+static void 	lexer_add_token(t_list *lexered_params, char c);
 
 t_list	*lexer(char *input)
 {
-    t_data          *data;
-    int             i;
-    t_lexer   		*content;
+    uint32_t        cmd_len;
     t_list         	*lexered_params;
 
-    data = get_data();
 	lexered_params = NULL;
-    data->lexered_params = &lexered_params;
-    content = new_content_lexer();
+    get_data()->lexered_params = &lexered_params;
     //TODO gestire ' e "" qui. aggiungere alla cmd_str invece che a TOKEN (flag stop?)
     while (*input != '\0')
     {
-        i = 0;
-        while (input[i] && !is_token(input, i))
-            i++;
-        if (i > 0)
-        {
-			content->cmd_str = (char *)malloc_p(sizeof(char) * (i + 1));
-            ft_strcpy(content->cmd_str, input);
-			lstadd_back(&lexered_params, lstnew_p(content));
-            content = new_content_lexer();
-            input += i;
-        }
+        cmd_len = 0;
+        while (input[cmd_len] && !is_token(input[cmd_len]))
+            cmd_len++;
+        if (cmd_len > 0)
+            lexer_add_cmd(lexered_params, cmd_len, input);
+        input += cmd_len;
 		if (input[0] != '\0')
-		{
-       	 	content->token = lexer_get_token(*input++);
-            lstadd_back(&lexered_params, lstnew_p(content));
-            content = new_content_lexer();
-        }
+            lexer_add_token(lexered_params, *input++);
     }
 	return (lexered_params);
 }
 
-static  t_lexer *new_content_lexer(void)
+static void lexer_add_cmd(t_list *lexered_params,uint32_t cmd_len, char *input)
 {
-    t_lexer	*content;
+    t_lexer   		*content;
 
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
-    content->cmd_str = NULL;
+    content->cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
     content->token = 0;
-    return (content);
+    ft_strlcpy(content->cmd_str, input, cmd_len + 1);
+    lstadd_back(&lexered_params, lstnew_p(content));
 }
 
-static char     lexer_get_token(char c)
+static void lexer_add_token(t_list *lexered_params, char c)
 {
-    int8_t         	i;
-	static uint8_t	n_tokens;
-    static int8_t   tokens[5] = {PIPE, SEMICOLON, AND, PARENTHESIS_L, PARENTHESIS_R};
-    
-	n_tokens = sizeof(tokens) / sizeof(tokens[0]);
-    i = -1;
-    while (++i < (n_tokens))
-        if (tokens[i] == c)
-            return (tokens[i]);
-    return (0);
+    t_lexer   		*content;
+
+    content = (t_lexer *)malloc_p(sizeof(t_lexer));
+    content->token = c;
+    content->cmd_str = NULL;
+    lstadd_back(&lexered_params, lstnew_p(content));
 }
 
-static bool is_token(char *str, int idx)
+static bool is_token(char c)
 {
     int8_t			i;
-	static uint8_t	n_tokens;
-    static char     tokens[5] = {PIPE, SEMICOLON, AND, PARENTHESIS_L, PARENTHESIS_R};
+    static char     tokens[5] = {'|', ';', '&', '(', ')'};
+	static uint8_t	n_tokens = sizeof(tokens) / sizeof(tokens[0]);
 
-    n_tokens = sizeof(tokens) / sizeof(tokens[0]);
 	i = -1;
    	while (++i < n_tokens)
-		if (tokens[i] == str[idx])
+		if (tokens[i] == c)
 			return (true);
 	return (false);
 }
