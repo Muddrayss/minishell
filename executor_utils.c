@@ -50,7 +50,7 @@ static char *get_env_name(char *str)
     uint8_t     len;
 
     len = 0;
-    if (!str || str[len] == '\0' || str[len] == '$' || is_shell_space(str[len]))
+    if (!str || str[0] == '\0' || str[0] == '$' || is_shell_space(str[0]))
         return (NULL);
     while (str[len] != '\0' && !is_shell_space(str[len]) && str[len] != '$')
         len++;
