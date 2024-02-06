@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:21:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 01:04:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ uint8_t hash(char *str)
 	{
 		hash_value *= 33;
 		hash_value += str[i++];
+		hash_value++;
 	}
 	return (hash_value % HASH_TABLE_SIZE);
 }
