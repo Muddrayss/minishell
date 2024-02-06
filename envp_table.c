@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 01:04:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/06 01:06:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void    envp_table_init(char **envp) //gli viene passata la envp originale
 		separator_idx = env_value - *envp - 1;
 		(*envp)[separator_idx] = '\0';
 		env_name = *envp;
-		ft_setenv(env_name, env_value, false); //all'inizio non ci possono essere doppioni
+		ft_setenv(env_name, env_value, false); //all'inizio non ci possono essere doppioni quindi metto false
 		envp++;
 	}
 }
@@ -129,8 +129,5 @@ void	envp_table_clear(t_list **table)
 
 	i = 0;
 	while (i < HASH_TABLE_SIZE)
-	{
-		lstclear(&table[i], &free);
-		i++;
-	}
+		lstclear(&table[i++], &free);
 }
