@@ -46,7 +46,7 @@ static void launch_commands(t_tree *node, int8_t next_separator_type, int8_t pre
     if (!node || node->type == SUBSHELL_END)
         return ;
     if (node->type == CMD) //piccolo problemino qui quando c'e' un solo comando, execve viene fatto sul padre
-        child(node, fds, prev_separator_type, next_separator_type); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
+        child(node, fds, prev_separator_type, next_separator_type);
     if (node->type == PIPELINE)
         pipe_p(fds);
     pid = fork_p(); //ogni volta che vado a sinistra forko. (cosi le subshell si gestiscono da sole)
