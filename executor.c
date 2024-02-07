@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 09:55:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 10:57:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,48 +37,30 @@ void    executor(t_tree *parsed_params)
     reset_fd(&original_stdin);
 }
 
-//inorder traversal search (L, N, R)
-static void launch_commands(t_tree *node, int8_t prev_separator_type, int8_t next_separator_type)
-{
-    pid_t   pid;
-
-    if (!node || node->type == SUBSHELL_END)
-        return ;
-    launch_commands(node->left, next_separator_type, node->type);
-    if (node->type == SUBSHELL_START)
-    {
-        pid = fork_p();
-        if (pid == 0)
-            launch_commands(node->left, next_separator_type, node->type);
-        else
-        {
-            waitpid_p(pid, &g_status, 0); //anche i subshell aggiornano l'exit status
-            g_status = WEXITSTATUS(g_status);
-            return ;
-        }
-    }
-    if (node->type == CMD)
-        exec_cmd(node, prev_separator_type, next_separator_type); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
-    if ((node->type == AND && g_status == 0) || (node->type == OR && g_status != 0))
-        return ; //breaka e non esegue i comandi successivo
-    launch_commands(node->right, prev_separator_type, node->type);
-}
-
-static void exec_cmd(t_tree *elem, int8_t prev, int8_t next)
+//preorder traversal search(N, L, R)
+//HO RIGUARDATO 3 VOLTE LA LOGICA SU CARTA E DOVREBBE FUNZIONARE (da testare)
+static void launch_commands(t_tree *node, int8_t next_separator_type, int8_t prev_separator_type)
 {
     pid_t       pid;
     static int  fds[3] = {-1, -1, -1}; //cosi' resetfd non li prova a chiudere
 
-    if (next == PIPELINE)
+    if (!node || node->type == SUBSHELL_END)
+        return ;
+    if (node->type == CMD)
+        child(node, fds, prev_separator_type, next_separator_type); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
+    if (node->type == PIPELINE)
         pipe_p(fds);
-    pid = fork_p();
+    pid = fork_p(); //ogni volta che vado a sinistra forko. (cosi le subshell si gestiscono da sole)
     if (pid == 0)
-        child(elem, fds, prev, next);
+        launch_commands(node->left, node->type, prev_separator_type);
     else
-        parent(pid, fds, next == PIPELINE);
+        parent(pid, fds, node->type == PIPELINE);
+    if ((node->type == AND && g_status == 0) || (node->type == OR && g_status != 0))
+        return ; //breaka e non esegue i comandi successivo
+    launch_commands(node->right, next_separator_type, node->type);
 }
 
-static void child(t_tree *elem, int fds[2], int8_t prev, int8_t next)
+static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
 {
     static int  heredoc_fileno = 0;
     t_list      *redirs;
