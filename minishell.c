@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 09:58:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 11:27:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ void  exec(char *path, char *cmd_str)
 		exit(0);
 	}
 	data->cmd_path = get_cmd(path, cmd_args[0]);
-	printf("cmd_path: %s\n", data->cmd_path);
 	if (!data->cmd_path)
 	{
 		free_data(data);

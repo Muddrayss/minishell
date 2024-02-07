@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 11:15:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 11:26:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
         dup_and_close(&fds[2], STDIN_FILENO, &fds[1]);
     reset_fd(&fds[0]);
     exec_redirs(redirs, heredoc_fileno++);
-    exec(get_data()->cmd_path, cmd_str);
+    exec(ft_getenv("PATH"), cmd_str);
 }
 
 static void parent(pid_t pid, int fds[3], bool is_before_pipeline)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 17:49:40 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/07 11:24:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ char *get_cmd(char *path, char *cmd)
 
 static bool is_custom_bin(char *cmd)
 {
-	static char	*prefix[] =
-	{"./", "../", "/", NULL};
 	int8_t		i;
+	static char	*prefixes[] =
+	{"./", "../", "/", NULL};
 	
 	i = -1;
-	while (prefix[++i])	
-		if (ft_strnstr(cmd, prefix[i], ft_strlen(prefix[i])) != 0)
+	while (prefixes[++i])	
+		if (ft_strnstr(cmd, prefixes[i], ft_strlen(prefixes[i])) != NULL)
 			return (true);
 	return (false);
 } 
@@ -62,9 +62,9 @@ static char *concat_path_cmd(char *dir, char *cmd)
 
 	size = strlen(dir) + strlen(cmd) + 2; // +2 for '/' and '\0'
 	full_path = malloc_p(size);
-	strcpy(full_path, dir);
-	strcat(full_path, "/");
-    strcat(full_path, cmd);
+	ft_strcpy(full_path, dir);
+	ft_strcat(full_path, "/");
+    ft_strcat(full_path, cmd);
     return (full_path);
 }
 
