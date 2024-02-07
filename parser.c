@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 14:21:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 14:26:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ t_tree	*parser(t_list *lexered_params)
 {
     t_tree   *parsed_params;
 
+    parsed_params = NULL;
     check_syntax(lexered_params);
     merge_separators(&lexered_params);
-    // tree = malloc_p(sizeof(t_tree * ) * (ft_lstsize(params_head) + 1));
-    parsed_params = fill_tree(lexered_params);
     treeadd_below(&parsed_params, treenew_p(AST, NULL)); //aggiungo il nodo radice perche' altrimenti se c'e' solo un comando l'executor lo esegue sul padre
+    treeadd_below(&parsed_params, fill_tree(lexered_params));
     return (parsed_params);
 }
 

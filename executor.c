@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 14:12:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 14:22:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
         dup_and_close(&fds[2], STDIN_FILENO, &fds[1]);
     reset_fd(&fds[0]);
     exec_redirs(redirs, heredoc_fileno++);
-    printf("EXECUTING\n");
     exec(ft_getenv("PATH"), cmd_str);
 }
 
