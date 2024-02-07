@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 11:27:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:47:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,13 +110,13 @@ void  exec(char *path, char *cmd_str)
 		ft_quit(ERR_MALLOC, "Failed to allocate memory");
 	if (!cmd_args[0])
 	{
-		free_data(data);
+		free_data();
 		exit(0);
 	}
 	data->cmd_path = get_cmd(path, cmd_args[0]);
 	if (!data->cmd_path)
 	{
-		free_data(data);
+		free_data();
 		exit(COMMAND_NOT_FOUND);
 	}
 	else

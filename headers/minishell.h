@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 17:49:47 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:47:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	exec_simple_cmd(char *path, char *cmd_str);
 void 	exec(char *path, char *cmd_str);
 void	clean_heredocs(char *path);
 void 	ft_quit(int id, char *msg);
-void 	free_data(t_data *data);
+void 	free_data(void);
 void	close_all_fds(void);
 void 	ft_parse_error(char token);
 void	ft_syntax_error(char token);

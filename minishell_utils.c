@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 11:24:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:47:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,6 @@ bool	is_shell_space(char c) //meglio cosi' altrimenti complicated conditional
 
 void	ft_quit(int id, char *msg)
 {
-	t_data	*data;
-
-	data = get_data();
 	dprintf(2, RED "error : %d\n" DEFAULT, id); //to remove
 	if (errno != EINTR)
 	{
@@ -159,8 +156,7 @@ void	ft_quit(int id, char *msg)
 		ft_putstr_fd("\n", 2);
 		unlink("./tmp/print_sem");
 	}
-	if (data)
-		free_data(data);
+	free_data();
 	if (id == EXEC_FAILURE)
 		free(msg);
 	exit(id);
@@ -184,15 +180,20 @@ void	clean_heredocs(char *path)
 	free(cmd);
 }
 
-void	free_data(t_data *data)
+void	free_data(void)
 {
+	t_data	*data;
+
+	close_all_fds();
+	data = get_data();
+	if (!data)
+		return ;
 	ft_freematrix(data->cmd_args);
 	ft_freematrix(data->envp_matrix);
 	free(data->cmd_path);
 	lstclear(data->lexered_params, &del_content_lexer);
 	treeclear(data->parsed_params, &del_content_parser);
 	envp_table_clear(data->envp_table);
-	close_all_fds();
 }
 
 void	close_all_fds(void)

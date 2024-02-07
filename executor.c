@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 11:36:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:59:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void    executor(t_tree *parsed_params)
 }
 
 //preorder traversal search(N, L, R)
-//HO RIGUARDATO 3 VOLTE LA LOGICA SU CARTA E DOVREBBE FUNZIONARE (da testare)
+//HO RIGUARDATO 3 VOLTE LA LOGICA SU CARTA E DOVREBBE FUNZIONARE al 98% (da testare)
 static void launch_commands(t_tree *node, int8_t next_separator_type, int8_t prev_separator_type)
 {
     pid_t       pid;
     static int  fds[3] = {-1, -1, -1}; //cosi' resetfd non li prova a chiudere
 
-    if (!node || node->type == SUBSHELL_END)
+    if (!node)
         return ;
     if (node->type == CMD) //piccolo problemino qui quando c'e' un solo comando, execve viene fatto sul padre
         child(node, fds, prev_separator_type, next_separator_type);
