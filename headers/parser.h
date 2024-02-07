@@ -6,21 +6,21 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 14:00:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 14:20:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# define AST 				0
-# define CMD 				1
-# define SEMICOLON			2
-# define OR 				3
-# define AND 				4
-# define PIPELINE 			5
-# define SUBSHELL_START 	6
-# define SUBSHELL_END 		7
+# define CMD 				0 //CMD deve essere zero, altrimenti non funziona treenew con il token
+# define SEMICOLON			1
+# define OR 				2
+# define AND 				3
+# define PIPELINE 			4
+# define SUBSHELL_START 	5
+# define SUBSHELL_END 		6
+# define AST 				7
 
 # define REDIR_INPUT 		0 	// '< filename'
 # define REDIR_HEREDOC 		1	// '<< limiter'
