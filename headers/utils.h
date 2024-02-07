@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:14:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:30:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ unsigned int 	ft_atou(char *nptr);
 char            *ft_itoa(int n);
 
 t_list			*lstnew_p(void *content);
-void			lstadd_back(t_list **lst, t_list *new);
+void	        lstadd_front(t_list **lst, t_list *new);
 t_list			*lstlast(t_list *lst);
 void			lstclear(t_list **lst, void (*del)(void *));
 void			lstdelone(t_list *lst, void (*del)(void *));
