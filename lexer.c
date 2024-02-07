@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 18:52:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:45:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_list	*lexer(char *input)
 		if (input[0] != '\0')
             lexer_add_token(&lexered_params, *input++);
     }
+    lstreverse(&lexered_params); //per mettere la testa al posto giusto (la lista era stata riempita al contrario)
 	return (lexered_params);
 }
 
@@ -46,7 +47,7 @@ static void lexer_add_cmd(t_list **lexered_params,uint32_t cmd_len, char *input)
     content->cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
     content->token = 0;
     ft_strlcpy(content->cmd_str, input, cmd_len + 1);
-    lstadd_back(lexered_params, lstnew_p(content));
+    lstadd_front(lexered_params, lstnew_p(content));
 }
 
 static void lexer_add_token(t_list **lexered_params, char c)
@@ -56,7 +57,7 @@ static void lexer_add_token(t_list **lexered_params, char c)
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
     content->token = c;
     content->cmd_str = NULL;
-    lstadd_back(lexered_params, lstnew_p(content));
+    lstadd_front(lexered_params, lstnew_p(content));
 }
 
 static bool is_token(char c)

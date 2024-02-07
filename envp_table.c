@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 12:18:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:30:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 	}
 	if (!bucket) //se non e' presente lo aggiunge
 	{
-		lstadd_back(&table[index], lstnew_p(new_elem));
+		lstadd_front(&table[index], lstnew_p(new_elem));
 		update_env_matrix(*new_elem, ADD);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 14:26:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:37:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ static t_list  *fill_redirs(char *cmd_str)
         }
         i++;
     }
+    lstreverse(&redirs);
     return (redirs);
 }
 
@@ -244,7 +245,7 @@ static void    fill_redir_input(t_list **redirs, char *str, uint32_t i, bool is_
         node->type = REDIR_HEREDOC;
         node->filename = get_filename(str, i);
     }
-    lstadd_back(redirs, lstnew_p(node));
+    lstadd_front(redirs, lstnew_p(node));
 }
 
 static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append)
@@ -268,7 +269,7 @@ static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool i
     }
     if (node->fds[0] == -42)
         node->fds[0] = STDOUT_FILENO;
-    lstadd_back(redirs, lstnew_p(node));
+    lstadd_front(redirs, lstnew_p(node));
 }
 
 static t_redir *init_redir(void)

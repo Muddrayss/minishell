@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lstadd_back.c                                      :+:      :+:    :+:   */
+/*   lstreverse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/03 13:21:58 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/05 11:54:52 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/07 15:38:02 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/07 15:45:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-void	lstadd_back(t_list **lst, t_list *new)
+void    lstreverse(t_list **lst)
 {
-	t_list	*last;
+    t_list	*prev;
+    t_list	*next;
 
-    if (!lst)
-        return ;
-	else if (*lst == NULL)
-		*lst = new;
-	else
+    prev = NULL;
+    while (*lst)
     {
-        last = lstlast(*lst);
-        last->next = new;
-        new->prev = last;
+        next = (*lst)->next;
+        (*lst)->next = prev;
+        prev = *lst;
+        *lst = next;
     }
+    *lst = prev;
 }
