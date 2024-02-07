@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 11:26:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/07 11:36:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void launch_commands(t_tree *node, int8_t next_separator_type, int8_t pre
 
     if (!node || node->type == SUBSHELL_END)
         return ;
-    if (node->type == CMD)
+    if (node->type == CMD) //piccolo problemino qui quando c'e' un solo comando, execve viene fatto sul padre
         child(node, fds, prev_separator_type, next_separator_type); //fa pipe, fa fork, esegue, ed aspetta settando g_status. se il parent leaf è un pipe, duplica l'input o l'output, altrimenti ignora 
     if (node->type == PIPELINE)
         pipe_p(fds);
