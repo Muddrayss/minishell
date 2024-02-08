@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 18:50:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:09:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void     launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3]);
 static void     child(t_tree *elem, int fds[3], int8_t prev, int8_t next, uint32_t heredoc_fileno);
 static void     parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_fileno);
-static void     exec_redirs(t_list *redirs, int heredoc_fileno);
+static void     exec_redirs(t_list *redirs, uint32_t heredoc_fileno);
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_x(t_tree *node, int n, int8_t type);
 
@@ -101,7 +101,7 @@ static void parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_
     }
 }
 
-static void exec_redirs(t_list *redirs, int heredoc_fileno)
+static void exec_redirs(t_list *redirs, uint32_t heredoc_fileno)
 {
     t_list  *node;
     t_redir *redir;

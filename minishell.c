@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 17:25:12 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 20:57:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static void check_args(int argc, char **argv);
 static void	init_general(void);
 static void init_data(char **envp);
 static void minishell_loop(void);
-static bool str_is_empty(char *str);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -77,7 +76,7 @@ static void	minishell_loop()
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
 			ft_quit(123, "exit"); 
-		if (input[0] == '\0' || str_is_empty(input))
+		if (input[0] == '\0' || is_empty_str(input))
 			continue ;
 		add_history(input);
 		lexered_params = lexer(input);
@@ -88,7 +87,7 @@ static void	minishell_loop()
 	}
 }
 
-static bool str_is_empty(char *str)
+bool is_empty_str(char *str)
 {
 	while (*str)
 	{

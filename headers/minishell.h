@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 13:47:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 20:57:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ void	close_all_fds(void);
 void 	ft_parse_error(char token);
 void	ft_syntax_error(char token);
 bool	is_shell_space(char c);
+bool 	is_empty_str(char *str);
 
 #endif

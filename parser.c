@@ -6,12 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 20:31:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:09:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
+static bool     is_empty_cmd(void *content);
 static int8_t   check_syntax(t_list *lexered_params);
 static void     merge_separators(t_list **lexered_params);
 static void     merge_ampersands(t_list **head, t_list *node);
@@ -29,15 +30,33 @@ static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool i
 static t_redir  *init_redir(void);
 static uint32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
 
+
+void print_params(t_list *lexered_params)
+{
+    t_lexer *elem;
+
+    while (lexered_params)
+    {
+        elem = (t_lexer *)lexered_params->content;
+        if (elem->token)
+            printf("token: %c\n", elem->token);
+        else
+            printf("cmd: %s\n", elem->cmd_str);
+        lexered_params = lexered_params->next;
+    }
+}
+
 t_tree	*parser(t_list *lexered_params)
 {
     t_tree   **parsed_params;
 
-    parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
-    *parsed_params = NULL;
+    lstdelif(&lexered_params, &is_empty_cmd, &del_content_lexer);
+    print_params(lexered_params);
     check_syntax(lexered_params);
     merge_separators(&lexered_params);
-    treeadd_below(parsed_params, fill_tree(lexered_params));
+    parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
+    *parsed_params = NULL;
+    *parsed_params = fill_tree(lexered_params);
     return (*parsed_params);
 }
 
@@ -382,4 +401,14 @@ void    del_content_redirs(void *content)
 
     elem = (t_redir *)content;
     free(elem->filename);
+}
+
+static bool    is_empty_cmd(void *content)
+{
+    t_lexer *elem;
+
+    elem = (t_lexer *)content;
+    if (elem->token == 0 && is_empty_str(elem->cmd_str))
+        return (true);
+    return (false);
 }
