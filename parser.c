@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:30:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 23:19:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ t_tree	*parser(t_list *lexered_params)
     check_syntax(lexered_params);
     merge_separators(&lexered_params);
     parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
-    *parsed_params = NULL;
     *parsed_params = fill_tree(lexered_params);
     return (*parsed_params);
 }
@@ -67,7 +66,7 @@ static t_tree   *fill_tree(t_list *lexered_params)
     if (elem->token != SUBSHELL_END)
         treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
     else
-        treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params)->next));
+        treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params)));
     treeadd_below(&node, fill_tree(skip_parenthesis(lexered_params->next->next)));
     return (node);
 }
@@ -78,39 +77,42 @@ static t_list	*skip_parenthesis(t_list *lexered_params)
 	int32_t	    n_open;
 	t_lexer		*elem;
 
-	n_open = -42;
-	while (n_open && lexered_params) 
+    if (!lexered_params)
+        return (NULL);
+    elem = (t_lexer *)lexered_params->content;
+    if (elem->token != SUBSHELL_START)
+    {
+        return (lexered_params);
+    }
+	n_open = 1;
+	while (n_open && lexered_params->next) 
 	{
-        if (n_open == -42)
-            n_open = 0;
+        lexered_params = lexered_params->next;
 		elem = (t_lexer *)lexered_params->content;
-		if (elem->token == SUBSHELL_START)
-			n_open++;
-		else if (elem->token == SUBSHELL_END)
+		if (elem->token == SUBSHELL_END)
 			n_open--;
-		lexered_params = lexered_params->next;
+		else if (elem->token == SUBSHELL_START)
+			n_open++;
 	}
-	return (lexered_params->prev); //ritorna la parentesi chiusa
+	return (lexered_params); //ritorna la parentesi chiusa
 }
 
 static t_list   *unskip_parenthesis(t_list *lexered_params)
 {
     int32_t    n_close;
-    t_lexer     *elem;
+    t_lexer    *elem;
 
-    n_close = -42;
-    while (n_close && lexered_params)
+    n_close = 1;
+    while (n_close && lexered_params->prev)
     {
-        if (n_close == -42)
-            n_close = 0;
+        lexered_params = lexered_params->prev;
         elem = (t_lexer *)lexered_params->content;
         if (elem->token == SUBSHELL_END)
             n_close++;
         else if (elem->token == SUBSHELL_START)
             n_close--;
-        lexered_params = lexered_params->prev;
     }
-    return (lexered_params->next); //ritorna la parentesi aperta
+    return (lexered_params->next); //ritorna uno dopo la parentesi aperta
 }
 
 static t_cmd    *init_cmd(char *cmd_str)

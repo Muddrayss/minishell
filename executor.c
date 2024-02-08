@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:19:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 23:50:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,25 @@ static uint32_t count_x(t_tree *node, uint32_t n, int8_t type);
 
 void    executor(t_tree *parsed_params)
 {
-    int original_stdin;
-    int fds[3] = {-1, -1, -1};
+    int     original_stdin;
+    pid_t   pid;
+    int     fds[3] = {-1, -1, -1};
 
     original_stdin = dup_p(STDIN_FILENO);
     create_heredocs(parsed_params);
     if (g_status != 130)
     {
-        launch_commands(parsed_params, -1, -1, fds);
-        wait_for_children(parsed_params);
+        pid = fork_p();
+        if (pid == 0)
+        {
+            launch_commands(parsed_params, -1, -1, fds);
+            wait_for_children(parsed_params);
+        }
+        else
+        {
+            waitpid_p(pid, &g_status, 0);
+            g_status = WEXITSTATUS(g_status);
+        }
     }
     dup2(original_stdin, STDIN_FILENO);
     reset_fd(&original_stdin);
@@ -52,9 +62,9 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
         else
             parent(pid, fds, node->type == PIPELINE, heredoc_fileno++);
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
-            return ;
+            exit(g_status);
         launch_commands(node->right, node->type, -1, fds);
-        return ;
+        exit(g_status);
     }
     if (next_type == -1)
     {
@@ -62,7 +72,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
         if (pid > 0)
         {
             parent(pid, fds, false, heredoc_fileno++);
-            return ;
+            exit(g_status);
         }
     }
     child(node, fds, prev_type, next_type, heredoc_fileno);
