@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:09:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:30:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,13 @@ static t_list   *fill_redirs(char *cmd_str);
 static void     fill_redir_input(t_list **redirs, char *str, uint32_t i, bool is_heredoc);
 static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append);
 static t_redir  *init_redir(void);
-static uint32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
-
-
-void print_params(t_list *lexered_params)
-{
-    t_lexer *elem;
-
-    while (lexered_params)
-    {
-        elem = (t_lexer *)lexered_params->content;
-        if (elem->token)
-            printf("token: %c\n", elem->token);
-        else
-            printf("cmd: %s\n", elem->cmd_str);
-        lexered_params = lexered_params->next;
-    }
-}
+static int32_t  get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
 
 t_tree	*parser(t_list *lexered_params)
 {
     t_tree   **parsed_params;
 
     lstdelif(&lexered_params, &is_empty_cmd, &del_content_lexer);
-    print_params(lexered_params);
     check_syntax(lexered_params);
     merge_separators(&lexered_params);
     parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
@@ -96,7 +79,7 @@ static t_list	*skip_parenthesis(t_list *lexered_params)
 	t_lexer		*elem;
 
 	n_open = -42;
-	while (n_open) 
+	while (n_open && lexered_params) 
 	{
         if (n_open == -42)
             n_open = 0;
@@ -116,7 +99,7 @@ static t_list   *unskip_parenthesis(t_list *lexered_params)
     t_lexer     *elem;
 
     n_close = -42;
-    while (n_close)
+    while (n_close && lexered_params)
     {
         if (n_close == -42)
             n_close = 0;
@@ -146,8 +129,8 @@ static t_cmd    *init_cmd(char *cmd_str)
  //rimpiazza anche tab e \n con spazi (cosi' dopo si potra' fare split con spazi)
 static void     clear_redirs(t_list *redirs, char *cmd_str)
 {
-    int32_t i;
-    t_redir *redir;
+    uint32_t    i;
+    t_redir     *redir;
 
     i = 0;
     while (cmd_str[i])
@@ -227,7 +210,7 @@ static t_list  *fill_redirs(char *cmd_str)
     return (redirs);
 }
 
-static uint32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after)
+static int32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after)
 {
     uint32_t    i;
     int32_t     num;

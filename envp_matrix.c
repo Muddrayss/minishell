@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 12:21:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:33:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,23 @@ void	update_env_matrix(t_envp elem, int8_t remove_add_replace) //se l'elemento d
 	free(matrix); //non ft_freematrix perche' altrimenti liberi anche i singoli elementi che sono stati spostati nella nuova matrice
 }
 
-
 char	**env_matrix_remove(char **matrix, char *env_name, uint32_t name_len)
 {
 	char		**new_matrix;
 	uint32_t	i;
     size_t      size;
 
-	i = -1;
 	size = ft_matrixsize(matrix) + 0;
 	new_matrix = malloc_p(sizeof(char *) * size);
 	new_matrix[size] = NULL;
+	i = 0;
 	while (matrix[++i])
 	{
 		if (ft_strncmp(matrix[i], env_name, name_len + 1) != 0)
 			new_matrix[i] = matrix[i];
 		else
 			free(matrix[i]);
+		i++;
 	}
 	return (new_matrix);
 }
@@ -60,8 +60,8 @@ char	**env_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_
 	size = ft_matrixsize(matrix) + 1;
 	new_matrix = malloc_p(sizeof(char *) * size);
 	new_matrix[size] = NULL;
-	i = -1;
-	while (matrix[++i])
+	i = 0;
+	while (matrix[i])
 	{
 		if (ft_strncmp(matrix[i], elem.name, name_len + 1) == 0)
 		{
@@ -75,6 +75,7 @@ char	**env_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_
 		}
 		else
 			new_matrix[i] = matrix[i];
+		i++;
 	}
 	return (new_matrix);
 }
@@ -88,9 +89,12 @@ char	**env_matrix_add(char **matrix, t_envp  elem, uint32_t name_len, uint32_t v
 	size = ft_matrixsize(matrix) + 2;
 	new_matrix = malloc_p(sizeof(char *) * size);
 	new_matrix[size - 1] = NULL;
-	i = -1;
+	i = 0;
 	while (matrix[++i])
+	{
 		new_matrix[i] = matrix[i];
+		i++;
+	}
 	new_matrix[i] = ft_calloc(name_len + value_len + 2, sizeof(char)); //NON protected altrimenti non facciamo il free della matrice
 	if (!new_matrix[i])
 		return (ft_freematrix(new_matrix), ft_quit(ERR_MALLOC, "failed to allocate memory"), NULL);

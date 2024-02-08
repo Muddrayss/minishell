@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 16:56:47 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:18:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ static bool is_custom_bin(char *cmd)
 
 static char *concat_path_cmd(char *dir, char *cmd)
 {
-	unsigned int size;
-	char *full_path;
+	uint32_t	size;
+	char 		*full_path;
 
-	size = strlen(dir) + strlen(cmd) + 2; // +2 for '/' and '\0'
+	size = ft_strlen(dir) + ft_strlen(cmd) + 2; // +2 for '/' and '\0'
 	full_path = malloc_p(size);
 	ft_strcpy(full_path, dir);
 	ft_strcat(full_path, "/");

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:09:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:19:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void     child(t_tree *elem, int fds[3], int8_t prev, int8_t next, uint32
 static void     parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_fileno);
 static void     exec_redirs(t_list *redirs, uint32_t heredoc_fileno);
 static void     wait_for_children(t_tree *parsed_params);
-static uint32_t count_x(t_tree *node, int n, int8_t type);
+static uint32_t count_x(t_tree *node, uint32_t n, int8_t type);
 
 void    executor(t_tree *parsed_params)
 {
@@ -148,7 +148,7 @@ static void wait_for_children(t_tree *parsed_params) //aspetta tutti i figli (ap
     }
 }
 
-static uint32_t count_x(t_tree *node, int n, int8_t type)
+static uint32_t count_x(t_tree *node, uint32_t n, int8_t type)
 {
     if (!node)
         return (n);

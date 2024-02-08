@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   ft_utoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 11:02:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 15:41:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:27:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	nbr_len(long n);
 
-char	*ft_itoa(int n)
+char	*ft_utoa(unsigned int n)
 {
 	char	*str;
 	int		n_len;
@@ -27,11 +27,6 @@ char	*ft_itoa(int n)
 		return (NULL);
 	if (n_long == 0)
 		str[0] = '0';
-	if (n_long < 0)
-	{
-		n_long *= -1;
-		str[0] = '-';
-	}
 	str[n_len] = '\0';
 	while (n_long > 0)
 	{

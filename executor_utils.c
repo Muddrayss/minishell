@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 17:30:09 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:39:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ char    *replace_env_vars(char *str)
         len = ft_strlen(str);
         free(str);
         str = calloc_p(len - ft_strlen(env_name) + ft_strlen(env_value), sizeof(char)); //senza + 1 perche' c'e' gia' il + 1 del carattere $ che non e' considerato nella len
-        ft_strlcpy(str, start, tmp - start + 1);
+        ft_strlcpy(str, start, (size_t)(tmp - start + 1));
         ft_strcat(str, env_value);
         ft_strcat(str, tmp + 1 + ft_strlen(env_name));
-        i += tmp - start;
+        i += (uint32_t)(tmp - start);
         free(start);
     }
 }

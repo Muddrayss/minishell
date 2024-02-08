@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 17:56:31 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:21:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ static void     fill_heredoc(char *limiter, int fd);
 
 void create_heredocs(t_tree *tree)
 {
-    static int  heredoc_fileno = 0;
-    int         heredoc_fd;
-    char        **limiters_array;
-    uint32_t i;
+    static uint32_t  heredoc_fileno = 0;
+    int32_t          heredoc_fd;
+    char             **limiters_array;
+    uint32_t         i;
 
     limiters_array = get_limiters_array(tree);
     heredoc_fd = -1;
@@ -98,7 +98,7 @@ static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs)
 }
 
 //usare strcat invece che strlcat
-char    *get_heredoc_filename(int id)
+char    *get_heredoc_filename(uint32_t id)
 {
     t_data      *data;
     char        *idx;
@@ -106,7 +106,7 @@ char    *get_heredoc_filename(int id)
     size_t      size;
 
     data = get_data();
-    idx = ft_itoa(id);
+    idx = ft_utoa(id);
     size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx)

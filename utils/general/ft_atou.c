@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   ft_atou.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:59:54 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/04 16:59:57 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:15:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-unsigned int	ft_atou(char *nptr)
+int	ft_atou(char *nptr)
 {
 	size_t 	n;
 	char	sign;
@@ -30,7 +30,7 @@ unsigned int	ft_atou(char *nptr)
 		nptr++;
 	}
 	n = (-n) * (sign == '-') + (n) * (sign != '-');
-	if (n > UINT_MAX)
-		return (UINT_MAX);
-	return (n);
+	if (n > INT_MAX)
+		return (INT_MAX);
+	return ((int)n);
 }

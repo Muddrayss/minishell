@@ -6,7 +6,7 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/08 20:51:18 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/08 21:22:23 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ SRCS = minishell.c minishell_utils.c lexer.c parser.c executor.c heredoc.c signa
 			$(addprefix lst/, lstadd_front.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c) \
 		 	$(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strchr.c) \
 			$(addprefix tree/, tree_size.c treeadd_below.c treeclear.c treenew_p.c) \
-			$(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c ft_matrixsize.c ft_itoa.c ft_calloc.c))
+			$(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c ft_matrixsize.c ft_utoa.c ft_calloc.c))
 		
 OBJS = $(SRCS:.c=.o)
 HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h envp_utils.h utils.h protected_methods.h colors.h)
