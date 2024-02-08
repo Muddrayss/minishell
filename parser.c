@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 18:09:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 18:31:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static t_tree   *fill_tree(t_list *lexered_params)
     t_lexer *next_elem; //token
 
     node = NULL;
+    if (!lexered_params)
+        return (NULL);
     elem = (t_lexer *)lexered_params->content;
     if (!lexered_params->next) //se c'e' solo un elemento sei alla foglia quindi lo ritorni cosi' com'e' senza controllare a destra
         return (treenew_p(elem->token, init_cmd(elem->cmd_str)));
@@ -61,8 +63,8 @@ static t_tree   *fill_tree(t_list *lexered_params)
     treeadd_below(&node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str))); //se node e' NULL, crea la testa
     if (elem->token == SUBSHELL_START)
     {
-        treeadd_below(&node->left, fill_tree(lexered_params->next->next));
         treeadd_below(&node->right, fill_tree(skip_parenthesis(lexered_params)));
+        treeadd_below(&node->left, fill_tree(lexered_params->next->next));
     }
     else if (elem->token != SUBSHELL_END)
     {
