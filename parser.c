@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 15:31:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:59:53 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,14 @@ static uint32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
 
 t_tree	*parser(t_list *lexered_params)
 {
-    t_tree   *parsed_params;
+    t_tree   **parsed_params;
 
-    parsed_params = NULL;
+    parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
+    *parsed_params = NULL;
     check_syntax(lexered_params);
     merge_separators(&lexered_params);
-    treeadd_below(&parsed_params, fill_tree(lexered_params));
-    return (parsed_params);
+    treeadd_below(parsed_params, fill_tree(lexered_params));
+    return (*parsed_params);
 }
 
 static int8_t   check_syntax(t_list *lexered_params)

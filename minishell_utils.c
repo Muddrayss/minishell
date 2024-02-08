@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 16:38:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:56:47 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ void	free_data(void)
 	ft_freematrix(data->envp_matrix);
 	free(data->cmd_path);
 	lstclear(data->lexered_params, &del_content_lexer);
+	free(data->lexered_params);
 	treeclear(data->parsed_params, &del_content_parser);
 	envp_table_clear(data->envp_table);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 16:41:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:57:42 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ static void parent(pid_t pid, int fds[3], bool is_in_pipeline)
     {
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
-        printf("status: %d\n", g_status);
         reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
     }
 }
