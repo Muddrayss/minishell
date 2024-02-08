@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 23:50:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 23:55:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,6 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
             exit(g_status);
         launch_commands(node->right, node->type, -1, fds);
-        exit(g_status);
-    }
-    if (next_type == -1)
-    {
-        pid = fork_p();
-        if (pid > 0)
-        {
-            parent(pid, fds, false, heredoc_fileno++);
-            exit(g_status);
-        }
     }
     child(node, fds, prev_type, next_type, heredoc_fileno);
 }
