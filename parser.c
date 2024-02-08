@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 18:01:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 18:09:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,10 @@ static void     clear_redirs(t_list *redirs, char *cmd_str)
     {
         if (cmd_str[i] == '<' || cmd_str[i] == '>')
         {
+            cmd_str[i++] = ' ';
+            if (cmd_str[i] == '<' || cmd_str[i] == '>')
+                cmd_str[i++] = ' ';
             redir = (t_redir *)redirs->content;
-            cmd_str[i] = ' ';
             if (redir->fds[1] != -42)
                 remove_fd_num(cmd_str, i, AFTER);
             if (redir->fds[0] != -42)
