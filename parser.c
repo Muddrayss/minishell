@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 18:31:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 20:31:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void     merge_ampersands(t_list **head, t_list *node);
 static void     merge_pipes(t_list **head, t_list *node);
 static t_tree   *fill_tree(t_list *lexered_params);
 static t_list   *skip_parenthesis(t_list *params);
+static t_list   *unskip_parenthesis(t_list *lexered_params);
 static t_cmd    *init_cmd(char *cmd_str);
 static void     clear_redirs(t_list *redirs, char *cmd_str);
 static void     remove_fd_num(char *cmd_str, uint32_t idx_redir, int8_t before_after);
@@ -50,38 +51,36 @@ static int8_t   check_syntax(t_list *lexered_params)
 static t_tree   *fill_tree(t_list *lexered_params)
 {
     t_tree  *node;
-	t_lexer *elem; //comando di sinistra
-    t_lexer *next_elem; //token
+	t_lexer *elem;
+    t_lexer *next_elem;
 
     node = NULL;
     if (!lexered_params)
         return (NULL);
     elem = (t_lexer *)lexered_params->content;
-    if (!lexered_params->next) //se c'e' solo un elemento sei alla foglia quindi lo ritorni cosi' com'e' senza controllare a destra
+    if (!lexered_params->next)
         return (treenew_p(elem->token, init_cmd(elem->cmd_str)));
     next_elem = (t_lexer *)lexered_params->next->content;
-    treeadd_below(&node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str))); //se node e' NULL, crea la testa
-    if (elem->token == SUBSHELL_START)
-    {
-        treeadd_below(&node->right, fill_tree(skip_parenthesis(lexered_params)));
-        treeadd_below(&node->left, fill_tree(lexered_params->next->next));
-    }
-    else if (elem->token != SUBSHELL_END)
-    {
-        treeadd_below(&node->left, treenew_p(elem->token, init_cmd(elem->cmd_str)));
-        treeadd_below(&node->right, fill_tree(lexered_params->next->next));
-    }
+    treeadd_below(&node, treenew_p(next_elem->token, init_cmd(next_elem->cmd_str)));
+    if (elem->token != SUBSHELL_END)
+        treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
+    else
+        treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params)->next));
+    treeadd_below(&node, fill_tree(skip_parenthesis(lexered_params->next->next)));
     return (node);
 }
 
+//TODO da mergiare con unskip_parenthesis
 static t_list	*skip_parenthesis(t_list *lexered_params)
 {
-	uint32_t	n_open;
+	int32_t	    n_open;
 	t_lexer		*elem;
 
-	n_open = 0;
-	while (n_open)
+	n_open = -42;
+	while (n_open) 
 	{
+        if (n_open == -42)
+            n_open = 0;
 		elem = (t_lexer *)lexered_params->content;
 		if (elem->token == SUBSHELL_START)
 			n_open++;
@@ -89,7 +88,27 @@ static t_list	*skip_parenthesis(t_list *lexered_params)
 			n_open--;
 		lexered_params = lexered_params->next;
 	}
-	return (lexered_params);
+	return (lexered_params->prev); //ritorna la parentesi chiusa
+}
+
+static t_list   *unskip_parenthesis(t_list *lexered_params)
+{
+    int32_t    n_close;
+    t_lexer     *elem;
+
+    n_close = -42;
+    while (n_close)
+    {
+        if (n_close == -42)
+            n_close = 0;
+        elem = (t_lexer *)lexered_params->content;
+        if (elem->token == SUBSHELL_END)
+            n_close++;
+        else if (elem->token == SUBSHELL_START)
+            n_close--;
+        lexered_params = lexered_params->prev;
+    }
+    return (lexered_params->next); //ritorna la parentesi aperta
 }
 
 static t_cmd    *init_cmd(char *cmd_str)
@@ -307,6 +326,8 @@ static void merge_separators(t_list **lexered_params)
                 elem->token = SUBSHELL_START;
             else if (elem->token == ')')
                 elem->token = SUBSHELL_END;
+            else if (elem->token == ';')
+                elem->token = SEMICOLON;
         }
         node = node->next;
     }

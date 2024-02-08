@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 17:41:40 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 18:50:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
             launch_commands(node->left, prev_type, node->type, fds);
         else
             parent(pid, fds, node->type == PIPELINE, heredoc_fileno++);
-        if ((node->type == AND && g_status != EXIT_SUCCESS) || (node->type == OR && g_status == EXIT_SUCCESS))
+        if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
             return ;
         launch_commands(node->right, node->type, -1, fds);
         return ;
@@ -83,6 +83,7 @@ static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next, uint32_t h
     reset_fd(&fds[1]);
     exec_redirs(redirs, heredoc_fileno);
     cmd_str = replace_env_vars(cmd_str);
+    printf("cmd_str: %s\n", cmd_str);
     exec(ft_getenv("PATH"), cmd_str);
 }
 
@@ -95,6 +96,7 @@ static void parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_
     {
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
+        printf("status: %d\n", g_status);
         reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
     }
 }

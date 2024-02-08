@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 16:57:05 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 18:55:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_list	*lexer(char *input)
             lexer_add_token(lexered_params, *input++);
     }
     lstreverse(lexered_params); //per mettere la testa al posto giusto (la lista era stata riempita al contrario)
-	return (*lexered_params);
+    return (*lexered_params);
 }
 
 static void lexer_add_cmd(t_list **lexered_params,uint32_t cmd_len, char *input)
