@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 23:55:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/09 00:07:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void    executor(t_tree *parsed_params)
 {
     int     original_stdin;
     pid_t   pid;
-    int     fds[3] = {-1, -1, -1};
+    int     fds[3] = {-42, -42, 42};
 
     original_stdin = dup_p(STDIN_FILENO);
     create_heredocs(parsed_params);
@@ -32,12 +32,12 @@ void    executor(t_tree *parsed_params)
         pid = fork_p();
         if (pid == 0)
         {
-            launch_commands(parsed_params, -1, -1, fds);
-            wait_for_children(parsed_params);
+            launch_command(parsed_params, -1, -1, fds);
+            wait_for_children(parsed_params); //aspetta i figli non gia aspettati (quindi le pipe)
         }
         else
         {
-            waitpid_p(pid, &g_status, 0);
+            waitpid_p(pid, &g_status, 0); //aspetta la command stream
             g_status = WEXITSTATUS(g_status);
         }
     }
@@ -49,9 +49,9 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
 {
     pid_t               pid;
     static uint32_t     heredoc_fileno = 0;
-    //gli fd statici non funzioanno con piu pipe di fila (la seconda pipe sovrascrive quelli della prima), passarli come argomenti??
+
     if (!node)
-        return ; //forse meglio exit essendo in un subprocess
+        exit(g_status);
     if (node->type != CMD)
     {
         if (node->type == PIPELINE)
@@ -83,7 +83,6 @@ static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next, uint32_t h
     reset_fd(&fds[1]);
     exec_redirs(redirs, heredoc_fileno);
     cmd_str = replace_env_vars(cmd_str);
-    printf("cmd_str: %s\n", cmd_str);
     exec(ft_getenv("PATH"), cmd_str);
 }
 
@@ -96,7 +95,6 @@ static void parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_
     {
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
-        printf("status: %d\n", g_status);
         reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
     }
 }
@@ -123,15 +121,11 @@ static void exec_redirs(t_list *redirs, uint32_t heredoc_fileno)
         else if (redir->type == REDIR_APPEND)
             redir->fds[1] = open_p(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (redir->fds[0] != -42)
-        {
             dup2_p(redir->fds[0], STDIN_FILENO);
-            reset_fd(&redir->fds[0]);
-        }
         if (redir->fds[1] != -42)
-        {
             dup2_p(redir->fds[1], STDOUT_FILENO);
-            reset_fd(&redir->fds[1]);
-        }
+        reset_fd(&redir->fds[1]);
+        reset_fd(&redir->fds[0]);
         node = node->next;
     }
 }

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:21:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/09 00:08:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void create_heredocs(t_tree *tree)
     uint32_t         i;
 
     limiters_array = get_limiters_array(tree);
-    heredoc_fd = -1;
+    heredoc_fd = -42;
     i = 0;
     while (limiters_array[i])
     {

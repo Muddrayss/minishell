@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   protected_methods.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 17:45:43 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/09 00:06:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void    signal_p(int signum, void (*handler)(int))
 
 void    reset_fd(int *fd)
 {
-    if (*fd != -1)
+    if (*fd >= 0)
         close_p(*fd);
-    *fd = -1;
+    *fd = -42;
 }
