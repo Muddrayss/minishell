@@ -6,19 +6,22 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 13:45:40 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/05 16:59:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:40:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-void	lstclear(t_list **lst, void (*del)(void *))
+void	lstclear(t_list **lst, void (*del)(void*))
 {
-	if (!lst || !*lst || !del)
+	t_list	*tmp;
+
+	if (!lst || !del || !*lst)
 		return ;
-	if ((*lst)->next != NULL)
-		lstclear(&(*lst)->next, del);
-	del((*lst)->content);
-	free(*lst);
-	*lst = NULL;
+	while (lst && *lst)
+	{
+		tmp = (*lst)->next;
+		lstdelone(*lst, del);
+		*lst = tmp;
+	}
 }
