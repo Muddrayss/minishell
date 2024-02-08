@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 12:03:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:42:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void     launch_commands(t_tree *node, int8_t prev_separator_type, int8_t next_separator_type);
+static void     launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3]);
 static void     child(t_tree *elem, int fds[3], int8_t prev, int8_t next);
 static void     parent(pid_t pid, int fds[3], bool is_in_pipeline);
 static void     dup_and_close(int *to_dup_old, int to_dup_new, int *to_close);
@@ -22,25 +22,25 @@ static uint32_t count_x(t_tree *node, int n, int8_t type);
 
 void    executor(t_tree *parsed_params)
 {
-    int             original_stdin;
+    int original_stdin;
+    int fds[3] = {-1, -1, -1};
 
     original_stdin = dup_p(STDIN_FILENO);
     create_heredocs(parsed_params);
     if (g_status != 130)
     {
         set_sighandler(&newline_signal, SIG_IGN);
-        launch_commands(parsed_params, -1, -1);
+        launch_commands(parsed_params, -1, -1, fds);
         wait_for_children(parsed_params);
     }
     dup2(original_stdin, STDIN_FILENO);
     reset_fd(&original_stdin);
 }
 
-static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type)
+static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3])
 {
     pid_t       pid;
-    static int  fds[3] = {-1, -1, -1}; //essendo gli fds statici non vorrei che non funzionassero con pie' pipe di fila (la seconda pipe sovrascrive quelli della prima), passarli come argomenti??
-
+    //gli fd statici non funzioanno con piu pipe di fila (la seconda pipe sovrascrive quelli della prima), passarli come argomenti??
     if (!node)
         return ;
     if (node->type != CMD)
@@ -49,11 +49,12 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type)
             pipe_p(fds);
         pid = fork_p();
         if (pid == 0) //ogni volta che vado a sinistra forko (tanto o c'e' un comando o una subshell)
-            launch_commands(node->left, prev_type, node->type);
+            launch_commands(node->left, prev_type, node->type, fds);
         else
             parent(pid, fds, node->type == PIPELINE);
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
-            launch_commands(node->right, node->type, -1);
+            return ;
+        launch_commands(node->right, node->type, -1, fds);
         return ;
     }
     if (next_type == -1)

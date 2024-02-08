@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 14:20:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:33:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # define PIPELINE 			4
 # define SUBSHELL_START 	5
 # define SUBSHELL_END 		6
-# define AST 				7
 
 # define REDIR_INPUT 		0 	// '< filename'
 # define REDIR_HEREDOC 		1	// '<< limiter'
