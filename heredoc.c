@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 14:12:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 17:56:31 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void create_heredocs(t_tree *tree)
     while (limiters_array[i])
     {
         heredoc_fd = open_p(get_heredoc_filename(heredoc_fileno++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        fill_in_child(limiters_array[i], heredoc_fd);
+        fill_in_child(limiters_array[i++], heredoc_fd);
         if (g_status == 130)
         {
             reset_fd(&heredoc_fd);
@@ -107,12 +107,12 @@ char    *get_heredoc_filename(int id)
 
     data = get_data();
     idx = ft_itoa(id);
-    size = ft_strlen(data->starting_dir) + ft_strlen("./tmp.heredoc_") + ft_strlen(idx) + 2;
+    size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx)
         return (free(idx), free(filename), ft_quit(ERR_MALLOC, "failed to allocate memory"), NULL);
     ft_strcpy(filename, data->starting_dir);
-    ft_strcat(filename, "./tmp.heredoc_");
+    ft_strcat(filename, "/tmp/.heredoc_");
     ft_strcat(filename, idx);
     return (free(idx), filename);
 }

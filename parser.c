@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 16:59:53 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 18:01:38 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,14 +168,14 @@ static t_list  *fill_redirs(char *cmd_str)
         if (cmd_str[i] == '<')
         {
             if (cmd_str[i + 1] == '<')
-                fill_redir_input(&redirs, cmd_str, i++, true);
+                fill_redir_input(&redirs, cmd_str, ++i, true);
             else
                 fill_redir_input(&redirs, cmd_str, i, false);
         }
         if (cmd_str[i] == '>')
         {
             if (cmd_str[i + 1] == '>')
-                fill_redir_output(&redirs, cmd_str, i++, true);
+                fill_redir_output(&redirs, cmd_str, ++i, true);
             else
                 fill_redir_output(&redirs, cmd_str, i, false);
         }

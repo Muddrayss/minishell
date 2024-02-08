@@ -6,15 +6,15 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 16:57:42 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 17:41:40 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static void     launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3]);
-static void     child(t_tree *elem, int fds[3], int8_t prev, int8_t next);
-static void     parent(pid_t pid, int fds[3], bool is_in_pipeline);
+static void     child(t_tree *elem, int fds[3], int8_t prev, int8_t next, uint32_t heredoc_fileno);
+static void     parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_fileno);
 static void     exec_redirs(t_list *redirs, int heredoc_fileno);
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_x(t_tree *node, int n, int8_t type);
@@ -37,7 +37,8 @@ void    executor(t_tree *parsed_params)
 
 static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3])
 {
-    pid_t       pid;
+    pid_t               pid;
+    static uint32_t     heredoc_fileno = 0;
     //gli fd statici non funzioanno con piu pipe di fila (la seconda pipe sovrascrive quelli della prima), passarli come argomenti??
     if (!node)
         return ; //forse meglio exit essendo in un subprocess
@@ -49,7 +50,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
         if (pid == 0) //ogni volta che vado a sinistra forko (tanto o c'e' un comando o una subshell)
             launch_commands(node->left, prev_type, node->type, fds);
         else
-            parent(pid, fds, node->type == PIPELINE);
+            parent(pid, fds, node->type == PIPELINE, heredoc_fileno++);
         if ((node->type == AND && g_status != EXIT_SUCCESS) || (node->type == OR && g_status == EXIT_SUCCESS))
             return ;
         launch_commands(node->right, node->type, -1, fds);
@@ -60,16 +61,15 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
         pid = fork_p();
         if (pid > 0)
         {
-            parent(pid, fds, false);
+            parent(pid, fds, false, heredoc_fileno++);
             return ;
         }
     }
-    child(node, fds, prev_type, next_type);
+    child(node, fds, prev_type, next_type, heredoc_fileno);
 }
 
-static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
+static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next, uint32_t heredoc_fileno)
 {
-    static int  heredoc_fileno = 0;
     t_list      *redirs;
     char        *cmd_str;
 
@@ -81,13 +81,14 @@ static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
         dup2_p(fds[2], STDIN_FILENO);
     reset_fd(&fds[0]);
     reset_fd(&fds[1]);
-    exec_redirs(redirs, heredoc_fileno++);
+    exec_redirs(redirs, heredoc_fileno);
     cmd_str = replace_env_vars(cmd_str);
     exec(ft_getenv("PATH"), cmd_str);
 }
 
-static void parent(pid_t pid, int fds[3], bool is_in_pipeline)
+static void parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_fileno)
 {
+    (void)heredoc_fileno;
     reset_fd(&fds[1]);
     fds[2] = fds[0];
     if (!is_in_pipeline)

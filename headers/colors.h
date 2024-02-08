@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 17:26:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 17:10:43 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/08 17:19:55 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@
 # define BROWN "\001\033[1;33m\002"
 # define BLACK "\001\033[1;30m\002"
 # define AQUA "\001\033[1;36m\002"
-# define DEFAULT "\001\033[1m\002"
+# define DEFAULT "\001\033[0m\002"
 
 #endif
