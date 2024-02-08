@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 10:02:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:12:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,13 +122,9 @@ static void fill_in_child(char *limiter, int heredoc_fd)
     pid_t   pid;
     int     status;
 
-    set_sighandler(SIG_IGN, SIG_IGN);
     pid = fork_p();
     if (pid == 0)
-    {
-        set_sighandler(&display_and_quit_signal, SIG_IGN);
         fill_heredoc(limiter, heredoc_fd);
-    }
     else
     {
         waitpid_p(pid, &status, 0);

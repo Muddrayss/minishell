@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 15:30:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:07:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	ft_unsetenv(char *env_name)
 		elem = (t_envp *)bucket->content;
 		if (ft_strcmp(env_name, elem->name) == 0)
 		{
-			lstremoveone(bucket, &free);
+			lstremoveone(&table[index], bucket, &free);
 			update_env_matrix(*elem, REMOVE);
 			break ;
 		}

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 12:42:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:12:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static void     launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3]);
 static void     child(t_tree *elem, int fds[3], int8_t prev, int8_t next);
 static void     parent(pid_t pid, int fds[3], bool is_in_pipeline);
-static void     dup_and_close(int *to_dup_old, int to_dup_new, int *to_close);
 static void     exec_redirs(t_list *redirs, int heredoc_fileno);
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_x(t_tree *node, int n, int8_t type);
@@ -29,7 +28,6 @@ void    executor(t_tree *parsed_params)
     create_heredocs(parsed_params);
     if (g_status != 130)
     {
-        set_sighandler(&newline_signal, SIG_IGN);
         launch_commands(parsed_params, -1, -1, fds);
         wait_for_children(parsed_params);
     }
@@ -78,11 +76,13 @@ static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
     redirs = elem->cmd->redirs;
     cmd_str = elem->cmd->cmd_str;
     if (next == PIPELINE)
-        dup_and_close(&fds[1], STDOUT_FILENO, &fds[0]);
+        dup2_p(fds[1], STDOUT_FILENO);
     if (prev == PIPELINE)
-        dup_and_close(&fds[2], STDIN_FILENO, &fds[1]);
+        dup2_p(fds[2], STDIN_FILENO);
     reset_fd(&fds[0]);
+    reset_fd(&fds[1]);
     exec_redirs(redirs, heredoc_fileno++);
+    cmd_str = replace_env_vars(cmd_str);
     exec(ft_getenv("PATH"), cmd_str);
 }
 
@@ -95,15 +95,7 @@ static void parent(pid_t pid, int fds[3], bool is_in_pipeline)
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
         reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
-        reset_fd(&fds[2]);
     }
-}
-
-static void dup_and_close(int *to_dup_old, int to_dup_new, int *to_close)
-{
-    reset_fd(to_close);
-    dup2_p(*to_dup_old, to_dup_new);
-    reset_fd(to_dup_old);
 }
 
 static void exec_redirs(t_list *redirs, int heredoc_fileno)

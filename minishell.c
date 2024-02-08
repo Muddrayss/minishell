@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 12:05:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:24:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void check_args(int argc, char **argv);
 static void	init_general(void);
 static void init_data(char **envp);
 static void minishell_loop(void);
+static bool str_is_empty(char *str);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -72,11 +73,10 @@ static void	minishell_loop()
 
 	while (1)
 	{
-		set_sighandler(&display_signal, SIG_IGN);
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
 			ft_quit(123, "exit"); 
-		if (input[0] == '\0')
+		if (input[0] == '\0' || str_is_empty(input))
 			continue ;
 		add_history(input);
 		lexered_params = lexer(input);
@@ -85,6 +85,17 @@ static void	minishell_loop()
 			continue ;
 		executor(execution_tree);
 	}
+}
+
+static bool str_is_empty(char *str)
+{
+	while (*str)
+	{
+		if (!is_shell_space(*str))
+			return (false);
+		str++;
+	}
+	return (true);
 }
 
 //va bene per comandi interni senza redirs, e senza here_doc e senza salvare l'exit status in data

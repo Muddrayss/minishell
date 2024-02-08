@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 15:45:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:11:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	        lstadd_front(t_list **lst, t_list *new);
 void            lstreverse(t_list **lst);
 void			lstclear(t_list **lst, void (*del)(void *));
 void			lstdelone(t_list *lst, void (*del)(void *));
-void 			lstremoveone(t_list *to_remove, void (*del)(void *));
+void            lstremoveone(t_list **head, t_list *to_remove, void (*del)(void *));
 
 t_tree			*treenew_p(int8_t type, t_cmd *cmd);
 void 			treeadd_below(t_tree **head, t_tree *new);

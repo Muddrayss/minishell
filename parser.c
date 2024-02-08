@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 12:34:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:31:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static int8_t   check_syntax(t_list *lexered_params);
-static void     merge_separators(t_list **head);
-static void     merge_ampersands(t_list *elem);
-static void     merge_pipes(t_list *elem);
+static void     merge_separators(t_list **lexered_params);
+static void     merge_ampersands(t_list **head, t_list *node);
+static void     merge_pipes(t_list **head, t_list *node);
 static t_tree   *fill_tree(t_list *lexered_params);
 static t_list   *skip_parenthesis(t_list *params);
 static t_cmd    *init_cmd(char *cmd_str);
@@ -295,9 +295,9 @@ static void merge_separators(t_list **lexered_params)
         if (elem->token)
         {
             if (elem->token == '&')
-                merge_ampersands(node);
+                merge_ampersands(lexered_params, node);
             else if (elem->token == '|')
-                merge_pipes(node);
+                merge_pipes(lexered_params, node);
             else if (elem->token == '(')
                 elem->token = SUBSHELL_START;
             else if (elem->token == ')')
@@ -307,7 +307,7 @@ static void merge_separators(t_list **lexered_params)
     }
 }
 
-static void merge_ampersands(t_list *node)
+static void merge_ampersands(t_list **head, t_list *node)
 {
     t_lexer *elem;
     t_lexer *next_elem;
@@ -321,10 +321,10 @@ static void merge_ampersands(t_list *node)
         elem->token = AND;
     else
         ft_strcat(prev_elem->cmd_str, "&");
-    lstremoveone(node->next, &del_content_lexer);
+    lstremoveone(head, node->next, &del_content_lexer);
 }
 
-static void merge_pipes(t_list *node)
+static void merge_pipes(t_list **head, t_list *node)
 {
     t_lexer *elem;
     t_lexer *next_elem;
@@ -334,7 +334,7 @@ static void merge_pipes(t_list *node)
     if (next_elem->token == '|')
     {
         elem->token = OR;
-        lstremoveone(node->next, del_content_lexer);
+        lstremoveone(head, node->next, del_content_lexer);
     }
     else
         elem->token = PIPELINE;
