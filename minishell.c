@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 13:47:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:05:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	check_args(int argc, char **argv)
 	(void)argv;
 	if (argc > 1)
 	{
-		ft_putstr_fd("minishell: too many arguments\n", 2);
+		ft_putstr_fd("minishell: too many arguments\n", STDERR_FILENO);
 		exit(1);
 	}
 }

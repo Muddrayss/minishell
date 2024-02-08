@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 13:47:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:04:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ char *get_cmd(char *path, char *cmd)
     ft_freematrix(dirs);
     if (!full_path)
 	{
-        ft_putstr_fd("minishell: command not found: '", 2);
-        ft_putstr_fd(cmd, 2);
-        ft_putstr_fd("'\n", 2);
+        ft_putstr_fd("minishell: command not found: '", STDERR_FILENO);
+        ft_putstr_fd(cmd, STDERR_FILENO);
+        ft_putstr_fd("'\n", STDERR_FILENO);
     }
     return (full_path);
 }
@@ -150,10 +150,10 @@ void	ft_quit(int id, char *msg)
 		while (open("./tmp/print_sem", O_CREAT | O_EXCL, 0666) == EEXIST)
 			;
 		if (!msg)
-			ft_putstr_fd(strerror(errno), 2);
+			ft_putstr_fd(strerror(errno), STDERR_FILENO);
 		else
-			ft_putstr_fd(msg, 2);
-		ft_putstr_fd("\n", 2);
+			ft_putstr_fd(msg, STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
 		unlink("./tmp/print_sem");
 	}
 	free_data();
@@ -207,16 +207,16 @@ void	close_all_fds(void)
 
 void	ft_parse_error(char token)
 {
-	ft_putstr_fd("Parse error near '", 2);
-	write(2, &token, 1);
-	ft_putstr_fd("'\n", 2);
+	ft_putstr_fd("Parse error near '", STDERR_FILENO);
+	write(STDERR_FILENO, &token, 1);
+	ft_putstr_fd("'\n", STDERR_FILENO);
 }
 
 void	ft_syntax_error(char token)
 {
-	ft_putstr_fd("Syntax error near '", 2);
-	write(2, &token, 1);
-	ft_putstr_fd("'\n", 2);
+	ft_putstr_fd("Syntax error near '", STDERR_FILENO);
+	write(STDERR_FILENO, &token, 1);
+	ft_putstr_fd("'\n", STDERR_FILENO);
 }
 
 t_data *get_data(void)

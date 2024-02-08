@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 10:25:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:03:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void     launch_commands(t_tree *node, int8_t prev_separator_type, int8_t next_separator_type);
 static void     child(t_tree *elem, int fds[3], int8_t prev, int8_t next);
-static void     parent(pid_t pid, int fds[3], bool is_after_pipeline);
+static void     parent(pid_t pid, int fds[3], bool is_in_pipeline);
 static void     dup_and_close(int *to_dup_old, int to_dup_new, int *to_close);
 static void     exec_redirs(t_list *redirs, int heredoc_fileno);
 static void     wait_for_children(t_tree *parsed_params);
@@ -29,40 +29,43 @@ void    executor(t_tree *parsed_params)
     if (g_status != 130)
     {
         set_sighandler(&newline_signal, SIG_IGN);
-        launch_commands(parsed_params, 0, 0);
+        launch_commands(parsed_params, -1, -1);
         wait_for_children(parsed_params);
     }
     dup2(original_stdin, STDIN_FILENO);
     reset_fd(&original_stdin);
 }
 
-//preorder traversal search(N, L, R)
-//HO RIGUARDATO 3 VOLTE LA LOGICA SU CARTA E DOVREBBE FUNZIONARE al 98% (da testare)
-static void launch_commands(t_tree *node, int8_t next_separator_type, int8_t prev_separator_type)
+static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type)
 {
     pid_t       pid;
-    static int  fds[3] = {-1, -1, -1}; //cosi' resetfd non li prova a chiudere
+    static int  fds[3] = {-1, -1, -1}; //essendo gli fds statici non vorrei che non funzionassero con pie' pipe di fila (la seconda pipe sovrascrive quelli della prima), passarli come argomenti??
 
     if (!node)
         return ;
-    if (node->type == CMD) //piccolo problemino qui quando c'e' un solo comando, execve viene fatto sul padre
-        child(node, fds, prev_separator_type, next_separator_type);
-    if (node->type == PIPELINE)
-        pipe_p(fds);
-    pid = fork_p(); //ogni volta che vado a sinistra forko. (cosi le subshell si gestiscono da sole)
-    if (pid == 0)
-        launch_commands(node->left, node->type, prev_separator_type);
-    else
-        parent(pid, fds, node->type == PIPELINE);
-    if ((node->type == AND && g_status == 0) || (node->type == OR && g_status != 0))
-        return ; //breaka e non esegue i comandi successivo
-    if (node->right && node->right->type == CMD) //ovvero l'ultimo
+    if (node->type != CMD)
+    {
+        if (node->type == PIPELINE)
+            pipe_p(fds);
+        pid = fork_p();
+        if (pid == 0) //ogni volta che vado a sinistra forko (tanto o c'e' un comando o una subshell)
+            launch_commands(node->left, prev_type, node->type);
+        else
+            parent(pid, fds, node->type == PIPELINE);
+        if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
+            launch_commands(node->right, node->type, -1);
+        return ;
+    }
+    if (next_type == -1)
     {
         pid = fork_p();
         if (pid > 0)
-            parent(pid, fds, node->type == PIPELINE);
+        {
+            parent(pid, fds, false);
+            return ;
+        }
     }
-    launch_commands(node->right, next_separator_type, node->type);
+    child(node, fds, prev_type, next_type);
 }
 
 static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
@@ -82,11 +85,11 @@ static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
     exec(ft_getenv("PATH"), cmd_str);
 }
 
-static void parent(pid_t pid, int fds[3], bool is_before_pipeline)
+static void parent(pid_t pid, int fds[3], bool is_in_pipeline)
 {
     reset_fd(&fds[1]);
     fds[2] = fds[0];
-    if (!is_before_pipeline)
+    if (!is_in_pipeline)
     {
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
