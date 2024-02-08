@@ -6,16 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:37:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 21:40:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
-
-//ho visto che anche il bash originale fa cosi' per le variabili d'ambiente
-//le conserva in una hashtable (perche' per getenv e' molto piu veloce di una matrice)
-//e quando deve passarle ad un comando sotto forma di envp (char **) le trasforma copiandole tutte
-//infatti se guardi le env non hanno un ordine particolare tipo alfabetico perche' sono state inserite in una hashtable
 
 uint8_t hash(char *str)
 {
