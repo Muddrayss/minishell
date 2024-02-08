@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 14:12:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:54:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
     pid_t       pid;
     //gli fd statici non funzioanno con piu pipe di fila (la seconda pipe sovrascrive quelli della prima), passarli come argomenti??
     if (!node)
-        return ;
+        return ; //forse meglio exit essendo in un subprocess
     if (node->type != CMD)
     {
         if (node->type == PIPELINE)
@@ -50,7 +50,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
             launch_commands(node->left, prev_type, node->type, fds);
         else
             parent(pid, fds, node->type == PIPELINE);
-        if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
+        if ((node->type == AND && g_status != EXIT_SUCCESS) || (node->type == OR && g_status == EXIT_SUCCESS))
             return ;
         launch_commands(node->right, node->type, -1, fds);
         return ;

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 12:04:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:07:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,9 +200,9 @@ void	close_all_fds(void)
 {
 	int		fd;
 
-	fd = 1; //senza chiudere stdin e stdout
+	fd = 2; //senza chiudere stdin e stdout
 	while (++fd < MAX_FDS)
-		reset_fd(&fd);
+		close(fd); //NON close_p perche' la maggiorparte daranno errore
 }
 
 void	ft_parse_error(char token)
