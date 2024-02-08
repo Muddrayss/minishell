@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 14:22:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 10:20:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,16 @@ static void launch_commands(t_tree *node, int8_t next_separator_type, int8_t pre
         parent(pid, fds, node->type == PIPELINE);
     if ((node->type == AND && g_status == 0) || (node->type == OR && g_status != 0))
         return ; //breaka e non esegue i comandi successivo
-    launch_commands(node->right, next_separator_type, node->type);
+    if (node->right->type == CMD) //ovvero l'ultimo
+    {
+        pid = fork_p();
+        if (pid == 0)
+            child(node->right, fds, node->type, 0);
+        else
+            parent(pid, fds, node->type == PIPELINE);
+    }
+    else
+        launch_commands(node->right, next_separator_type, node->type);
 }
 
 static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next)
