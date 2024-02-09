@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/09 19:49:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:52:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ static int8_t   check_syntax(t_list *lexered_params)
 // }
 
 //da passargli lexered_params->next
+//NON funziona il caso: cmd 1 ; ( cmd2 ; ( cmd3 ; cmd 4)) ; cmd 5
+//NON funziona il caso con una parentesi che contiene solo un comando ma si gestisce prima tramite merge_parenthesis
 static t_tree   *fill_tree(t_list *lexered_params, t_list *stop)
 {
     t_tree  *node;
