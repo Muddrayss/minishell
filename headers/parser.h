@@ -6,13 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/09 14:25:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/09 23:18:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
+# define END 			   -1
 # define CMD 				0 //CMD deve essere zero, altrimenti non funziona treenew con il token
 # define SEMICOLON			1
 # define OR 				2
