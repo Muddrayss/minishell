@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/09 00:17:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:32:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void    executor(t_tree *parsed_params)
         pid = fork_p();
         if (pid == 0)
         {
-            launch_command(parsed_params, -1, -1, fds);
+            launch_commands(parsed_params, -1, -1, fds);
             wait_for_children(parsed_params); //aspetta i figli non gia aspettati (quindi le pipe)
         }
         else
