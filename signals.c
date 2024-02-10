@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/10 23:00:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:28:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void command_mode(int signo)
     }
 }
 
-void    set_signals(int mode)
+void    set_signals(int8_t mode)
 {
     if (mode == S_SILENT)
     {
