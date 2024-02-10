@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:18:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:32:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ static char *get_env_name(char *str);
 
 char    *replace_env_vars(char *str)
 {
-    char        *env_name;
+    uint32_t    env_name_len;
     char        *env_value;
+    char        *env_name;
     char        *start;
     char        *tmp;
     uint32_t    len;
@@ -33,26 +34,23 @@ char    *replace_env_vars(char *str)
         if (!tmp)
             return (free(start), str);
         env_name = get_env_name(tmp + 1);
-        //questo if else e' riducibile quasi sicuramente
+        env_name_len = ft_strlen(env_name);
         if (ft_strncmp(env_name, "?", 1) != 0)
-        {
             env_value = ft_getenv(env_name);
-            free(env_name);
-        }
         else
         {
-            free(env_name);
-            env_name = "?";
+            env_name_len = 1;
             env_value = ft_utoa((long) g_status);
         }
+        free(env_name);
         if (!env_value)
             env_value = "";
         len = ft_strlen(str);
         free(str);
-        str = calloc_p(len - ft_strlen(env_name) + ft_strlen(env_value), sizeof(char)); //senza + 1 perche' c'e' gia' il + 1 del carattere $ che non e' considerato nella len
+        str = calloc_p(len - env_name_len + ft_strlen(env_value), sizeof(char)); //senza + 1 perche' c'e' gia' il + 1 del carattere $ che non e' considerato nella len
         ft_strlcpy(str, start, (size_t)(tmp - start + 1));
         ft_strcat(str, env_value);
-        ft_strcat(str, tmp + 1 + ft_strlen(env_name));
+        ft_strcat(str, tmp + 1 + env_name_len);
         i += (uint32_t)(tmp - start);
         free(start);
     }
