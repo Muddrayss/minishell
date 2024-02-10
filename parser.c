@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 18:02:09 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:45:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ static t_tree *fill_tree(t_list *lexered_params, t_list *stop)
     return (node);
 }
 
-//TODO da mergiare con unskip_parenthesis
+//TODO da mergiare con unskip_parenthesis (int8_t direction)
 static t_list	*skip_parenthesis(t_list *lexered_params)
 {
 	int32_t	    n_open;
 	t_lexer		*elem;
 
 	n_open = 1;
-	while (n_open && lexered_params->next) 
+	while (n_open && lexered_params->next)
 	{
         lexered_params = lexered_params->next;
 		elem = (t_lexer *)lexered_params->content;
@@ -286,18 +286,12 @@ static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool i
     t_redir *redir;
 
     redir = init_redir();
-    if (is_append== false)
-        redir->type = REDIR_OUTPUT_FD;
-    else
-        redir->type = REDIR_APPEND_FD;
+    redir->type = REDIR_APPEND_FD * (is_append) + REDIR_OUTPUT_FD * (!is_append);
     redir->fds[1] = get_fd_num(str, i, AFTER);
     redir->fds[0] = get_fd_num(str, i, BEFORE);
     if (redir->fds[1] == -42)
     {
-        if (is_append== false)
-            redir->type = REDIR_OUTPUT;
-        else
-            redir->type = REDIR_APPEND;
+        redir->type = REDIR_APPEND * (is_append) + REDIR_OUTPUT * (!is_append);
         redir->filename = get_filename(str, i);
     }
     if (redir->fds[0] == -42)
