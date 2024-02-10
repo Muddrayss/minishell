@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 18:33:54 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 18:46:19 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ char    *replace_env_vars(char *str)
         if (ft_strncmp(env_name, "?", 1) != 0)
             env_value = ft_getenv(env_name);
         else
+        {
+            free(env_name);
+            env_name = "?";
             env_value = ft_utoa((long) g_status);
+        }
         if (!env_value)
             env_value = "";
         len = ft_strlen(str);

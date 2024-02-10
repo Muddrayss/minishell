@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 18:32:27 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 18:36:30 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ bool create_heredocs(t_tree *tree)
     success = true;
     if (!tree || g_status == 130)
         return (false);
-
     if (tree->type == CMD)
     {
         redirs = (t_list *)tree->cmd->redirs;
