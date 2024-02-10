@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 00:27:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 13:41:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ void    executor(t_tree *parsed_params)
     reset_fd(&original_stdin);
 }
 
+//TODO non fa il seguente comando:  ( echo a && echo b ) | ls
+// il risultato della parentesi non e' passato in pipe alla parentesi successiva
+//se c'e' la pipe, sia echo a che echo b devono essere scritti nella pipeline
 static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3])
 {
     pid_t               pid;
