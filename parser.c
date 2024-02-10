@@ -64,7 +64,7 @@ static t_tree *fill_tree(t_list *lexered_params, t_list *stop)
         return (fill_tree(skip_parenthesis(lexered_params), stop));
     if (lexered_params->next == stop)
     {
-        node = treenew_p(END, NULL);
+        node = treenew_p(END, NULL); //uso END come nodo vuoto, che serve solo per poter mettere il comando a sinistra invece che destra. così l'executor i comandi li ha solo a sinistra
         if (elem->token == SUBSHELL_END)
             treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
         else
