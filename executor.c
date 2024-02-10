@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 16:52:25 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 17:52:58 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ void    executor(t_tree *parsed_params)
     int     fds[3] = {-42, -42, 42};
 
     original_stdin = dup_p(STDIN_FILENO);
+    g_status = 0;
     create_heredocs(parsed_params);
     if (g_status != 130)
     {
         pid = fork_p();
         if (pid == 0)
         {
+            set_signals(S_COMMAND);
             launch_commands(parsed_params, -1, fds);
             wait_for_children(parsed_params); //aspetta i figli non gia aspettati (quindi le pipe)
         }

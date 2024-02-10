@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 16:24:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 17:54:43 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,12 @@ static void fill_in_child(char *limiter, int heredoc_fd)
 
     pid = fork_p();
     if (pid == 0)
-        fill_heredoc(limiter, heredoc_fd);
-    else
     {
-        waitpid_p(pid, &status, 0);
-        if (WEXITSTATUS(status) == SIGINT)
-            g_status = 130;
-        else if (g_status == 130)
-            g_status = 0;
+        set_signals(S_HEREDOC);
+        fill_heredoc(limiter, heredoc_fd);
     }
+    else
+        waitpid_p(pid, &status, 0);
 }
 
 static void fill_heredoc(char *limiter, int fd)

@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 13:38:21 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 17:45:22 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ static void	minishell_loop()
 	while (true)
 	{
 		//TODO gestire linea lunga che supera colonne
+		set_signals(S_INTERACTIVE);
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
 			ft_quit(123, "exit"); 
@@ -83,6 +84,7 @@ static void	minishell_loop()
 		execution_tree = parser(lexered_params);
 		if (!execution_tree)
 			continue ;
+		set_signals(S_SILENT);
 		executor(execution_tree);
 	}
 }

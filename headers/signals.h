@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:04:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 14:11:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 17:40:32 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SIGNALS_H
 # define SIGNALS_H
 
-void    set_sighandler(void *handle_sigint, void *handle_sigquit);
-void    display_signal(int signo);
-void    display_and_quit_signal(int signo);
-void    hide_and_abort_signal(int signo);
-void    newline_signal(int signo);
+# define S_INTERACTIVE 0
+# define S_HEREDOC 1
+# define S_COMMAND 2
+# define S_SILENT 3
+
+void set_signals(int mode);
 
 #endif
