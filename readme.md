@@ -1,1 +1,1 @@
-![Untitled](https://github.com/Muddrayss/minishell/assets/104778891/194db680-8881-401d-9207-d001e9e626a6)
+![Parser_infographic](https://github.com/Muddrayss/minishell/assets/104778891/9d10378d-82ee-4c1f-a8de-4c94d28f093d)
