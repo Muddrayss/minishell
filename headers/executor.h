@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 18:32:46 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:02:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define COMMAND_NOT_FOUND 127
 
 void    executor(t_tree *parsed_params);
-bool    create_heredocs(t_tree *tree);
+void    create_heredocs(t_tree *tree);
 char    *get_heredoc_filename(int32_t id);
 char 	*replace_env_vars(char *str);
 bool    check_last_subcmd(char *cmd_str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 18:33:30 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:22:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,22 @@ void    executor(t_tree *parsed_params)
     int     original_stdin;
     pid_t   pid;
     int     fds[3] = {-42, -42, 42};
-    bool    has_heredoc_succeded;
 
     original_stdin = dup_p(STDIN_FILENO);
-    has_heredoc_succeded = create_heredocs(parsed_params);
-    if (has_heredoc_succeded)
+    create_heredocs(parsed_params);
+    if (g_status == 130) //se all'heredoc e' arrivato ctrl+c...
+        return ; //...ma comunque non devo eseguire i comandi
+    pid = fork_p();
+    if (pid == 0)
     {
-        pid = fork_p();
-        if (pid == 0)
-        {
-            set_signals(S_COMMAND);
-            launch_commands(parsed_params, -1, fds);
-            wait_for_children(parsed_params); //aspetta i figli non gia aspettati (quindi le pipe)
-        }
-        else
-        {
-            waitpid_p(pid, &g_status, 0); //aspetta la command stream
-            g_status = WEXITSTATUS(g_status);
-        }
+        set_signals(S_COMMAND);
+        launch_commands(parsed_params, -1, fds);
+        wait_for_children(parsed_params); //aspetta i figli non gia aspettati (quindi le pipe)
+    }
+    else
+    {
+        waitpid_p(pid, &g_status, 0); //aspetta la command stream
+        g_status = WEXITSTATUS(g_status);
     }
     dup2(original_stdin, STDIN_FILENO);
     reset_fd(&original_stdin);

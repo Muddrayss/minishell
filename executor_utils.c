@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 18:46:19 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:18:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ char    *replace_env_vars(char *str)
         if (!tmp)
             return (free(start), str);
         env_name = get_env_name(tmp + 1);
+        //questo if else e' riducibile quasi sicuramente
         if (ft_strncmp(env_name, "?", 1) != 0)
+        {
             env_value = ft_getenv(env_name);
+            free(env_name);
+        }
         else
         {
             free(env_name);

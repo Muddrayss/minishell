@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 18:36:30 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:10:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 static void     fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);
 
-bool create_heredocs(t_tree *tree)
+void create_heredocs(t_tree *tree)
 {
     t_list *redirs;
     t_redir *redir;
     int heredoc_fd;
-    bool success;
 
-    success = true;
     if (!tree || g_status == 130)
-        return (false);
+        return ;
     if (tree->type == CMD)
     {
         redirs = (t_list *)tree->cmd->redirs;
@@ -35,23 +33,15 @@ bool create_heredocs(t_tree *tree)
             {
                 heredoc_fd = open_p(get_heredoc_filename(redir->heredoc_fileno), O_WRONLY | O_CREAT | O_TRUNC, 0644);
                 fill_in_child(redir->filename, heredoc_fd);
-                if (g_status == 130)
-                {
-                    reset_fd(&heredoc_fd);
-                    success = false;
-                    break;
-                }
+                if (g_status != 0)
+                    return ;
             }
             redirs = redirs->next;
         }
     }
-    if (tree->left && !create_heredocs(tree->left))
-        success = false;
-    if (tree->right && !create_heredocs(tree->right))
-        success = false;
-    return (success);
+    create_heredocs(tree->left);
+    create_heredocs(tree->right);
 }
-
 
 //usare strcat invece che strlcat
 char    *get_heredoc_filename(int32_t id)
@@ -73,10 +63,11 @@ char    *get_heredoc_filename(int32_t id)
     return (free(idx), filename);
 }
 
+//TODO controllare caso << here && echo ciao con ctrl+d
+//TODO capire perche' dopo un ctrl+c non prende piu comandi
 static void fill_in_child(char *limiter, int heredoc_fd)
 {
     pid_t   pid;
-    int     status;
 
     pid = fork_p();
     if (pid == 0)
@@ -85,7 +76,10 @@ static void fill_in_child(char *limiter, int heredoc_fd)
         fill_heredoc(limiter, heredoc_fd);
     }
     else
-        waitpid_p(pid, &status, 0);
+    {
+        waitpid_p(pid, &g_status, 0);
+        g_status = WEXITSTATUS(g_status);
+    }
 }
 
 static void fill_heredoc(char *limiter, int fd)
@@ -96,12 +90,12 @@ static void fill_heredoc(char *limiter, int fd)
   
     str = NULL;
     limiter_len = ft_strlen(limiter);
-    while (g_status != 130)
+    while (1)
     {
         str = readline("> ");
-        if (!str || g_status == 130)
+        if (!str)
         {
-            ft_putstr_fd("\n", STDOUT_FILENO);
+            ft_putstr_fd("\n", STDOUT_FILENO); //altrimenti ctrl+d non va a capo
             break ;
         }
         str_len = ft_strlen(str);

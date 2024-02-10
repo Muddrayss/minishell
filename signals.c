@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/10 17:58:29 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:00:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,8 @@ static void heredoc_mode(int signo)
 {
     if (signo == SIGINT)
     {
-        g_status = 130;
         ft_putstr_fd("\n", STDOUT_FILENO);
-        exit(signo);  
+        exit(130);
     }
     else if (signo == SIGQUIT)
         ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
