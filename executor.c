@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 13:41:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 15:07:18 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void     launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3]);
-static void     child(t_tree *elem, int fds[3], int8_t prev, int8_t next, uint32_t heredoc_fileno);
+static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3]);
+static void     child(t_tree *elem, int fds[3], int8_t prev_type, uint32_t heredoc_fileno);
 static void     parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_fileno);
 static void     exec_redirs(t_list *redirs, uint32_t heredoc_fileno);
 static void     wait_for_children(t_tree *parsed_params);
@@ -32,7 +32,7 @@ void    executor(t_tree *parsed_params)
         pid = fork_p();
         if (pid == 0)
         {
-            launch_commands(parsed_params, -1, -1, fds);
+            launch_commands(parsed_params, -1, fds);
             wait_for_children(parsed_params); //aspetta i figli non gia aspettati (quindi le pipe)
         }
         else
@@ -48,7 +48,7 @@ void    executor(t_tree *parsed_params)
 //TODO non fa il seguente comando:  ( echo a && echo b ) | ls
 // il risultato della parentesi non e' passato in pipe alla parentesi successiva
 //se c'e' la pipe, sia echo a che echo b devono essere scritti nella pipeline
-static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, int fds[3])
+static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
 {
     pid_t               pid;
     static uint32_t     heredoc_fileno = 0;
@@ -61,32 +61,31 @@ static void launch_commands(t_tree *node, int8_t prev_type, int8_t next_type, in
             pipe_p(fds);
         pid = fork_p();
         if (pid == 0) //ogni volta che vado a sinistra forko (tanto o c'e' un comando o una subshell)
-            launch_commands(node->left, prev_type, node->type, fds);
+        {
+            if (node->type == PIPELINE)
+            {
+                dup2_p(fds[1], STDOUT_FILENO);
+                reset_fd(&fds[0]);
+                reset_fd(&fds[1]);
+            }
+            launch_commands(node->left, prev_type, fds);
+        }
         else
             parent(pid, fds, node->type == PIPELINE, heredoc_fileno++);
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
             exit(g_status);
-        launch_commands(node->right, node->type, -1, fds);
+        launch_commands(node->right, node->type, fds);
     }
-    child(node, fds, prev_type, next_type, heredoc_fileno);
+    child(node, fds, prev_type, heredoc_fileno);
 }
 
-static void child(t_tree *elem, int fds[3], int8_t prev, int8_t next, uint32_t heredoc_fileno)
+static void child(t_tree *elem, int fds[3], int8_t prev_type, uint32_t heredoc_fileno)
 {
-    t_list      *redirs;
-    char        *cmd_str;
-
-    redirs = elem->cmd->redirs;
-    cmd_str = elem->cmd->cmd_str;
-    if (next == PIPELINE)
-        dup2_p(fds[1], STDOUT_FILENO);
-    if (prev == PIPELINE)
+    if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
-    reset_fd(&fds[0]);
-    reset_fd(&fds[1]);
-    exec_redirs(redirs, heredoc_fileno);
-    cmd_str = replace_env_vars(cmd_str);
-    exec(ft_getenv("PATH"), cmd_str);
+    exec_redirs(elem->cmd->redirs, heredoc_fileno);
+    elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str);
+    exec(ft_getenv("PATH"), elem->cmd->cmd_str);
 }
 
 static void parent(pid_t pid, int fds[3], bool is_in_pipeline, uint32_t heredoc_fileno)

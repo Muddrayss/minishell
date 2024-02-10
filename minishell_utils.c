@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:18:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 14:44:52 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ static char	*get_custom_bin(char *path)
 	full_path = NULL;
 	tmp2 = ft_getenv("PWD");
 	tmp = ft_strjoin(tmp2, "/"); //abbastanza ridicolo dover usare strjoin per aggiungere un carattere
-	free(tmp2);
 	if (!tmp)
 		ft_quit(ERR_MALLOC, "failed to allocate memory");
 	if (ft_strncmp(path, "../", 3) == 0)
