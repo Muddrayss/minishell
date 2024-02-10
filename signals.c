@@ -6,13 +6,11 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/10 17:46:58 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 17:58:29 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
-
-
 
 static void silent_mode(int signo)
 {

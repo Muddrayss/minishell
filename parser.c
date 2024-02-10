@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 16:24:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 18:02:09 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ t_tree	*parser(t_list *lexered_params)
     lstdelif(&lexered_params, &is_empty_cmd, &del_content_lexer);
     check_syntax(lexered_params);
     merge_separators(&lexered_params);
-    //merge_parenthesis(&lexered_params); rimuove le parentesi inutili tipo (cmd 1) oppure ((((cmd1))(((cmd2)))))
     parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
     *parsed_params = fill_tree(lexered_params, NULL);
     return (*parsed_params);

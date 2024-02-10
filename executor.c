@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 17:52:58 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 18:33:30 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ void    executor(t_tree *parsed_params)
     int     original_stdin;
     pid_t   pid;
     int     fds[3] = {-42, -42, 42};
+    bool    has_heredoc_succeded;
 
     original_stdin = dup_p(STDIN_FILENO);
-    g_status = 0;
-    create_heredocs(parsed_params);
-    if (g_status != 130)
+    has_heredoc_succeded = create_heredocs(parsed_params);
+    if (has_heredoc_succeded)
     {
         pid = fork_p();
         if (pid == 0)

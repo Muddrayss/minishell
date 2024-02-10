@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 17:54:43 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 18:32:27 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 static void     fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);
 
-void create_heredocs(t_tree *tree)
+bool create_heredocs(t_tree *tree)
 {
-    t_list      *redirs;
-    t_redir     *redir;
-    int32_t     heredoc_fd;
+    t_list *redirs;
+    t_redir *redir;
+    int heredoc_fd;
+    bool success;
 
+    success = true;
     if (!tree || g_status == 130)
-        return ;
+        return (false);
+
     if (tree->type == CMD)
     {
         redirs = (t_list *)tree->cmd->redirs;
@@ -36,15 +39,20 @@ void create_heredocs(t_tree *tree)
                 if (g_status == 130)
                 {
                     reset_fd(&heredoc_fd);
-                    break ;
+                    success = false;
+                    break;
                 }
             }
             redirs = redirs->next;
         }
     }
-    create_heredocs(tree->left);
-    create_heredocs(tree->right);
+    if (tree->left && !create_heredocs(tree->left))
+        success = false;
+    if (tree->right && !create_heredocs(tree->right))
+        success = false;
+    return (success);
 }
+
 
 //usare strcat invece che strlcat
 char    *get_heredoc_filename(int32_t id)

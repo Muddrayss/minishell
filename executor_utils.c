@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:39:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 18:33:54 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char    *replace_env_vars(char *str)
     uint32_t    i;
 
     i = 0;
-    while (1)
+    while (true)
     {
         start = ft_strdup(&str[i]);
         if (!start)
@@ -33,7 +33,10 @@ char    *replace_env_vars(char *str)
         if (!tmp)
             return (free(start), str);
         env_name = get_env_name(tmp + 1);
-        env_value = ft_getenv(env_name);
+        if (ft_strncmp(env_name, "?", 1) != 0)
+            env_value = ft_getenv(env_name);
+        else
+            env_value = ft_utoa((long) g_status);
         if (!env_value)
             env_value = "";
         len = ft_strlen(str);
