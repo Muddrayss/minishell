@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 16:12:12 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 16:52:25 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,15 @@ void    executor(t_tree *parsed_params)
     reset_fd(&original_stdin);
 }
 
+static t_tree *skip_till_semicolon(t_tree *node)
+{
+    if (!node)
+        return (NULL);
+    if (node->type == SEMICOLON)
+        return (node->right);
+    return (skip_till_semicolon(node->right));
+}
+
 static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
 {
     pid_t               pid;
@@ -69,7 +78,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
         else
             parent(pid, fds, node->type == PIPELINE);
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
-            exit(g_status);
+            launch_commands(skip_till_semicolon(node), -1, fds);
         launch_commands(node->right, node->type, fds);
     }
     child(node, fds, prev_type);
