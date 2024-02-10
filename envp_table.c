@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:40:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:56:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,13 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 	while (bucket) //ci entra solo se c'e' una collision
 	{
         elem = (t_envp *)bucket->content;
-		if (ft_strcmp(env_name, elem->name) == 0 && replace) //va bene strcmp perche' compara anche il '\0
+		if (ft_strcmp(env_name, elem->name) == 0) //va bene strcmp perche' compara anche il '\0
 		{
-			bucket->content = new_elem;
-			update_env_matrix(*new_elem, REPLACE);
+			if (replace)
+			{
+				bucket->content = new_elem;
+				update_env_matrix(*new_elem, REPLACE);
+			}
 			return ;
 		}
 		bucket = bucket->next;
