@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 15:55:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 16:24:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void     remove_fd_num(char *cmd_str, uint32_t idx_redir, int8_t before_a
 static uint32_t remove_filename(char *cmd_str, uint32_t i);
 static t_list   *fill_redirs(char *cmd_str);
 static void     fill_redir_input(t_list **redirs, char *str, uint32_t i);
-static void     fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, uint32_t heredoc_fileno);
+static void     fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno);
 static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append);
 static t_redir *init_redir(void);
 static int32_t  get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
@@ -191,7 +191,7 @@ static t_list  *fill_redirs(char *cmd_str)
 {
     t_list          *redirs;
     uint32_t        i;
-    static uint32_t heredoc_fileno = 0;
+    static int32_t  heredoc_fileno = 0;
 
     i = 0;
     redirs = NULL;
@@ -271,7 +271,7 @@ static void    fill_redir_input(t_list **redirs, char *str, uint32_t i)
     lstadd_front(redirs, lstnew_p(redir));
 }
 
-static void fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, uint32_t heredoc_fileno)
+static void fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno)
 {
     t_redir *redir;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 15:59:30 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/10 16:24:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void create_heredocs(t_tree *tree)
 }
 
 //usare strcat invece che strlcat
-char    *get_heredoc_filename(uint32_t id)
+char    *get_heredoc_filename(int32_t id)
 {
     t_data      *data;
     char        *idx;
@@ -55,7 +55,7 @@ char    *get_heredoc_filename(uint32_t id)
     size_t      size;
 
     data = get_data();
-    idx = ft_utoa(id);
+    idx = ft_utoa((uint32_t)id);
     size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx)
