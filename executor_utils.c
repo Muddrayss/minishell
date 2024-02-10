@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:32:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:50:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char    *replace_env_vars(char *str)
         else
         {
             env_name_len = 1;
-            env_value = ft_utoa((long) g_status);
+            env_value = ft_utoa((uint32_t)g_status);
         }
         free(env_name);
         if (!env_value)
