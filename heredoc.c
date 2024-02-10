@@ -3,98 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/09 00:08:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 15:59:30 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs);
-static char     **get_limiters_array(t_tree *node);
-static void     fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i);
 static void     fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);
 
 void create_heredocs(t_tree *tree)
 {
-    static uint32_t  heredoc_fileno = 0;
-    int32_t          heredoc_fd;
-    char             **limiters_array;
-    uint32_t         i;
-
-    limiters_array = get_limiters_array(tree);
-    heredoc_fd = -42;
-    i = 0;
-    while (limiters_array[i])
-    {
-        heredoc_fd = open_p(get_heredoc_filename(heredoc_fileno++), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        fill_in_child(limiters_array[i++], heredoc_fd);
-        if (g_status == 130)
-        {
-            reset_fd(&heredoc_fd);
-            break ;
-        }
-    }
-    ft_freematrix(limiters_array);
-    reset_fd(&heredoc_fd);
-}
-
-static char    **get_limiters_array(t_tree *node)
-{
-    char        **limiters_array;
-    uint32_t    n_heredocs;
-
-    n_heredocs = count_heredocs(node, 0);
-    limiters_array = (char **)malloc_p(sizeof(char *) * (n_heredocs + 1));
-    limiters_array[n_heredocs] = NULL;
-    fill_limiters_array(node, limiters_array, 0);
-    return (limiters_array);
-}
-
-//inorder traversal search (L, N, R)
-static void fill_limiters_array(t_tree *node, char **limiters_array, uint32_t i)
-{
     t_list      *redirs;
-    t_redir     *content;
+    t_redir     *redir;
+    int32_t     heredoc_fd;
 
-    if (!node)
+    if (!tree || g_status == 130)
         return ;
-    fill_limiters_array(node->left, limiters_array, i);
-    if (node->type == CMD)
+    if (tree->type == CMD)
     {
-        redirs = node->cmd->redirs;
+        redirs = (t_list *)tree->cmd->redirs;
         while (redirs)
         {
-            content = (t_redir *)redirs->content;
-            if (content->type == REDIR_HEREDOC)
-                limiters_array[i++] = content->filename;
+            redir = (t_redir *)redirs->content;
+            if (redir->type == REDIR_HEREDOC)
+            {
+                heredoc_fd = open_p(get_heredoc_filename(redir->heredoc_fileno), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                fill_in_child(redir->filename, heredoc_fd);
+                if (g_status == 130)
+                {
+                    reset_fd(&heredoc_fd);
+                    break ;
+                }
+            }
             redirs = redirs->next;
         }
     }
-    fill_limiters_array(node->right, limiters_array, i);
-}
-
-static uint32_t count_heredocs(t_tree *node, uint32_t n_heredocs)
-{
-    t_list      *redirs;
-
-    if (!node)
-        return (n_heredocs);
-    if (node->type == CMD)
-    {
-        redirs = node->cmd->redirs;
-        while (redirs)
-        {
-            n_heredocs += (((t_redir *)(redirs->content))->type == REDIR_HEREDOC);
-            redirs = redirs->next;
-        }
-    }
-    n_heredocs += count_heredocs(node->left, n_heredocs);
-    n_heredocs += count_heredocs(node->right, n_heredocs);
-    return (n_heredocs);
+    create_heredocs(tree->left);
+    create_heredocs(tree->right);
 }
 
 //usare strcat invece che strlcat

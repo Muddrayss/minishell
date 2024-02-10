@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/09 23:18:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 15:34:54 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_redir
 	int8_t		type;
 	int			fds[2];
 	char 		*filename; // o limiter in caso dell heredoc
+	int32_t		heredoc_fileno; //eventuale numero da appendere al nome del heredoc
 }t_redir;
 
 t_tree	*parser(t_list *params_head);

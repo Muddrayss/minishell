@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 00:19:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 15:55:24 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ static void     clear_redirs(t_list *redirs, char *cmd_str);
 static void     remove_fd_num(char *cmd_str, uint32_t idx_redir, int8_t before_after);
 static uint32_t remove_filename(char *cmd_str, uint32_t i);
 static t_list   *fill_redirs(char *cmd_str);
-static void     fill_redir_input(t_list **redirs, char *str, uint32_t i, bool is_heredoc);
+static void     fill_redir_input(t_list **redirs, char *str, uint32_t i);
+static void     fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, uint32_t heredoc_fileno);
 static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append);
-static t_redir  *init_redir(void);
+static t_redir *init_redir(void);
 static int32_t  get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
 
 t_tree	*parser(t_list *lexered_params)
@@ -188,8 +189,9 @@ static uint32_t  remove_filename(char *cmd_str, uint32_t i)
 
 static t_list  *fill_redirs(char *cmd_str)
 {
-    t_list      *redirs;
-    uint32_t     i;
+    t_list          *redirs;
+    uint32_t        i;
+    static uint32_t heredoc_fileno = 0;
 
     i = 0;
     redirs = NULL;
@@ -198,9 +200,9 @@ static t_list  *fill_redirs(char *cmd_str)
         if (cmd_str[i] == '<')
         {
             if (cmd_str[i + 1] == '<')
-                fill_redir_input(&redirs, cmd_str, ++i, true);
+                fill_redir_heredoc(&redirs, cmd_str, ++i, heredoc_fileno);
             else
-                fill_redir_input(&redirs, cmd_str, i, false);
+                fill_redir_input(&redirs, cmd_str, i);
         }
         if (cmd_str[i] == '>')
         {
@@ -211,8 +213,7 @@ static t_list  *fill_redirs(char *cmd_str)
         }
         i++;
     }
-    lstreverse(&redirs);
-    return (redirs);
+    return (heredoc_fileno++, lstreverse(&redirs), redirs);
 }
 
 static int32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after)
@@ -255,51 +256,54 @@ static char *get_filename(char *str, uint32_t idx_redir)
 	return (filename);
 }
 
-static void    fill_redir_input(t_list **redirs, char *str, uint32_t i, bool is_heredoc)
+static void    fill_redir_input(t_list **redirs, char *str, uint32_t i)
 {
-    t_redir *node;
+    t_redir         *redir;
 
-    node = init_redir();
-    if (is_heredoc == false)
+    redir = init_redir();
+    redir->type = REDIR_INPUT_FD;
+    redir->fds[0] = get_fd_num(str, i, AFTER);
+    if (redir->fds[0] == -42)
     {
-        node->type = REDIR_INPUT_FD;
-        node->fds[0] = get_fd_num(str, i, AFTER);
-        if (node->fds[0] == -42)
-        {
-            node->type = REDIR_INPUT;
-            node->filename = get_filename(str, i);
-        }
+        redir->type = REDIR_INPUT;
+        redir->filename = get_filename(str, i);
     }
-    else
-    {
-        node->type = REDIR_HEREDOC;
-        node->filename = get_filename(str, i);
-    }
-    lstadd_front(redirs, lstnew_p(node));
+    lstadd_front(redirs, lstnew_p(redir));
+}
+
+static void fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, uint32_t heredoc_fileno)
+{
+    t_redir *redir;
+
+    redir = init_redir();
+    redir->type = REDIR_HEREDOC;
+    redir->filename = get_filename(str, i);
+    redir->heredoc_fileno = heredoc_fileno;
+    lstadd_front(redirs, lstnew_p(redir));
 }
 
 static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append)
 {
-    t_redir *node;
+    t_redir *redir;
 
-    node = init_redir();
+    redir = init_redir();
     if (is_append== false)
-        node->type = REDIR_OUTPUT_FD;
+        redir->type = REDIR_OUTPUT_FD;
     else
-        node->type = REDIR_APPEND_FD;
-    node->fds[1] = get_fd_num(str, i, AFTER);
-    node->fds[0] = get_fd_num(str, i, BEFORE);
-    if (node->fds[1] == -42)
+        redir->type = REDIR_APPEND_FD;
+    redir->fds[1] = get_fd_num(str, i, AFTER);
+    redir->fds[0] = get_fd_num(str, i, BEFORE);
+    if (redir->fds[1] == -42)
     {
         if (is_append== false)
-            node->type = REDIR_OUTPUT;
+            redir->type = REDIR_OUTPUT;
         else
-            node->type = REDIR_APPEND;
-        node->filename = get_filename(str, i);
+            redir->type = REDIR_APPEND;
+        redir->filename = get_filename(str, i);
     }
-    if (node->fds[0] == -42)
-        node->fds[0] = STDOUT_FILENO;
-    lstadd_front(redirs, lstnew_p(node));
+    if (redir->fds[0] == -42)
+        redir->fds[0] = STDOUT_FILENO;
+    lstadd_front(redirs, lstnew_p(redir));
 }
 
 static t_redir *init_redir(void)
@@ -310,6 +314,7 @@ static t_redir *init_redir(void)
     redir->fds[0] = -42;
     redir->fds[1] = -42;
     redir->filename = NULL;
+    redir->heredoc_fileno = -1;
     redir->type = -1;
     return (redir);
 }
