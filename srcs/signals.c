@@ -6,11 +6,42 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/10 23:28:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 23:15:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
+
+static void silent_mode(int signo);
+static void interactive_mode(int signo);
+static void heredoc_mode(int signo);
+static void command_mode(int signo);
+
+void    set_signals(int8_t mode)
+{
+    if (mode == S_SILENT)
+    {
+        signal(SIGINT, silent_mode);
+        signal(SIGQUIT, silent_mode);
+    }
+    else if (mode == S_INTERACTIVE)
+    {
+        signal(SIGINT, interactive_mode);
+        signal(SIGQUIT, interactive_mode);
+    }
+    else if (mode == S_HEREDOC)
+    {
+        signal(SIGINT, heredoc_mode);
+        signal(SIGQUIT, heredoc_mode);
+    }
+    else if (mode == S_COMMAND)
+    {
+        signal(SIGINT, command_mode);
+        signal(SIGQUIT, command_mode);
+    }
+    else
+        ft_putstr_fd("Internal error: invalid signal mode\n", STDERR_FILENO);
+}
 
 static void silent_mode(int signo)
 {
@@ -62,28 +93,3 @@ static void command_mode(int signo)
     }
 }
 
-void    set_signals(int8_t mode)
-{
-    if (mode == S_SILENT)
-    {
-        signal(SIGINT, silent_mode);
-        signal(SIGQUIT, silent_mode);
-    }
-    else if (mode == S_INTERACTIVE)
-    {
-        signal(SIGINT, interactive_mode);
-        signal(SIGQUIT, interactive_mode);
-    }
-    else if (mode == S_HEREDOC)
-    {
-        signal(SIGINT, heredoc_mode);
-        signal(SIGQUIT, heredoc_mode);
-    }
-    else if (mode == S_COMMAND)
-    {
-        signal(SIGINT, command_mode);
-        signal(SIGQUIT, command_mode);
-    }
-    else
-        ft_putstr_fd("Internal error: invalid signal mode\n", STDERR_FILENO);
-}

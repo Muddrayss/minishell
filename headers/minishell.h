@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 20:57:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 23:47:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,6 @@ extern int g_status;
 # define MAX_FDS 1024
 
 t_data	*get_data(void);
-char	*get_cmd(char *path, char *cmd);
-void	exec_simple_cmd(char *path, char *cmd_str);
-void 	exec(char *path, char *cmd_str);
 void	clean_heredocs(char *path);
 void 	ft_quit(int id, char *msg);
 void 	free_data(void);
