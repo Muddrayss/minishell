@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 18:24:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 22:59:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void create_heredocs(t_tree *tree, int *status)
 {
     t_list  *redirs;
     t_redir *redir;
-    int     heredoc_fd;
+    int     fd;
+    char    *filename;
 
     if (!tree || *status != 0)
         return ;
@@ -31,8 +32,9 @@ void create_heredocs(t_tree *tree, int *status)
             redir = (t_redir *)redirs->content;
             if (redir->type == REDIR_HEREDOC)
             {
-                heredoc_fd = open_p(get_heredoc_filename(redir->heredoc_fileno), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                *status = fill_in_child(redir->filename, heredoc_fd);
+                filename = get_heredoc_filename(redir->heredoc_fileno);
+                fd = open_p(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                *status = fill_in_child(redir->filename, fd);
                 if (*status != 0)
                     return ;
             }
@@ -63,8 +65,6 @@ char    *get_heredoc_filename(int32_t id)
     return (free(idx), filename);
 }
 
-//TODO controllare caso << here && echo ciao con ctrl+d
-//TODO capire perche' dopo un ctrl+c non prende piu comandi
 static int fill_in_child(char *limiter, int heredoc_fd)
 {
     pid_t   pid;
@@ -88,10 +88,8 @@ static void fill_heredoc(char *limiter, int fd)
 {
     char    *str;
     size_t  str_len;
-    size_t  limiter_len;
   
     str = NULL;
-    limiter_len = ft_strlen(limiter);
     while (1)
     {
         str = readline("> ");
@@ -101,8 +99,7 @@ static void fill_heredoc(char *limiter, int fd)
             break ;
         }
         str_len = ft_strlen(str);
-        //se aggiungessimo il \n al limiter basterebbe fare strncmp con limiter_len + 1
-        if (ft_strncmp(limiter, str, MAX(str_len, limiter_len)) == 0)
+        if (ft_strncmp(limiter, str, str_len + 1) == 0)
             break ;
         str = replace_env_vars(str);
         ft_putstr_fd(str, fd);
