@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 17:04:54 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/11 18:11:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ void    executor(t_tree *parsed_params)
     int     original_stdin;
     pid_t   pid;
     int     heredoc_status;
+    int     tmp;
     int     fds[3] = {-42, -42, 42};
 
     original_stdin = dup_p(STDIN_FILENO);
+    tmp = g_status;
     heredoc_status = create_heredocs(parsed_params);
     if (heredoc_status != 0)
     {
@@ -35,7 +37,7 @@ void    executor(t_tree *parsed_params)
             g_status = 130;
         return ;
     }
-    g_status = 0;
+    g_status = tmp;
     pid = fork_p();
     if (pid == 0)
     {
