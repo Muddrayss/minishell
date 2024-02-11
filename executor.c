@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 18:24:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 20:58:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3]);
 static void     child(t_tree *elem, int fds[3], int8_t prev_type);
 static void     parent(pid_t pid, int fds[3], bool is_in_pipeline);
 static void     exec_redirs(t_list *redirs);
+static void     exec_fd_redirs(t_redir *redir);
+static void     exec_file_redirs(t_redir *redir);
+static int      open_redir_file(t_redir *redir);
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_x(t_tree *node, uint32_t n, int8_t type);
 // static int      count_heredocs(t_tree *tree);
@@ -65,7 +68,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
         if (node->type == PIPELINE)
             pipe_p(fds);
         pid = fork_p();
-        if (pid == 0) //ogni volta che vado a sinistra forko (tanto o c'e' un comando o una subshell)
+        if (pid == 0)
         {
             if (node->type == PIPELINE)
             {
@@ -108,33 +111,57 @@ static void parent(pid_t pid, int fds[3], bool is_in_pipeline)
 
 static void exec_redirs(t_list *redirs)
 {
-    t_list  *node;
     t_redir *redir;
 
-    if (!redirs)
-        return ;
-    node = redirs;
-    while (node)
+    while (redirs)
     {
-        redir = (t_redir *)node->content;
-        if (redir->filename[0] == '$')
-            redir->filename = replace_env_vars(redir->filename);
-        if (redir->type == REDIR_INPUT)
-            redir->fds[0] = open_p(redir->filename, O_RDONLY, 0644);
-        else if (redir->type == REDIR_HEREDOC)
-            redir->fds[0] = open_p(get_heredoc_filename(redir->heredoc_fileno), O_RDONLY, 0644);
-        else if (redir->type == REDIR_OUTPUT)
-            redir->fds[1] = open_p(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        else if (redir->type == REDIR_APPEND)
-            redir->fds[1] = open_p(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-        if (redir->fds[0] != -42)
-            dup2_p(redir->fds[0], STDIN_FILENO);
-        if (redir->fds[1] != -42)
-            dup2_p(redir->fds[1], STDOUT_FILENO);
-        reset_fd(&redir->fds[1]);
-        reset_fd(&redir->fds[0]);
-        node = node->next;
+        redir = (t_redir *)redirs->content;
+        exec_fd_redirs(redir);
+        exec_file_redirs(redir);
+        redirs = redirs->next;
     }
+}
+
+static void exec_fd_redirs(t_redir *redir)
+{
+    if (redir->fds[0] != -42)
+        dup2_p(redir->fds[0], STDIN_FILENO);
+    if (redir->fds[1] != -42)
+        dup2_p(redir->fds[1], STDOUT_FILENO);
+    reset_fd(&redir->fds[0]);
+    reset_fd(&redir->fds[1]);
+}
+
+static void exec_file_redirs(t_redir *redir)
+{
+    int file_fd;
+    int dup_target;
+
+    if (redir->filename[0] == '$')
+        redir->filename = replace_env_vars(redir->filename);
+    file_fd = open_redir_file(redir);
+    if (redir->type == REDIR_INPUT_FD || redir->type == REDIR_HEREDOC)
+        dup_target = STDOUT_FILENO;
+    else if (redir->type == REDIR_OUTPUT_FD || redir->type == REDIR_APPEND_FD)
+        dup_target = STDIN_FILENO;
+    dup2_p(file_fd, dup_target);
+    reset_fd(&file_fd);
+}
+
+static int  open_redir_file(t_redir *redir)
+{
+    int     fd;
+
+    fd = -1;
+    if (redir->type == REDIR_INPUT)
+        fd = open_p(redir->filename, O_RDONLY, 0644);
+    else if (redir->type == REDIR_HEREDOC)
+        fd = open_p(get_heredoc_filename(redir->heredoc_fileno), O_RDONLY, 0644);
+    else if (redir->type == REDIR_OUTPUT)
+        fd = open_p(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    else if (redir->type == REDIR_APPEND)
+        fd = open_p(redir->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    return (fd);
 }
 
 static void wait_for_children(t_tree *parsed_params) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
