@@ -37,7 +37,7 @@ void    executor(t_tree *parsed_params)
             g_status = 130;
         return ;
     }
-    g_status = original_status;
+    g_status = original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
     set_signals(S_COMMAND);
     launch_commands(parsed_params, -1, fds);
     wait_for_children(parsed_params); // aspetta i figli non gia aspettati (quindi le pipe)
