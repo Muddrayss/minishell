@@ -151,6 +151,7 @@ static void     clear_redirs(t_list *redirs, char *cmd_str)
             if (redir->fds[0] != -42)
                 remove_fd_num(cmd_str, i, BEFORE);
             i = remove_filename(cmd_str, i);
+            redirs = redirs->next;
         }
         if (is_shell_space(cmd_str[i])) //NON ELSE IF perche' remove filename incrementa la i uno di troppo
             cmd_str[i] = ' ';
