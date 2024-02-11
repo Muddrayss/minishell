@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:45:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 23:10:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ static t_list  *fill_redirs(char *cmd_str)
             else
                 fill_redir_input(&redirs, cmd_str, i);
         }
-        if (cmd_str[i] == '>')
+        else if (cmd_str[i] == '>')
         {
             if (cmd_str[i + 1] == '>')
                 fill_redir_output(&redirs, cmd_str, ++i, true);
@@ -216,14 +216,14 @@ static t_list  *fill_redirs(char *cmd_str)
     return (heredoc_fileno++, lstreverse(&redirs), redirs);
 }
 
-static int32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after)
+static int32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t direction)
 {
     uint32_t    i;
     int32_t     num;
 
     num = -42;
-    i = idx_redir + (before_after == AFTER) - (before_after == BEFORE);
-    if (before_after == AFTER)
+    i = idx_redir + (direction == AFTER) - (direction == BEFORE);
+    if (direction == AFTER)
     {
         if (str[i] == '&' && ft_isdigit(str[i + 1]))
             num = ft_atou(&str[i + 1]);
