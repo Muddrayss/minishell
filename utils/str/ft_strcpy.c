@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.h                                          :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/01 16:04:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:28:54 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/03 20:18:45 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/04 15:29:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNALS_H
-# define SIGNALS_H
+#include "../../headers/minishell.h"
 
-# define S_INTERACTIVE 0
-# define S_HEREDOC 1
-# define S_COMMAND 2
-# define S_SILENT 3
+char	*ft_strcpy(char *dest, char *src)
+{
+	unsigned int	i;
 
-void set_signals(int8_t mode);
-
-#endif
+	i = -1;
+	while (src[++i] != '\0')
+		dest[i] = src[i];
+	dest[i] = '\0';
+	return (dest);
+}

@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   ft_freematrix.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:02:48 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/03 20:21:37 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/05 16:01:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+#include "../../headers/minishell.h"
 
-# define EXEC_FAILURE 1
-# define COMMAND_NOT_FOUND 127
+void	ft_freematrix(char **matrix)
+{
+    unsigned int	i;
 
-void    executor(t_tree *parsed_params);
-void    create_heredocs(t_tree *tree);
-char    *get_heredoc_filename(int32_t id);
-char 	*replace_env_vars(char *str);
-bool    check_last_subcmd(char *cmd_str);
-
-#endif
+    if (!matrix)
+        return ;
+    i = 0;
+    while (matrix[i])
+        free(matrix[i++]);
+    free(matrix);
+}

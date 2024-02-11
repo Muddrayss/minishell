@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/06 12:06:21 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/05 16:27:05 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/05 16:55:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef ERRORS_H
+# define ERRORS_H
 
-typedef struct s_lexer
-{
-	char	*cmd_str;
-	char	token;
-}t_lexer;
-
-typedef struct s_list
-{
-    void			*content;
-    struct s_list	*next;
-    struct s_list	*prev;
-}t_list;
-
-t_list	*lexer(char *input);
-void	del_content_lexer(void *content);
+# define ERR_MALLOC     3
+# define ERR_FD         4
+# define ERR_FORK       5
+# define ERR_EXEC       6
+# define ERR_ENV        7   //quando non viene trovata una var di ambiente essenziale al corretto funzionamento (tipo PWD ci serve per sapere dove mettere la cartella temp)
+# define ERR_SIGSETUP   8  //quando fallisce la funzione signal()
+# define ERR_WAIT       9
 
 #endif

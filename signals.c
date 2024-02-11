@@ -6,82 +6,84 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/01 18:04:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 23:28:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-void    set_sighandler(void *handle_sigint, void *handle_sigquit) //int8_t flags da shiftare
+static void silent_mode(int signo)
 {
-    if (signal(SIGINT, handle_sigint) == SIG_ERR)
-        ft_quit(25, NULL);
-    if (signal(SIGQUIT, handle_sigquit) == SIG_ERR)
-        ft_quit(26, NULL);
+    if (signo == SIGINT)
+        g_status = 130;
+    else if (signo == SIGQUIT)
+        g_status = 131;
 }
 
-//TODO dopo ctr+c in heredoc si rompe tutto
-
-
-//per queste 3 funzioni sarebbe figo fare lo shift dei bit come in open
-//rendere quindi queste statiche e scegliere quale chiamare in base alla flag nel set_sighandler
-void    display_signal(int signo) //O_DISPLAY
+static void interactive_mode(int signo)
 {
-    g_status = signo;
-    ft_putstr_fd("\n", STDOUT_FILENO);
-    rl_on_new_line();
-    rl_replace_line("", 0);
-    rl_redisplay();
+    if (signo == SIGINT)
+    {
+        g_status = 130;
+        ft_putstr_fd("\n", STDOUT_FILENO);
+        rl_on_new_line();
+        rl_replace_line("", 0);
+        rl_redisplay();
+    }
+    else if (signo == SIGQUIT)
+        ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
 }
 
-void    display_and_quit_signal(int signo) //O_DQUIT
+static void heredoc_mode(int signo)
 {
-    g_status = signo;
-    ft_putstr_fd("\n", STDOUT_FILENO);
-    exit(signo);
+    if (signo == SIGINT)
+    {
+        ft_putstr_fd("\n", STDOUT_FILENO);
+        exit(130);
+    }
+    else if (signo == SIGQUIT)
+        ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
 }
 
-void    hide_and_abort_signal(int signo) //O_DCORE
+static void command_mode(int signo)
 {
-    g_status = signo;
-    ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO); //non identico a bash ma pie' bello
-    ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
-    exit(signo);
+    if (signo == SIGINT)
+    {
+        g_status = 130;
+        ft_putstr_fd("\n", STDOUT_FILENO);
+        exit(130);  
+    }
+    else if (signo == SIGQUIT)
+    {
+        g_status = 131;
+        ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO); //non identico a bash ma pie' bello
+        ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
+        exit(131);
+    }
 }
 
-void newline_signal(int signo)
+void    set_signals(int8_t mode)
 {
-    (void)signo;
-    ft_putstr_fd("\n", STDOUT_FILENO);
+    if (mode == S_SILENT)
+    {
+        signal(SIGINT, silent_mode);
+        signal(SIGQUIT, silent_mode);
+    }
+    else if (mode == S_INTERACTIVE)
+    {
+        signal(SIGINT, interactive_mode);
+        signal(SIGQUIT, interactive_mode);
+    }
+    else if (mode == S_HEREDOC)
+    {
+        signal(SIGINT, heredoc_mode);
+        signal(SIGQUIT, heredoc_mode);
+    }
+    else if (mode == S_COMMAND)
+    {
+        signal(SIGINT, command_mode);
+        signal(SIGQUIT, command_mode);
+    }
+    else
+        ft_putstr_fd("Internal error: invalid signal mode\n", STDERR_FILENO);
 }
-
-// void interactive_mode(int signo)
-// {
-//     if (signo == SIGINT)
-//     {
-//         g_status = 130;
-//         ft_putstr_fd("\n", STDOUT_FILENO);
-//         rl_on_new_line();
-//         rl_replace_line("", 0);
-//         rl_redisplay();
-//     }
-//     else if (signo == SIGQUIT)
-// 	{
-//         g_status = 131;
-//         ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
-//     }
-// }
-
-// void heredoc_mode(int signo)
-// {
-//     if (signo == SIGINT)
-//     {
-// 		ft_putstr_fd("\b\b  \b\b\n", STDOUT_FILENO);
-//         exit(130);
-//     }
-//    	else if (signo == SIGQUIT)
-// 	{
-// 		g_status = 131;
-// 		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
-// 	}
-// }

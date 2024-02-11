@@ -3,64 +3,99 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/01/31 22:16:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 14:44:52 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
 static char	*get_custom_bin(char *path);
-static char	*get_new_env(char *name, char *value);
+static void	throw_file_error(char *file);
+static char *search_cmd_in_dirs(char **dirs, char *cmd);
+static char *concat_path_cmd(char *dir, char *cmd);
+static bool is_custom_bin(char *cmd);
 
-char	*get_cmd(char *path, char *cmd)
+char *get_cmd(char *path, char *cmd)
 {
-	char			**dirs;
-	char			*full_path;
-	unsigned int	i;
-	unsigned int	size;
+    char **dirs;
+    char *full_path;
 
-	if (ft_strnstr(cmd, "/", 1) || ft_strnstr(cmd, "./", 2) || ft_strnstr(cmd, "../", 3))
-		return (get_custom_bin(cmd));
-	dirs = ft_split(path, ':');
-	if (!dirs)
-		ft_quit(3, ft_strdup("failed to allocate memory"));
+	full_path = NULL;
+    if (!path || !cmd)
+        return (NULL);
+    if (is_custom_bin(cmd))
+        return (get_custom_bin(cmd));
+    dirs = ft_split(path, ':');
+    if (!dirs)
+        ft_quit(ERR_MALLOC, "failed to allocate memory");
+    full_path = search_cmd_in_dirs(dirs, cmd);
+    ft_freematrix(dirs);
+    if (!full_path)
+	{
+        ft_putstr_fd("minishell: command not found: '", STDERR_FILENO);
+        ft_putstr_fd(cmd, STDERR_FILENO);
+        ft_putstr_fd("'\n", STDERR_FILENO);
+    }
+    return (full_path);
+}
+
+static bool is_custom_bin(char *cmd)
+{
+	int8_t		i;
+	static char	*prefixes[] =
+	{"./", "../", "/", NULL};
+	
+	i = -1;
+	while (prefixes[++i])	
+		if (ft_strnstr(cmd, prefixes[i], ft_strlen(prefixes[i])) != NULL)
+			return (true);
+	return (false);
+} 
+
+static char *concat_path_cmd(char *dir, char *cmd)
+{
+	uint32_t	size;
+	char 		*full_path;
+
+	size = ft_strlen(dir) + ft_strlen(cmd) + 2; // +2 for '/' and '\0'
+	full_path = malloc_p(size);
+	ft_strcpy(full_path, dir);
+	ft_strcat(full_path, "/");
+    ft_strcat(full_path, cmd);
+    return (full_path);
+}
+
+static char *search_cmd_in_dirs(char **dirs, char *cmd)
+{
+    char	*full_path;
+	int		i;
+
 	full_path = NULL;
 	i = -1;
-	while (dirs[++i])
+    while (dirs[++i])
 	{
-		size = ft_strlen(dirs[i]) + ft_strlen(cmd) + 2;
-		full_path = malloc(size * sizeof(char));
-		if (!full_path)
-			ft_quit(3, ft_strdup("failed to allocate memory"));
-		ft_strlcpy(full_path, dirs[i], size);
-		ft_strlcat(full_path, "/", size);
-		ft_strlcat(full_path, cmd, size);
-		if (access(full_path, X_OK) == 0)
-			break ;
-		free(full_path);
-		full_path = NULL;
-	}
-	ft_free_matrix(dirs);
-	if (!full_path)
-	{
-		ft_putstr_fd("minishell: command not found: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd("\n", 2);
-	}
-	return (full_path);
+        full_path = concat_path_cmd(dirs[i], cmd);
+        if (access(full_path, X_OK) == 0)
+			return (full_path);
+        free(full_path);
+    }
+    return (NULL);
 }
 
 static char	*get_custom_bin(char *path)
 {
 	char	*full_path;
 	char	*tmp;
+	char    *tmp2;
 
 	full_path = NULL;
-	tmp = ft_getenv("PWD");
-	ft_strlcat(tmp, "/", ft_strlen(tmp) + 2);
+	tmp2 = ft_getenv("PWD");
+	tmp = ft_strjoin(tmp2, "/"); //abbastanza ridicolo dover usare strjoin per aggiungere un carattere
+	if (!tmp)
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
 	if (ft_strncmp(path, "../", 3) == 0)
 		full_path = ft_strjoin(tmp, path);
 	else if (ft_strncmp(path, "./", 2) == 0)
@@ -68,124 +103,65 @@ static char	*get_custom_bin(char *path)
 	else
 		full_path = ft_strdup(path);
 	if (!full_path)
-		ft_quit(37, "failed to allocate memory");
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
 	if (access(full_path, X_OK) == 0)
     	return (free(tmp), full_path);
 	else
-	{
-		if (errno == EACCES)
-			ft_putstr_fd("minishell: permission denied: ", 2);
-		else if (errno == ENOENT)
-			ft_putstr_fd("minishell: no such file or directory: ", 2);
-		else
-			ft_putstr_fd("minishell: error accessing file: ", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd("\n", 2);
-	}
+		throw_file_error(path);
     return (free(tmp), free(full_path), NULL);
 }
 
-char	*ft_getenv(char *env_name)
+//quanto cazzo e' bello unire stringhe in C porca puttana. per unire 2 stringhe e 1 carattere novantamila malloc
+static void	throw_file_error(char *file)
 {
-	t_data	*data;
-	char	*env_value;
-	int		env_name_len;
-	int		i;
-
-	data = get_data();
-	env_value = NULL;
-	env_name_len = ft_strlen(env_name);
-	i = 0;
-	while (ft_strncmp(data->envp[i], env_name, env_name_len) != 0)
-		i++;
-	if (data->envp[i] != NULL)
-	{
-		env_value = ft_strdup(data->envp[i] + env_name_len + 1); //per saltare il nome e l'=
-		if (!env_value)
-			ft_quit(3, "failed to allocate memory");
-	}
-	return (env_value);
-}
-
-void	ft_setenv(char *name, char *value, int8_t overwrite)
-{
-	t_data	*data;
-	size_t	name_len;
-	int		i;
-	char	*env_name;
-	char	**new_env;
-
-	data = get_data();
-	name_len = ft_strlen(name);
-	if (overwrite)
-	{
-		i = 0;
-		while (data->envp[i])
-		{
-			env_name = ft_strdup_until(data->envp[i++], "=", NULL);
-			if (!env_name)
-				ft_quit(4, "failed to allocate memory");
-			if (ft_strncmp(env_name, name, name_len) == 0)
-				break ;
-		}
-		free(data->envp[i]);
-		data->envp[i] = get_new_env(name, value);
-	}
-	else
-	{
-		i = ft_matrixsize(data->envp);
-		new_env = malloc(sizeof(char *) * i + 2);
-		if (!new_env)
-			ft_quit(34, "failed to allocate memory");
-		new_env[i + 1] = NULL;
-		new_env = ft_strarrncpy(new_env, data->envp, i);
-		new_env[i] = get_new_env(name, value);
-		ft_free_matrix(data->envp);
-		data->envp = new_env;
-	}
-}
-
-static char	*get_new_env(char *name, char *value)
-{
-	char	*new_env;
 	char	*tmp;
-
-	tmp = ft_strjoin(name, "=");
-	new_env = ft_strjoin(tmp, value);
-	return (free(tmp), free(name), free(value), new_env);
+	char	*error_str;
+	
+	tmp = ft_strjoin("minishell: Error opening file '", file);
+	if (!tmp)
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
+	error_str = ft_strjoin(tmp, "'");
+	free(tmp);
+	if (!error_str)
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
+	perror(error_str); //viene tipo: minishell: Error opening file 'file.txt': No such file or directory
+	free(error_str);
 }
 
-bool	is_shell_space(char c)
+bool	is_shell_space(char c) //meglio cosi' altrimenti complicated conditional
 {
-	if (c == ' ' || c == '\n' || c == '\t')
-		return (true);
+	static char 	shell_spaces[] = {' ', '\n', '\t'};
+	static uint8_t	n_spaces = sizeof(shell_spaces) / sizeof(shell_spaces[0]);
+	uint8_t			i;
+
+	i = 0;
+	while (i < n_spaces)
+		if (c == shell_spaces[i++])
+			return (true);
 	return (false);
 }
 
 void	ft_quit(int id, char *msg)
 {
-	t_data	*data;
-
-	data = get_data();
 	dprintf(2, RED "error : %d\n" DEFAULT, id); //to remove
 	if (errno != EINTR)
 	{
 		while (open("./tmp/print_sem", O_CREAT | O_EXCL, 0666) == EEXIST)
 			;
 		if (!msg)
-			ft_putstr_fd(strerror(errno), 2);
+			ft_putstr_fd(strerror(errno), STDERR_FILENO);
 		else
-			ft_putstr_fd(msg, 2);
-		ft_putstr_fd("\n", 2);
+			ft_putstr_fd(msg, STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
 		unlink("./tmp/print_sem");
 	}
-	if (data)
-		free_data(data);
+	free_data();
+	if (id == EXEC_FAILURE)
+		free(msg);
 	exit(id);
-	return ;
 }
 
-void	clean_heredocs(void)
+void	clean_heredocs(char *path)
 {
 	t_data	*data;
     char    *tmpdir_name;
@@ -193,28 +169,54 @@ void	clean_heredocs(void)
 
 	data = get_data();
     tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
+	if (!tmpdir_name)
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
 	cmd = ft_strjoin("rm -rf ", tmpdir_name);
 	free(tmpdir_name);
-    exec_simple_cmd(getenv("PATH"), cmd);
+	if (!cmd)
+		ft_quit(ERR_MALLOC, "failed to allocate memory");
+    exec_simple_cmd(path, cmd);
 	free(cmd);
 }
 
-void	free_data(t_data *data)
+void	free_data(void)
 {
-	if (data->cmd_args)
-		ft_free_matrix(data->cmd_args);
-	if (data->cmd_path)
-		free(data->cmd_path);
-	if (data->lexered_params)
-		ft_lstclear(data->lexered_params, &del_content_lexer);
-	//TODO fare una funzione che chiude tutti i fd
+	t_data	*data;
+
+	close_all_fds();
+	data = get_data();
+	if (!data)
+		return ;
+	ft_freematrix(data->cmd_args);
+	ft_freematrix(data->envp_matrix);
+	free(data->cmd_path);
+	lstclear(data->lexered_params, &del_content_lexer);
+	free(data->lexered_params);
+	treeclear(data->parsed_params, &del_content_parser);
+	envp_table_clear(data->envp_table);
+}
+
+void	close_all_fds(void)
+{
+	int		fd;
+
+	fd = 2; //senza chiudere stdin e stdout
+	while (++fd < MAX_FDS)
+		close(fd); //NON close_p perche' la maggiorparte daranno errore
 }
 
 void	ft_parse_error(char token)
 {
-	ft_putstr_fd("Parse error near '", 2);
-	ft_putchar_fd(token, 2);
-	ft_putstr_fd("'\n", 2);
+	ft_putstr_fd("Parse error near '", STDERR_FILENO);
+	write(STDERR_FILENO, &token, 1);
+	ft_putstr_fd("'\n", STDERR_FILENO);
+}
+
+void	ft_syntax_error(char token)
+{
+	ft_putstr_fd("Syntax error near '", STDERR_FILENO);
+	write(STDERR_FILENO, &token, 1);
+	ft_putstr_fd("'\n", STDERR_FILENO);
 }
 
 t_data *get_data(void)
@@ -222,17 +224,4 @@ t_data *get_data(void)
 	static t_data data;
 
 	return (&data);
-}
-
-int8_t	reset_fd(int *fd)
-{
-	int8_t	ret;
-
-	ret = 0;
-	if (*fd != -1)
-	{
-		ret = close(*fd);
-		*fd = -1;
-	}
-	return (ret);
 }

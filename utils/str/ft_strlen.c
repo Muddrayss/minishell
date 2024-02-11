@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:02:48 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/03 19:33:17 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/08 21:16:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+#include "../../headers/minishell.h"
 
-# define EXEC_FAILURE 1
-# define COMMAND_NOT_FOUND 127
+uint32_t     ft_strlen(char *str)
+{
+    uint32_t     i;
 
-void    executor(t_tree *parsed_params);
-void    create_heredocs(t_tree *tree);
-char    *get_heredoc_filename(int32_t id);
-char 	*replace_env_vars(char *str);
-bool    check_last_subcmd(char *cmd_str);
-
-#endif
+    if (!str)
+        return (0);
+    i = 0;
+    while (str[i])
+        i++;
+    return (i);
+}

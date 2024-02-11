@@ -6,14 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 16:12:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/08 20:57:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -30,39 +29,47 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
+# include <stdbool.h>
+# include <stdint.h>
+# include <limits.h>
+
+# include "lexer.h"
+# include "parser.h"
+# include "executor.h"
+# include "signals.h"
+# include "envp_utils.h"
+# include "utils.h"
+# include "protected_methods.h"
+# include "errors.h"
+# include "colors.h"
 
 typedef struct s_data
 {
 	char	*cmd_path;
 	char	**cmd_args;
-	char	**envp;
+	t_list	**envp_table;
+	char	**envp_matrix;
 	char	*starting_dir;
 	t_list	**lexered_params;
-}			t_data;
+	t_tree  **parsed_params;
+}t_data;
 
 extern int g_status;
 
-# include "colors.h"
-# include "lexer.h"
-# include "parser.h"
-# include "executor.h"
-# include "signals.h"
-
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
+# define MAX_FDS 1024
 
-t_data		*get_data(void);
-char		*get_cmd(char *path, char *cmd);
-void		exec_simple_cmd(char *path, char *cmd_str);
-void  		exec(char *path, char *cmd_str);
-void		free_matrix(char **matrix);
-void 		clean_heredocs();
-void 		ft_quit(int id, char *msg);
-void 		free_data(t_data *data);
-void 		ft_parse_error(char token);
-bool		is_shell_space(char c);
-void		ft_lstdel_if(t_list **lst, bool (*f)(void *), void (*del)(void *));
-char		*ft_getenv(char *env_name);
-void		ft_setenv(char *name, char *value, int8_t overwrite);
-int8_t		reset_fd(int *fd);
+t_data	*get_data(void);
+char	*get_cmd(char *path, char *cmd);
+void	exec_simple_cmd(char *path, char *cmd_str);
+void 	exec(char *path, char *cmd_str);
+void	clean_heredocs(char *path);
+void 	ft_quit(int id, char *msg);
+void 	free_data(void);
+void	close_all_fds(void);
+void 	ft_parse_error(char token);
+void	ft_syntax_error(char token);
+bool	is_shell_space(char c);
+bool 	is_empty_str(char *str);
 
 #endif

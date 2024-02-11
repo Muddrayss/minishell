@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/07 19:30:41 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/03 20:17:06 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/04 15:29:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../headers/minishell.h"
 
-short    ft_strcmp( char *s1,  char *s2)
+char	*ft_strcat(char *dest, char *src)
 {
-	while (*s1 && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-	}
-	return (*s1 - *s2);
-}
-
-size_t	ft_strlen( char *s)
-{
-	size_t	i;
+	unsigned int	i;
+	unsigned int	j;
 
 	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0')
+	while (dest[i] != '\0')
 		i++;
-	return (i);
+	j = -1;
+	while (src[++j] != '\0')
+		dest[i + j] = src[j];
+	dest[i + j] = '\0';
+	return (dest);
 }

@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/07 19:30:41 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/05 12:04:47 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/05 12:06:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../headers/minishell.h"
 
-short    ft_strcmp( char *s1,  char *s2)
+static void ft_bzero(void *s, size_t n);
+
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	while (*s1 && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-	}
-	return (*s1 - *s2);
+	void	*arr;
+
+	if (nmemb != 0 && size > ULONG_MAX / nmemb)
+		return (NULL);
+	arr = (void *)malloc(size * nmemb);
+	if (arr == NULL)
+		return (NULL);
+	ft_bzero(arr, size * nmemb);
+	return (arr);
 }
 
-size_t	ft_strlen( char *s)
+void	ft_bzero(void *s, size_t n)
 {
-	size_t	i;
+	char	*ptr;
 
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	ptr = (char *)s;
+	while (n-- > 0)
+		ptr[n] = '\0';
 }

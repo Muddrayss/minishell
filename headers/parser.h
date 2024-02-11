@@ -6,64 +6,57 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/01 14:35:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/10 16:22:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# define LEFT 0
-# define RIGHT 1
+# define END 			   -1
+# define CMD 				0 //CMD deve essere zero, altrimenti non funziona treenew con il token
+# define SEMICOLON			1
+# define OR 				2
+# define AND 				3
+# define PIPELINE 			4
+# define SUBSHELL_START 	5
+# define SUBSHELL_END 		6
 
-# define PH_REDIR -42
-# define PH_SEMICOLON -45
-# define PH_REDIR_STOP -46
-# define PH_OR -47
-# define PH_AND -48
+# define REDIR_INPUT 		0 	// '< filename'
+# define REDIR_HEREDOC 		1	// '<< limiter'
+# define REDIR_INPUT_FD 	2 	// '<&n'
+# define REDIR_OUTPUT 		3 	// '> filename o n> filename'
+# define REDIR_OUTPUT_FD 	4 	// '>&n'
+# define REDIR_APPEND 		5 	// '>> filename o n>> filename'
+# define REDIR_APPEND_FD 	6 	// '>>&n'
 
-# define CMD_LEN 0
-# define ENV_NUM 1
+# define BEFORE 0
+# define AFTER  1
 
-// TODO sostituire ogni enum con variabili di un singolo byte
-
-typedef enum e_redir_type
-{
-	REDIR_INPUT,	 // '< filename'
-	REDIR_HEREDOC,	 // '<< limiter'
-	REDIR_INPUT_FD,	 // '<&n'
-	REDIR_OUTPUT,	 // '> filename o n> filename'
-	REDIR_OUTPUT_FD, // '>&n'
-	REDIR_APPEND,	 // '>> filename o n>> filename'
-	REDIR_APPEND_FD, // '>>&n'
-}
-t_redir_type;
-
-typedef struct s_redir
-{
-	t_redir_type	type;
-	int				fds[2];
-	char 			*filename; // o limiter in caso dell heredoc
-}					t_redir;
-
-typedef struct s_parser
+typedef struct s_command
 {
 	char	*cmd_str;
 	t_list	*redirs;
-	pid_t 	pid;
-} t_parser;
+}t_cmd;
 
-t_list			*parser(t_list *lexered_params);
-bool			handle_redir_l(t_list *lexered_params, t_parser *content_par);
-bool			handle_redir_r(t_list *lexered_params, t_lexer *prev_cmd_elem, t_parser *content_par);
-unsigned int	check_token_streak(char *next_token, t_list *lexered_params);
-t_parser		*new_elem(t_list *lexered_params);
-char			*remove_filename(char *str, unsigned int starting_idx);
-char			*remove_num(char *str, unsigned int *starting_idx, uint8_t flag);
-void 			replace_env_var(char **str, char *env_var);
-t_lexer 		*get_next_cmd_elem(t_list *lexered_params);
-bool			is_empty_cmd(void *content);
-void			del_content_redirs(void *content);
-void			del_content_parser(void *content);
+typedef struct s_tree
+{
+	int8_t			type;
+	t_cmd			*cmd;
+	struct s_tree 	*left;
+	struct s_tree	*right;
+}t_tree;
+
+typedef struct s_redir
+{
+	int8_t		type;
+	int			fds[2];
+	char 		*filename; // o limiter in caso dell heredoc
+	int32_t		heredoc_fileno; //eventuale numero da appendere al nome del heredoc
+}t_redir;
+
+t_tree	*parser(t_list *params_head);
+void    del_content_parser(void *content);
+void    del_content_redirs(void *content);
 
 #endif
