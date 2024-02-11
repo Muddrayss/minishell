@@ -6,68 +6,90 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:50:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 22:50:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static char *get_env_name(char *str);
+static char *rebuild_str(char *str, uint32_t i, char *env_value, char *env_name);
+static char *get_env_name(char *str, uint32_t i);
+static char *get_env_value(char *env_name);
 
-char    *replace_env_vars(char *str)
+char *replace_env_vars(char *str)
 {
-    uint32_t    env_name_len;
-    char        *env_value;
-    char        *env_name;
-    char        *start;
     char        *tmp;
-    uint32_t    len;
+    char        *env_name;
+    char        *env_value;
     uint32_t    i;
 
     i = 0;
-    while (true)
+    env_name = get_env_name(str, i);
+    while (env_name)
     {
-        start = ft_strdup(&str[i]);
-        if (!start)
-            ft_quit(ERR_MALLOC, "failed to allocate memory");
-        tmp = ft_strchr(start, '$');
-        if (!tmp)
-            return (free(start), str);
-        env_name = get_env_name(tmp + 1);
-        env_name_len = ft_strlen(env_name);
-        if (ft_strncmp(env_name, "?", 1) != 0)
-            env_value = ft_getenv(env_name);
-        else
-        {
-            env_name_len = 1;
-            env_value = ft_utoa((uint32_t)g_status);
-        }
-        free(env_name);
-        if (!env_value)
-            env_value = "";
-        len = ft_strlen(str);
+        env_value = get_env_value(env_name);
+        i = ft_strchr(str, '$') - str;
+        tmp = rebuild_str(str, i, env_value, env_name);
         free(str);
-        str = calloc_p(len - env_name_len + ft_strlen(env_value), sizeof(char)); //senza + 1 perche' c'e' gia' il + 1 del carattere $ che non e' considerato nella len
-        ft_strlcpy(str, start, (size_t)(tmp - start + 1));
-        ft_strcat(str, env_value);
-        ft_strcat(str, tmp + 1 + env_name_len);
-        i += (uint32_t)(tmp - start);
-        free(start);
+        free(env_name);
+        str = tmp;
+        env_name = get_env_name(str, i);
     }
+    return (str);
 }
 
-static char *get_env_name(char *str)
+static char *rebuild_str(char *str, uint32_t i, char *env_value, char *env_name)
 {
-    char	    *env_name;
-    char        *end;
+    uint32_t    size;
+    char        *new_str;
+    uint32_t    env_name_len;
 
-    if (!str || str[0] == '\0' || str[0] == '$' || is_shell_space(str[0]))
+    env_name_len = ft_strlen(env_name);
+    size = ft_strlen(str) - env_name_len + ft_strlen(env_value) + 1;
+    new_str = (char *)calloc_p(size, sizeof(char));
+    ft_strlcpy(new_str, str, i + 1);
+    ft_strcat(new_str, env_value);
+    ft_strcat(new_str, str + i + env_name_len + 1);
+    return (new_str);
+}
+
+static char *get_env_name(char *str, uint32_t i)
+{
+    char        *end;
+    char        *env_name;
+    uint32_t    len;
+
+    if (!str)
         return (NULL);
-    env_name = ft_strdup(str);
-    if (!env_name)
-        ft_quit(ERR_MALLOC, "failed to allocate memory");
-    end = ft_strchr(env_name, ' ');
+    while (str[i] && str[i] != '$')
+        i++;
+    if (!str[i] || !str[i + 1] || str[i + 1] == '$' || is_shell_space(str[i + 1]))
+        return (NULL);
+    i++;
+    end = ft_strchr(str + i, ' ');
     if (end)
-        *end = '\0';
+        len = (uint32_t)(end - (str + i));
+    else
+        len = ft_strlen(str + i);
+    env_name = (char *)malloc_p(sizeof(char) * (len + 1));
+    ft_strlcpy(env_name, str + i, len + 1);
     return (env_name);
+}
+
+static char *get_env_value(char *env_name)
+{
+    char *env_value;
+
+    if (env_name[0] == '?')
+    {
+        env_name[1] = '\0';
+        env_value = ft_utoa((uint32_t)g_status); //utoa fa la malloc
+    }
+    else
+        env_value = ft_strdup(ft_getenv(env_name)); //getenv non fa la malloc
+    if (!env_value)
+        env_value = ft_strdup("");
+    if (!env_value)
+        ft_quit(ERR_MALLOC, "failed to allocate memory");
+    return (env_value);
 }
