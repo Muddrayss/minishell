@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:22:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 17:04:54 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,31 @@ static void     parent(pid_t pid, int fds[3], bool is_in_pipeline);
 static void     exec_redirs(t_list *redirs);
 static void     wait_for_children(t_tree *parsed_params);
 static uint32_t count_x(t_tree *node, uint32_t n, int8_t type);
+// static int      count_heredocs(t_tree *tree);
 
 void    executor(t_tree *parsed_params)
 {
     int     original_stdin;
     pid_t   pid;
+    int     heredoc_status;
     int     fds[3] = {-42, -42, 42};
 
     original_stdin = dup_p(STDIN_FILENO);
-    create_heredocs(parsed_params);
-    if (g_status == 130) //se all'heredoc e' arrivato ctrl+c...
-        return ; //...ma comunque non devo eseguire i comandi
+    heredoc_status = create_heredocs(parsed_params);
+    if (heredoc_status != 0)
+    {
+        if (heredoc_status == 130)
+            g_status = 130;
+        return ;
+    }
+    g_status = 0;
     pid = fork_p();
     if (pid == 0)
     {
         set_signals(S_COMMAND);
         launch_commands(parsed_params, -1, fds);
-        wait_for_children(parsed_params); //aspetta i figli non gia aspettati (quindi le pipe)
+        wait_for_children(parsed_params); // aspetta i figli non gia aspettati (quindi le pipe)
+        exit(g_status);
     }
     else
     {
@@ -59,7 +67,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
     pid_t               pid;
 
     if (!node)
-        exit(g_status);
+        return ;
     if (node->type != CMD)
     {
         if (node->type == PIPELINE)
@@ -80,12 +88,10 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
             launch_commands(skip_till_semicolon(node), -1, fds);
         launch_commands(node->right, node->type, fds);
+        return ;
     }
     child(node, fds, prev_type);
 }
-
-// no: 0
-// ch1: 0
 
 static void child(t_tree *elem, int fds[3], int8_t prev_type)
 {
@@ -141,10 +147,10 @@ static void exec_redirs(t_list *redirs)
 
 static void wait_for_children(t_tree *parsed_params) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
 {
-    uint32_t    n_pipelines;
+    uint32_t    n_to_wait;
 
-    n_pipelines = count_x(parsed_params, 0, PIPELINE);
-    while (n_pipelines--)
+    n_to_wait = count_x(parsed_params, 0, PIPELINE);
+    while (n_to_wait--)
     {
         waitpid_p(0, &g_status, 0);
         g_status = WEXITSTATUS(g_status);

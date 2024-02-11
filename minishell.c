@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 18:24:09 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/11 15:51:13 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,11 @@ void  exec(char *path, char *cmd_str)
 	data->cmd_args = cmd_args;
 	if (!cmd_args)
 		ft_quit(ERR_MALLOC, "Failed to allocate memory");
+	if (cmd_args[0][0] == '\0')
+	{
+		free_data();
+		exit(0);
+	}
 	data->cmd_path = get_cmd(path, cmd_args[0]);
 	if (!data->cmd_path)
 	{

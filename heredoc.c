@@ -3,26 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:10:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 15:11:24 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
 
-static void     fill_in_child(char *limiter, int heredoc_fd);
+static int      fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);
 
-void create_heredocs(t_tree *tree)
+int create_heredocs(t_tree *tree)
 {
-    t_list *redirs;
+    t_list  *redirs;
     t_redir *redir;
-    int heredoc_fd;
+    int     heredoc_fd;
+    int     status;
 
-    if (!tree || g_status == 130)
-        return ;
+    status = 0;
+    if (!tree)
+        return (status);
     if (tree->type == CMD)
     {
         redirs = (t_list *)tree->cmd->redirs;
@@ -32,15 +34,16 @@ void create_heredocs(t_tree *tree)
             if (redir->type == REDIR_HEREDOC)
             {
                 heredoc_fd = open_p(get_heredoc_filename(redir->heredoc_fileno), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                fill_in_child(redir->filename, heredoc_fd);
-                if (g_status != 0)
-                    return ;
+                status = fill_in_child(redir->filename, heredoc_fd);
+                if (status != 0)
+                    return (status);
             }
             redirs = redirs->next;
         }
     }
-    create_heredocs(tree->left);
-    create_heredocs(tree->right);
+    if (create_heredocs(tree->left) != 0 || create_heredocs(tree->right) != 0)
+        return (status);
+    return (status);
 }
 
 //usare strcat invece che strlcat
@@ -65,9 +68,10 @@ char    *get_heredoc_filename(int32_t id)
 
 //TODO controllare caso << here && echo ciao con ctrl+d
 //TODO capire perche' dopo un ctrl+c non prende piu comandi
-static void fill_in_child(char *limiter, int heredoc_fd)
+static int fill_in_child(char *limiter, int heredoc_fd)
 {
     pid_t   pid;
+    int     status;
 
     pid = fork_p();
     if (pid == 0)
@@ -77,9 +81,10 @@ static void fill_in_child(char *limiter, int heredoc_fd)
     }
     else
     {
-        waitpid_p(pid, &g_status, 0);
-        g_status = WEXITSTATUS(g_status);
+        waitpid_p(pid, &status, 0);
+        status = WEXITSTATUS(status);
     }
+    return (status);
 }
 
 static void fill_heredoc(char *limiter, int fd)
