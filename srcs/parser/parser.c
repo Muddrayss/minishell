@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:35:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:10:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 static int8_t   check_syntax(t_list *lexered_params);
 static t_tree   *fill_tree(t_list *lexered_params, t_list *stop);

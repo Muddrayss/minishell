@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:48:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:11:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ char 	*replace_env_vars(char *str);
 bool    check_last_subcmd(char *cmd_str);
 void    exec_simple_cmd(char *path, char *cmd_str);
 void    exec(char *path, char *cmd_str);
+char    *get_cmd_path(char *path, char *cmd);
 
 #endif

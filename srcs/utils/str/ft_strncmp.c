@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 15:41:15 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:07:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 int	ft_strncmp( char *s1,  char *s2, size_t n)
 {

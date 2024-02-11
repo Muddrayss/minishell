@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:21:37 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:01:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:08:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 void	ft_freematrix(char **matrix)
 {

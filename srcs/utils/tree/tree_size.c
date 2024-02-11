@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:36:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 12:00:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:08:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 uint32_t tree_size(t_tree *node, uint32_t size)
 {

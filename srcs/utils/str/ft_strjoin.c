@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:12:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:05:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 char	*ft_strjoin( char *s1,  char *s2)
 {

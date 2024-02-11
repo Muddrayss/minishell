@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:43:35 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:05:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 size_t	ft_strlcpy(char *dst,  char *src, size_t size)
 {

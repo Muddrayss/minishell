@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 13:52:49 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/11 22:23:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:08:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 char	*ft_strdup(char *s)
 {

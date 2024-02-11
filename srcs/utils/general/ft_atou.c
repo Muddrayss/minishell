@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:59:54 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/08 21:15:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:07:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 int	ft_atou(char *nptr)
 {

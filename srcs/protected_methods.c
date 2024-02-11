@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/09 00:06:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:09:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../headers/minishell.h"
 
 void    *malloc_p(size_t size)
 {

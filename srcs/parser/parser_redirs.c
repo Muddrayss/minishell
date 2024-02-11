@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:16:55 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:36:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:10:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 static void     remove_fd_num(char *cmd_str, uint32_t idx_redir, int8_t before_after);
 static uint32_t remove_filename(char *cmd_str, uint32_t i);

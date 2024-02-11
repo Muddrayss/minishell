@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 22:59:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:10:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 static int      fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);

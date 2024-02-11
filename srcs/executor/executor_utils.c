@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:46:56 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:48:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:11:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 void	exec_simple_cmd(char *path, char *cmd_str)
 {

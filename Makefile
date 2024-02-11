@@ -6,7 +6,7 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/11 23:58:58 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/12 00:01:05 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strj
 TREE_UTILS_SRCS = $(addprefix tree/, tree_size.c treeadd_below.c treeclear.c treenew_p.c)
 
 UTILS_SRCS = $(addprefix utils/, $(GENERAL_UTILS_SRCS) $(STR_UTILS_SRCS) $(LST_UTILS_SRCS) $(TREE_UTILS_SRCS))
-SRCS = $(adprefix srcs/, $(GENERAL_SRCS) $(LEXER_SRCS) $(PARSER_SRCS) $(EXECUTOR_SRCS) $(UTILS_SRCS) $(BUILTIN_SRCS))		
+SRCS = $(addprefix srcs/, $(GENERAL_SRCS) $(LEXER_SRCS) $(PARSER_SRCS) $(EXECUTOR_SRCS) $(UTILS_SRCS) $(BUILTIN_SRCS))		
 OBJS = $(SRCS:.c=.o)
 HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h envp_utils.h utils.h protected_methods.h colors.h)
 

@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 22:46:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:07:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../headers/minishell.h"
 
 void	update_env_matrix(t_envp elem, int8_t remove_add_replace) //se l'elemento da aggiungere o da rimuovere o  da rimpiazare
 {

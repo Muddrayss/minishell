@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:14:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:10:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 static char *rebuild_str(char *str, uint32_t i, char *env_value, char *env_name);
 static char *get_env_name(char *str, uint32_t i);

@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/11 23:15:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:09:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../headers/minishell.h"
 
 static void silent_mode(int signo);
 static void interactive_mode(int signo);

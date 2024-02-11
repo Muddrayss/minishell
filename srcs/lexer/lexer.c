@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 18:55:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:09:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 static bool 	is_token(char c);
 static void 	lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *input);

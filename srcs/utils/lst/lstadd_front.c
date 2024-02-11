@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:21:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/07 15:31:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:05:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 void	lstadd_front(t_list **lst, t_list *new)
 {

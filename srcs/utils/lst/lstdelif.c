@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 20:47:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:06:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:08:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 void    lstdelif(t_list **lst, bool (*f)(void *), void (*del)(void *))
 {

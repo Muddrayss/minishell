@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 15:28:08 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/08 15:12:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:07:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 void    lstremoveone(t_list **head, t_list *to_remove, void (*del)(void *))
 {

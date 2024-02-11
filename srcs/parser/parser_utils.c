@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:30:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:10:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 static void merge_ampersands(t_list **head, t_list *node);
 static void merge_pipes(t_list **head, t_list *node);

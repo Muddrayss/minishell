@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:11:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:10:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "headers/minishell.h"
+#include "../../headers/minishell.h"
 
 static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3]);
 static void     child(t_tree *elem, int fds[3], int8_t prev_type);

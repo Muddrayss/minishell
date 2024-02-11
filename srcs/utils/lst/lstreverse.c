@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:38:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 15:29:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:06:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 void    lstreverse(t_list **lst)
 {

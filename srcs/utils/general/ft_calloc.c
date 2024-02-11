@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 12:04:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 12:06:17 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:06:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 static void ft_bzero(void *s, size_t n);
 

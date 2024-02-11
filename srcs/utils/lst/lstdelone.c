@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lstdelone.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 14:44:27 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/08 16:58:00 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/12 00:07:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 void	lstdelone(t_list *lst, void (*del)(void *))
 {
