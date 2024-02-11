@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 18:11:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/11 18:24:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,39 +23,29 @@ static uint32_t count_x(t_tree *node, uint32_t n, int8_t type);
 void    executor(t_tree *parsed_params)
 {
     int     original_stdin;
-    pid_t   pid;
+    int     original_status;
     int     heredoc_status;
-    int     tmp;
     int     fds[3] = {-42, -42, 42};
 
     original_stdin = dup_p(STDIN_FILENO);
-    tmp = g_status;
-    heredoc_status = create_heredocs(parsed_params);
+    original_status = g_status;
+    heredoc_status = 0;
+    create_heredocs(parsed_params, &heredoc_status);
     if (heredoc_status != 0)
     {
         if (heredoc_status == 130)
             g_status = 130;
         return ;
     }
-    g_status = tmp;
-    pid = fork_p();
-    if (pid == 0)
-    {
-        set_signals(S_COMMAND);
-        launch_commands(parsed_params, -1, fds);
-        wait_for_children(parsed_params); // aspetta i figli non gia aspettati (quindi le pipe)
-        exit(g_status);
-    }
-    else
-    {
-        waitpid_p(pid, &g_status, 0); //aspetta la command stream
-        g_status = WEXITSTATUS(g_status);
-    }
+    g_status = original_status;
+    set_signals(S_COMMAND);
+    launch_commands(parsed_params, -1, fds);
+    wait_for_children(parsed_params); // aspetta i figli non gia aspettati (quindi le pipe)
     dup2(original_stdin, STDIN_FILENO);
     reset_fd(&original_stdin);
 }
 
-static t_tree *skip_till_semicolon(t_tree *node)
+static t_tree   *skip_till_semicolon(t_tree *node)
 {
     if (!node)
         return (NULL);
@@ -66,7 +56,7 @@ static t_tree *skip_till_semicolon(t_tree *node)
 
 static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
 {
-    pid_t               pid;
+    pid_t   pid;
 
     if (!node)
         return ;

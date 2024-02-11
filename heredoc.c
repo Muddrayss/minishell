@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 15:11:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/11 18:24:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 static int      fill_in_child(char *limiter, int heredoc_fd);
 static void     fill_heredoc(char *limiter, int fd);
 
-int create_heredocs(t_tree *tree)
+void create_heredocs(t_tree *tree, int *status)
 {
     t_list  *redirs;
     t_redir *redir;
     int     heredoc_fd;
-    int     status;
 
-    status = 0;
-    if (!tree)
-        return (status);
+    if (!tree || *status != 0)
+        return ;
     if (tree->type == CMD)
     {
         redirs = (t_list *)tree->cmd->redirs;
@@ -34,16 +32,15 @@ int create_heredocs(t_tree *tree)
             if (redir->type == REDIR_HEREDOC)
             {
                 heredoc_fd = open_p(get_heredoc_filename(redir->heredoc_fileno), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                status = fill_in_child(redir->filename, heredoc_fd);
-                if (status != 0)
-                    return (status);
+                *status = fill_in_child(redir->filename, heredoc_fd);
+                if (*status != 0)
+                    return ;
             }
             redirs = redirs->next;
         }
     }
-    if (create_heredocs(tree->left) != 0 || create_heredocs(tree->right) != 0)
-        return (status);
-    return (status);
+    create_heredocs(tree->left, status);
+    create_heredocs(tree->right, status);
 }
 
 //usare strcat invece che strlcat
