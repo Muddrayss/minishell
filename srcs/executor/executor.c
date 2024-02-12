@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 01:29:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:57:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void     exec_fd_redirs(t_redir *redir);
 static void     exec_file_redirs(t_redir *redir);
 static int      open_redir_file(t_redir *redir);
 static void     wait_for_children(t_tree *parsed_params);
+static uint16_t get_n_pipelines(t_tree *parsed_params);
 
 void    executor(t_tree *parsed_params)
 {
@@ -45,7 +46,7 @@ void    executor(t_tree *parsed_params)
     {
         set_signals(S_COMMAND);
         launch_commands(parsed_params, -1, fds);
-        wait_for_children(parsed_params); // aspetta i figli non gia aspettati (quindi le pipe)
+        wait_for_children(parsed_params);
         exit(g_status);
     }
     else
@@ -84,15 +85,17 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
                 dup2_p(fds[1], STDOUT_FILENO);
                 reset_fd(&fds[0]);
                 reset_fd(&fds[1]);
-            }
+            }           
             launch_commands(node->left, prev_type, fds);
-            exit(g_status);
+            wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno
+            exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
         }
         else
             parent(pid, fds, node->type == PIPELINE);
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
             launch_commands(skip_till_semicolon(node), -1, fds);
-        launch_commands(node->right, node->type, fds);
+        else
+            launch_commands(node->right, node->type, fds);
         return ;
     }
     child(node, fds, prev_type);
@@ -177,13 +180,26 @@ static int  open_redir_file(t_redir *redir)
 
 static void wait_for_children(t_tree *parsed_params) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
 {
-    uint32_t    n_to_wait;
+    uint16_t    n_to_wait;
 
-    n_to_wait = //TODO numero di PIPELINE SUL PRIMO LIVELLO (quindi non quelle dentro le parentesi)
+    n_to_wait = get_n_pipelines(parsed_params); //numero di pipeline SULLO STESSO LAYER
     while (n_to_wait--)
     {
         waitpid_p(0, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
     }
+}
+
+static uint16_t get_n_pipelines(t_tree *parsed_params)
+{
+    uint16_t    n;
+
+    n = 0;
+    if (!parsed_params)
+        return (n);
+    if (parsed_params->type == PIPELINE)
+        n++;
+    n += get_n_pipelines(parsed_params->right); //va solo a destra per contare quelle sullo stesso layer
+    return (n);
 }
 
