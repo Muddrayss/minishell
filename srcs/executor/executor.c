@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:10:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 01:29:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@ static void     exec_fd_redirs(t_redir *redir);
 static void     exec_file_redirs(t_redir *redir);
 static int      open_redir_file(t_redir *redir);
 static void     wait_for_children(t_tree *parsed_params);
-static uint32_t count_x(t_tree *node, uint32_t n, int8_t type);
-// static int      count_heredocs(t_tree *tree);
 
 void    executor(t_tree *parsed_params)
 {
     int     original_stdin;
     int     original_status;
     int     heredoc_status;
+    pid_t   pid;
     int     fds[3] = {-42, -42, 42};
 
     original_stdin = dup_p(STDIN_FILENO);
@@ -41,9 +40,19 @@ void    executor(t_tree *parsed_params)
         return ;
     }
     g_status = original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
-    set_signals(S_COMMAND);
-    launch_commands(parsed_params, -1, fds);
-    wait_for_children(parsed_params); // aspetta i figli non gia aspettati (quindi le pipe)
+    pid = fork_p();
+    if (pid == 0)
+    {
+        set_signals(S_COMMAND);
+        launch_commands(parsed_params, -1, fds);
+        wait_for_children(parsed_params); // aspetta i figli non gia aspettati (quindi le pipe)
+        exit(g_status);
+    }
+    else
+    {
+        waitpid_p(pid, &g_status, 0);
+        g_status = WEXITSTATUS(g_status);
+    }
     dup2(original_stdin, STDIN_FILENO);
     reset_fd(&original_stdin);
 }
@@ -62,7 +71,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
     pid_t   pid;
 
     if (!node)
-        return ;
+        return ; //se e' exit non funziona sleep 2 | ls
     if (node->type != CMD)
     {
         if (node->type == PIPELINE)
@@ -77,6 +86,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
                 reset_fd(&fds[1]);
             }
             launch_commands(node->left, prev_type, fds);
+            exit(g_status);
         }
         else
             parent(pid, fds, node->type == PIPELINE);
@@ -169,7 +179,7 @@ static void wait_for_children(t_tree *parsed_params) //aspetta tutti i figli (ap
 {
     uint32_t    n_to_wait;
 
-    n_to_wait = count_x(parsed_params, 0, PIPELINE);
+    n_to_wait = //TODO numero di PIPELINE SUL PRIMO LIVELLO (quindi non quelle dentro le parentesi)
     while (n_to_wait--)
     {
         waitpid_p(0, &g_status, 0);
@@ -177,13 +187,3 @@ static void wait_for_children(t_tree *parsed_params) //aspetta tutti i figli (ap
     }
 }
 
-static uint32_t count_x(t_tree *node, uint32_t n, int8_t type)
-{
-    if (!node)
-        return (n);
-    if (node->type == type)
-        n++;
-    n += count_x(node->left, 0, type);
-    n += count_x(node->right, 0, type);
-    return (n);
-}
