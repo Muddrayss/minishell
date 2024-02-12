@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:16:55 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:20:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:51:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void     remove_fd_num(char *cmd_str, uint32_t idx_redir, int8_t before_after);
-static uint32_t remove_filename(char *cmd_str, uint32_t i);
+static void     remove_fd_nums(char *cmd_str, uint32_t idx_redir);
+static void     remove_filename(char *cmd_str, uint32_t idx_redir);
 static void     fill_redir_input(t_list **redirs, char *str, uint32_t i);
 static void     fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno);
 static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append);
@@ -60,18 +60,16 @@ void    clear_redirs(t_list *redirs, char *cmd_str)
     {
         if (cmd_str[i] == '<' || cmd_str[i] == '>')
         {
-            cmd_str[i++] = ' ';
-            if (cmd_str[i] == '<' || cmd_str[i] == '>')
-                cmd_str[i++] = ' ';
             redir = (t_redir *)redirs->content;
-            if (redir->fds[1] != -42)
-                remove_fd_num(cmd_str, i, AFTER);
-            if (redir->fds[0] != -42)
-                remove_fd_num(cmd_str, i, BEFORE);
-            i = remove_filename(cmd_str, i);
+            if (redir->fds[1] == -42)
+                remove_filename(cmd_str, i);
+            remove_fd_nums(cmd_str, i);
+            cmd_str[i] = ' ';
+            if (cmd_str[i + 1] == '<' || cmd_str[i + 1] == '>')
+                cmd_str[++i] = ' ';
             redirs = redirs->next;
         }
-        if (is_shell_space(cmd_str[i])) //NON ELSE IF perche' remove filename incrementa la i uno di troppo
+        else if (is_shell_space(cmd_str[i])) //NON ELSE IF perche' remove filename incrementa la i uno di troppo
             cmd_str[i] = ' ';
         i++;
     }
@@ -174,30 +172,27 @@ static int32_t get_fd_num(char *str, uint32_t idx_redir, uint8_t direction)
     return (num);
 }
 
-static void     remove_fd_num(char *cmd_str, uint32_t idx_redir, int8_t before_after)
+static void remove_fd_nums(char *cmd_str, uint32_t idx_redir)
 {
-    uint32_t i;
+    int32_t i;
 
-    i = idx_redir + (before_after == AFTER) - (before_after == BEFORE);
-    if (before_after == AFTER)
-    {
-        if (cmd_str[i] == '&')
-            cmd_str[i++] = ' ';
-        while (cmd_str[i] && ft_isdigit(cmd_str[i]))
-            cmd_str[i++] = ' ';
-    }
-    else
-    {
-        while (cmd_str[i] && ft_isdigit(cmd_str[i]))
-            cmd_str[i--] = ' ';
-    }
+    i = idx_redir + 1 + (cmd_str[idx_redir + 1] == '<' || cmd_str[idx_redir + 1] == '>');
+    if (cmd_str[i] == '&')
+        cmd_str[i++] = ' ';
+    while (cmd_str[i] && ft_isdigit(cmd_str[i]))
+        cmd_str[i++] = ' ';
+    i = idx_redir - 1;
+    while (i >= 0 && ft_isdigit(cmd_str[i]))
+        cmd_str[i--] = ' ';
 }
 
-static uint32_t  remove_filename(char *cmd_str, uint32_t i)
+static void  remove_filename(char *cmd_str, uint32_t idx_redir)
 {
+    uint32_t   i;
+
+    i = idx_redir + 1 + (cmd_str[idx_redir + 1] == '<' || cmd_str[idx_redir + 1] == '>');
     while (cmd_str[i] && is_shell_space(cmd_str[i]))
         cmd_str[i++] = ' ';
     while (cmd_str[i] && !is_shell_space(cmd_str[i]))
         cmd_str[i++] = ' ';
-    return (i);
 }

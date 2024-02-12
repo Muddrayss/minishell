@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 13:07:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:52:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ static void exec_file_redirs(t_redir *redir)
     if (redir->filename[0] == '$')
         redir->filename = replace_env_vars(redir->filename);
     file_fd = open_redir_file(redir);
-    if (redir->type == REDIR_INPUT_FD || redir->type == REDIR_HEREDOC)
+    if (redir->type == REDIR_INPUT || redir->type == REDIR_INPUT_FD || redir->type == REDIR_HEREDOC)
         dup_target = STDIN_FILENO;
     else if (redir->type == REDIR_OUTPUT || redir->type == REDIR_OUTPUT_FD || redir->type == REDIR_APPEND_FD)
         dup_target = STDOUT_FILENO;
