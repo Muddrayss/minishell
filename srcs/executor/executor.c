@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 12:57:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:07:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,14 @@ static t_tree   *skip_till_semicolon(t_tree *node)
     return (skip_till_semicolon(node->right));
 }
 
+//Yes, when you use pipes within a subshell, such as in ( cmd1 | cmd2 | cmd3 ), 
+//the subshell will wait for the entire pipeline of commands to complete before it returns 
+//control to the rest of the script or command line. Each command in the pipeline 
+//is executed in parallel in its own sub-process: cmd1's output is piped into
+//cmd2, and cmd2's output is piped into cmd3. The subshell waits for the last
+//command in the pipeline (cmd3 in this case) to complete, along with 
+//all preceding commands in the pipeline, before it finishes.
+
 static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
 {
     pid_t   pid;
@@ -87,7 +95,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
                 reset_fd(&fds[1]);
             }           
             launch_commands(node->left, prev_type, fds);
-            wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno
+            wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno VEDI SOPRA
             exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
         }
         else
