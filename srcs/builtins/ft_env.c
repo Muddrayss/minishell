@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/07 19:30:41 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/13 16:29:39 by egualand          #+#    #+#             */
+/*   Updated: 2024/02/13 18:24:28 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../headers/minishell.h"
 
-short    ft_strcmp( char *s1,  char *s2)
+void ft_env(char **args)
 {
-	while (*s1 && (*s1 == *s2))
+	int	i;
+
+	if (args[1])
 	{
-		s1++;
-		s2++;
+		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
+		g_status = EXIT_FAILURE;
 	}
-	return (*s1 - *s2);
-}
-
-size_t	ft_strlen( char *s)
-{
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	else
+		print_envp_table();
+	g_status = EXIT_SUCCESS;
 }
