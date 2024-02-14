@@ -18,7 +18,6 @@ void ft_export(char **args)
 	char *key;
 	char *env_var;
 	
-	(void)args;
 	i = 0;
 	while (args[++i])
 	{
