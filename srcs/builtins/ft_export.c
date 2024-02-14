@@ -22,7 +22,7 @@ void ft_export(char **args)
 	{
 		sep = ft_strchr(args[i], '=');
 		*sep = '\0';
-		ft_setenv(args[i], key + 1, true);
+		ft_setenv(args[i], sep + 1, true);
 	}
 	g_status = EXIT_SUCCESS;
 }
