@@ -19,15 +19,14 @@ void ft_pwd(char **args)
 	buf = getcwd(NULL, 0);
 	if (buf == NULL)
 	{
-		ft_putstr_fd(strerror(errno), STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-		g_status = EXIT_SUCCESS;
+		perror("minishell: Error:");
+		g_status = EXIT_FAILURE;
 	}
 	else
 	{
 		ft_putstr_fd(buf, STDOUT_FILENO);
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		free(buf);
-		g_status = EXIT_FAILURE;
+		g_status = EXIT_SUCCESS;
 	}
 }
