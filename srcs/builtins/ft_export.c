@@ -22,6 +22,7 @@ void ft_export(char **args)
 	while (args[++i])
 	{
 		key = ft_strchr(args[i], '=');
+		*key = '\0';
 		env_var = ft_getenv(args[i]);
 		if (env_var)
 		{
