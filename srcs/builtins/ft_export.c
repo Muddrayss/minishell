@@ -15,22 +15,14 @@
 void ft_export(char **args)
 {
 	int	i;
-	char *key;
-	char *env_var;
+	char *sep;
 	
 	i = 0;
 	while (args[++i])
 	{
-		key = ft_strchr(args[i], '=');
-		*key = '\0';
-		env_var = ft_getenv(args[i]);
-		if (env_var)
-		{
-			ft_setenv(args[i], key + 1, true);
-			free(env_var);
-		}
-		else
-			ft_setenv(args[i], key + 1, false);
+		sep = ft_strchr(args[i], '=');
+		*sep = '\0';
+		ft_setenv(args[i], key + 1, true);
 	}
 	g_status = EXIT_SUCCESS;
 }
