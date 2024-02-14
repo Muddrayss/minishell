@@ -46,7 +46,7 @@ static int  check_flag(char **argv, bool *is_n)
         if (argv[i][0] == '-')
         {
             j = 0;
-            while (argv[i][j] == 'n' && argv[i][j] != '\0')
+            while (argv[i][j] == 'n')
                 j++;
             if (argv[i][j] != '\0')
                 return (i);
