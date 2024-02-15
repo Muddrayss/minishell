@@ -12,7 +12,8 @@
 
 #include "../../headers/minishell.h"
 
-void ft_export(char **args)
+//TODO gestire export senza opzioni
+void	ft_export(char **args) //TODO gestire 'export VAR=' 
 {
 	int	i;
 	char *sep;
@@ -22,7 +23,7 @@ void ft_export(char **args)
 	{
 		sep = ft_strchr(args[i], '=');
 		*sep = '\0';
-		ft_setenv(args[i], sep + 1, true);
+		ft_setenv(args[i], sep + 1, true); //sep + 1 va in segfault col comando export VAR=
 	}
-	g_status = EXIT_SUCCESS;
+	exit(EXIT_SUCCESS);
 }

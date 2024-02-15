@@ -29,7 +29,7 @@ void ft_echo(char **argv)
     }
     if (!is_n)
         ft_putstr_fd("\n", STDOUT_FILENO);
-    g_status = EXIT_SUCCESS;
+    exit(EXIT_SUCCESS);
 }
 
 static int  check_flag(char **argv, bool *is_n)

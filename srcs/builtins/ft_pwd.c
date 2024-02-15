@@ -12,7 +12,7 @@
 
 #include "../../headers/minishell.h"
 
-void ft_pwd(char **args)
+void	ft_pwd(char **args)
 {
 	char	*buf;
 
@@ -20,13 +20,10 @@ void ft_pwd(char **args)
 	if (buf == NULL)
 	{
 		perror("minishell: Error:");
-		g_status = EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
-	else
-	{
-		ft_putstr_fd(buf, STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
-		free(buf);
-		g_status = EXIT_SUCCESS;
-	}
+	ft_putstr_fd(buf, STDOUT_FILENO);
+	ft_putstr_fd("\n", STDOUT_FILENO);
+	free(buf);
+	exit(EXIT_SUCCESS);
 }

@@ -20,25 +20,20 @@ void ft_cd(char **args)
 	if (args[2])
 	{
 		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
-		g_status = EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
-	else
+	if (chdir(args[1]) == -1)
 	{
-		if (chdir(args[1]) == -1)
-		{
-			ft_putstr_fd("cd: ", STDERR_FILENO);
-			ft_putstr_fd(args[1], STDERR_FILENO);
-			ft_putstr_fd(": ", STDERR_FILENO);
-			ft_putstr_fd(strerror(errno), STDERR_FILENO);
-			ft_putstr_fd("\n", STDERR_FILENO);
-			g_status = EXIT_FAILURE;
-		}
-		else
-		{
-			update_env_vars(args[1]);
-			g_status = EXIT_SUCCESS;
-		}
+		//forse si piò usare perror direttamente
+		ft_putstr_fd("cd: ", STDERR_FILENO);
+		ft_putstr_fd(args[1], STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
+		exit(EXIT_FAILURE);
 	}
+	update_env_vars(args[1]);
+	exit(EXIT_SUCCESS);
 }
 
 static char *get_absolute_from_relative_path(char *path)

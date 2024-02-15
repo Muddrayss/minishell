@@ -14,11 +14,11 @@
 
 void ft_unset(char **args)
 {
-	int	i;
-	int internal_status;
+	int		i;
+	uint8_t	exit_status;
 
 	i = 0;
-	internal_status = EXIT_SUCCESS;
+	exit_status = EXIT_SUCCESS;
 	while (args[++i])
 	{
 		if (ft_strchr(args[i], '=') == NULL)	
@@ -26,8 +26,8 @@ void ft_unset(char **args)
 		else 
 		{
 			ft_putstr_fd("unset: not a valid identifier\n", STDERR_FILENO);
-			internal_status = EXIT_FAILURE;
+			exit_status = EXIT_FAILURE;
 		}
 	}
-	g_status = internal_status;
+	exit(exit_status);
 }

@@ -19,9 +19,8 @@ void ft_env(char **args)
 	if (args[1])
 	{
 		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
-		g_status = EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
-	else
-		print_envp_table();
-	g_status = EXIT_SUCCESS;
+	print_envp_table();
+	exit(EXIT_SUCCESS);
 }
