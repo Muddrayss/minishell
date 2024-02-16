@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 17:22:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/16 19:16:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/16 21:59:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@ void    replace_wildcards(char *str)
         if (!wildcard_str)
             break ;
         matching_files = parse_wildcard_str(wildcard_str);
-        ft_lstreverse(&matching_files);
+        lstreverse(&matching_files);
+        sort_filenames(matching_files);
         str = insert_wildcards(str, matching_files, idx); //deve fare il free di str
+        lstclear(&matching_files, &free);
         free(wildcard_str);
     }
     return (str);
@@ -57,7 +59,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
         if (matches_pattern(wildcard_str, entry->d_name) == true)
         {
             new_wildcard_str = get_new_wildcard_str(basedir, wildcard_str, entry->d_name);
-            ft_lstadd_front(&matching_files, parse_wildcard_str(new_wildcard_str));
+            lstadd_front(&matching_files, parse_wildcard_str(new_wildcard_str));
         }
         entry = readdir(dir);
     }
@@ -121,27 +123,23 @@ static char *get_base_dir(char *wildcard_str)
     return (basedir);
 }
 
-//da abbellire, cosi fa cacare
-static char   *get_wildcard_str(char *str, uint32_t *idx)
+static char *get_wildcard_str(char *str, uint32_t *idx)
 {
-    char    *full_wildcard;
-    char    *end;
-
-    while (str[*idx])
-    {
-        if (str[*idx] == '*')
-            break ;
-        (*idx)++;
-    }
-    if (!str[*idx])
+    uint32_t    i;
+    uint32_t    len;
+    char        *wildcard_str;
+    
+    i = 0;
+    while (str[i] && str[i] != '*')
+        i++;
+    if (str[i] != '*')
         return (NULL);
-    while (!is_shell_space(str[*idx]))
-        (*idx)--;
-    full_wildcard = ft_strdup(&str[*idx]);
-    if (!full_wildcard)
-        ft_quit(ERR_MALLOC, "failed to allocate memory");
-    end = ft_strchr(full_wildcard, ' ');
-    if (end)
-        *end = '\0';
-    return (full_wildcard);
+    while (i > 0 && !is_shell_space(str[i]))
+        i--;
+    len = 1;
+    while (!is_shell_space(str[i + len]))
+        len++;
+    wildcard_str = (char *)malloc_p(sizeof(char) * (len + 1));
+    ft_strlcpy(wildcard_str, &str[i], len + 1);
+    return (wildcard_str);
 }
