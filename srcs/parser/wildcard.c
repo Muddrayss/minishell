@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 17:22:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/16 19:15:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/16 19:16:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ static char *get_base_dir(char *wildcard_str)
     return (basedir);
 }
 
+//da abbellire, cosi fa cacare
 static char   *get_wildcard_str(char *str, uint32_t *idx)
 {
     char    *full_wildcard;
