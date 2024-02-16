@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 17:22:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/16 18:25:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/16 19:15:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ static char     *get_wildcard_str(char *str, uint32_t *idx);
 static char     *get_new_wildcard_str(char *basedir, char *entry, char *wildcard_str);
 static char     *get_base_dir(char *wildcard_str);
 static t_list   *parse_wildcard_str(char *wildcard_str);
-static bool     matches_pattern(char *wildcard_str, char *entry);
-
+static bool     matches_pattern(char *pattern, char *entry);
 
 void    replace_wildcards(char *str)
 {
@@ -27,11 +26,13 @@ void    replace_wildcards(char *str)
 
     while (true)
     {
+        idx = 0;
         wildcard_str = get_wildcard_str(str, &idx);
         if (!wildcard_str)
             break ;
         matching_files = parse_wildcard_str(wildcard_str);
         ft_lstreverse(&matching_files);
+        str = insert_wildcards(str, matching_files, idx); //deve fare il free di str
         free(wildcard_str);
     }
     return (str);
@@ -43,11 +44,12 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
     char            *new_wildcard_str;
     t_list          *matching_files;
     DIR             *dir;
+    char            *end;
     struct dirent   *entry;
 
     matching_files = NULL;
     basedir = get_base_dir(wildcard_str);
-    wildcard_str = ft_strrchr(wildcard_str, '/') + 1;
+    wildcard_str = ft_strchr(wildcard_str, '/') + 1;
     dir = opendir(basedir);
     entry = readdir(dir);
     while (entry)
@@ -63,39 +65,32 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
     return (matching_files);
 }
 
-static bool matches_pattern(char *wildcard_str, char *entry)
+static bool matches_pattern(char *pattern, char *entry)
 {
     char    *end;
 
-    end = ft_strchr(wildcard_str, '/');
-    if (end)
-        *end = '\0';
-    while (*wildcard_str && *entry)
-    {
-        if (*wildcard_str == '*')
-        {
-            
-        }
-        wildcard_str++;
-        entry++;
-    }
-    if (end)
-        *end = '/';
+    if (*pattern == '\0' || *pattern == '/')
+        return (*entry == '\0');
+    if (*pattern == '*')
+        return (matches_pattern(pattern + 1, entry) || (matches_pattern(pattern, entry + 1)));
+    if (*pattern == *entry)
+        return (matches_pattern(pattern + 1, entry + 1));
+    return (false);
 }
 
-static char  *get_new_wildcard_str(char *basedir, char *entry, char *wildcard_str)
+static char  *get_new_pattern(char *basedir, char *entry, char *pattern)
 {
-    char        *new_wildcard_str;
+    char        *new_pattern;
     uint32_t    size;
     uint32_t    i;
 
-    wildcard_str = ft_strrchr(wildcard_str, '/'); //skippo gli * tra / e /
-    size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(wildcard_str) + 1;
-    new_wildcard_str = (char *)malloc_p(sizeof(char) * size);
-    ft_strcpy(new_wildcard_str, basedir);
-    ft_strcat(new_wildcard_str, entry);
-    ft_strcat(new_wildcard_str, wildcard_str);
-    return (new_wildcard_str);
+    pattern = ft_strchr(pattern, '/'); //skippo gli * tra / e /
+    size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(pattern) + 1;
+    new_pattern = (char *)malloc_p(sizeof(char) * size);
+    ft_strcpy(new_pattern, basedir);
+    ft_strcat(new_pattern, entry);
+    ft_strcat(new_pattern, pattern);
+    return (new_pattern);
 }
 
 static char *get_base_dir(char *wildcard_str)
@@ -131,18 +126,17 @@ static char   *get_wildcard_str(char *str, uint32_t *idx)
     char    *full_wildcard;
     char    *end;
 
-    while (*str)
+    while (str[*idx])
     {
-        if (*str == '*')
+        if (str[*idx] == '*')
             break ;
-        str++;
+        (*idx)++;
     }
-    if (!*str)
+    if (!str[*idx])
         return (NULL);
-    while (!is_shell_space(*str))
-        str--;
-    *idx = str;
-    full_wildcard = ft_strdup(str);
+    while (!is_shell_space(str[*idx]))
+        (*idx)--;
+    full_wildcard = ft_strdup(&str[*idx]);
     if (!full_wildcard)
         ft_quit(ERR_MALLOC, "failed to allocate memory");
     end = ft_strchr(full_wildcard, ' ');
