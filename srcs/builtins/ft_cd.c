@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/13 18:24:20 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/17 15:04:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ static char *get_absolute_from_relative_path(char *path)
 
 	buf = getcwd(NULL, 0);
 	if (buf == NULL)
-		return (NULL);
+	{
+		perror("cd: Error:");
+		exit(EXIT_FAILURE);
+	}
 	new_path = ft_strjoin(buf, "/");
 	free(buf);
 	if (new_path == NULL)
