@@ -6,12 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 13:52:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/17 14:55:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
+static void     launch_command_stream(t_tree *parsed_params);
 static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3]);
 static void     child(t_tree *elem, int fds[3], int8_t prev_type);
 static void     parent(pid_t pid, int fds[3], bool is_in_pipeline);
@@ -27,8 +28,6 @@ void    executor(t_tree *parsed_params)
     int     original_stdin;
     int     original_status;
     int     heredoc_status;
-    pid_t   pid;
-    int     fds[3] = {-42, -42, 42};
 
     original_stdin = dup_p(STDIN_FILENO);
     original_status = g_status;
@@ -41,6 +40,17 @@ void    executor(t_tree *parsed_params)
         return ;
     }
     g_status = original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
+    launch_command_stream(parsed_params);
+    dup2(original_stdin, STDIN_FILENO);
+    reset_fd(&original_stdin);
+}
+
+//inizializza un nuovo command environvment (environvment di esecuzione assestante)
+static void launch_command_stream(t_tree *parsed_params)
+{
+    pid_t   pid;
+    int     fds[3] = {-42, -42, 42};
+
     pid = fork_p();
     if (pid == 0)
     {
@@ -54,8 +64,6 @@ void    executor(t_tree *parsed_params)
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
     }
-    dup2(original_stdin, STDIN_FILENO);
-    reset_fd(&original_stdin);
 }
 
 static t_tree   *skip_till_semicolon(t_tree *node)
@@ -115,6 +123,7 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
         dup2_p(fds[2], STDIN_FILENO);
     exec_redirs(elem->cmd->redirs);
     elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str);
+    elem->cmd->cmd_str = replace_wildcards(elem->cmd->cmd_str); //deve essere DOPO replace_env_vars
     exec(ft_getenv("PATH"), elem->cmd->cmd_str);
 }
 
