@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcard.c                                         :+:      :+:    :+:   */
+/*   replace_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 17:22:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/16 21:59:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/17 14:43:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,54 @@ static char     *get_new_wildcard_str(char *basedir, char *entry, char *wildcard
 static char     *get_base_dir(char *wildcard_str);
 static t_list   *parse_wildcard_str(char *wildcard_str);
 static bool     matches_pattern(char *pattern, char *entry);
+static char     *insert_result(char *original_str, t_list *matching_files, uint32_t idx, char *wildcard_str);
 
-void    replace_wildcards(char *str)
+char    *replace_wildcards(char *str)
 {
     char        *wildcard_str;
     t_list      *matching_files;
     uint32_t    idx;
 
-    while (true)
+    wildcard_str = get_wildcard_str(str, &idx);
+    while (wildcard_str)
     {
         idx = 0;
-        wildcard_str = get_wildcard_str(str, &idx);
-        if (!wildcard_str)
-            break ;
         matching_files = parse_wildcard_str(wildcard_str);
         lstreverse(&matching_files);
-        sort_filenames(matching_files);
-        str = insert_wildcards(str, matching_files, idx); //deve fare il free di str
+        lstsort(matching_files, &ft_strcmp);
+        str = insert_result(str, matching_files, idx, wildcard_str); //deve fare il free di str
         lstclear(&matching_files, &free);
         free(wildcard_str);
+        wildcard_str = get_wildcard_str(str, &idx);
     }
     return (str);
+}
+
+static char *insert_result(char *original_str, t_list *matching_files, uint32_t idx, char *wildcard_str)
+{
+    char        *new_str;
+    uint32_t    size;
+    uint32_t    filenames_len;
+    uint32_t    wildcard_str_len;
+    
+    wildcard_str_len = ft_strlen(wildcard_str);
+    filenames_len = 0;
+    while(matching_files)
+    {
+        filenames_len += ft_strlen(matching_files->content) + 1; //+1 per lo spazio
+        matching_files = matching_files->next;
+    }
+    size = ft_strlen(original_str) - wildcard_str_len + filenames_len + 1;
+    new_str = (char *)malloc_p(sizeof(char) * size);
+    ft_strlcpy(new_str, original_str, idx + 1);
+    while (matching_files)
+    {
+        ft_strcat(new_str, matching_files->content);
+        ft_strcat(new_str, " ");
+        matching_files = matching_files->next;
+    }
+    ft_strcat(new_str, &original_str[idx + wildcard_str_len]);
+    return (free(original_str), new_str);
 }
 
 static t_list   *parse_wildcard_str(char *wildcard_str)
@@ -46,13 +73,14 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
     char            *new_wildcard_str;
     t_list          *matching_files;
     DIR             *dir;
-    char            *end;
     struct dirent   *entry;
 
     matching_files = NULL;
     basedir = get_base_dir(wildcard_str);
     wildcard_str = ft_strchr(wildcard_str, '/') + 1;
     dir = opendir(basedir);
+    if (!dir && errno != ENOENT && errno != ENOTDIR)
+        ft_quit(ERR_DIR, NULL);
     entry = readdir(dir);
     while (entry)
     {
@@ -69,8 +97,6 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
 
 static bool matches_pattern(char *pattern, char *entry)
 {
-    char    *end;
-
     if (*pattern == '\0' || *pattern == '/')
         return (*entry == '\0');
     if (*pattern == '*')
@@ -80,11 +106,10 @@ static bool matches_pattern(char *pattern, char *entry)
     return (false);
 }
 
-static char  *get_new_pattern(char *basedir, char *entry, char *pattern)
+static char  *get_new_wildcard_str(char *basedir, char *entry, char *pattern)
 {
     char        *new_pattern;
     uint32_t    size;
-    uint32_t    i;
 
     pattern = ft_strchr(pattern, '/'); //skippo gli * tra / e /
     size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(pattern) + 1;
@@ -141,5 +166,7 @@ static char *get_wildcard_str(char *str, uint32_t *idx)
         len++;
     wildcard_str = (char *)malloc_p(sizeof(char) * (len + 1));
     ft_strlcpy(wildcard_str, &str[i], len + 1);
+    *idx = i;
     return (wildcard_str);
 }
+

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 01:17:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/17 14:05:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void    close_p(int fd)
     if (close(fd) == -1)
         ft_quit(ERR_FD, NULL);
 }
-
 
 void    pipe_p(int fds[2])
 {

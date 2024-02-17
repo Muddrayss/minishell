@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:27:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:55:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/17 14:08:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@
 # define ERR_ENV        7   //quando non viene trovata una var di ambiente essenziale al corretto funzionamento (tipo PWD ci serve per sapere dove mettere la cartella temp)
 # define ERR_SIGSETUP   8  //quando fallisce la funzione signal()
 # define ERR_WAIT       9
+# define ERR_DIR        10
 
 #endif

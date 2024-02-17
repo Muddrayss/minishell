@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:10:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/17 14:30:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void create_heredocs(t_tree *tree, int *status)
     create_heredocs(tree->right, status);
 }
 
-//usare strcat invece che strlcat
 char    *get_heredoc_filename(int32_t id)
 {
     t_data      *data;
