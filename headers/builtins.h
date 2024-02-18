@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 19:30:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 17:53:10 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 18:13:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define BUILTINS_H
 
 bool	is_builtin(char *cmd);
-void	exec_builtin(char *cmd_str);
+void    exec_builtin(char **cmd_args);
 void	ft_echo(char **argv);
 void 	ft_cd(char **args);
 void	ft_env(char **args);

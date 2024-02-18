@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 17:49:11 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 18:08:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
+//TODO fix, OLDPWD non si aggiorna
 void ft_cd(char **args)
 {
 	char *cwd;

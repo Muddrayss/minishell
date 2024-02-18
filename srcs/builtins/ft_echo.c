@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 17:49:39 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 18:38:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static int      check_flag(char **argv, bool *is_n);
+static int  check_flag(char **argv, bool *is_n);
 
+//TODO fix flag non funziona
 void ft_echo(char **argv)
 {
     int     i;

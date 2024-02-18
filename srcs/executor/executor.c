@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 17:56:55 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 21:38:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3]);
+static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3], int original_stdout);
+static void     launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3], int original_stdout);
+static void     launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3], int original_stdout);
 static void     child(t_tree *elem, int fds[3], int8_t prev_type);
 static void     parent(pid_t pid, int fds[3], t_tree *node);
 static void     exec_redirs(t_list *redirs);
@@ -25,11 +27,13 @@ static uint16_t get_n_pipelines(t_tree *parsed_params);
 void    executor(t_tree *parsed_params)
 {
     int     original_stdin;
+    int     original_stdout;
     int     original_status;
     int     heredoc_status;
-    int     fds[3] = {-42, -42, 42};
+    int     fds[3] = {-42, -42, -42};
 
     original_stdin = dup_p(STDIN_FILENO);
+    original_stdout = dup_p(STDOUT_FILENO);
     original_status = g_status;
     heredoc_status = 0;
     create_heredocs(parsed_params, &heredoc_status);
@@ -41,7 +45,7 @@ void    executor(t_tree *parsed_params)
     }
     g_status = original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
     set_signals(S_COMMAND);
-    launch_commands(parsed_params, -1, fds);
+    launch_commands(parsed_params, -1, fds, original_stdout);
     wait_for_children(parsed_params);
     dup2(original_stdin, STDIN_FILENO);
     reset_fd(&original_stdin);
@@ -64,43 +68,66 @@ static t_tree   *skip_till_semicolon(t_tree *node)
 //command in the pipeline (cmd3 in this case) to complete, along with 
 //all preceding commands in the pipeline, before it finishes.
 
-static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
+//TODO unificare tutto nell'array fds (original stdin, stdout, pipe_builtin ecc)
+static void launch_commands(t_tree *node, int8_t prev_type, int fds[3], int original_stdout)
 {
-    pid_t   pid;
-
     if (!node)
         return ; //se e' exit non funziona sleep 2 | ls
     if (node->type != CMD)
     {
         if (node->type == PIPELINE)
             pipe_p(fds);
-        if (node->left && node->left->cmd && is_builtin(node->left->cmd->cmd_str))
-            exec_builtin(node->left->cmd->cmd_str);
+        if (node->left->cmd && is_builtin(node->left->cmd->cmd_str))
+            launch_builtin_cmd(node, prev_type, fds, original_stdout);
         else
-        {
-            pid = fork_p();
-            if (pid == 0)
-            {
-                if (node->type == PIPELINE)
-                {
-                    dup2_p(fds[1], STDOUT_FILENO);
-                    reset_fd(&fds[0]);
-                    reset_fd(&fds[1]);
-                }
-                launch_commands(node->left, prev_type, fds);
-                wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno VEDI SOPRA
-                exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
-            }
-            else
-                parent(pid, fds, node);
-        }
+            launch_standard_cmd(node, prev_type, fds, original_stdout);
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
-            launch_commands(skip_till_semicolon(node), -1, fds);
+            launch_commands(skip_till_semicolon(node), -1, fds, original_stdout);
         else
-            launch_commands(node->right, node->type, fds);
+            launch_commands(node->right, node->type, fds, original_stdout);
+        signal(SIGPIPE, SIG_DFL);
         return ;
     }
     child(node, fds, prev_type);
+}
+
+// Yes, you are correct. When Bash executes built-in commands,
+// these commands run directly within the context of the current shell process,
+// rather than in a new child process. This means that for a pipeline
+// of built-in commands, the commands are executed sequentially, not in parallel
+// as they would be if each command in the pipeline were an external command that
+// required a new process to be spawned.
+static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3], int original_stdout)
+{
+    if (node->type == PIPELINE)
+    {
+        dup2_p(fds[1], STDOUT_FILENO);
+        reset_fd(&fds[1]);
+    }
+    fds[2] = fds[0];
+    launch_commands(node->left, prev_type, fds, original_stdout);
+    dup2_p(original_stdout, STDOUT_FILENO);
+}
+
+static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3], int original_stdout)
+{
+    pid_t   pid;
+
+    pid = fork_p();
+    if (pid == 0)
+    {
+        if (node->type == PIPELINE)
+        {
+            dup2_p(fds[1], STDOUT_FILENO);
+            reset_fd(&fds[0]);
+            reset_fd(&fds[1]);
+        }
+        launch_commands(node->left, prev_type, fds, original_stdout);
+        wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno VEDI SOPRA
+        exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
+    }
+    else
+        parent(pid, fds, node);
 }
 
 static void child(t_tree *elem, int fds[3], int8_t prev_type)
@@ -193,16 +220,17 @@ static void wait_for_children(t_tree *node) //aspetta tutti i figli (apparte que
     }
 }
 
-static uint16_t get_n_pipelines(t_tree *parsed_params)
+static uint16_t get_n_pipelines(t_tree *node)
 {
     uint16_t    n;
 
     n = 0;
-    if (!parsed_params)
+    if (!node)
         return (n);
-    if (parsed_params->type == PIPELINE)
-        n++;
-    n += get_n_pipelines(parsed_params->right); //va solo a destra per contare quelle sullo stesso layer
+    if (node->type == PIPELINE)
+        if (node->left->type == CMD && !is_builtin(node->left->cmd->cmd_str))
+            n++;
+    n += get_n_pipelines(node->right); //va solo a destra per contare quelle sullo stesso layer
     return (n);
 }
 
