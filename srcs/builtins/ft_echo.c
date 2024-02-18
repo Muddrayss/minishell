@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/13 18:24:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:49:39 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void ft_echo(char **argv)
     }
     if (!is_n)
         ft_putstr_fd("\n", STDOUT_FILENO);
-    exit(EXIT_SUCCESS);
+    g_status = EXIT_SUCCESS;
 }
 
 static int  check_flag(char **argv, bool *is_n)

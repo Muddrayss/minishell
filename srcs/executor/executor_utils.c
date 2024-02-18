@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:46:56 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 17:19:36 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:57:12 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,14 @@ void  exec(char *path, char *cmd_str)
 		free_data();
 		exit(0);
 	}
-	if (is_builtin(cmd_args[0]))
-		exec_builtin(cmd_args);
-	else
+	data->cmd_path = get_cmd_path(path, cmd_args[0]);
+	if (!data->cmd_path)
 	{
-		data->cmd_path = get_cmd_path(path, cmd_args[0]);
-		if (!data->cmd_path)
-		{
-			free_data();
-			exit(COMMAND_NOT_FOUND);
-		}
-		else
-			execve(data->cmd_path, cmd_args, data->envp_matrix);
+		free_data();
+		exit(COMMAND_NOT_FOUND);
 	}
+	else
+		execve(data->cmd_path, cmd_args, data->envp_matrix);
 	if (errno != ENOEXEC)
 		ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_args[0]));
 	exit(0);

@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 19:30:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 15:22:57 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:53:10 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define BUILTINS_H
 
 bool	is_builtin(char *cmd);
-void	exec_builtin(char **args);
+void	exec_builtin(char *cmd_str);
 void	ft_echo(char **argv);
 void 	ft_cd(char **args);
 void	ft_env(char **args);

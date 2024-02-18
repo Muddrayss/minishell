@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/13 18:24:43 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:52:24 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ void ft_unset(char **args)
 			exit_status = EXIT_FAILURE;
 		}
 	}
-	exit(exit_status);
+	g_status = exit_status;
 }

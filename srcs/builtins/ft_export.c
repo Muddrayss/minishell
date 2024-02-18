@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:27:44 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 14:41:31 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:50:51 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,5 @@ void	ft_export(char **args) //TODO gestire 'export VAR='
 			ft_setenv(args[i], sep + 1, true);
 		}
 	}
-	exit(EXIT_SUCCESS);
+	g_status = EXIT_SUCCESS;
 }

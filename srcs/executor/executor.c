@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 17:33:37 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:56:55 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,21 +74,26 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
     {
         if (node->type == PIPELINE)
             pipe_p(fds);
-        pid = fork_p();
-        if (pid == 0)
-        {
-            if (node->type == PIPELINE)
-            {
-                dup2_p(fds[1], STDOUT_FILENO);
-                reset_fd(&fds[0]);
-                reset_fd(&fds[1]);
-            }           
-            launch_commands(node->left, prev_type, fds);
-            wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno VEDI SOPRA
-            exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
-        }
+        if (node->left && node->left->cmd && is_builtin(node->left->cmd->cmd_str))
+            exec_builtin(node->left->cmd->cmd_str);
         else
-            parent(pid, fds, node);
+        {
+            pid = fork_p();
+            if (pid == 0)
+            {
+                if (node->type == PIPELINE)
+                {
+                    dup2_p(fds[1], STDOUT_FILENO);
+                    reset_fd(&fds[0]);
+                    reset_fd(&fds[1]);
+                }
+                launch_commands(node->left, prev_type, fds);
+                wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno VEDI SOPRA
+                exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
+            }
+            else
+                parent(pid, fds, node);
+        }
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
             launch_commands(skip_till_semicolon(node), -1, fds);
         else
@@ -109,8 +114,6 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
 
 static void parent(pid_t pid, int fds[3], t_tree *node)
 {
-    char *end;
-
     reset_fd(&fds[1]);
     fds[2] = fds[0];
     if (node->type != PIPELINE)
@@ -118,14 +121,6 @@ static void parent(pid_t pid, int fds[3], t_tree *node)
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
         reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
-        if (node->left->cmd && node->left->cmd->cmd_str)
-        {
-            end = ft_strchr(node->left->cmd->cmd_str, ' ');
-            if (end)
-                *end = '\0';
-            if (ft_strcmp(node->left->cmd->cmd_str, "exit") == 0)
-                exit(g_status);
-        }
     }
 }
 
@@ -194,8 +189,6 @@ static void wait_for_children(t_tree *node) //aspetta tutti i figli (apparte que
     {
         waitpid_p(0, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
-        if (node->cmd && ft_strcmp(node->cmd->cmd_str, "exit") == 0)
-            exit(g_status);
         //funziona cosi', exit non e' immediato. basta guardare il caso 'sleep 3 && (sleep 2 | exit)'
     }
 }

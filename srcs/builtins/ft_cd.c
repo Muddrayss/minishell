@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 14:31:17 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:49:11 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void ft_cd(char **args)
 	if (args[2])
 	{
 		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
-		exit(EXIT_FAILURE);
+		g_status = EXIT_FAILURE;
+		return ;
 	}
 	cwd = getcwd(NULL, 0);
 	if (chdir(args[1]) == -1)
@@ -30,11 +31,13 @@ void ft_cd(char **args)
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putstr_fd(strerror(errno), STDERR_FILENO);
 		ft_putstr_fd("\n", STDERR_FILENO);
-		exit(EXIT_FAILURE);
+		g_status = EXIT_FAILURE;
+		free(cwd);
+		return ;
 	}
 	ft_setenv("OLDPWD", cwd, true);
 	free(cwd);
 	cwd = getcwd(NULL, 0);
 	ft_setenv("PWD", cwd, true);
-	exit(EXIT_SUCCESS);
+	g_status = EXIT_SUCCESS;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:29:39 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/17 15:17:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:50:05 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ void ft_env(char **args)
 	if (args[1])
 	{
 		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
-		exit(EXIT_FAILURE);
+		g_status = EXIT_FAILURE;
+		return ;
 	}
 	print_envp_table();
-	exit(EXIT_SUCCESS);
+	g_status = EXIT_SUCCESS;
 }
