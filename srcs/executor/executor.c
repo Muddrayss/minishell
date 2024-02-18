@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 15:31:43 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 15:33:09 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,7 @@ static void wait_for_children(t_tree *child_node) //aspetta tutti i figli (appar
     {
         waitpid_p(0, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
+        //funziona cosi', exit non e' immediato. basta guardare il caso 'sleep 3 && (sleep 2 | exit)'
         if (child_node->cmd->cmd_str && ft_strcmp(child_node->cmd->cmd_str, "exit") == 0)
             exit(g_status);
     }
