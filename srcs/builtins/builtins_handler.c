@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 17:56:29 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 18:07:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ void exec_builtin(char *cmd_str)
 	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	void	(*builtin_functions[])(char **) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
 	uint8_t	n_builtins;
-	
+
+	cmd_str = replace_env_vars(cmd_str);
+	//cmd_str = replace_wildcards(cmd_str);
 	cmd_args = ft_split(cmd_str, ' ');
 	get_data()->cmd_args = cmd_args;
 	if (!cmd_args)
