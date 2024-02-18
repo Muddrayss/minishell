@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:27:44 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/13 18:24:35 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 14:41:31 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@ void	ft_export(char **args) //TODO gestire 'export VAR='
 	while (args[++i])
 	{
 		sep = ft_strchr(args[i], '=');
-		*sep = '\0';
-		ft_setenv(args[i], sep + 1, true); //sep + 1 va in segfault col comando export VAR=
+		if (!sep)
+			ft_setenv(args[i], "", true);
+		else
+		{
+			*sep = '\0';
+			ft_setenv(args[i], sep + 1, true);
+		}
 	}
 	exit(EXIT_SUCCESS);
 }
