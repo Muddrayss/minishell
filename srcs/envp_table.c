@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_table.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/13 17:24:58 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:19:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 	table = get_data()->envp_table;
 	index = hash(env_name);
 	new_elem = malloc_p(sizeof(t_envp));
-	new_elem->name = env_name;
-	new_elem->value = env_value;
+	new_elem->name = ft_strdup(env_name);
+	new_elem->value = ft_strdup(env_value);
+	if (!new_elem->name || !new_elem->value)
+		ft_quit(ERR_MALLOC, "Failed to allocate memory");
     bucket = table[index];
 	while (bucket) //ci entra solo se c'e' una collision
 	{
@@ -50,6 +52,8 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 		{
 			if (replace)
 			{
+				free(elem->name); //cosi' facendo sto liberando anche il value essendo la stessa stringa
+				free(elem->value);
 				bucket->content = new_elem;
 				update_env_matrix(*new_elem, REPLACE);
 			}

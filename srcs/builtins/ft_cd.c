@@ -6,16 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 18:08:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/18 22:20:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-//TODO fix, OLDPWD non si aggiorna
 void ft_cd(char **args)
 {
-	char *cwd;
+	char	*cwd;
 
 	if (args[2])
 	{
@@ -36,9 +35,10 @@ void ft_cd(char **args)
 		free(cwd);
 		return ;
 	}
-	ft_setenv("OLDPWD", cwd, true);
+	ft_setenv("OLDPWD", cwd, true); //se fai la free di cwd, OLDPWD punta a un indirizzo di memoria che non esiste più perche' setenv NON fa una copia della stringa
 	free(cwd);
 	cwd = getcwd(NULL, 0);
 	ft_setenv("PWD", cwd, true);
+	free(cwd);
 	g_status = EXIT_SUCCESS;
 }

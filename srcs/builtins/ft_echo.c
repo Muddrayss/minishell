@@ -6,25 +6,25 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 18:38:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/18 21:54:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static int  check_flag(char **argv, bool *is_n);
+static int  skip_flags(char **args, bool *is_n);
 
-//TODO fix flag non funziona
-void ft_echo(char **argv)
+//TODO quando viene chiamato con flag, readline si scazza
+void ft_echo(char **args)
 {
     int     i;
     bool    is_n;
 
-    i = check_flag(argv, &is_n);
-    while (argv[i])
+    i = skip_flags(args, &is_n);
+    while (args[i])
     {
-        ft_putstr_fd(argv[i], STDOUT_FILENO);
-        if (argv[i + 1])
+        ft_putstr_fd(args[i], STDOUT_FILENO);
+        if (args[i + 1])
             ft_putstr_fd(" ", STDOUT_FILENO);
         i++;
     }
@@ -33,26 +33,26 @@ void ft_echo(char **argv)
     g_status = EXIT_SUCCESS;
 }
 
-static int  check_flag(char **argv, bool *is_n)
+static int  skip_flags(char **args, bool *is_n)
 {
     int i;
     int j;
 
     *is_n = false;
     i = 0;
-    if (argv[1][0] != '-')
+    if (args[1][0] != '-')
         return (1);
-    while (argv[++i])
+    while (args[++i])
     {
-        if (argv[i][0] == '-')
+        if (args[i][0] == '-')
         {
-            j = 0;
-            while (argv[i][j] == 'n')
+            j = 1;
+            while (args[i][j] == 'n')
                 j++;
-            if (argv[i][j] != '\0')
-                return (i);
             *is_n = true;
         }
+        else
+            break ;
     }
     return (i);
 }
