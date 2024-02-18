@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
+#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/17 15:16:52 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/18 14:58:12 by egualand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 LEXER_SRCS = $(addprefix lexer/, lexer.c)
 PARSER_SRCS = $(addprefix parser/, parser.c parser_redirs.c parser_utils.c)
 EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_utils.c heredoc.c get_cmd_path.c replace_env_vars.c)
-BUILTIN_SRCS = $(addprefix builtins/, ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)
+BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)
 GENERAL_SRCS = minishell.c minishell_utils.c signals.c envp_matrix.c envp_table.c protected_methods.c
 GENERAL_UTILS_SRCS = $(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c ft_matrixsize.c ft_utoa.c ft_calloc.c)
 LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c)
