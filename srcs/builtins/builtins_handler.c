@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 15:21:33 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 16:14:42 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ bool is_builtin(char *cmd)
 	return (false);
 }
 
+//I BUILTINS VENGONO ESEGUITI IN UN FIGLIO!! QUINDI IN OGNI CASO EXPORT, CD, UNSET NON POSSONO MODIFICARE LE VARIABILI D'AMBIENTE DEL PADRE
 void exec_builtin(char **args)
 {
 	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};

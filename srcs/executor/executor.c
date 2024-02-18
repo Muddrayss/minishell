@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 15:33:09 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:33:37 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3]);
 static void     child(t_tree *elem, int fds[3], int8_t prev_type);
-static void     parent(pid_t pid, int fds[3], bool is_in_pipeline);
+static void     parent(pid_t pid, int fds[3], t_tree *node);
 static void     exec_redirs(t_list *redirs);
 static void     exec_fd_redirs(t_redir *redir);
 static void     exec_file_redirs(t_redir *redir);
@@ -27,7 +27,6 @@ void    executor(t_tree *parsed_params)
     int     original_stdin;
     int     original_status;
     int     heredoc_status;
-    pid_t   pid;
     int     fds[3] = {-42, -42, 42};
 
     original_stdin = dup_p(STDIN_FILENO);
@@ -41,19 +40,9 @@ void    executor(t_tree *parsed_params)
         return ;
     }
     g_status = original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
-    pid = fork_p();
-    if (pid == 0)
-    {
-        set_signals(S_COMMAND);
-        launch_commands(parsed_params, -1, fds);
-        wait_for_children(parsed_params);
-        exit(g_status);
-    }
-    else
-    {
-        waitpid_p(pid, &g_status, 0);
-        g_status = WEXITSTATUS(g_status);
-    }
+    set_signals(S_COMMAND);
+    launch_commands(parsed_params, -1, fds);
+    wait_for_children(parsed_params);
     dup2(original_stdin, STDIN_FILENO);
     reset_fd(&original_stdin);
 }
@@ -99,7 +88,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
             exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
         }
         else
-            parent(pid, fds, node->type == PIPELINE);
+            parent(pid, fds, node);
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
             launch_commands(skip_till_semicolon(node), -1, fds);
         else
@@ -118,15 +107,25 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
     exec(ft_getenv("PATH"), elem->cmd->cmd_str);
 }
 
-static void parent(pid_t pid, int fds[3], bool is_in_pipeline)
+static void parent(pid_t pid, int fds[3], t_tree *node)
 {
+    char *end;
+
     reset_fd(&fds[1]);
     fds[2] = fds[0];
-    if (!is_in_pipeline)
+    if (node->type != PIPELINE)
     {
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
         reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
+        if (node->left->cmd && node->left->cmd->cmd_str)
+        {
+            end = ft_strchr(node->left->cmd->cmd_str, ' ');
+            if (end)
+                *end = '\0';
+            if (ft_strcmp(node->left->cmd->cmd_str, "exit") == 0)
+                exit(g_status);
+        }
     }
 }
 
@@ -186,18 +185,18 @@ static int  open_redir_file(t_redir *redir)
     return (fd);
 }
 
-static void wait_for_children(t_tree *child_node) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
+static void wait_for_children(t_tree *node) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
 {
     uint16_t    n_to_wait;
 
-    n_to_wait = get_n_pipelines(child_node); //numero di pipeline SULLO STESSO LAYER
+    n_to_wait = get_n_pipelines(node); //numero di pipeline SULLO STESSO LAYER
     while (n_to_wait--)
     {
         waitpid_p(0, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
-        //funziona cosi', exit non e' immediato. basta guardare il caso 'sleep 3 && (sleep 2 | exit)'
-        if (child_node->cmd->cmd_str && ft_strcmp(child_node->cmd->cmd_str, "exit") == 0)
+        if (node->cmd && ft_strcmp(node->cmd->cmd_str, "exit") == 0)
             exit(g_status);
+        //funziona cosi', exit non e' immediato. basta guardare il caso 'sleep 3 && (sleep 2 | exit)'
     }
 }
 

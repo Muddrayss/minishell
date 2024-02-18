@@ -6,7 +6,7 @@
 #    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/18 14:58:12 by egualand         ###   ########.fr        #
+#    Updated: 2024/02/18 16:39:36 by egualand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_en
 GENERAL_SRCS = minishell.c minishell_utils.c signals.c envp_matrix.c envp_table.c protected_methods.c
 GENERAL_UTILS_SRCS = $(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c ft_matrixsize.c ft_utoa.c ft_calloc.c)
 LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c)
-STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_split.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strchr.c)
+STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_split.c ft_strtrim.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strchr.c)
 TREE_UTILS_SRCS = $(addprefix tree/, tree_size.c treeadd_below.c treeclear.c treenew_p.c)
 
 UTILS_SRCS = $(addprefix utils/, $(GENERAL_UTILS_SRCS) $(STR_UTILS_SRCS) $(LST_UTILS_SRCS) $(TREE_UTILS_SRCS))
@@ -34,12 +34,12 @@ NAME = minishell
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(HEADERS)
+$(NAME): $(OBJS)
 	@mkdir -p tmp
 	@$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
 	@echo "Compilation of $(NAME) done!"
 
-%.o: %.c
+%.o: %.c $(HEADERS)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

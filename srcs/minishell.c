@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:09:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/18 17:25:07 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ static void	minishell_loop()
 		set_signals(S_INTERACTIVE);
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
-			ft_quit(123, "exit"); 
+			ft_quit(123, "exit");
+		input = ft_strtrim(input, " \t\n");
 		if (input[0] == '\0' || is_empty_str(input))
 			continue ;
 		add_history(input);

@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 13:52:57 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/18 16:18:52 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,19 @@ static bool is_long_type_overflow(char *str);
 
 void ft_exit(char **args)
 {
+	dprintf(2, "exit deb\n");
 	if (!args[1])
 		exit(g_status);
+	dprintf(2, "exit deb2\n");
 	if (args[2])
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
+	dprintf(2, "exit deb3\n");
 	if (is_number(args[1]) && !is_long_type_overflow(args[1]))
 		exit((uint8_t)ft_atou(args[1]));
+	dprintf(2, "exit deb4\n");
 	ft_putstr_fd("exit: ", STDERR_FILENO);
 	ft_putstr_fd(args[1], STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
