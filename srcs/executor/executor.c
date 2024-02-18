@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 13:52:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/18 15:31:43 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,15 +186,17 @@ static int  open_redir_file(t_redir *redir)
     return (fd);
 }
 
-static void wait_for_children(t_tree *parsed_params) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
+static void wait_for_children(t_tree *child_node) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
 {
     uint16_t    n_to_wait;
 
-    n_to_wait = get_n_pipelines(parsed_params); //numero di pipeline SULLO STESSO LAYER
+    n_to_wait = get_n_pipelines(child_node); //numero di pipeline SULLO STESSO LAYER
     while (n_to_wait--)
     {
         waitpid_p(0, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
+        if (child_node->cmd->cmd_str && ft_strcmp(child_node->cmd->cmd_str, "exit") == 0)
+            exit(g_status);
     }
 }
 
