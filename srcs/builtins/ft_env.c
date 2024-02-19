@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:29:39 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 17:50:05 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:55:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ void ft_env(char **args)
 		g_status = EXIT_FAILURE;
 		return ;
 	}
-	print_envp_table();
+	print_envp_table(false);
 	g_status = EXIT_SUCCESS;
 }

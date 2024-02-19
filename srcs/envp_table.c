@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 22:19:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:59:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void    envp_table_init(char **envp) //gli viene passata la envp originale
 	}
 }
 
-void	print_envp_table(void)
+void	print_envp_table(bool is_export)
 {
 	uint8_t		i;
 	t_list		*bucket;
@@ -144,7 +144,15 @@ void	print_envp_table(void)
 		while (bucket)
 		{
 			elem = (t_envp *)bucket->content;
-			printf("%s=%s\n", elem->name, elem->value);
+			if (elem->value[0] && !is_export)
+				printf("%s=%s\n", elem->name, elem->value);
+			else if (is_export)
+			{
+				printf("declare -x %s", elem->name);
+				if (elem->value[0])
+					printf("\"%s\"", elem->value);
+				printf("\n");
+			}
 			bucket = bucket->next;
 		}
 		i++;

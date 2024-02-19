@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 17:25:07 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:42:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,3 @@ bool is_empty_str(char *str)
 	}
 	return (true);
 }
-
-//va bene per comandi interni senza redirs, e senza here_doc e senza salvare l'exit status in data
-

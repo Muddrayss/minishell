@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:27:44 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 22:22:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:55:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ void	ft_export(char **args)
 	int		i;
 	char 	*sep;
 	
+	if (!args[1])
+	{
+		print_envp_table(true);
+		g_status = EXIT_SUCCESS;
+		return ;
+	}
 	i = 0;
 	while (args[++i])
 	{
