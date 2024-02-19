@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:59:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 17:51:21 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:44:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	ft_pwd(char **args)
 
 	(void)args;
 	buf = getcwd(NULL, 0);
-	if (buf == NULL)
+	if (!buf)
 	{
-		perror("pwd: Error:");
+		perror("pwd: ");
 		g_status = EXIT_FAILURE;
 		return ;
 	}
