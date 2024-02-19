@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:50:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 20:52:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ char    *replace_wildcards(char *str)
     t_list      *matching_files;
     uint32_t    idx;
 
+    idx = 0;
     wildcard_str = get_wildcard_str(str, &idx);
     while (wildcard_str)
     {
-        idx = 0;
         matching_files = parse_wildcard_str(wildcard_str);
         lstreverse(&matching_files);
         lstsort(matching_files, &ft_strcmp);
         str = insert_result(str, matching_files, idx, wildcard_str); //deve fare il free di str
         lstclear(&matching_files, &free);
-        free(wildcard_str);
+        idx += ft_strlen(wildcard_str) + 1;
         wildcard_str = get_wildcard_str(str, &idx);
     }
     return (str);
@@ -43,25 +43,35 @@ char    *replace_wildcards(char *str)
 static char *insert_result(char *original_str, t_list *matching_files, uint32_t idx, char *wildcard_str)
 {
     char        *new_str;
+    t_list      *node;
     uint32_t    size;
     uint32_t    filenames_len;
     uint32_t    wildcard_str_len;
     
+    if (!matching_files)
+    {
+        new_str = ft_strdup(original_str);
+        if (!new_str)
+            ft_quit(ERR_MEM, "failed to allocate memory");
+        return (free(original_str), new_str);
+    }
+    node = matching_files;
     wildcard_str_len = ft_strlen(wildcard_str);
     filenames_len = 0;
-    while(matching_files)
+    while(node)
     {
-        filenames_len += ft_strlen(matching_files->content) + 1; //+1 per lo spazio
-        matching_files = matching_files->next;
+        filenames_len += ft_strlen(node->content) + 1; //+1 per lo spazio
+        node = node->next;
     }
     size = ft_strlen(original_str) - wildcard_str_len + filenames_len + 1;
     new_str = (char *)malloc_p(sizeof(char) * size);
     ft_strlcpy(new_str, original_str, idx + 1);
-    while (matching_files)
+    node = matching_files;
+    while (node)
     {
-        ft_strcat(new_str, matching_files->content);
+        ft_strcat(new_str, node->content);
         ft_strcat(new_str, " ");
-        matching_files = matching_files->next;
+        node = node->next;
     }
     ft_strcat(new_str, &original_str[idx + wildcard_str_len]);
     return (free(original_str), new_str);
@@ -70,26 +80,40 @@ static char *insert_result(char *original_str, t_list *matching_files, uint32_t 
 static t_list   *parse_wildcard_str(char *wildcard_str)
 {
     char            *basedir;
+    char            *tmp;
     char            *new_wildcard_str;
     t_list          *matching_files;
     DIR             *dir;
     struct dirent   *entry;
 
+    if (!wildcard_str)
+        return (NULL);
     matching_files = NULL;
     basedir = get_base_dir(wildcard_str);
-    wildcard_str = ft_strchr(wildcard_str, '/') + 1;
+    tmp = ft_strchr(wildcard_str, '/');
+    if (tmp)
+        wildcard_str = tmp + 1;        
     dir = opendir(basedir);
     if (!dir && errno != ENOENT && errno != ENOTDIR)
         ft_quit(ERR_MEM, NULL);
-    entry = readdir(dir);
-    while (entry)
+    while (true)
     {
+        entry = readdir(dir);
+        if (!entry)
+            break ;
+        if (ft_strcmp(entry->d_name, ".") == 0 ||  ft_strcmp(entry->d_name, "..") == 0)
+            continue ;
         if (matches_pattern(wildcard_str, entry->d_name) == true)
         {
             new_wildcard_str = get_new_wildcard_str(basedir, wildcard_str, entry->d_name);
-            lstadd_front(&matching_files, parse_wildcard_str(new_wildcard_str));
+            tmp = ft_strdup(entry->d_name);
+            if (!tmp)
+                ft_quit(ERR_MEM, "failed to allocate memory");
+            if (!new_wildcard_str)
+                lstadd_front(&matching_files, lstnew_p(tmp));
+            else
+                lstadd_front(&matching_files, parse_wildcard_str(new_wildcard_str));
         }
-        entry = readdir(dir);
     }
     closedir(dir);
     return (matching_files);
@@ -97,10 +121,18 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
 
 static bool matches_pattern(char *pattern, char *entry)
 {
-    if (*pattern == '\0' || *pattern == '/')
-        return (*entry == '\0');
+    if (*pattern == '\0' && *entry == '\0')
+        return (true);
+    if (*entry == '\0')
+    {
+        while (*pattern == '*')
+            pattern++;
+        return (*pattern == '\0');
+    }
+    if (*pattern == '\0' && *entry != '\0')
+        return (false);
     if (*pattern == '*')
-        return (matches_pattern(pattern + 1, entry) || (matches_pattern(pattern, entry + 1)));
+        return (matches_pattern(pattern + 1, entry) || matches_pattern(pattern, entry + 1));
     if (*pattern == *entry)
         return (matches_pattern(pattern + 1, entry + 1));
     return (false);
@@ -112,6 +144,8 @@ static char  *get_new_wildcard_str(char *basedir, char *entry, char *pattern)
     uint32_t    size;
 
     pattern = ft_strchr(pattern, '/'); //skippo gli * tra / e /
+    if (!pattern)
+        return (NULL);
     size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(pattern) + 1;
     new_pattern = (char *)malloc_p(sizeof(char) * size);
     ft_strcpy(new_pattern, basedir);
@@ -150,22 +184,20 @@ static char *get_base_dir(char *wildcard_str)
 
 static char *get_wildcard_str(char *str, uint32_t *idx)
 {
-    uint32_t    i;
     uint32_t    len;
     char        *wildcard_str;
     
-    i = 0;
-    while (str[i] && str[i] != '*')
-        i++;
-    if (str[i] != '*')
+    while (str[*idx] && str[*idx] != '*')
+        (*idx)++;
+    if (str[*idx] != '*')
         return (NULL);
-    while (i > 0 && !is_shell_space(str[i]))
-        i--;
-    len = 1;
-    while (!is_shell_space(str[i + len]))
+    while (*idx > 0 && !is_shell_space(str[*idx]))
+        (*idx)--;
+    len = 0;
+    (*idx)++;
+    while (str[*idx + len] && !is_shell_space(str[*idx + len]))
         len++;
     wildcard_str = (char *)malloc_p(sizeof(char) * (len + 1));
-    ft_strlcpy(wildcard_str, &str[i], len + 1);
-    *idx = i;
+    ft_strlcpy(wildcard_str, &str[*idx], len + 1);
     return (wildcard_str);
 }
