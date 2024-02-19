@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 21:54:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:41:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static int  skip_flags(char **args, bool *is_n)
 
     *is_n = false;
     i = 0;
+    if (!args[1])
+        return (0);
     if (args[1][0] != '-')
         return (1);
     while (args[++i])
