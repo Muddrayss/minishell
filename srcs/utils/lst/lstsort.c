@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:46:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:46:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:53:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void    lstsort(t_list *lst, int (*swap_condition)(char *, char *))
+void    lstsort(t_list *lst, int (*swap_condition)())
 {
     t_list  *tmp;
     void    *content;
