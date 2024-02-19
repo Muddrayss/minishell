@@ -3,21 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/18 16:39:36 by egualand         ###   ########.fr        #
+#    Updated: 2024/02/19 15:46:35 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 LEXER_SRCS = $(addprefix lexer/, lexer.c)
 PARSER_SRCS = $(addprefix parser/, parser.c parser_redirs.c parser_utils.c)
-EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_utils.c heredoc.c get_cmd_path.c replace_env_vars.c)
+EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_utils.c heredoc.c get_cmd_path.c replace_env_vars.c replace_wildcards.c)
 BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)
 GENERAL_SRCS = minishell.c minishell_utils.c signals.c envp_matrix.c envp_table.c protected_methods.c
 GENERAL_UTILS_SRCS = $(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c ft_matrixsize.c ft_utoa.c ft_calloc.c)
-LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c)
+LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c lstsort.c)
 STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_split.c ft_strtrim.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strchr.c)
 TREE_UTILS_SRCS = $(addprefix tree/, tree_size.c treeadd_below.c treeclear.c treenew_p.c)
 

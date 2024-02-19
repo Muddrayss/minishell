@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:19:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:33:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
         dup2_p(fds[2], STDIN_FILENO);
     exec_redirs(elem->cmd->redirs);
     elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str);
+    elem->cmd->cmd_str = replace_wildcards(elem->cmd->cmd_str);
     exec(ft_getenv("PATH"), elem->cmd->cmd_str);
 }
 
