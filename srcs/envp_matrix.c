@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:07:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:45:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	**env_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_
 
 	size = ft_matrixsize(matrix) + 1;
 	new_matrix = malloc_p(sizeof(char *) * size);
-	new_matrix[size] = NULL;
+	new_matrix[size - 1] = NULL;
 	i = 0;
 	while (matrix[i])
 	{

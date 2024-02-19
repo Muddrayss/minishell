@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/08 21:24:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/18 16:37:28 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 void    	ft_putstr_fd(char *s, int fd);
 char    	*ft_strdup(char *s);
 char		**ft_split(char *s, char c);
-uint32_t    ft_strlen(char *s);
+char 		*ft_strtrim(char *s1, char *set);
+uint32_t ft_strlen(char *s);
 char        *ft_strjoin(char *s1, char *s2);
 char	    *ft_strnstr(char *big, char *little, size_t len);
 char        *ft_strcpy(char *dst, char *src);

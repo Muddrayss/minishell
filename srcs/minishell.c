@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:09:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 14:42:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ static void	minishell_loop()
 		set_signals(S_INTERACTIVE);
 		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!input)
-			ft_quit(123, "exit"); 
+			ft_quit(123, "exit");
+		input = ft_strtrim(input, " \t\n");
 		if (input[0] == '\0' || is_empty_str(input))
 			continue ;
 		add_history(input);
@@ -99,6 +100,3 @@ bool is_empty_str(char *str)
 	}
 	return (true);
 }
-
-//va bene per comandi interni senza redirs, e senza here_doc e senza salvare l'exit status in data
-

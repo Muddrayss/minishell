@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:47:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:05:54 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include <stdint.h>
 # include <limits.h>
 
+# include "builtins.h"
 # include "lexer.h"
 # include "parser.h"
 # include "executor.h"

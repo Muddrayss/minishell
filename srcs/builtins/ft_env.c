@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/07 19:30:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 11:59:43 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/13 16:29:39 by egualand          #+#    #+#             */
+/*   Updated: 2024/02/19 14:55:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTINS_H
-# define BUILTINS_H
+#include "../../headers/minishell.h"
 
-#include <unistd.h>
-#include <stdbool.h>
-#include <stddef.h>
-
-short       ft_strcmp( char *s1,  char *s2);
-size_t	    ft_strlen( char *s);
-
-#endif
+void ft_env(char **args)
+{
+	if (args[1])
+	{
+		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
+		g_status = EXIT_FAILURE;
+		return ;
+	}
+	print_envp_table(false);
+	g_status = EXIT_SUCCESS;
+}
