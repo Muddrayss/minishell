@@ -6,15 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 21:38:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:05:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3], int original_stdout);
-static void     launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3], int original_stdout);
-static void     launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3], int original_stdout);
+static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3]);
+static void     launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3]);
+static void     launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3]);
 static void     child(t_tree *elem, int fds[3], int8_t prev_type);
 static void     parent(pid_t pid, int fds[3], t_tree *node);
 static void     exec_redirs(t_list *redirs);
@@ -26,14 +26,12 @@ static uint16_t get_n_pipelines(t_tree *parsed_params);
 
 void    executor(t_tree *parsed_params)
 {
-    int     original_stdin;
-    int     original_stdout;
     int     original_status;
     int     heredoc_status;
-    int     fds[3] = {-42, -42, -42};
+    int     fds[5] = {-42, -42, -42, -42, -42}; //pipe read, pipe write, prev_output, original stdin, original stdout
 
-    original_stdin = dup_p(STDIN_FILENO);
-    original_stdout = dup_p(STDOUT_FILENO);
+    fds[3] = dup_p(STDIN_FILENO);
+    fds[4] = dup_p(STDOUT_FILENO);
     original_status = g_status;
     heredoc_status = 0;
     create_heredocs(parsed_params, &heredoc_status);
@@ -45,10 +43,10 @@ void    executor(t_tree *parsed_params)
     }
     g_status = original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
     set_signals(S_COMMAND);
-    launch_commands(parsed_params, -1, fds, original_stdout);
+    launch_commands(parsed_params, -1, fds);
     wait_for_children(parsed_params);
-    dup2(original_stdin, STDIN_FILENO);
-    reset_fd(&original_stdin);
+    dup2(fds[3], STDIN_FILENO);
+    reset_fd(&fds[3]);
 }
 
 static t_tree   *skip_till_semicolon(t_tree *node)
@@ -68,8 +66,7 @@ static t_tree   *skip_till_semicolon(t_tree *node)
 //command in the pipeline (cmd3 in this case) to complete, along with 
 //all preceding commands in the pipeline, before it finishes.
 
-//TODO unificare tutto nell'array fds (original stdin, stdout, pipe_builtin ecc)
-static void launch_commands(t_tree *node, int8_t prev_type, int fds[3], int original_stdout)
+static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
 {
     if (!node)
         return ; //se e' exit non funziona sleep 2 | ls
@@ -78,13 +75,13 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3], int orig
         if (node->type == PIPELINE)
             pipe_p(fds);
         if (node->left->cmd && is_builtin(node->left->cmd->cmd_str))
-            launch_builtin_cmd(node, prev_type, fds, original_stdout);
+            launch_builtin_cmd(node, prev_type, fds);
         else
-            launch_standard_cmd(node, prev_type, fds, original_stdout);
+            launch_standard_cmd(node, prev_type, fds);
         if ((node->type == AND && g_status != 0) || (node->type == OR && g_status == 0))
-            launch_commands(skip_till_semicolon(node), -1, fds, original_stdout);
+            launch_commands(skip_till_semicolon(node), -1, fds);
         else
-            launch_commands(node->right, node->type, fds, original_stdout);
+            launch_commands(node->right, node->type, fds);
         signal(SIGPIPE, SIG_DFL);
         return ;
     }
@@ -97,7 +94,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3], int orig
 // of built-in commands, the commands are executed sequentially, not in parallel
 // as they would be if each command in the pipeline were an external command that
 // required a new process to be spawned.
-static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3], int original_stdout)
+static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3])
 {
     if (node->type == PIPELINE)
     {
@@ -105,11 +102,11 @@ static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3], int o
         reset_fd(&fds[1]);
     }
     fds[2] = fds[0];
-    launch_commands(node->left, prev_type, fds, original_stdout);
-    dup2_p(original_stdout, STDOUT_FILENO);
+    launch_commands(node->left, prev_type, fds);
+    dup2_p(fds[4], STDOUT_FILENO);
 }
 
-static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3], int original_stdout)
+static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3])
 {
     pid_t   pid;
 
@@ -122,7 +119,7 @@ static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3], int 
             reset_fd(&fds[0]);
             reset_fd(&fds[1]);
         }
-        launch_commands(node->left, prev_type, fds, original_stdout);
+        launch_commands(node->left, prev_type, fds);
         wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno VEDI SOPRA
         exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
     }
