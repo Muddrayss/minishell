@@ -6,13 +6,12 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:27:44 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/19 14:55:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:00:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-//TODO gestire export senza opzioni (basta fare un muro di printf)
 void	ft_export(char **args)
 {
 	int		i;
