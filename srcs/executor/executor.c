@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:05:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:19:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void    executor(t_tree *parsed_params)
     original_status = g_status;
     heredoc_status = 0;
     create_heredocs(parsed_params, &heredoc_status);
+    dup2(fds[3], STDIN_FILENO); //altrimenti se heredoc e' terminato con segnale 130, il comando dopo continua a scrivere nell'fd dell'heredoc
     if (heredoc_status != 0)
     {
         if (heredoc_status == 130)
@@ -46,7 +47,6 @@ void    executor(t_tree *parsed_params)
     launch_commands(parsed_params, -1, fds);
     wait_for_children(parsed_params);
     dup2(fds[3], STDIN_FILENO);
-    reset_fd(&fds[3]);
 }
 
 static t_tree   *skip_till_semicolon(t_tree *node)
