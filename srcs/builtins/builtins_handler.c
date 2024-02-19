@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 21:42:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool is_builtin(char *cmd_str)
 	
 	cmd = ft_strdup(cmd_str);
 	if (!cmd)
-		ft_quit(ERR_MALLOC, "Failed to allocate memory");
+		ft_quit(ERR_MEM, "Failed to allocate memory");
 	end = ft_strchr(cmd, ' ');
 	if (end)
 		*end = '\0';

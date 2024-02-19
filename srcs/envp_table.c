@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 14:59:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 	new_elem->name = ft_strdup(env_name);
 	new_elem->value = ft_strdup(env_value);
 	if (!new_elem->name || !new_elem->value)
-		ft_quit(ERR_MALLOC, "Failed to allocate memory");
+		ft_quit(ERR_MEM, "Failed to allocate memory");
     bucket = table[index];
 	while (bucket) //ci entra solo se c'e' una collision
 	{

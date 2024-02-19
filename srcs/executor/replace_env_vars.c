@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:10:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ static char *get_env_value(char *env_name)
     if (!env_value)
         env_value = ft_strdup("");
     if (!env_value)
-        ft_quit(ERR_MALLOC, "failed to allocate memory");
+        ft_quit(ERR_MEM, "failed to allocate memory");
     return (env_value);
 }

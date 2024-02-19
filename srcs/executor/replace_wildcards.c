@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:32:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:50:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
     wildcard_str = ft_strchr(wildcard_str, '/') + 1;
     dir = opendir(basedir);
     if (!dir && errno != ENOENT && errno != ENOTDIR)
-        ft_quit(ERR_DIR, NULL);
+        ft_quit(ERR_MEM, NULL);
     entry = readdir(dir);
     while (entry)
     {
@@ -130,7 +130,7 @@ static char *get_base_dir(char *wildcard_str)
 
     tmp = ft_strdup(wildcard_str);
     if (!tmp)
-        ft_quit(ERR_MALLOC, "failed to allocate memory");
+        ft_quit(ERR_MEM, "failed to allocate memory");
     end = tmp;
     i = 0;
     while (tmp[i] && tmp[i] != '*')

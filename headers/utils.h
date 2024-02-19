@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 16:37:28 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:47:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void    	ft_putstr_fd(char *s, int fd);
 char    	*ft_strdup(char *s);
 char		**ft_split(char *s, char c);
 char 		*ft_strtrim(char *s1, char *set);
-uint32_t ft_strlen(char *s);
+uint32_t    ft_strlen(char *s);
 char        *ft_strjoin(char *s1, char *s2);
 char	    *ft_strnstr(char *big, char *little, size_t len);
 char        *ft_strcpy(char *dst, char *src);
@@ -41,6 +41,7 @@ void	    lstclear(t_list **lst, void (*del)(void *));
 void	    lstdelone(t_list *lst, void (*del)(void *));
 void        lstremoveone(t_list **head, t_list *to_remove, void (*del)(void *));
 void	    lstdelif(t_list **lst, bool (*f)(void *), void (*del)(void *));
+void        lstsort(t_list *lst, int (*cmp)(void *, void *));
 
 t_tree	    *treenew_p(int8_t type, t_cmd *cmd);
 void 	    treeadd_below(t_tree **head, t_tree *new);

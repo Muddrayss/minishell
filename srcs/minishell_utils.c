@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 17:20:36 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ void	clean_heredocs(char *path)
 	data = get_data();
     tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
 	if (!tmpdir_name)
-		ft_quit(ERR_MALLOC, "failed to allocate memory");
+		ft_quit(ERR_MEM, "failed to allocate memory");
 	cmd = ft_strjoin("rm -rf ", tmpdir_name);
 	free(tmpdir_name);
 	if (!cmd)
-		ft_quit(ERR_MALLOC, "failed to allocate memory");
+		ft_quit(ERR_MEM, "failed to allocate memory");
     exec_simple_cmd(path, cmd);
 	free(cmd);
 }

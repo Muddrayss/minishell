@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:10:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char *get_cmd_path(char *path, char *cmd)
         return (get_custom_bin(cmd));
     dirs = ft_split(path, ':');
     if (!dirs)
-        ft_quit(ERR_MALLOC, "failed to allocate memory");
+        ft_quit(ERR_MEM, "failed to allocate memory");
     full_path = search_cmd_in_dirs(dirs, cmd);
     ft_freematrix(dirs);
     if (!full_path)
@@ -95,7 +95,7 @@ static char	*get_custom_bin(char *path)
 	tmp2 = ft_getenv("PWD");
 	tmp = ft_strjoin(tmp2, "/"); //abbastanza ridicolo dover usare strjoin per aggiungere un carattere
 	if (!tmp)
-		ft_quit(ERR_MALLOC, "failed to allocate memory");
+		ft_quit(ERR_MEM, "failed to allocate memory");
 	if (ft_strncmp(path, "../", 3) == 0)
 		full_path = ft_strjoin(tmp, path);
 	else if (ft_strncmp(path, "./", 2) == 0)
@@ -103,7 +103,7 @@ static char	*get_custom_bin(char *path)
 	else
 		full_path = ft_strdup(path);
 	if (!full_path)
-		ft_quit(ERR_MALLOC, "failed to allocate memory");
+		ft_quit(ERR_MEM, "failed to allocate memory");
 	if (access(full_path, X_OK) == 0)
     	return (free(tmp), full_path);
 	else
@@ -119,11 +119,11 @@ static void	throw_file_error(char *file)
 	
 	tmp = ft_strjoin("minishell: Error opening file '", file);
 	if (!tmp)
-		ft_quit(ERR_MALLOC, "failed to allocate memory");
+		ft_quit(ERR_MEM, "failed to allocate memory");
 	error_str = ft_strjoin(tmp, "'");
 	free(tmp);
 	if (!error_str)
-		ft_quit(ERR_MALLOC, "failed to allocate memory");
+		ft_quit(ERR_MEM, "failed to allocate memory");
 	perror(error_str); //viene tipo: minishell: Error opening file 'file.txt': No such file or directory
 	free(error_str);
 }
