@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/19 15:24:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:32:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,29 @@ static bool is_long_overflow(char *str);
 
 void ft_exit(char **args)
 {
+	int8_t	id;
+
 	if (!args[1])
+	{
+		free_data();
 		exit(g_status);
+	}
 	if (args[2])
 	{
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
+		free_data();
 		exit(EXIT_FAILURE);
 	}
 	if (is_number(args[1]) && !is_long_overflow(args[1]))
-		exit((uint8_t)ft_atou(args[1]));
+	{
+		id = ft_atou(args[1]);
+		free_data();
+		exit(id);
+	}
 	ft_putstr_fd("exit: ", STDERR_FILENO);
 	ft_putstr_fd(args[1], STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+	free_data();
 	exit(2);
 }
 

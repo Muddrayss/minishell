@@ -6,13 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:46:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:35:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
-
 
 bool	is_shell_space(char c) //meglio cosi' altrimenti complicated conditional
 {
@@ -41,14 +39,16 @@ void	ft_quit(int id, char *msg)
 		ft_putstr_fd("\n", STDERR_FILENO);
 		unlink("./tmp/print_sem");
 	}
-	free_data();
 	if (id == EXEC_FAILURE)
 		free(msg);
-	send_id_to_main(id);
+	if (getpid() != get_data()->main_pid)
+		quit_from_main(id); //quit from main manda SIGTERM a tutti, quindi anche a se stesso. e le free vengono fatte dall'handler di sigterm
+	else
+		free_data();
 	exit(id);
 }
 
-void	send_id_to_main(int id)
+void	quit_from_main(int id)
 {
 	t_data			*data;
 	unsigned int 	i;
@@ -91,7 +91,9 @@ void	free_data(void)
 	if (!data)
 		return ;
 	ft_freematrix(data->cmd_args);
+	data->cmd_args = NULL;
 	ft_freematrix(data->envp_matrix);
+	data->envp_matrix = NULL;
 	free(data->cmd_path);
 	lstclear(data->lexered_params, &del_content_lexer);
 	free(data->lexered_params);
@@ -99,6 +101,7 @@ void	free_data(void)
 	free(data->parsed_params);
 	envp_table_clear(data->envp_table);
 	free(data->envp_table);
+	data->envp_table = NULL;
 	free(data->input);
 }
 

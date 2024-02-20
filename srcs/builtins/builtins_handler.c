@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:27:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ bool is_builtin(char *cmd_str)
 	char 	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	uint8_t	n_builtins;
 	
+	if (!cmd_str)
+		return (false);
 	cmd = ft_strdup(cmd_str);
 	if (!cmd)
 		ft_quit(ERR_MEM, "Error: failed to allocate memory");

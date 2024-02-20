@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:34:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/18 16:23:00 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:18:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	**ft_split(char *s, char c)
 
 	if (s == NULL || *s == '\0')
 	{
-		str_array = ft_calloc(sizeof(char *), 1);
+		str_array = (char **)ft_calloc(sizeof(char *), 1);
 		if (str_array == NULL)
 			return (NULL);
 		return (str_array);

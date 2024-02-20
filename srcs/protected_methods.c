@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   protected_methods.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:27:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

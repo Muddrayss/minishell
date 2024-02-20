@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/20 16:03:22 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:28:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ static void interactive_mode(int signo);
 static void heredoc_mode(int signo);
 static void command_mode(int signo);
 static void death_mode(int signo);
+static void release_resources_mode(int signo);
 
-void    set_signals(int8_t mode)
+void    set_signals(int8_t mode, bool is_main)
 {
     int8_t  modes[4] = {S_SILENT, S_INTERACTIVE, S_HEREDOC, S_COMMAND};
     void    (*sig_handler[4])(int) = {&silent_mode, &interactive_mode, &heredoc_mode, &command_mode};
@@ -34,13 +35,22 @@ void    set_signals(int8_t mode)
     }
     signal_p(SIGINT, sig_handler[n_modes]);
     signal_p(SIGQUIT, sig_handler[n_modes]);
+    if (!is_main)
+        signal_p(SIGTERM, &release_resources_mode);
+    else
+    {
+        signal_p(SIGUSR1, &death_mode);
+        signal_p(SIGUSR2, &death_mode);
+    }
 }
 
-void    set_death_mode(void)
+static void release_resources_mode(int signo)
 {
-    signal_p(SIGUSR1, &death_mode);
-    signal_p(SIGUSR2, &death_mode);
-    signal_p(SIGTERM, SIG_IGN);
+    if (signo == SIGTERM)
+    {
+        free_data();
+        exit(0);
+    }
 }
 
 static void death_mode(int signo)
@@ -57,6 +67,7 @@ static void death_mode(int signo)
     if (n_signals == sizeof(id))
     {
         kill(-(get_data()->main_pid), SIGTERM);
+        free_data();
         exit(id);
     }
 }

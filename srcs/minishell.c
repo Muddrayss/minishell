@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 16:16:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:29:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ static void init_general(void)
 	path = ft_getenv("PATH");
 	errno = 0;
 	g_status = 0;
-	set_death_mode();
 	exec_simple_cmd(path, "clear");
 	clean_heredocs(path);
 	exec_simple_cmd(path, "mkdir -p tmp");
@@ -77,7 +76,7 @@ static void	minishell_loop()
 	while (true)
 	{
 		//TODO gestire linea lunga che supera colonne
-		set_signals(S_INTERACTIVE);
+		set_signals(S_INTERACTIVE, true);
 		free(data->input);
 		data->input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!data->input)
@@ -90,7 +89,7 @@ static void	minishell_loop()
 		execution_tree = parser(lexered_params);
 		if (!execution_tree)
 			continue ;
-		set_signals(S_SILENT);
+		set_signals(S_SILENT, true);
 		executor(execution_tree);
 	}
 }
