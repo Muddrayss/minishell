@@ -1,5 +1,4 @@
 {
-   <Suppression for readline errors>
    Memcheck:Leak
    ...
    fun:xmalloc
@@ -8,7 +7,6 @@
 }
 
 {
-   <Suppression for readline errors>
    Memcheck:Leak
    ...
    fun:xrealloc
@@ -17,7 +15,6 @@
 }
 
 {
-   <Suppression for readline initialization errors>
    Memcheck:Leak
    ...
    fun:rl_initialize
@@ -26,12 +23,9 @@
 }
 
 {
-   <Suppression for readline terminal IO errors>
    Memcheck:Leak
    ...
    fun:_rl_init_terminal_io
    ...
    obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
 }
-
-# Repeat for other specific errors as needed

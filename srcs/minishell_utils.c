@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 20:40:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 23:58:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	is_shell_space(char c) //meglio cosi' altrimenti complicated conditional
 	return (false);
 }
 
-void	ft_quit(int id, char *msg)
+void	ft_quit(uint8_t id, char *msg)
 {
 	dprintf(2, RED "error : %d\n" DEFAULT, id); //to remove
 	if (errno != EINTR)
@@ -36,16 +36,12 @@ void	ft_quit(int id, char *msg)
 			ft_putstr_fd(strerror(errno), STDERR_FILENO);
 		else
 			ft_putstr_fd(msg, STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
+		write(STDERR_FILENO, "\n", 1);
 		unlink("./tmp/print_sem");
 	}
 	if (id == EXEC_FAILURE)
 		free(msg);
-	if (getpid() != get_data()->main_pid)
-		quit_from_main((uint8_t)id); //quit from main manda SIGTERM a tutti, quindi anche a se stesso. e le free vengono fatte dall'handler di sigterm
-	else
-		free_data();
-	exit(id);
+	quit_from_main((uint8_t)id); //quit from main manda SIGTERM a tutti, quindi anche a se stesso. e le free vengono fatte dall'handler di sigterm
 }
 
 void	quit_from_main(uint8_t id)
