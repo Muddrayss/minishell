@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redirs.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:16:55 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:00:02 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:19:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static void     remove_fd_nums(char *cmd_str, uint32_t idx_redir);
 static void     remove_filename(char *cmd_str, uint32_t idx_redir);
-static void     fill_redir_input(t_list *redirs, char *str, uint32_t i);
-static void     fill_redir_heredoc(t_list *redirs, char *str, uint32_t i, int32_t heredoc_fileno);
-static void     fill_redir_output(t_list *redirs, char *str, uint32_t i, bool is_append);
+static void     fill_redir_input(t_list **redirs, char *str, uint32_t i);
+static void     fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno);
+static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append);
 static int32_t  get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
 static char     *get_filename(char *str, uint32_t idx_redir);
 static t_redir  *init_redir(void);
@@ -36,16 +36,16 @@ t_list  *fill_redirs(char *cmd_str)
         if (cmd_str[i] == '<')
         {
             if (cmd_str[i + 1] == '<')
-                fill_redir_heredoc(redirs, cmd_str, ++i, heredoc_fileno);
+                fill_redir_heredoc(&redirs, cmd_str, ++i, heredoc_fileno);
             else
-                fill_redir_input(redirs, cmd_str, i);
+                fill_redir_input(&redirs, cmd_str, i);
         }
         else if (cmd_str[i] == '>')
         {
             if (cmd_str[i + 1] == '>')
-                fill_redir_output(redirs, cmd_str, ++i, true);
+                fill_redir_output(&redirs, cmd_str, ++i, true);
             else
-                fill_redir_output(redirs, cmd_str, i, false);
+                fill_redir_output(&redirs, cmd_str, i, false);
         }
         i++;
     }
@@ -79,7 +79,7 @@ void    clear_redirs(t_list *redirs, char *cmd_str)
     }
 }
 
-static void fill_redir_heredoc(t_list *redirs, char *str, uint32_t i, int32_t heredoc_fileno)
+static void fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno)
 {
     t_redir *redir;
 
@@ -87,10 +87,10 @@ static void fill_redir_heredoc(t_list *redirs, char *str, uint32_t i, int32_t he
     redir->type = REDIR_HEREDOC;
     redir->filename = get_filename(str, i);
     redir->heredoc_fileno = heredoc_fileno;
-    lstadd_front(&redirs, lstnew_p(redir));
+    lstadd_front(redirs, lstnew_p(redir));
 }
 
-static void    fill_redir_input(t_list *redirs, char *str, uint32_t i)
+static void    fill_redir_input(t_list **redirs, char *str, uint32_t i)
 {
     t_redir         *redir;
 
@@ -102,10 +102,10 @@ static void    fill_redir_input(t_list *redirs, char *str, uint32_t i)
         redir->type = REDIR_INPUT;
         redir->filename = get_filename(str, i);
     }
-    lstadd_front(&redirs, lstnew_p(redir));
+    lstadd_front(redirs, lstnew_p(redir));
 }
 
-static void     fill_redir_output(t_list *redirs, char *str, uint32_t i, bool is_append)
+static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append)
 {
     t_redir *redir;
 
@@ -120,7 +120,7 @@ static void     fill_redir_output(t_list *redirs, char *str, uint32_t i, bool is
     }
     if (redir->fds[0] == -42)
         redir->fds[0] = STDOUT_FILENO;
-    lstadd_front(&redirs, lstnew_p(redir));
+    lstadd_front(redirs, lstnew_p(redir));
 }
 
 static t_redir *init_redir(void)

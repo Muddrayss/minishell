@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:00:25 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:25:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,13 +112,14 @@ static t_cmd    *init_cmd(char *cmd_str)
     cmd = malloc_p(sizeof(t_cmd));
     cmd->redirs = fill_redirs(cmd_str);
     clear_redirs(cmd->redirs, cmd_str);
-    cmd->cmd_str = NULL;
     if (cmd_str)
     {
         cmd->cmd_str = ft_strdup(cmd_str);
         if (!cmd->cmd_str)
             ft_quit(ERR_MEM, "Error: failed to allocate memory");
     }
+    else
+        cmd->cmd_str = NULL;
     return (cmd);
 }
 
