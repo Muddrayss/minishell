@@ -184,7 +184,7 @@ static void exec_file_redirs(t_redir *redir)
     int dup_target;
 
     file_fd = -42;
-    if (redir->filename[0] == '$')
+    if (ft_strchr(redir->filename, '$'))
         redir->filename = replace_env_vars(redir->filename);
     file_fd = open_redir_file(redir);
     if (redir->type == REDIR_INPUT || redir->type == REDIR_INPUT_FD || redir->type == REDIR_HEREDOC)
