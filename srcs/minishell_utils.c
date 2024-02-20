@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 20:35:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:40:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,16 @@ void	ft_quit(int id, char *msg)
 	if (id == EXEC_FAILURE)
 		free(msg);
 	if (getpid() != get_data()->main_pid)
-		quit_from_main(id); //quit from main manda SIGTERM a tutti, quindi anche a se stesso. e le free vengono fatte dall'handler di sigterm
+		quit_from_main((uint8_t)id); //quit from main manda SIGTERM a tutti, quindi anche a se stesso. e le free vengono fatte dall'handler di sigterm
 	else
 		free_data();
 	exit(id);
 }
 
-void	quit_from_main(int id)
+void	quit_from_main(uint8_t id)
 {
-	t_data			*data;
-	unsigned int 	i;
+	t_data		*data;
+	uint8_t 	i;
 
 	i = 0;
 	data = get_data();

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/20 20:28:17 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:41:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ static void release_resources_mode(int signo)
 
 static void death_mode(int signo)
 {
-    static int  id
+    static uint8_t  id
     = 0;
-    static int n_signals
+    static int      n_signals
     = 0;
 
     if (signo == SIGUSR1)

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 20:37:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:40:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_data	*get_data(void);
 void	clean_heredocs(char *path);
 void 	ft_quit(int id, char *msg);
 void 	free_data(void);
-void	quit_from_main(int id);
+void	quit_from_main(uint8_t id);
 void 	close_all_fds(void);
 void 	ft_parse_error(char token);
 void	ft_syntax_error(char token);
