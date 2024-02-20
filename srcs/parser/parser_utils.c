@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:00:40 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:50:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,5 @@ void    del_content_redirs(void *content)
 
     elem = (t_redir *)content;
     free(elem->filename);
+    free(content);
 }

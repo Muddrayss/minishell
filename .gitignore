@@ -6,7 +6,7 @@ libft/*.a
 *.a
 .nfs*
 minishell
-leak_report
+#leak_report
 *.o
 *.out
 *.txt

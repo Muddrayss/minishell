@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:53:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void create_heredocs(t_tree *tree, int *status)
             {
                 filename = get_heredoc_filename(redir->heredoc_fileno);
                 fd = open_p(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                free(filename);
                 *status = fill_in_child(redir->filename, fd);
                 if (*status != 0)
                     return ;
@@ -108,5 +109,6 @@ static void fill_heredoc(char *limiter, int fd)
         str = NULL; //per evitare la double free
     }
     free(str);
+    free_data();
     exit(0);
 }

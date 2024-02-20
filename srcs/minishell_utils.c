@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 17:37:37 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:46:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	free_data(void)
 	free(data->parsed_params);
 	envp_table_clear(data->envp_table);
 	free(data->envp_table);
+	free(data->input);
 }
 
 void	close_all_fds(void)

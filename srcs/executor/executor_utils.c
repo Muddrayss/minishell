@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:46:56 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:30:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:56:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void  exec(char *path, char *cmd_str)
 	data->cmd_args = ft_split(cmd_str, ' ');
 	if (!data->cmd_args)
 		ft_quit(ERR_MEM, "Error: failed to allocate memory");
-	if (data->cmd_args[0][0] == '\0')
+	if (!data->cmd_args[0] || !data->cmd_args[0][0])
 	{
 		free_data();
 		exit(0);

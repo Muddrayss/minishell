@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:26:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:59:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,12 +197,17 @@ static void exec_file_redirs(t_redir *redir)
 static int  open_redir_file(t_redir *redir)
 {
     int     fd;
+    char    *heredoc_filename;
 
     fd = -1;
     if (redir->type == REDIR_INPUT)
         fd = open_p(redir->filename, O_RDONLY, 0644);
     else if (redir->type == REDIR_HEREDOC)
-        fd = open_p(get_heredoc_filename(redir->heredoc_fileno), O_RDONLY, 0644);
+    {
+        heredoc_filename = get_heredoc_filename(redir->heredoc_fileno); 
+        fd = open_p(heredoc_filename, O_RDONLY, 0644);
+        free(heredoc_filename);
+    }
     else if (redir->type == REDIR_OUTPUT)
         fd = open_p(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     else if (redir->type == REDIR_APPEND)
