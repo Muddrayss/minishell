@@ -17,7 +17,7 @@ static void interactive_mode(int signo);
 static void heredoc_mode(int signo);
 static void command_mode(int signo);
 static void death_mode(int signo);
-static void release_resources_mode(int signo);
+static void safe_exit(int signo);
 
 void    set_signals(int8_t mode, bool is_main)
 {
@@ -26,7 +26,7 @@ void    set_signals(int8_t mode, bool is_main)
     signal_p(SIGINT, sig_handler[mode]);
     signal_p(SIGQUIT, sig_handler[mode]);
     if (!is_main)
-        signal_p(SIGTERM, &release_resources_mode);
+        signal_p(SIGTERM, &safe_exit);
     else
     {
         signal_p(SIGTERM, SIG_IGN);
@@ -35,13 +35,11 @@ void    set_signals(int8_t mode, bool is_main)
     }
 }
 
-static void release_resources_mode(int signo)
+static void safe_exit(int signo)
 {
-    if (signo == SIGTERM)
-    {
-        free_data();
-        exit(0);
-    }
+    (void)signo;
+    free_data();
+    exit(0);
 }
 
 static void death_mode(int signo)
