@@ -107,7 +107,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
         if (matches_pattern(wildcard_str, entry->d_name) == true)
         {
             new_wildcard_str = get_new_wildcard_str(basedir, wildcard_str, entry->d_name);
-            tmp = ft_strdup(entry->d_name);
+            tmp = ft_strdup(entry->d_name); //TODO forse inutile, mettere nella lista direttamente entry-d_name
             if (!tmp)
                 ft_quit(ERR_MEM, "Error: failed to allocate memory");
             if (!new_wildcard_str)
