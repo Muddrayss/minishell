@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env_vars.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:39:31 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ char *replace_env_vars(char *str)
         tmp = rebuild_str(str, i, env_value, env_name);
         free(str);
         free(env_name);
+        free(env_value);
         str = tmp;
         env_name = get_env_name(str, i);
     }
@@ -90,6 +91,6 @@ static char *get_env_value(char *env_name)
     if (!env_value)
         env_value = ft_strdup("");
     if (!env_value)
-        ft_quit(ERR_MEM, "failed to allocate memory");
+        ft_quit(ERR_MEM, "Error: failed to allocate memory");
     return (env_value);
 }

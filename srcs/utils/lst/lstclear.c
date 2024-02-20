@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lstclear.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 13:45:40 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/12 00:07:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:08:58 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,5 @@ void	lstclear(t_list **lst, void (*del)(void*))
 		lstdelone(*lst, del);
 		*lst = tmp;
 	}
+	*lst = NULL;
 }

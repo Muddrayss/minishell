@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/12 00:09:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:03:22 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,49 @@ static void silent_mode(int signo);
 static void interactive_mode(int signo);
 static void heredoc_mode(int signo);
 static void command_mode(int signo);
+static void death_mode(int signo);
 
 void    set_signals(int8_t mode)
 {
-    if (mode == S_SILENT)
+    int8_t  modes[4] = {S_SILENT, S_INTERACTIVE, S_HEREDOC, S_COMMAND};
+    void    (*sig_handler[4])(int) = {&silent_mode, &interactive_mode, &heredoc_mode, &command_mode};
+    int8_t  n_modes = sizeof(modes) / sizeof(modes[0]);
+    
+    while (n_modes--)
+        if (modes[n_modes] == mode)
+            break; 
+    if (n_modes < 0)
     {
-        signal(SIGINT, silent_mode);
-        signal(SIGQUIT, silent_mode);
-    }
-    else if (mode == S_INTERACTIVE)
-    {
-        signal(SIGINT, interactive_mode);
-        signal(SIGQUIT, interactive_mode);
-    }
-    else if (mode == S_HEREDOC)
-    {
-        signal(SIGINT, heredoc_mode);
-        signal(SIGQUIT, heredoc_mode);
-    }
-    else if (mode == S_COMMAND)
-    {
-        signal(SIGINT, command_mode);
-        signal(SIGQUIT, command_mode);
-    }
-    else
         ft_putstr_fd("Internal error: invalid signal mode\n", STDERR_FILENO);
+        return;
+    }
+    signal_p(SIGINT, sig_handler[n_modes]);
+    signal_p(SIGQUIT, sig_handler[n_modes]);
+}
+
+void    set_death_mode(void)
+{
+    signal_p(SIGUSR1, &death_mode);
+    signal_p(SIGUSR2, &death_mode);
+    signal_p(SIGTERM, SIG_IGN);
+}
+
+static void death_mode(int signo)
+{
+    static int  id
+    = 0;
+    static int n_signals
+    = 0;
+
+    if (signo == SIGUSR1)
+        id |= 0x01 << n_signals++;
+    else if (signo == SIGUSR2)
+        n_signals++;
+    if (n_signals == sizeof(id))
+    {
+        kill(-(get_data()->main_pid), SIGTERM);
+        exit(id);
+    }
 }
 
 static void silent_mode(int signo)

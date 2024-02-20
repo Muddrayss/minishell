@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:10:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:00:40 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

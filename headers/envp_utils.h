@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_utils.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 17:21:31 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/19 14:54:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:36:24 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	ft_unsetenv(char *env_name);
 void    envp_table_init(char **envp);
 void	print_envp_table(bool is_export);
 void	envp_table_clear(t_list **table);
+void del_content_envptable(void *content);
 
 // void    ft_printenv(void); forse serve per il comando env
 

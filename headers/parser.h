@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/11 23:33:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:00:20 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_redir
 }t_redir;
 
 t_tree	*parser(t_list *params_head);
-t_list  *fill_redirs(char *cmd_str);
+t_list 	*fill_redirs(char *cmd_str);
 void 	clear_redirs(t_list *redirs, char *cmd_str);
 void 	merge_separators(t_list **lexered_params);
 bool 	is_empty_cmd(void *content);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 14:42:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:16:24 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ static void	init_data(char **envp)
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
 	data->starting_dir = getenv("PWD");
+	data->main_pid = getpid();
+	data->input = NULL;
 	if (!data->starting_dir)
-		ft_quit(ERR_ENV, "Failed to get current working directory\nEnv var PWD likely not set");
+		ft_quit(ERR_ENV, "Error: failed to get current working directory\nEnv var PWD likely not set");
 	data->envp_matrix = calloc_p(ft_matrixsize(envp) + 1, sizeof(char *));
 	envp_table_init(envp);
 }
@@ -59,6 +61,7 @@ static void init_general(void)
 	path = ft_getenv("PATH");
 	errno = 0;
 	g_status = 0;
+	set_death_mode();
 	exec_simple_cmd(path, "clear");
 	clean_heredocs(path);
 	exec_simple_cmd(path, "mkdir -p tmp");
@@ -66,22 +69,24 @@ static void init_general(void)
 
 static void	minishell_loop()
 {
-	char		*input;
+	t_data 		*data;
 	t_list		*lexered_params;
 	t_tree		*execution_tree;
 
+	data = get_data();
 	while (true)
 	{
 		//TODO gestire linea lunga che supera colonne
 		set_signals(S_INTERACTIVE);
-		input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
-		if (!input)
+		free(data->input);
+		data->input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
+		if (!data->input)
 			ft_quit(123, "exit");
-		input = ft_strtrim(input, " \t\n");
-		if (input[0] == '\0' || is_empty_str(input))
+		data->input = ft_strtrim(data->input, " \t\n");
+		if (data->input[0] == '\0' || is_empty_str(data->input))
 			continue ;
-		add_history(input);
-		lexered_params = lexer(input);
+		add_history(data->input);
+		lexered_params = lexer(data->input);
 		execution_tree = parser(lexered_params);
 		if (!execution_tree)
 			continue ;

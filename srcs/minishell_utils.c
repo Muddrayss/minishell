@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:37:37 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,24 @@ void	ft_quit(int id, char *msg)
 	free_data();
 	if (id == EXEC_FAILURE)
 		free(msg);
+	send_id_to_main(id);
 	exit(id);
+}
+
+void	send_id_to_main(int id)
+{
+	t_data			*data;
+	unsigned int 	i;
+
+	i = 0;
+	data = get_data();
+	while (i < sizeof(id))
+	{
+		if (0x01 & (id << i++))
+			kill(data->main_pid, SIGUSR1);
+		else
+			kill(data->main_pid, SIGUSR2);
+	}
 }
 
 void	clean_heredocs(char *path)
@@ -56,11 +73,11 @@ void	clean_heredocs(char *path)
 	data = get_data();
     tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
 	if (!tmpdir_name)
-		ft_quit(ERR_MEM, "failed to allocate memory");
+		ft_quit(ERR_MEM, "Error: failed to allocate memory");
 	cmd = ft_strjoin("rm -rf ", tmpdir_name);
 	free(tmpdir_name);
 	if (!cmd)
-		ft_quit(ERR_MEM, "failed to allocate memory");
+		ft_quit(ERR_MEM, "Error: failed to allocate memory");
     exec_simple_cmd(path, cmd);
 	free(cmd);
 }
@@ -79,7 +96,9 @@ void	free_data(void)
 	lstclear(data->lexered_params, &del_content_lexer);
 	free(data->lexered_params);
 	treeclear(data->parsed_params, &del_content_parser);
+	free(data->parsed_params);
 	envp_table_clear(data->envp_table);
+	free(data->envp_table);
 }
 
 void	close_all_fds(void)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 16:04:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/10 23:28:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:16:29 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,6 @@
 # define S_SILENT 3
 
 void set_signals(int8_t mode);
+void set_death_mode(void);
 
 #endif

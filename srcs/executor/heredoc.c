@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char    *get_heredoc_filename(int32_t id)
     size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx)
-        return (free(idx), free(filename), ft_quit(ERR_MEM, "failed to allocate memory"), NULL);
+        return (free(idx), free(filename), ft_quit(ERR_MEM, "Error: failed to allocate memory"), NULL);
     ft_strcpy(filename, data->starting_dir);
     ft_strcat(filename, "/tmp/.heredoc_");
     ft_strcat(filename, idx);

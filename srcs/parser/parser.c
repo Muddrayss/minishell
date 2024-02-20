@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 14:44:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 18:00:25 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,15 @@ static t_list   *unskip_parenthesis(t_list *lexered_params);
 
 t_tree	*parser(t_list *lexered_params)
 {
-    t_tree   **parsed_params;
+    t_data *data;
 
+    data = get_data();
     lstdelif(&lexered_params, &is_empty_cmd, &del_content_lexer);
     check_syntax(lexered_params);
     merge_separators(&lexered_params);
-    parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
-    *parsed_params = fill_tree(lexered_params, NULL);
-    return (*parsed_params);
+    data->parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
+    *(data->parsed_params) = fill_tree(lexered_params, NULL);
+    return (*(data->parsed_params));
 }
 
 static int8_t   check_syntax(t_list *lexered_params)
@@ -51,7 +52,7 @@ static t_tree *fill_tree(t_list *lexered_params, t_list *stop)
         return (fill_tree(skip_parenthesis(lexered_params), stop));
     if (lexered_params->next == stop)
     {
-        node = treenew_p(END, NULL); //uso END come nodo vuoto, che serve solo per poter mettere il comando a sinistra invece che destra. così l'executor i comandi li ha solo a sinistra
+        node = treenew_p(END, init_cmd(NULL)); //uso END come nodo vuoto, che serve solo per poter mettere il comando a sinistra invece che destra. così l'executor i comandi li ha solo a sinistra
         if (elem->token == SUBSHELL_END)
             treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
         else
@@ -108,12 +109,16 @@ static t_cmd    *init_cmd(char *cmd_str)
 {
     t_cmd   *cmd;
 
-    if (!cmd_str)
-        return (NULL);
     cmd = malloc_p(sizeof(t_cmd));
     cmd->redirs = fill_redirs(cmd_str);
     clear_redirs(cmd->redirs, cmd_str);
-    cmd->cmd_str = cmd_str;
+    cmd->cmd_str = NULL;
+    if (cmd_str)
+    {
+        cmd->cmd_str = ft_strdup(cmd_str);
+        if (!cmd->cmd_str)
+            ft_quit(ERR_MEM, "Error: failed to allocate memory");
+    }
     return (cmd);
 }
 

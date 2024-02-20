@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 20:52:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static char *insert_result(char *original_str, t_list *matching_files, uint32_t 
     {
         new_str = ft_strdup(original_str);
         if (!new_str)
-            ft_quit(ERR_MEM, "failed to allocate memory");
+            ft_quit(ERR_MEM, "Error: failed to allocate memory");
         return (free(original_str), new_str);
     }
     node = matching_files;
@@ -95,7 +95,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
         wildcard_str = tmp + 1;        
     dir = opendir(basedir);
     if (!dir && errno != ENOENT && errno != ENOTDIR)
-        ft_quit(ERR_MEM, NULL);
+        ft_quit(ERR_MEM, "Error: failed to allocate memory");
     while (true)
     {
         entry = readdir(dir);
@@ -108,7 +108,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
             new_wildcard_str = get_new_wildcard_str(basedir, wildcard_str, entry->d_name);
             tmp = ft_strdup(entry->d_name);
             if (!tmp)
-                ft_quit(ERR_MEM, "failed to allocate memory");
+                ft_quit(ERR_MEM, "Error: failed to allocate memory");
             if (!new_wildcard_str)
                 lstadd_front(&matching_files, lstnew_p(tmp));
             else
@@ -164,7 +164,7 @@ static char *get_base_dir(char *wildcard_str)
 
     tmp = ft_strdup(wildcard_str);
     if (!tmp)
-        ft_quit(ERR_MEM, "failed to allocate memory");
+        ft_quit(ERR_MEM, "Error: failed to allocate memory");
     end = tmp;
     i = 0;
     while (tmp[i] && tmp[i] != '*')

@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   treeclear.c                                        :+:      :+:    :+:   */
+/*   xmalloc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/05 15:42:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 17:29:23 by egualand         ###   ########.fr       */
+/*   Created: 2024/02/20 14:07:50 by egualand          #+#    #+#             */
+/*   Updated: 2024/02/20 15:21:30 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/minishell.h"
+#include "../headers/minishell.h"
 
-void	treeclear(t_tree **tree, void (*del)(void *))
+static int fail_after = 300;
+static int num_allocs = 0;
+
+void *cxmalloc(size_t size)
 {
-    if (!tree || !*tree)
-        return ;
-    treeclear(&(*tree)->left, del);
-    treeclear(&(*tree)->right, del);
-    del(*tree);
-    free(*tree);
-    *tree = NULL;
+    //dprintf(2, "xmalloc(%zu) - num_allocs: %d\n", size, num_allocs);
+    if (fail_after > 0 && num_allocs++ >= fail_after)
+    {
+        fputs("Out of memory\n", stderr);
+        return (NULL);
+    }
+    
+    #undef malloc
+    
+    return (malloc(size));
 }

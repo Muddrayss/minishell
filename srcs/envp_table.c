@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_table.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 17:36:11 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 	new_elem->name = ft_strdup(env_name);
 	new_elem->value = ft_strdup(env_value);
 	if (!new_elem->name || !new_elem->value)
-		ft_quit(ERR_MEM, "Failed to allocate memory");
+		ft_quit(ERR_MEM, "Error: failed to allocate memory");
     bucket = table[index];
 	while (bucket) //ci entra solo se c'e' una collision
 	{
@@ -165,5 +165,15 @@ void	envp_table_clear(t_list **table)
 
 	i = 0;
 	while (i < HASH_TABLE_SIZE)
-		lstclear(&table[i++], &free);
+		lstclear(&table[i++], &del_content_envptable);
+}
+
+void	del_content_envptable(void *content)
+{
+	t_envp	*elem;
+
+	elem = (t_envp *)content;
+	free(elem->name);
+	free(elem->value);
+	free(elem);
 }

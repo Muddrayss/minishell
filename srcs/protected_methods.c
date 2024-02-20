@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   protected_methods.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 20:51:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void    *malloc_p(size_t size)
 
     ptr = malloc(size);
     if (!ptr)
-        ft_quit(ERR_MEM, NULL);
+        ft_quit(ERR_MEM, "Error: failed to allocate memory");
     return (ptr);
 }
 
@@ -28,7 +28,7 @@ void    *calloc_p(size_t nmemb, size_t size)
 
     ptr = calloc(nmemb, size);
     if (!ptr)
-        ft_quit(ERR_MEM, NULL);
+        ft_quit(ERR_MEM, "Error: failed to allocate memory");
     return (ptr);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/19 15:49:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool is_builtin(char *cmd_str)
 	
 	cmd = ft_strdup(cmd_str);
 	if (!cmd)
-		ft_quit(ERR_MEM, "Failed to allocate memory");
+		ft_quit(ERR_MEM, "Error: failed to allocate memory");
 	end = ft_strchr(cmd, ' ');
 	if (end)
 		*end = '\0';

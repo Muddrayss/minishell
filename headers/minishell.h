@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/13 15:05:54 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:09:30 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ typedef struct s_data
 	char	*starting_dir;
 	t_list	**lexered_params;
 	t_tree  **parsed_params;
+	char 	*input;
+	pid_t 	main_pid;
 }t_data;
 
 extern int g_status;
@@ -64,10 +66,14 @@ t_data	*get_data(void);
 void	clean_heredocs(char *path);
 void 	ft_quit(int id, char *msg);
 void 	free_data(void);
-void	close_all_fds(void);
+void 	send_id_to_main(int id);
+void 	close_all_fds(void);
 void 	ft_parse_error(char token);
 void	ft_syntax_error(char token);
 bool	is_shell_space(char c);
 bool 	is_empty_str(char *str);
+void	*cxmalloc(size_t size); // TODO: to remove
+
+//#define malloc(x)    cxmalloc(x)
 
 #endif
