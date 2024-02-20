@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 17:39:05 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:46:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
 
-# define EXEC_FAILURE 1
-# define COMMAND_NOT_FOUND 127
+# define EXEC_FAILURE   1
+# define CMD_NOT_FOUND  127
 
 void    executor(t_tree *parsed_params);
 void    create_heredocs(t_tree *tree, int *status);
