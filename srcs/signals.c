@@ -21,24 +21,15 @@ static void release_resources_mode(int signo);
 
 void    set_signals(int8_t mode, bool is_main)
 {
-    int8_t  modes[4] = {S_SILENT, S_INTERACTIVE, S_HEREDOC, S_COMMAND};
-    void    (*sig_handler[4])(int) = {&silent_mode, &interactive_mode, &heredoc_mode, &command_mode};
-    int8_t  n_modes = sizeof(modes) / sizeof(modes[0]);
-    
-    while (n_modes--)
-        if (modes[n_modes] == mode)
-            break; 
-    if (n_modes < 0)
-    {
-        ft_putstr_fd("Internal error: invalid signal mode\n", STDERR_FILENO);
-        return;
-    }
-    signal_p(SIGINT, sig_handler[n_modes]);
-    signal_p(SIGQUIT, sig_handler[n_modes]);
+    void    (*sig_handler[4])(int) = {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode}; //order has to be the same as the defines in the header file
+
+    signal_p(SIGINT, sig_handler[mode]);
+    signal_p(SIGQUIT, sig_handler[mode]);
     if (!is_main)
         signal_p(SIGTERM, &release_resources_mode);
     else
     {
+        signal_p(SIGTERM, SIG_IGN);
         signal_p(SIGUSR1, &death_mode);
         signal_p(SIGUSR2, &death_mode);
     }
