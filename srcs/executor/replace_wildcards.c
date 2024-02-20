@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:13:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ char    *replace_wildcards(char *str)
         lstsort(matching_files, &ft_strcmp);
         str = insert_result(str, matching_files, idx, wildcard_str); //deve fare il free di str
         lstclear(&matching_files, &free);
-        idx += ft_strlen(wildcard_str) + 1;
+        idx += ft_strlen(wildcard_str);
+        free(wildcard_str);
         wildcard_str = get_wildcard_str(str, &idx);
     }
     return (str);
@@ -115,8 +116,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
                 lstadd_front(&matching_files, parse_wildcard_str(new_wildcard_str));
         }
     }
-    closedir(dir);
-    return (matching_files);
+    return (free(basedir), closedir(dir), matching_files);
 }
 
 static bool matches_pattern(char *pattern, char *entry)
@@ -175,18 +175,20 @@ static char *get_base_dir(char *wildcard_str)
     }
     *end = '\0';
     cwd = getcwd(NULL, 0);
+    if (!cwd)
+        ft_quit(ERR_MEM, "Error: failed to allocate memory");
     basedir = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(tmp) + 2));
     ft_strcpy(basedir, cwd);
     ft_strcat(basedir, "/");
     ft_strcat(basedir, tmp);
-    return (basedir);
+    return (free(tmp), free(cwd), basedir);
 }
 
 static char *get_wildcard_str(char *str, uint32_t *idx)
 {
     uint32_t    len;
     char        *wildcard_str;
-    
+
     while (str[*idx] && str[*idx] != '*')
         (*idx)++;
     if (str[*idx] != '*')

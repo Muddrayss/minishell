@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:59:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:30:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void    executor(t_tree *parsed_params)
         return ;
     }
     g_status = original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
-    set_signals(S_COMMAND);
+    set_signals(S_COMMAND, true);
     launch_commands(parsed_params, -1, fds);
     wait_for_children(parsed_params);
     dup2(fds[3], STDIN_FILENO);
@@ -126,6 +126,7 @@ static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3])
         }
         launch_commands(node->left, prev_type, fds);
         wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno VEDI SOPRA
+        free_data();
         exit(g_status); //lui e' l'unico che deve uscire perche' e' il figlio
     }
     else

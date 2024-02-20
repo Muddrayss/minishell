@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env_vars.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 17:39:31 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:27:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

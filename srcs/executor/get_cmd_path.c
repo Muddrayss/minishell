@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 16:04:38 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:27:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ static char	*get_custom_bin(char *path)
     return (free(tmp), free(full_path), NULL);
 }
 
-//quanto cazzo e' bello unire stringhe in C porca puttana. per unire 2 stringhe e 1 carattere novantamila malloc
 static void	throw_file_error(char *file)
 {
 	char	*tmp;

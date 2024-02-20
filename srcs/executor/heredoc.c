@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:53:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/20 20:30:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int fill_in_child(char *limiter, int heredoc_fd)
     pid = fork_p();
     if (pid == 0)
     {
-        set_signals(S_HEREDOC);
+        set_signals(S_HEREDOC, false);
         fill_heredoc(limiter, heredoc_fd);
     }
     else
