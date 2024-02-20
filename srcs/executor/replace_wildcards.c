@@ -121,15 +121,13 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
 
 static bool matches_pattern(char *pattern, char *entry)
 {
-    if (*pattern == '\0' && *entry == '\0')
-        return (true);
     if (*entry == '\0')
     {
         while (*pattern == '*')
             pattern++;
         return (*pattern == '\0');
     }
-    if (*pattern == '\0' && *entry != '\0')
+    if (*pattern == '\0')
         return (false);
     if (*pattern == '*')
         return (matches_pattern(pattern + 1, entry) || matches_pattern(pattern, entry + 1));
