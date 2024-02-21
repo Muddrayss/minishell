@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 15:56:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 16:04:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ char	**env_matrix_add(char **matrix, t_envp  elem, uint32_t name_len, uint32_t v
 	return (new_matrix);
 }
 
+//TODO handle cases where there is '=' in the value
+//for some reason our export (or env) command adds extra " to the value
 void	envp_matrix_print(bool is_export)
 {
 	uint8_t		i;

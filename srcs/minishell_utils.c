@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 14:54:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:59:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	ft_quit(uint8_t id, char *msg)
 	quit_from_main((uint8_t)id); //quit from main manda SIGTERM a tutti, quindi anche a se stesso. e le free vengono fatte dall'handler di sigterm
 }
 
+//TODO not working properly, final id communicated is always 1
 void	quit_from_main(uint8_t id)
 {
 	t_data		*data;
@@ -104,7 +105,7 @@ void	free_data(void)
 	data->input = NULL;
 }
 
-//TODO valutare se unirla con freedata
+//TODO valutare se unirla con free_data()
 void	free_builtin_data(void)
 {
 	t_data	*data;
