@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/20 19:27:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:54:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,5 @@ void exec_builtin(char **cmd_args)
 	while (n_builtins--)
 		if (ft_strcmp(cmd_args[0], builtins[n_builtins]) == 0)
 			builtin_functions[n_builtins](cmd_args);
+	free_builtin_data();
 }

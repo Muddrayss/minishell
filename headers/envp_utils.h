@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_utils.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 17:21:31 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/20 17:36:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:43:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace);
 char	*ft_getenv(char *env_name);
 void	ft_unsetenv(char *env_name);
 void    envp_table_init(char **envp);
-void	print_envp_table(bool is_export);
+void	envp_matrix_print(bool is_export);
 void	envp_table_clear(t_list **table);
 void del_content_envptable(void *content);
 

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 12:56:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:41:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,38 +135,12 @@ void    envp_table_init(char **envp) //gli viene passata la envp originale
 	}
 }
 
-void	print_envp_table(bool is_export)
-{
-	uint8_t		i;
-	t_list		*bucket;
-	t_envp		*elem;
-
-	i = 0;
-	while (i < HASH_TABLE_SIZE)
-	{
-		bucket = get_data()->envp_table[i];
-		while (bucket)
-		{
-			elem = (t_envp *)bucket->content;
-			if (elem->value[0] && !is_export)
-				printf("%s=%s\n", elem->name, elem->value);
-			else if (is_export)
-			{
-				printf("declare -x %s", elem->name);
-				if (elem->value[0])
-					printf("\"%s\"", elem->value);
-				printf("\n");
-			}
-			bucket = bucket->next;
-		}
-		i++;
-	}
-}
-
 void	envp_table_clear(t_list **table)
 {
 	uint8_t		i;
 
+	if (!table)
+		return ;
 	i = 0;
 	while (i < HASH_TABLE_SIZE)
 		lstclear(&table[i++], &del_content_envptable);

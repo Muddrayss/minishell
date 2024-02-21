@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/19 15:53:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:41:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 void    	ft_putstr_fd(char *s, int fd);
 char    	*ft_strdup(char *s);
+char	    **ft_strarrdup(char **arr);
 char		**ft_split(char *s, char c);
 char 		*ft_strtrim(char *s1, char *set);
 uint32_t    ft_strlen(char *s);

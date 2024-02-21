@@ -1,36 +1,16 @@
 {
-   <ignored_libreadline_leak_1>
+   <unique_name_for_readline_suppression>
    Memcheck:Leak
    ...
-   fun:malloc
+   fun:readline
    ...
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
 }
 
 {
-   <ignored_libtinfo_leak_1>
+   <unique_name_for_add_history_suppression>
    Memcheck:Leak
    ...
-   fun:malloc
+   fun:add_history
    ...
-   obj:/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-}
-
-{
-   <ignored_libreadline_reachable_1>
-   Memcheck:Leak
-   ...
-   fun:calloc
-   ...
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
-}
-
-{
-   ignored_libreadline_realloc_leak
-   Memcheck:Leak
-   match-leak-kinds: possible,definite,indirect,reachable
-   fun:realloc
-   fun:xrealloc
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
 }
 

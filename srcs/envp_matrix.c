@@ -6,11 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 19:26:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:56:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+static char	*get_next_alphabetically(char **matrix, uint32_t size);
 
 void	update_env_matrix(t_envp elem, int8_t remove_add_replace) //se l'elemento da aggiungere o da rimuovere o  da rimpiazare
 {
@@ -102,4 +104,65 @@ char	**env_matrix_add(char **matrix, t_envp  elem, uint32_t name_len, uint32_t v
 	new_matrix[i][name_len] = '=';
 	ft_strcat(new_matrix[i], elem.value);
 	return (new_matrix);
+}
+
+void	envp_matrix_print(bool is_export)
+{
+	uint8_t		i;
+	char		**matrix;
+	char		*to_print;
+	uint32_t	size;
+	uint32_t	name_len;
+
+	matrix = get_data()->envp_matrix;
+	if (is_export == false)
+	{
+		i = -1;
+		while (matrix[++i])
+			if (*(ft_strchr(matrix[i], '=') + 1))
+				printf("%s\n", matrix[i]);
+	}
+	else
+	{
+		matrix = ft_strarrdup(get_data()->envp_matrix);
+		if (!matrix)
+			ft_quit(ERR_MEM, "Error: failed to allocate memory");
+		size = ft_matrixsize(matrix);
+		to_print = get_next_alphabetically(matrix, size);
+		while (to_print)
+		{
+			write(STDOUT_FILENO, "declare -x ", 11);
+			if (!ft_strchr(to_print, '='))
+				name_len = ft_strlen(to_print);
+			else
+				name_len = ft_strchr(to_print, '=') - to_print;
+			write(STDOUT_FILENO, to_print, name_len);
+			write(STDOUT_FILENO, "=\"", 2);
+			ft_putstr_fd(to_print + name_len + 1, STDOUT_FILENO);
+			write(STDOUT_FILENO, "\"\n", 2);
+			free(to_print);
+			to_print = get_next_alphabetically(matrix, size);
+		}
+		free(matrix);
+	}
+}
+
+static char	*get_next_alphabetically(char **matrix, uint32_t size)
+{
+	uint32_t	i;
+	char		**first;
+	char		*tmp;
+
+	i = 0;
+	first = NULL;
+	while (i < size)
+	{
+		if (!first || !*first || (matrix[i] && ft_strcmp(matrix[i], *first) < 0))
+			first = &matrix[i];
+		i++;
+	}
+	tmp = ft_strdup(*first);
+	free(*first);
+	*first = NULL;
+	return (tmp);
 }

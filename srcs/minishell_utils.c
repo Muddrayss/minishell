@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 23:58:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:54:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,32 @@ void	free_data(void)
 	free(data->cmd_path);
 	lstclear(data->lexered_params, &del_content_lexer);
 	free(data->lexered_params);
+	data->lexered_params = NULL;
 	treeclear(data->parsed_params, &del_content_parser);
 	free(data->parsed_params);
+	data->parsed_params = NULL;
 	envp_table_clear(data->envp_table);
 	free(data->envp_table);
 	data->envp_table = NULL;
 	free(data->input);
+	data->input = NULL;
+}
+
+//TODO valutare se unirla con freedata
+void	free_builtin_data(void)
+{
+	t_data	*data;
+
+	data = get_data();
+	if (!data)
+		return ;
+	ft_freematrix(data->cmd_args);
+	data->cmd_args = NULL;
+	free(data->input);
+	data->input = NULL;
+	lstclear(data->lexered_params, &del_content_lexer);
+	free(data->lexered_params);
+	data->lexered_params = NULL;
 }
 
 void	close_all_fds(void)
