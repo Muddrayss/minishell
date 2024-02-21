@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 19:26:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 12:56:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 	new_elem->name = ft_strdup(env_name);
 	new_elem->value = ft_strdup(env_value);
 	if (!new_elem->name || !new_elem->value)
+	{
+		del_content_envptable(new_elem);
 		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+	}
     bucket = table[index];
 	while (bucket) //ci entra solo se c'e' una collision
 	{
@@ -52,11 +55,12 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 		{
 			if (replace)
 			{
-				free(elem->name); //cosi' facendo sto liberando anche il value essendo la stessa stringa
-				free(elem->value);
+				del_content_envptable(elem);
 				bucket->content = new_elem;
 				update_env_matrix(*new_elem, REPLACE);
 			}
+			else
+				del_content_envptable(new_elem); //se non deve sostituire il valore lo libera
 			return ;
 		}
 		bucket = bucket->next;
