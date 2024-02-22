@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 01:06:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 01:09:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str);
 static bool     matches_pattern(char *pattern, struct dirent *entry, uint32_t idx);
 static char     *insert_result(char *original_str, t_list *matching_files, uint32_t idx, char *wildcard_str);
 
+//TODO gestire vari inizi di directory tipo ./dir ../dir /dir
 char    *replace_wildcards(char *str)
 {
     char        *wildcard_str;
