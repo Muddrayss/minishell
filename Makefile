@@ -6,7 +6,7 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/21 15:34:02 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/22 01:07:42 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_utils.c heredoc.c get
 BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)
 GENERAL_SRCS = minishell.c minishell_utils.c signals.c envp_matrix.c envp_table.c protected_methods.c xmalloc.c
 GENERAL_UTILS_SRCS = $(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c ft_matrixsize.c ft_utoa.c ft_calloc.c)
-LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c lstsort.c)
+LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c)
 STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_split.c ft_strtrim.c ft_strdup.c ft_strarrdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strchr.c)
 TREE_UTILS_SRCS = $(addprefix tree/, tree_size.c treeadd_below.c treeclear.c treenew_p.c)
 
