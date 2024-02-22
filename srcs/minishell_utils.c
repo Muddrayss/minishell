@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 15:59:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:15:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ void	quit_from_main(uint8_t id)
 
 	i = 0;
 	data = get_data();
-	while (i < sizeof(id))
+	while (i < (sizeof(id) * 8))
 	{
-		if (0x01 & (id << i++))
+		if (id & (0x01 << i++))
 			kill(data->main_pid, SIGUSR1);
 		else
 			kill(data->main_pid, SIGUSR2);

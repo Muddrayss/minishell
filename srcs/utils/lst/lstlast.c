@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lstadd_front.c                                     :+:      :+:    :+:   */
+/*   lstlast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/07 15:21:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 15:35:22 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/22 15:38:14 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/22 15:40:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	lstadd_front(t_list **lst, t_list *new)
+t_list	*lstlast(t_list *lst)
 {
-    if (!lst || !new)
-        return ;
-    else if (!*lst)
-        *lst = new;
-    else
-    {
-        new->next = *lst;
-        (*lst)->prev = new;
-        *lst = new;
-    }
+    if (!lst)
+        return (NULL);
+    while (lst->next)
+        lst = lst->next;
+    return (lst);
 }

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 01:09:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:36:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static char     *get_base_dir(char **wildcard_str);
 static void     add_cwd(char **wildcard_str, char *cwd);
 static t_list   *parse_wildcard_str(char *wildcard_str);
 static bool     matches_pattern(char *pattern, struct dirent *entry, uint32_t idx);
-static char     *insert_result(char *original_str, t_list *matching_files, uint32_t idx, char *wildcard_str);
+static char     *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len);
+
 
 //TODO gestire vari inizi di directory tipo ./dir ../dir /dir
 char    *replace_wildcards(char *str)
@@ -27,6 +28,7 @@ char    *replace_wildcards(char *str)
     t_list      *matching_files;
     char        *cwd;
     uint32_t    idx;
+    uint32_t    pattern_len;
 
     idx = 0;
     wildcard_str = get_wildcard_str(str, &idx);
@@ -35,13 +37,13 @@ char    *replace_wildcards(char *str)
         ft_quit(ERR_MEM, "Error: failed to get current working directory");
     while (wildcard_str)
     {
+        pattern_len = ft_strlen(wildcard_str);
         add_cwd(&wildcard_str, cwd);
         matching_files = parse_wildcard_str(wildcard_str);
-        lstreverse(&matching_files);
         //TODO sortare la lista con strncmp delle stringhe dopo aver fatto TOLOWER
-        str = insert_result(str, matching_files, idx, wildcard_str); //deve fare il free di str
+        str = insert_result(str, matching_files, idx, pattern_len);
         lstclear(&matching_files, &free);
-        idx += ft_strlen(wildcard_str);
+        idx += pattern_len;
         free(wildcard_str);
         wildcard_str = get_wildcard_str(str, &idx);
     }
@@ -62,32 +64,30 @@ static void add_cwd(char **wildcard_str, char *cwd)
 }
 
 //TODO da riscrivere refractandola assulutamente
-static char *insert_result(char *original_str, t_list *matching_files, uint32_t idx, char *wildcard_str)
+static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len)
 {
     char        *new_str;
     t_list      *node;
     uint32_t    size;
     uint32_t    filenames_len;
-    uint32_t    wildcard_str_len;
     
     if (!matching_files)
     {
-        new_str = ft_strdup(original_str);
+        new_str = ft_strdup(str);
         if (!new_str)
             ft_quit(ERR_MEM, "Error: failed to allocate memory");
-        return (free(original_str), new_str);
+        return (free(str), new_str);
     }
     node = matching_files;
-    wildcard_str_len = ft_strlen(wildcard_str);
     filenames_len = 0;
     while(node)
     {
         filenames_len += ft_strlen(node->content) + 1; //+1 per lo spazio
         node = node->next;
     }
-    size = ft_strlen(original_str) - wildcard_str_len + filenames_len + 1;
+    size = ft_strlen(str) - pattern_len + filenames_len + 1;
     new_str = (char *)malloc_p(sizeof(char) * size);
-    ft_strlcpy(new_str, original_str, idx + 1);
+    ft_strlcpy(new_str, str, idx + 1);
     node = matching_files;
     while (node)
     {
@@ -95,8 +95,8 @@ static char *insert_result(char *original_str, t_list *matching_files, uint32_t 
         ft_strcat(new_str, " ");
         node = node->next;
     }
-    ft_strcat(new_str, &original_str[idx + wildcard_str_len]);
-    return (free(original_str), new_str);
+    ft_strcat(new_str, &str[idx + pattern_len]);
+    return (free(str), new_str);
 }
 
 static t_list   *parse_wildcard_str(char *wildcard_str)
@@ -129,7 +129,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
             if (!new_wildcard_str)
                 lstadd_front(&matching_files, lstnew_p(tmp));
             else
-                lstadd_front(&matching_files, parse_wildcard_str(new_wildcard_str));
+                lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str));
             free(new_wildcard_str);
         }
     }
@@ -144,8 +144,6 @@ static bool matches_pattern(char *pattern, struct dirent *entry, uint32_t idx)
             pattern++;
         return (*pattern == '\0' || (*pattern == '/' && entry->d_type == DT_DIR));
     }
-    if (*pattern == '\0' || (*pattern == '/' && entry->d_type == DT_DIR))
-        return (false);
     if (*pattern == '*')
         return (matches_pattern(pattern + 1, entry, idx) || matches_pattern(pattern, entry, idx + 1));
     if (*pattern == entry->d_name[idx])

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/21 14:34:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:19:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ static void death_mode(int signo)
 {
     static uint8_t  id
     = 0;
-    static int      n_signals
+    static uint8_t  n_signals
     = 0;
 
     if (signo == SIGUSR1)
         id |= 0x01 << n_signals++;
     else if (signo == SIGUSR2)
         n_signals++;
-    if (n_signals == sizeof(id))
+    if (n_signals == (sizeof(id) * 8))
     {
         kill(-(get_data()->main_pid), SIGTERM);
         free_data();
