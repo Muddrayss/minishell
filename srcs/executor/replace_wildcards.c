@@ -69,18 +69,15 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd)
         entry = readdir(dir);
         if (!entry)
             break ;
-        if (entry->d_name[0] == '.')
+        if (entry->d_name[0] == '.' || !matches_pattern(wildcard_str, entry, 0))
             continue ;
-        if (matches_pattern(wildcard_str, entry, 0) == true)
-        {
-            full_entry = get_full_entry(basedir, entry->d_name, cwd);
-            new_wildcard_str = get_new_wildcard_str(basedir, wildcard_str, entry->d_name);
-            if (!new_wildcard_str)
-                lstadd_front(&matching_files, lstnew_p(full_entry));
-            else
-                lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str, cwd));
-            free(new_wildcard_str);
-        }
+        full_entry = get_full_entry(basedir, entry->d_name, cwd);
+        new_wildcard_str = get_new_wildcard_str(basedir, wildcard_str, entry->d_name);
+        if (!new_wildcard_str)
+            lstadd_front(&matching_files, lstnew_p(full_entry));
+        else
+            lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str, cwd));
+        free(new_wildcard_str);
     }
     return (free(basedir), closedir(dir), matching_files);
 }
