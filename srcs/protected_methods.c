@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 19:27:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 17:59:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,12 @@ void    waitpid_p(pid_t pid, int *status, int options)
 void    signal_p(int signum, void (*handler)(int))
 {
     if (signal(signum, handler) == SIG_ERR)
+        ft_quit(ERR_SIGSETUP, NULL);
+}
+
+void    sigaction_p(int signum, struct sigaction *act, struct sigaction *oldact)
+{
+    if (sigaction(signum, act, oldact) == -1)
         ft_quit(ERR_SIGSETUP, NULL);
 }
 

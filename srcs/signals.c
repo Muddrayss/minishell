@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/22 14:19:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 17:58:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@ static void silent_mode(int signo);
 static void interactive_mode(int signo);
 static void heredoc_mode(int signo);
 static void command_mode(int signo);
-static void death_mode(int signo);
+static void death_mode(int signo, siginfo_t *info, void *context);
 static void safe_exit(int signo);
 
 void    set_signals(int8_t mode, bool is_main)
 {
+    struct sigaction  sa;
     void    (*sig_handler[4])(int) = {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode}; //order has to be the same as the defines in the header file
 
     signal_p(SIGINT, sig_handler[mode]);
@@ -30,10 +31,15 @@ void    set_signals(int8_t mode, bool is_main)
     else
     {
         signal_p(SIGTERM, SIG_IGN);
-        signal_p(SIGUSR1, &death_mode);
-        signal_p(SIGUSR2, &death_mode);
+        sa.sa_sigaction = death_mode;
+        sa.sa_flags = SA_SIGINFO | SA_RESTART;
+        sigemptyset(&sa.sa_mask);
+        sigaction_p(SIGUSR1, &sa, NULL);
+        sigaction_p(SIGUSR2, &sa, NULL);
     }
 }
+
+//TODO semaphores for the signals or sigaction
 
 static void safe_exit(int signo)
 {
@@ -42,13 +48,20 @@ static void safe_exit(int signo)
     exit(0);
 }
 
-static void death_mode(int signo)
+static void death_mode(int signo, siginfo_t *info, void *context)
 {
     static uint8_t  id
     = 0;
     static uint8_t  n_signals
     = 0;
+    static pid_t   pid
+    = -1;
 
+    (void)context;
+    if (pid == -1)
+        pid = info->si_pid;
+    else if (pid != info->si_pid)
+        return ;
     if (signo == SIGUSR1)
         id |= 0x01 << n_signals++;
     else if (signo == SIGUSR2)

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 14:15:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 17:35:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	quit_from_main(uint8_t id)
 			kill(data->main_pid, SIGUSR1);
 		else
 			kill(data->main_pid, SIGUSR2);
+		usleep(100);
 	}
 }
 

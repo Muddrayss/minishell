@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/05 16:30:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 18:00:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void    dup2_p(int oldfd, int newfd);
 void    wait_p(int *status);
 void    waitpid_p(pid_t pid, int *status, int options);
 void    signal_p(int signum, void (*handler)(int));
+void    sigaction_p(int signum, struct sigaction *act, struct sigaction *oldact);
 void	reset_fd(int *fd);
 
 #endif
