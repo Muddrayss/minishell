@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 16:42:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 18:44:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,6 @@ static void add_cwd(char **wildcard_str, char *cwd)
     *wildcard_str = new_wildcard_str;
 }
 
-//TODO da riscrivere refractandola assulutamente
 static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len)
 {
     char        *new_str;
@@ -219,12 +218,7 @@ static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint
     uint32_t    filenames_len;
 
     if (!matching_files)
-    {
-        new_str = ft_strdup(str);
-        if (!new_str)
-            ft_quit(ERR_MEM, "Error: failed to allocate memory");
-        return (free(str), new_str);
-    }
+        return (str);
     node = matching_files;
     filenames_len = 0;
     while(node)

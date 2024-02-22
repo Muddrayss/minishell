@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 17:35:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 18:14:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ bool	is_shell_space(char c) //meglio cosi' altrimenti complicated conditional
 
 void	ft_quit(uint8_t id, char *msg)
 {
-	dprintf(2, RED "error : %d\n" DEFAULT, id); //to remove
 	if (errno != EINTR)
 	{
 		while (open("./tmp/print_sem", O_CREAT | O_EXCL, 0666) == EEXIST)
@@ -41,10 +40,9 @@ void	ft_quit(uint8_t id, char *msg)
 	}
 	if (id == EXEC_FAILURE)
 		free(msg);
-	quit_from_main((uint8_t)id); //quit from main manda SIGTERM a tutti, quindi anche a se stesso. e le free vengono fatte dall'handler di sigterm
+	quit_from_main((uint8_t)id);
 }
 
-//TODO not working properly, final id communicated is always 1
 void	quit_from_main(uint8_t id)
 {
 	t_data		*data;

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/22 17:58:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 18:12:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ void    set_signals(int8_t mode, bool is_main)
         sigaction_p(SIGUSR2, &sa, NULL);
     }
 }
-
-//TODO semaphores for the signals or sigaction
 
 static void safe_exit(int signo)
 {
