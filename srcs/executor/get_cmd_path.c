@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 19:27:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 17:24:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ char *get_cmd_path(char *path, char *cmd)
     ft_freematrix(dirs);
     if (!full_path)
 	{
-        ft_putstr_fd("minishell: command not found: '", STDERR_FILENO);
+		ft_putstr_fd("minishell: command not found: '", STDERR_FILENO);
         ft_putstr_fd(cmd, STDERR_FILENO);
-        ft_putstr_fd("'\n", STDERR_FILENO);
+		ft_putstr_fd("'\n", STDERR_FILENO);
+		free_data();
+		exit(CMD_NOT_FOUND);
     }
     return (full_path);
 }

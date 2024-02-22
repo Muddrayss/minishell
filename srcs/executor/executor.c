@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 20:30:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 17:36:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
             launch_commands(skip_till_semicolon(node), -1, fds);
         else
             launch_commands(node->right, node->type, fds);
-        signal(SIGPIPE, SIG_DFL);
+        //signal(SIGPIPE, SIG_DFL);
         return ;
     }
     child(node, fds, prev_type);
@@ -118,6 +118,7 @@ static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3])
     pid = fork_p();
     if (pid == 0)
     {
+        set_signals(S_SILENT, false);
         if (node->type == PIPELINE)
         {
             dup2_p(fds[1], STDOUT_FILENO);
@@ -135,6 +136,7 @@ static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3])
 
 static void child(t_tree *elem, int fds[3], int8_t prev_type)
 {
+    set_signals(S_COMMAND, false);
     if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
     exec_redirs(elem->cmd->redirs);
