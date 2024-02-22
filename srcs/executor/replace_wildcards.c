@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 15:36:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 16:42:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ static char     *get_wildcard_str(char *str, uint32_t *idx);
 static char     *get_new_wildcard_str(char *basedir, char *entry, char *wildcard_str);
 static char     *get_base_dir(char **wildcard_str);
 static void     add_cwd(char **wildcard_str, char *cwd);
-static t_list   *parse_wildcard_str(char *wildcard_str);
+static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd);
 static bool     matches_pattern(char *pattern, struct dirent *entry, uint32_t idx);
+static char     *get_full_entry(char *basedir, char *entry, char *cwd);
+static void     sort_result(t_list **matching_files);
 static char     *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len);
 
-
-//TODO gestire vari inizi di directory tipo ./dir ../dir /dir
 char    *replace_wildcards(char *str)
 {
     char        *wildcard_str;
@@ -39,74 +39,25 @@ char    *replace_wildcards(char *str)
     {
         pattern_len = ft_strlen(wildcard_str);
         add_cwd(&wildcard_str, cwd);
-        matching_files = parse_wildcard_str(wildcard_str);
-        //TODO sortare la lista con strncmp delle stringhe dopo aver fatto TOLOWER
+        matching_files = parse_wildcard_str(wildcard_str, cwd);
+        sort_result(&matching_files);
         str = insert_result(str, matching_files, idx, pattern_len);
         lstclear(&matching_files, &free);
         idx += pattern_len;
         free(wildcard_str);
         wildcard_str = get_wildcard_str(str, &idx);
     }
-    return (str);
+    return (free(cwd), str);
 }
 
-static void add_cwd(char **wildcard_str, char *cwd)
-{
-    char    *new_wildcard_str;
-
-    new_wildcard_str = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(*wildcard_str) + 2));
-    ft_strcpy(new_wildcard_str, cwd);
-    ft_strcat(new_wildcard_str, "/");
-    ft_strcat(new_wildcard_str, *wildcard_str);
-    free(cwd);
-    free(*wildcard_str);
-    *wildcard_str = new_wildcard_str;
-}
-
-//TODO da riscrivere refractandola assulutamente
-static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len)
-{
-    char        *new_str;
-    t_list      *node;
-    uint32_t    size;
-    uint32_t    filenames_len;
-    
-    if (!matching_files)
-    {
-        new_str = ft_strdup(str);
-        if (!new_str)
-            ft_quit(ERR_MEM, "Error: failed to allocate memory");
-        return (free(str), new_str);
-    }
-    node = matching_files;
-    filenames_len = 0;
-    while(node)
-    {
-        filenames_len += ft_strlen(node->content) + 1; //+1 per lo spazio
-        node = node->next;
-    }
-    size = ft_strlen(str) - pattern_len + filenames_len + 1;
-    new_str = (char *)malloc_p(sizeof(char) * size);
-    ft_strlcpy(new_str, str, idx + 1);
-    node = matching_files;
-    while (node)
-    {
-        ft_strcat(new_str, node->content);
-        ft_strcat(new_str, " ");
-        node = node->next;
-    }
-    ft_strcat(new_str, &str[idx + pattern_len]);
-    return (free(str), new_str);
-}
-
-static t_list   *parse_wildcard_str(char *wildcard_str)
+static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd)
 {
     char            *basedir;
     char            *new_wildcard_str;
     t_list          *matching_files;
     DIR             *dir;
     struct dirent   *entry;
-    char            *tmp;
+    char            *full_entry;
 
     matching_files = NULL;
     basedir = get_base_dir(&wildcard_str);
@@ -122,18 +73,33 @@ static t_list   *parse_wildcard_str(char *wildcard_str)
             continue ;
         if (matches_pattern(wildcard_str, entry, 0) == true)
         {
-            tmp = ft_strdup(entry->d_name);
-            if (!tmp)
-                return (free(basedir), lstclear(&matching_files, &free), closedir(dir), ft_quit(ERR_MEM, "Error: failed to allocate memory"), NULL);
+            full_entry = get_full_entry(basedir, entry->d_name, cwd);
             new_wildcard_str = get_new_wildcard_str(basedir, wildcard_str, entry->d_name);
             if (!new_wildcard_str)
-                lstadd_front(&matching_files, lstnew_p(tmp));
+                lstadd_front(&matching_files, lstnew_p(full_entry));
             else
-                lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str));
+                lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str, cwd));
             free(new_wildcard_str);
         }
     }
     return (free(basedir), closedir(dir), matching_files);
+}
+
+static char *get_full_entry(char *basedir, char *entry, char *cwd)
+{
+    char    *full_entry;
+
+    while (*basedir == *cwd)
+    {
+        basedir++;
+        cwd++;
+    }
+    basedir++;
+    full_entry = (char *)malloc_p(sizeof(char) * (ft_strlen(basedir) + ft_strlen(entry) + 2));
+    ft_strcpy(full_entry, basedir);
+    ft_strcat(full_entry, "/");
+    ft_strcat(full_entry, entry);
+    return (full_entry);
 }
 
 static bool matches_pattern(char *pattern, struct dirent *entry, uint32_t idx)
@@ -206,4 +172,76 @@ static char *get_wildcard_str(char *str, uint32_t *idx)
     wildcard_str = (char *)malloc_p(sizeof(char) * (len + 1));
     ft_strlcpy(wildcard_str, &str[*idx], len + 1);
     return (wildcard_str);
+}
+
+static void sort_result(t_list **matching_files)
+{
+    t_list  *node;
+    t_list  *next;
+    char    *tmp;
+
+    node = *matching_files;
+    while (node)
+    {
+        next = node->next;
+        while (next)
+        {
+            if (ft_strcmp_lower(node->content, next->content) > 0)
+            {
+                tmp = node->content;
+                node->content = next->content;
+                next->content = tmp;
+            }
+            next = next->next;
+        }
+        node = node->next;
+    }
+}
+
+static void add_cwd(char **wildcard_str, char *cwd)
+{
+    char    *new_wildcard_str;
+
+    new_wildcard_str = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(*wildcard_str) + 2));
+    ft_strcpy(new_wildcard_str, cwd);
+    ft_strcat(new_wildcard_str, "/");
+    ft_strcat(new_wildcard_str, *wildcard_str);
+    free(*wildcard_str);
+    *wildcard_str = new_wildcard_str;
+}
+
+//TODO da riscrivere refractandola assulutamente
+static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len)
+{
+    char        *new_str;
+    t_list      *node;
+    uint32_t    size;
+    uint32_t    filenames_len;
+
+    if (!matching_files)
+    {
+        new_str = ft_strdup(str);
+        if (!new_str)
+            ft_quit(ERR_MEM, "Error: failed to allocate memory");
+        return (free(str), new_str);
+    }
+    node = matching_files;
+    filenames_len = 0;
+    while(node)
+    {
+        filenames_len += ft_strlen(node->content) + 1; //+1 per lo spazio
+        node = node->next;
+    }
+    size = ft_strlen(str) - pattern_len + filenames_len + 1;
+    new_str = (char *)malloc_p(sizeof(char) * size);
+    ft_strlcpy(new_str, str, idx + 1);
+    node = matching_files;
+    while (node)
+    {
+        ft_strcat(new_str, node->content);
+        ft_strcat(new_str, " ");
+        node = node->next;
+    }
+    ft_strcat(new_str, &str[idx + pattern_len]);
+    return (free(str), new_str);
 }
