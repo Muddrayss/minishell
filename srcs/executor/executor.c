@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 17:36:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 19:08:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3])
         reset_fd(&fds[1]);
     }
     fds[2] = fds[0];
+    set_signals(S_COMMAND, true);
     launch_commands(node->left, prev_type, fds);
     dup2_p(fds[4], STDOUT_FILENO);
 }
@@ -118,13 +119,13 @@ static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3])
     pid = fork_p();
     if (pid == 0)
     {
-        set_signals(S_SILENT, false);
         if (node->type == PIPELINE)
         {
             dup2_p(fds[1], STDOUT_FILENO);
             reset_fd(&fds[0]);
             reset_fd(&fds[1]);
         }
+        set_signals(S_COMMAND, true);
         launch_commands(node->left, prev_type, fds);
         wait_for_children(node->left); //deve stare qua, non su. in questo modo anche le subshells aspettano le pipe al loro interno VEDI SOPRA
         free_data();
@@ -136,7 +137,6 @@ static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3])
 
 static void child(t_tree *elem, int fds[3], int8_t prev_type)
 {
-    set_signals(S_COMMAND, false);
     if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
     exec_redirs(elem->cmd->redirs);
