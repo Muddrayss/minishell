@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:21:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:05:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 00:03:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	lstadd_front(t_list **lst, t_list *new)
 {
-    if (!lst)
+    if (!lst || !new)
         return ;
     else if (!*lst)
         *lst = new;

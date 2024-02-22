@@ -1,21 +1,57 @@
-==1303700== Memcheck, a memory error detector
-==1303700== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==1303700== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==1303700== Command: ./minishell
-==1303700== 
+==29470== Memcheck, a memory error detector
+==29470== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==29470== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==29470== Command: ./minishell
+==29470== 
+==29470== Invalid read of size 1
+==29470==    at 0x10E0C4: get_wildcard_str (replace_wildcards.c:197)
+==29470==    by 0x10D998: replace_wildcards (replace_wildcards.c:45)
+==29470==    by 0x10C754: child (executor.c:142)
+==29470==    by 0x10C587: launch_commands (executor.c:93)
+==29470==    by 0x10C600: launch_builtin_cmd (executor.c:110)
+==29470==    by 0x10C4D8: launch_commands (executor.c:83)
+==29470==    by 0x10C39D: executor (executor.c:49)
+==29470==    by 0x10986D: minishell_loop (minishell.c:93)
+==29470==    by 0x1095F6: main (minishell.c:27)
+==29470==  Address 0x4b71608 is 24 bytes after a block of size 16 in arena "client"
+==29470== 
+==29470== Invalid read of size 1
+==29470==    at 0x10E0DA: get_wildcard_str (replace_wildcards.c:197)
+==29470==    by 0x10D998: replace_wildcards (replace_wildcards.c:45)
+==29470==    by 0x10C754: child (executor.c:142)
+==29470==    by 0x10C587: launch_commands (executor.c:93)
+==29470==    by 0x10C600: launch_builtin_cmd (executor.c:110)
+==29470==    by 0x10C4D8: launch_commands (executor.c:83)
+==29470==    by 0x10C39D: executor (executor.c:49)
+==29470==    by 0x10986D: minishell_loop (minishell.c:93)
+==29470==    by 0x1095F6: main (minishell.c:27)
+==29470==  Address 0x4b71608 is 24 bytes after a block of size 16 in arena "client"
+==29470== 
+==29470== Invalid read of size 1
+==29470==    at 0x10E0F0: get_wildcard_str (replace_wildcards.c:199)
+==29470==    by 0x10D998: replace_wildcards (replace_wildcards.c:45)
+==29470==    by 0x10C754: child (executor.c:142)
+==29470==    by 0x10C587: launch_commands (executor.c:93)
+==29470==    by 0x10C600: launch_builtin_cmd (executor.c:110)
+==29470==    by 0x10C4D8: launch_commands (executor.c:83)
+==29470==    by 0x10C39D: executor (executor.c:49)
+==29470==    by 0x10986D: minishell_loop (minishell.c:93)
+==29470==    by 0x1095F6: main (minishell.c:27)
+==29470==  Address 0x4b71609 is 25 bytes after a block of size 16 in arena "client"
+==29470== 
 [1;31merror : 123
 [0mexit
-==1303700== 
-==1303700== HEAP SUMMARY:
-==1303700==     in use at exit: 196,218 bytes in 210 blocks
-==1303700==   total heap usage: 1,010 allocs, 800 frees, 285,646 bytes allocated
-==1303700== 
-==1303700== LEAK SUMMARY:
-==1303700==    definitely lost: 0 bytes in 0 blocks
-==1303700==    indirectly lost: 0 bytes in 0 blocks
-==1303700==      possibly lost: 0 bytes in 0 blocks
-==1303700==    still reachable: 0 bytes in 0 blocks
-==1303700==         suppressed: 196,218 bytes in 210 blocks
-==1303700== 
-==1303700== For lists of detected and suppressed errors, rerun with: -s
-==1303700== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==29470== 
+==29470== HEAP SUMMARY:
+==29470==     in use at exit: 198,774 bytes in 214 blocks
+==29470==   total heap usage: 811 allocs, 597 frees, 299,009 bytes allocated
+==29470== 
+==29470== LEAK SUMMARY:
+==29470==    definitely lost: 0 bytes in 0 blocks
+==29470==    indirectly lost: 0 bytes in 0 blocks
+==29470==      possibly lost: 0 bytes in 0 blocks
+==29470==    still reachable: 0 bytes in 0 blocks
+==29470==         suppressed: 198,774 bytes in 214 blocks
+==29470== 
+==29470== For lists of detected and suppressed errors, rerun with: -s
+==29470== ERROR SUMMARY: 4 errors from 3 contexts (suppressed: 0 from 0)

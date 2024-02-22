@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 14:54:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/21 22:26:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <stdbool.h>
 # include <stdint.h>
 # include <limits.h>
+# include <dirent.h>
 
 # include "builtins.h"
 # include "lexer.h"
