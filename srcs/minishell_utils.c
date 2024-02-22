@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 18:14:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 19:23:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	free_data(void)
 }
 
 //TODO valutare se unirla con free_data()
-void	free_builtin_data(void)
+void	free_data_in_main(void)
 {
 	t_data	*data;
 
