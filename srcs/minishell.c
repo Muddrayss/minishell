@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 14:44:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/22 19:26:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,13 @@ static void	minishell_loop()
 {
 	t_data 		*data;
 	t_list		*lexered_params;
-	t_tree		*execution_tree;
+	t_tree		*parsed_params;
 
 	data = get_data();
 	while (true)
 	{
 		//TODO gestire linea lunga che supera colonne
 		set_signals(S_INTERACTIVE, true);
-		free(data->input);
 		data->input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!data->input)
 			ft_quit(123, "exit");
@@ -86,11 +85,11 @@ static void	minishell_loop()
 			continue ;
 		add_history(data->input);
 		lexered_params = lexer(data->input);
-		execution_tree = parser(lexered_params);
-		if (!execution_tree)
+		parsed_params = parser(lexered_params);
+		if (!parsed_params)
 			continue ;
 		set_signals(S_SILENT, true);
-		executor(execution_tree);
+		executor(parsed_params);
 	}
 }
 
