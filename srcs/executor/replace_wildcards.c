@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 18:44:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 13:23:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,10 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd)
 
     matching_files = NULL;
     basedir = get_base_dir(&wildcard_str);
-    dir = opendir(basedir);
-    if (!dir && errno != ENOENT && errno != ENOTDIR)
-        ft_quit(ERR_MEM, "Error: failed to access directory");
+    dir = opendir_p(basedir);
     while (dir)
     {
-        entry = readdir(dir);
+        entry = readdir_p(dir);
         if (!entry)
             break ;
         if (entry->d_name[0] == '.' || !matches_pattern(wildcard_str, entry, 0))
