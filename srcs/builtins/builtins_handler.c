@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/22 19:20:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 19:15:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,18 @@ void exec_builtin(char **cmd_args)
 	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	void	(*builtin_functions[])(char **) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
 	uint8_t	n_builtins;
+	t_data	*data;
 
 	n_builtins = sizeof(builtins) / sizeof(char *);
 	while (n_builtins--)
 		if (ft_strcmp(cmd_args[0], builtins[n_builtins]) == 0)
 			builtin_functions[n_builtins](cmd_args);
-	free_data_in_main();
+	data = get_data();
+	ft_freematrix(data->cmd_args);
+	data->cmd_args = NULL;
+	free(data->input);
+	data->input = NULL;
+	lstclear(data->lexered_params, &del_content_lexer);
+	free(data->lexered_params);
+	data->lexered_params = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 16:09:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 19:15:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,23 +104,6 @@ void	free_data(void)
 	data->envp_table = NULL;
 	free(data->input);
 	data->input = NULL;
-}
-
-//TODO valutare se unirla con free_data()
-void	free_data_in_main(void)
-{
-	t_data	*data;
-
-	data = get_data();
-	if (!data)
-		return ;
-	ft_freematrix(data->cmd_args);
-	data->cmd_args = NULL;
-	free(data->input);
-	data->input = NULL;
-	lstclear(data->lexered_params, &del_content_lexer);
-	free(data->lexered_params);
-	data->lexered_params = NULL;
 }
 
 void	close_all_fds(void)

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 18:55:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 19:14:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void    executor(t_tree *parsed_params)
     launch_commands(parsed_params, -1, fds);
     wait_for_children(parsed_params);
     dup2(fds[3], STDIN_FILENO);
-    free_data_in_main();
 }
 
 static t_tree   *skip_till_semicolon(t_tree *node)
