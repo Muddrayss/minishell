@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 14:06:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 17:00:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void    *malloc_p(size_t size)
 {
     void    *ptr;
 
+    if (size == 0)
+        return (NULL);
     ptr = malloc(size);
     if (!ptr)
         ft_quit(ERR_MEM, "Error: failed to allocate memory");
@@ -28,7 +30,9 @@ void    *calloc_p(size_t nmemb, size_t size)
 {
     void    *ptr;
 
-    ptr = calloc(nmemb, size);
+    if (nmemb * size == 0)
+        return (NULL);
+    ptr = ft_calloc(nmemb, size);
     if (!ptr)
         ft_quit(ERR_MEM, "Error: failed to allocate memory");
     return (ptr);

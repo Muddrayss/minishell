@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 16:49:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 17:22:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd)
         if (!new_wildcard_str)
             lstadd_front(&matching_files, lstnew_p(full_entry));
         else
+        {
+            free(full_entry);
             lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str, cwd));
+        }
         free(new_wildcard_str);
     }
     return (free(basedir), closedir(dir), matching_files);
