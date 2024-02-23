@@ -1,90 +1,166 @@
-==666242== Memcheck, a memory error detector
-==666242== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==666242== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==666242== Command: ./minishell
-==666242== 
-==666283== 
-==666283== HEAP SUMMARY:
-==666283==     in use at exit: 196,099 bytes in 210 blocks
-==666283==   total heap usage: 860 allocs, 650 frees, 251,521 bytes allocated
-==666283== 
-==666283== LEAK SUMMARY:
-==666283==    definitely lost: 0 bytes in 0 blocks
-==666283==    indirectly lost: 0 bytes in 0 blocks
-==666283==      possibly lost: 0 bytes in 0 blocks
-==666283==    still reachable: 0 bytes in 0 blocks
-==666283==         suppressed: 196,099 bytes in 210 blocks
-==666283== 
-==666283== For lists of detected and suppressed errors, rerun with: -s
-==666283== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==666378== 
-==666378== HEAP SUMMARY:
-==666378==     in use at exit: 196,132 bytes in 213 blocks
-==666378==   total heap usage: 898 allocs, 685 frees, 252,239 bytes allocated
-==666378== 
-==666378== LEAK SUMMARY:
-==666378==    definitely lost: 0 bytes in 0 blocks
-==666378==    indirectly lost: 0 bytes in 0 blocks
-==666378==      possibly lost: 0 bytes in 0 blocks
-==666378==    still reachable: 0 bytes in 0 blocks
-==666378==         suppressed: 196,132 bytes in 213 blocks
-==666378== 
-==666378== For lists of detected and suppressed errors, rerun with: -s
-==666378== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==666397== 
-==666397== HEAP SUMMARY:
-==666397==     in use at exit: 196,277 bytes in 215 blocks
-==666397==   total heap usage: 896 allocs, 681 frees, 256,413 bytes allocated
-==666397== 
-==666397== LEAK SUMMARY:
-==666397==    definitely lost: 0 bytes in 0 blocks
-==666397==    indirectly lost: 0 bytes in 0 blocks
-==666397==      possibly lost: 0 bytes in 0 blocks
-==666397==    still reachable: 0 bytes in 0 blocks
-==666397==         suppressed: 196,277 bytes in 215 blocks
-==666397== 
-==666397== For lists of detected and suppressed errors, rerun with: -s
-==666397== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==666459== 
-==666459== HEAP SUMMARY:
-==666459==     in use at exit: 196,176 bytes in 216 blocks
-==666459==   total heap usage: 926 allocs, 710 frees, 252,809 bytes allocated
-==666459== 
-==666459== LEAK SUMMARY:
-==666459==    definitely lost: 0 bytes in 0 blocks
-==666459==    indirectly lost: 0 bytes in 0 blocks
-==666459==      possibly lost: 0 bytes in 0 blocks
-==666459==    still reachable: 0 bytes in 0 blocks
-==666459==         suppressed: 196,176 bytes in 216 blocks
-==666459== 
-==666459== For lists of detected and suppressed errors, rerun with: -s
-==666459== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==666493== 
-==666493== HEAP SUMMARY:
-==666493==     in use at exit: 196,321 bytes in 218 blocks
-==666493==   total heap usage: 922 allocs, 704 frees, 256,946 bytes allocated
-==666493== 
-==666493== LEAK SUMMARY:
-==666493==    definitely lost: 0 bytes in 0 blocks
-==666493==    indirectly lost: 0 bytes in 0 blocks
-==666493==      possibly lost: 0 bytes in 0 blocks
-==666493==    still reachable: 0 bytes in 0 blocks
-==666493==         suppressed: 196,321 bytes in 218 blocks
-==666493== 
-==666493== For lists of detected and suppressed errors, rerun with: -s
-==666493== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-exit
-==666242== 
-==666242== HEAP SUMMARY:
-==666242==     in use at exit: 196,296 bytes in 216 blocks
-==666242==   total heap usage: 920 allocs, 704 frees, 252,848 bytes allocated
-==666242== 
-==666242== LEAK SUMMARY:
-==666242==    definitely lost: 0 bytes in 0 blocks
-==666242==    indirectly lost: 0 bytes in 0 blocks
-==666242==      possibly lost: 0 bytes in 0 blocks
-==666242==    still reachable: 0 bytes in 0 blocks
-==666242==         suppressed: 196,296 bytes in 216 blocks
-==666242== 
-==666242== For lists of detected and suppressed errors, rerun with: -s
-==666242== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==686743== Memcheck, a memory error detector
+==686743== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==686743== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==686743== Command: ./minishell
+==686743== 
+==686743== Invalid read of size 1
+==686743==    at 0x10F286: ft_strcat (ft_strcat.c:21)
+==686743==    by 0x10C684: merge_ampersands (parser_utils.c:57)
+==686743==    by 0x10C59D: merge_separators (parser_utils.c:30)
+==686743==    by 0x10B636: parser (parser.c:28)
+==686743==    by 0x10983B: minishell_loop (minishell.c:89)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==686743== 
+==686743== 
+==686743== Process terminating with default action of signal 11 (SIGSEGV)
+==686743==  Access not within mapped region at address 0x0
+==686743==    at 0x10F286: ft_strcat (ft_strcat.c:21)
+==686743==    by 0x10C684: merge_ampersands (parser_utils.c:57)
+==686743==    by 0x10C59D: merge_separators (parser_utils.c:30)
+==686743==    by 0x10B636: parser (parser.c:28)
+==686743==    by 0x10983B: minishell_loop (minishell.c:89)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743==  If you believe this happened as a result of a stack
+==686743==  overflow in your program's main thread (unlikely but
+==686743==  possible), you can try to increase the size of the
+==686743==  main thread stack using the --main-stacksize= flag.
+==686743==  The main thread stack size used in this run was 8388608.
+==686743== 
+==686743== HEAP SUMMARY:
+==686743==     in use at exit: 208,673 bytes in 625 blocks
+==686743==   total heap usage: 914 allocs, 289 frees, 256,650 bytes allocated
+==686743== 
+==686743== 8 bytes in 1 blocks are still reachable in loss record 4 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10B3BF: lexer (lexer.c:24)
+==686743==    by 0x10982B: minishell_loop (minishell.c:88)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743== 
+==686743== 15 bytes in 3 blocks are still reachable in loss record 8 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10B4C2: lexer_add_cmd (lexer.c:48)
+==686743==    by 0x10B437: lexer (lexer.c:34)
+==686743==    by 0x10982B: minishell_loop (minishell.c:88)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743== 
+==686743== 17 bytes in 1 blocks are still reachable in loss record 11 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10EE86: ft_strtrim (ft_strtrim.c:30)
+==686743==    by 0x1097D8: minishell_loop (minishell.c:84)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743== 
+==686743== 48 bytes in 3 blocks are still reachable in loss record 22 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10B4AE: lexer_add_cmd (lexer.c:47)
+==686743==    by 0x10B437: lexer (lexer.c:34)
+==686743==    by 0x10982B: minishell_loop (minishell.c:88)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743== 
+==686743== 48 bytes in 3 blocks are still reachable in loss record 23 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10B52F: lexer_add_token (lexer.c:58)
+==686743==    by 0x10B469: lexer (lexer.c:37)
+==686743==    by 0x10982B: minishell_loop (minishell.c:88)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743== 
+==686743== 55 bytes in 1 blocks are still reachable in loss record 24 of 70
+==686743==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x49E5297: getcwd (getcwd.c:84)
+==686743==    by 0x10B04B: getcwd_p (protected_methods.c:79)
+==686743==    by 0x10967F: init_data (minishell.c:48)
+==686743==    by 0x1095EC: main (minishell.c:25)
+==686743== 
+==686743== 72 bytes in 3 blocks are still reachable in loss record 28 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10F8EC: lstnew_p (lstnew_p.c:19)
+==686743==    by 0x10B4FB: lexer_add_cmd (lexer.c:51)
+==686743==    by 0x10B437: lexer (lexer.c:34)
+==686743==    by 0x10982B: minishell_loop (minishell.c:88)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743== 
+==686743== 72 bytes in 3 blocks are still reachable in loss record 29 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10F8EC: lstnew_p (lstnew_p.c:19)
+==686743==    by 0x10B555: lexer_add_token (lexer.c:61)
+==686743==    by 0x10B469: lexer (lexer.c:37)
+==686743==    by 0x10982B: minishell_loop (minishell.c:88)
+==686743==    by 0x1095F6: main (minishell.c:27)
+==686743== 
+==686743== 632 bytes in 1 blocks are still reachable in loss record 34 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10A588: envp_matrix_add (envp_matrix.c:100)
+==686743==    by 0x10A1F0: update_envp_matrix (envp_matrix.c:27)
+==686743==    by 0x10ABA9: ft_setenv (envp_table.c:71)
+==686743==    by 0x10AD9B: envp_table_init (envp_table.c:133)
+==686743==    by 0x1096EE: init_data (minishell.c:54)
+==686743==    by 0x1095EC: main (minishell.c:25)
+==686743== 
+==686743== 1,245 bytes in 78 blocks are still reachable in loss record 41 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10EF69: ft_strdup (ft_strdup.c:22)
+==686743==    by 0x10AA6D: ft_setenv (envp_table.c:43)
+==686743==    by 0x10AD9B: envp_table_init (envp_table.c:133)
+==686743==    by 0x1096EE: init_data (minishell.c:54)
+==686743==    by 0x1095EC: main (minishell.c:25)
+==686743== 
+==686743== 1,248 bytes in 78 blocks are still reachable in loss record 42 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10AA5D: ft_setenv (envp_table.c:42)
+==686743==    by 0x10AD9B: envp_table_init (envp_table.c:133)
+==686743==    by 0x1096EE: init_data (minishell.c:54)
+==686743==    by 0x1095EC: main (minishell.c:25)
+==686743== 
+==686743== 1,872 bytes in 78 blocks are still reachable in loss record 44 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10AE78: malloc_p (protected_methods.c:21)
+==686743==    by 0x10F8EC: lstnew_p (lstnew_p.c:19)
+==686743==    by 0x10AB6D: ft_setenv (envp_table.c:70)
+==686743==    by 0x10AD9B: envp_table_init (envp_table.c:133)
+==686743==    by 0x1096EE: init_data (minishell.c:54)
+==686743==    by 0x1095EC: main (minishell.c:25)
+==686743== 
+==686743== 2,037 bytes in 78 blocks are still reachable in loss record 46 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10EF69: ft_strdup (ft_strdup.c:22)
+==686743==    by 0x10AA80: ft_setenv (envp_table.c:44)
+==686743==    by 0x10AD9B: envp_table_init (envp_table.c:133)
+==686743==    by 0x1096EE: init_data (minishell.c:54)
+==686743==    by 0x1095EC: main (minishell.c:25)
+==686743== 
+==686743== 2,040 bytes in 1 blocks are still reachable in loss record 47 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10EA90: ft_calloc (ft_calloc.c:23)
+==686743==    by 0x10AED6: calloc_p (protected_methods.c:33)
+==686743==    by 0x10AD2F: envp_table_init (envp_table.c:125)
+==686743==    by 0x1096EE: init_data (minishell.c:54)
+==686743==    by 0x1095EC: main (minishell.c:25)
+==686743== 
+==686743== 2,970 bytes in 78 blocks are still reachable in loss record 49 of 70
+==686743==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==686743==    by 0x10EA90: ft_calloc (ft_calloc.c:23)
+==686743==    by 0x10A624: envp_matrix_add (envp_matrix.c:105)
+==686743==    by 0x10A1F0: update_envp_matrix (envp_matrix.c:27)
+==686743==    by 0x10ABA9: ft_setenv (envp_table.c:71)
+==686743==    by 0x10AD9B: envp_table_init (envp_table.c:133)
+==686743==    by 0x1096EE: init_data (minishell.c:54)
+==686743==    by 0x1095EC: main (minishell.c:25)
+==686743== 
+==686743== LEAK SUMMARY:
+==686743==    definitely lost: 0 bytes in 0 blocks
+==686743==    indirectly lost: 0 bytes in 0 blocks
+==686743==      possibly lost: 0 bytes in 0 blocks
+==686743==    still reachable: 12,379 bytes in 410 blocks
+==686743==         suppressed: 196,294 bytes in 215 blocks
+==686743== 
+==686743== For lists of detected and suppressed errors, rerun with: -s
+==686743== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+Segmentation fault (core dumped)

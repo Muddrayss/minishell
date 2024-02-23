@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 18:01:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 19:01:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,16 @@ static void	minishell_loop()
 		add_history(data->input);
 		lexered_params = lexer(data->input);
 		parsed_params = parser(lexered_params);
+		lstclear(data->lexered_params, &del_content_lexer); //potrebbe dare problemi se albero condivide elementi del lexer
+		free(data->lexered_params);
+		data->lexered_params = NULL;
 		if (!parsed_params)
 			continue ;
 		set_signals(S_SILENT, true);
 		executor(parsed_params);
+		treeclear(data->parsed_params, &del_content_parser);
+		free(data->parsed_params);
+		data->parsed_params = NULL;
 	}
 }
 

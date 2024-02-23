@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:50:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 19:10:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void merge_ampersands(t_list **head, t_list *node)
     t_lexer *next_elem;
     t_lexer *prev_elem;
 
-    //vanno in segfault se non ci sono due elementi prima e dopo (quindi e' da fare attentamente il check_syntax())
+    //TODO gestire i segfault di next e prev
     elem = (t_lexer *)node->content;
     next_elem = (t_lexer *)node->next->content;
     prev_elem = (t_lexer *)node->prev->content;

@@ -6,13 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 14:07:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 18:31:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROTECTED_METHODS_H
 # define PROTECTED_METHODS_H
 
+bool            is_bad_errno(uint8_t value, bool init);
 void            *malloc_p(size_t size);
 void            *calloc_p(size_t nmemb, size_t size);
 int             open_p(char *path, int flags, uint16_t permissions);

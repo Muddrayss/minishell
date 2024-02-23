@@ -6,13 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 18:01:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 18:31:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
-static bool is_bad_errno(uint8_t value, bool init);
 
 void    *malloc_p(size_t size)
 {
@@ -157,7 +155,7 @@ void    reset_fd(int *fd)
     *fd = -42;
 }
 
-static bool is_bad_errno(uint8_t value, bool init)
+bool is_bad_errno(uint8_t value, bool init)
 {
     static uint8_t   bad_errnos[256];
 

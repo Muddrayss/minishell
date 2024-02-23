@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 14:12:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 18:55:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ void    executor(t_tree *parsed_params)
     int     original_status;
     int     heredoc_status;
     int     fds[5] = {-42, -42, -42, -42, -42}; //pipe read, pipe write, prev_output, original stdin, original stdout
-    t_data  *data;
 
-    data = get_data();
     fds[3] = dup_p(STDIN_FILENO);
     fds[4] = dup_p(STDOUT_FILENO);
     original_status = g_status;
@@ -50,9 +48,6 @@ void    executor(t_tree *parsed_params)
     wait_for_children(parsed_params);
     dup2(fds[3], STDIN_FILENO);
     free_data_in_main();
-    treeclear(data->parsed_params, &del_content_parser);
-	free(data->parsed_params);
-	data->parsed_params = NULL;
 }
 
 static t_tree   *skip_till_semicolon(t_tree *node)
