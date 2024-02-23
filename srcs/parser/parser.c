@@ -40,8 +40,6 @@ static int8_t   check_syntax(t_list *lexered_params)
 {
     t_lexer  *elem;
     t_lexer  *next_elem;
-    char     err_msg[50] =
-    "minishell: syntax error near unexpected token: '";
 
     if (check_parenthesis(lexered_params) == -1)
         return (-1);
@@ -55,8 +53,8 @@ static int8_t   check_syntax(t_list *lexered_params)
         {
             if (!next_elem || next_elem->token)
             {
-                ft_putstr_fd(err_msg, STDERR_FILENO);
-                write(STDERR_FILENO, &next_elem->token, 1);
+                ft_putstr_fd("minishell: syntax error near unexpected token: '", STDERR_FILENO);
+                write(STDERR_FILENO, &elem->token, 1);
                 write(STDERR_FILENO, "'\n", 2);
                 return (-1);
             }
@@ -70,8 +68,6 @@ static int8_t check_parenthesis(t_list *lexered_params)
 {
     int32_t     n_open;
     t_lexer     *elem;
-    char        err_msg[56]
-    = "minishell: syntax error: uneven number of parenthesis\n";
 
     n_open = 0;
     while (lexered_params)
@@ -83,13 +79,13 @@ static int8_t check_parenthesis(t_list *lexered_params)
         {
             n_open--;
             if (n_open < 0)
-                ft_putstr_fd(err_msg, STDERR_FILENO);
+                ft_putstr_fd("minishell: syntax error near unexpected token: ')'\n", STDERR_FILENO);
             return (-1);
         }
         lexered_params = lexered_params->next;
     }
     if (n_open)
-        ft_putstr_fd(err_msg, STDERR_FILENO);
+        ft_putstr_fd("minishell: syntax error: uneven number of parenthesis\n", STDERR_FILENO);
     return (-1 * (n_open > 0)); //se ci sono parentesi aperte, ritorna -1
 }
 
