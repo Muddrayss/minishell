@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 13:23:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 16:49:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,11 @@ static char *get_full_entry(char *basedir, char *entry, char *cwd)
 {
     char    *full_entry;
 
-    while (*basedir == *cwd)
+    while (*cwd && *basedir == *cwd)
     {
         basedir++;
         cwd++;
     }
-    basedir++;
     full_entry = (char *)malloc_p(sizeof(char) * (ft_strlen(basedir) + ft_strlen(entry) + 2));
     ft_strcpy(full_entry, basedir);
     ft_strcat(full_entry, "/");
