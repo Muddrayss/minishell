@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 15:49:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 15:51:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	envp_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_t
 			tmp = matrix[i];
 			matrix[i] = (char *)malloc_p(sizeof(char) * name_len + value_len + 2);
 			free(tmp);
-			ft_strcpy(matrix[i], elem.name);
+			ft_strlcpy(matrix[i], elem.name, name_len + 1);
 			matrix[i][name_len] = '=';
 			ft_strcat(matrix[i], elem.value);
 		}
