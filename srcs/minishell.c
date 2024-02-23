@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 16:11:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 18:01:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ static void init_general(void)
 {
 	char	*path;
 	
+	is_bad_errno(0, true);
 	path = ft_getenv("PATH");
-	errno = 0;
 	g_status = 0;
 	exec_simple_cmd(path, "clear");
 	clean_heredocs(path);

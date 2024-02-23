@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 17:00:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 18:01:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-static bool is_bad_errno(uint8_t value);
+static bool is_bad_errno(uint8_t value, bool init);
 
 void    *malloc_p(size_t size)
 {
@@ -59,7 +59,7 @@ DIR *opendir_p(char *path)
     DIR    *dir;
 
     dir = opendir(path);
-    if (!dir && is_bad_errno(errno))
+    if (!dir && is_bad_errno(errno, false))
         ft_quit(ERR_MEM, NULL);
     return (dir);
 }
@@ -69,7 +69,7 @@ struct dirent   *readdir_p(DIR *dir)
     struct dirent    *entry;
 
     entry = readdir(dir);
-    if (!entry && is_bad_errno(errno))
+    if (!entry && is_bad_errno(errno, false))
         ft_quit(ERR_MEM, NULL);
     return (entry);
 }
@@ -79,7 +79,7 @@ char   *getcwd_p(char *buf, size_t size)
     char    *cwd;
 
     cwd = getcwd(buf, size);
-    if (!cwd && is_bad_errno(errno))
+    if (!cwd && is_bad_errno(errno, false))
         ft_quit(ERR_MEM, NULL);
     return (cwd);
 }
@@ -89,7 +89,7 @@ int    chdir_p(char *path)
     int    ret;
 
     ret = chdir(path);
-    if (ret == -1 && is_bad_errno(errno))
+    if (ret == -1 && is_bad_errno(errno, false))
         ft_quit(ERR_MEM, NULL);
     return (ret);
 }
@@ -157,11 +157,11 @@ void    reset_fd(int *fd)
     *fd = -42;
 }
 
-static bool is_bad_errno(uint8_t value)
+static bool is_bad_errno(uint8_t value, bool init)
 {
     static uint8_t   bad_errnos[256];
 
-    if (bad_errnos[ENOMEM] == false) //solo la prima volta
+    if (init)
     {
         bad_errnos[ENOMEM] = true;
         bad_errnos[EFAULT] = true;
