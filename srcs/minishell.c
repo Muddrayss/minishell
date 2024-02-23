@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 19:26:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 14:07:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ static void	init_data(char **envp)
 	data->cmd_args = NULL;
 	data->cmd_path = NULL;
 	data->lexered_params = NULL;
-	data->starting_dir = getenv("PWD");
+	data->starting_dir = getcwd_p(NULL, 0);
 	data->main_pid = getpid();
 	data->input = NULL;
 	if (!data->starting_dir)
-		ft_quit(ERR_ENV, "Error: failed to get current working directory\nEnv var PWD likely not set");
+		ft_quit(ERR_ENV, "Error: failed to get current working directory");
 	data->envp_matrix = calloc_p(ft_matrixsize(envp) + 1, sizeof(char *));
 	envp_table_init(envp);
 }

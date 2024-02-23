@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 13:57:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 14:07:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int             open_p(char *path, int flags, uint16_t permissions);
 void            close_p(int fd);
 DIR             *opendir_p(char *path);
 struct dirent   *readdir_p(DIR *dir);
+char            *getcwd_p(char *buf, size_t size);
+int             chdir_p(char *path);
 void            pipe_p(int pipefd[2]);
 pid_t           fork_p(void);
 int             dup_p(int fd);

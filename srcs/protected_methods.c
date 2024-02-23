@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:01:04 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 13:53:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 14:06:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,26 @@ struct dirent   *readdir_p(DIR *dir)
     if (!entry && is_bad_errno(errno))
         ft_quit(ERR_MEM, NULL);
     return (entry);
+}
+
+char   *getcwd_p(char *buf, size_t size)
+{
+    char    *cwd;
+
+    cwd = getcwd(buf, size);
+    if (!cwd && is_bad_errno(errno))
+        ft_quit(ERR_MEM, NULL);
+    return (cwd);
+}
+
+int    chdir_p(char *path)
+{
+    int    ret;
+
+    ret = chdir(path);
+    if (ret == -1 && is_bad_errno(errno))
+        ft_quit(ERR_MEM, NULL);
+    return (ret);
 }
 
 void    pipe_p(int fds[2])
