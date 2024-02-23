@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 15:41:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 15:00:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 			{
 				del_content_envptable(elem);
 				bucket->content = new_elem;
-				update_env_matrix(*new_elem, REPLACE);
+				update_envp_matrix(*new_elem, REPLACE);
 			}
 			else
 				del_content_envptable(new_elem); //se non deve sostituire il valore lo libera
@@ -68,7 +68,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 	if (!bucket) //se non e' presente lo aggiunge
 	{
 		lstadd_front(&table[index], lstnew_p(new_elem));
-		update_env_matrix(*new_elem, ADD);
+		update_envp_matrix(*new_elem, ADD);
 	}
 }
 
@@ -107,8 +107,8 @@ void	ft_unsetenv(char *env_name)
 		elem = (t_envp *)bucket->content;
 		if (ft_strcmp(env_name, elem->name) == 0)
 		{
+			update_envp_matrix(*elem, REMOVE);
 			lstremoveone(&table[index], bucket, &free);
-			update_env_matrix(*elem, REMOVE);
 			break ;
 		}
 		bucket = bucket->next;

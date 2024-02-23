@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 20:30:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 14:16:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,15 @@ void create_heredocs(t_tree *tree, int *status)
         while (redirs)
         {
             redir = (t_redir *)redirs->content;
-            if (redir->type == REDIR_HEREDOC)
-            {
-                filename = get_heredoc_filename(redir->heredoc_fileno);
-                fd = open_p(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-                free(filename);
-                *status = fill_in_child(redir->filename, fd);
-                if (*status != 0)
-                    return ;
-            }
             redirs = redirs->next;
+            if (redir->type != REDIR_HEREDOC)
+                continue ;
+            filename = get_heredoc_filename(redir->heredoc_fileno);
+            fd = open_p(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            free(filename);
+            *status = fill_in_child(redir->filename, fd);
+            if (*status != 0)
+                return ;
         }
     }
     create_heredocs(tree->left, status);
