@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 16:22:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 17:34:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,16 @@ void	update_envp_matrix(t_envp elem, int8_t operation) //se l'elemento da aggiun
 	uint32_t	name_len;
 	uint32_t    value_len;
 	char		**matrix;
-	t_envp		*elem_cpy;
 
 	matrix = get_data()->envp_matrix;
 	name_len = ft_strlen(elem.name);
 	value_len = ft_strlen(elem.value);
-	elem_cpy = (t_envp *)malloc_p(sizeof(t_envp));
-	elem_cpy->name = ft_strdup(elem.name);
-	elem_cpy->value = ft_strdup(elem.value);
 	if (operation == ADD)
-		envp_matrix_add(matrix, *elem_cpy, name_len, value_len);
+		envp_matrix_add(matrix, elem, name_len, value_len);
 	else if (operation == REMOVE)
-		envp_matrix_remove(matrix, elem_cpy->name, name_len);
+		envp_matrix_remove(matrix, elem.name, name_len);
 	else if (operation == REPLACE)
-		envp_matrix_replace(matrix, *elem_cpy, name_len, value_len);
-	free(elem_cpy->name);
-	free(elem_cpy->value);
-	free(elem_cpy);
+		envp_matrix_replace(matrix, elem, name_len, value_len);
 }
 
 void	envp_matrix_remove(char **matrix, char *env_name, uint32_t name_len)
@@ -44,22 +37,29 @@ void	envp_matrix_remove(char **matrix, char *env_name, uint32_t name_len)
 	uint32_t	i;
 	uint32_t	j;
     size_t      size;
+	char        *env_name_cpy;
 
 	matrix = get_data()->envp_matrix;
 	size = ft_matrixsize(matrix);
 	new_matrix = malloc_p(sizeof(char *) * size); //
 	new_matrix[size - 1] = NULL;
-	env_name[name_len] = '='; //sovrascrivo il '\0' con '=' per lo strncmp
+	env_name_cpy = ft_strjoin(env_name, "=");
+	if (!env_name_cpy)
+	{
+		free(new_matrix);
+		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+	}
 	j = 0;
 	i = 0;
 	while (matrix[i])
 	{
-		if (ft_strncmp(matrix[i], env_name, name_len + 1) != 0)
+		if (ft_strncmp(matrix[i], env_name_cpy, name_len + 1) != 0)
 			new_matrix[j++] = matrix[i];
 		else
 			free(matrix[i]);
 		i++;
 	}
+	free(env_name_cpy);
 	free(matrix); //non ft_freematrix() altrimenti faccio il free di tutti gli elementi nuovi e vecchi
 	get_data()->envp_matrix = new_matrix;
 }
@@ -68,23 +68,26 @@ void	envp_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_t
 {
 	uint32_t	i;
 	char		*tmp;
+	char        *env_name_cpy;
 
 	matrix = get_data()->envp_matrix;
-	elem.name[name_len] = '=';  //sovrascrivo il '\0' con '=' per lo strncmp
+	env_name_cpy = ft_strjoin(elem.name, "=");
+	if (!env_name_cpy)
+		ft_quit(ERR_MEM, "Error: failed to allocate memory");
 	i = 0;
 	while (matrix[i])
 	{
-		if (ft_strncmp(matrix[i], elem.name, name_len + 1) == 0)
+		if (ft_strncmp(matrix[i], env_name_cpy, name_len + 1) == 0)
 		{
 			tmp = matrix[i];
 			matrix[i] = (char *)malloc_p(sizeof(char) * name_len + value_len + 2);
 			free(tmp);
-			ft_strlcpy(matrix[i], elem.name, name_len + 1);
-			matrix[i][name_len] = '=';
+			ft_strlcpy(matrix[i], env_name_cpy, name_len + 1);
 			ft_strcat(matrix[i], elem.value);
 		}
 		i++;
 	}
+	free(env_name_cpy);
 }
 
 void	envp_matrix_add(char **matrix, t_envp  elem, uint32_t name_len, uint32_t value_len)
