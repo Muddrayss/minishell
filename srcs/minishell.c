@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 14:07:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/23 16:11:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static void	minishell_loop()
 	{
 		//TODO gestire linea lunga che supera colonne
 		set_signals(S_INTERACTIVE, true);
+		free(data->input);
 		data->input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!data->input)
 			ft_quit(123, "exit");
