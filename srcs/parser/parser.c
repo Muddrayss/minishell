@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 19:10:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/24 15:14:14 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
+
 
 static int8_t   check_syntax(t_list *lexered_params);
 static int8_t   check_parenthesis(t_list *lexered_params);
@@ -40,6 +41,7 @@ static int8_t   check_syntax(t_list *lexered_params)
 {
     t_lexer  *elem;
     t_lexer  *next_elem;
+    t_lexer  *prev_elem;
 
     if (check_parenthesis(lexered_params) == -1)
         return (-1);
@@ -47,20 +49,24 @@ static int8_t   check_syntax(t_list *lexered_params)
     {
         elem = (t_lexer *)lexered_params->content;
         next_elem = NULL;
+        prev_elem = NULL;
         if (lexered_params->next)
             next_elem = (t_lexer *)lexered_params->next->content;
-        if (elem->token && elem->token != SUBSHELL_END && elem->token != SUBSHELL_START)
+        if (lexered_params->prev)
+            prev_elem = (t_lexer *)lexered_params->prev->content;
+        if (elem->token)
         {
-            if (!next_elem || next_elem->token)
+            if (!prev_elem || !next_elem || !prev_elem->cmd_str || !next_elem->cmd_str)
             {
                 ft_putstr_fd("minishell: syntax error near unexpected token: '", STDERR_FILENO);
-                write(STDERR_FILENO, &elem->token, 1);
+                write(STDERR_FILENO, &g_parser_tokens[(int)elem->token], 1);
                 write(STDERR_FILENO, "'\n", 2);
                 return (-1);
             }
         }
         lexered_params = lexered_params->next;
     }
+    //TODO fare check syntax per redirs
     return (0);
 }
 
@@ -85,7 +91,7 @@ static int8_t check_parenthesis(t_list *lexered_params)
         lexered_params = lexered_params->next;
     }
     if (n_open)
-        ft_putstr_fd("minishell: syntax error: uneven number of parenthesis\n", STDERR_FILENO);
+        ft_putstr_fd("minishell: syntax error near unexpected token: '('\n", STDERR_FILENO);
     return (-1 * (n_open > 0)); //se ci sono parentesi aperte, ritorna -1
 }
 

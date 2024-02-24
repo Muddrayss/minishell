@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 17:22:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/24 15:18:57 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,8 @@ static char *get_wildcard_str(char *str, uint32_t *idx)
     uint32_t    len;
     char        *wildcard_str;
 
+    if (!str)
+        return (NULL);
     while (str[*idx] && str[*idx] != '*')
         (*idx)++;
     if (str[*idx] != '*')

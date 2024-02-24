@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:00:20 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/24 15:13:25 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 
 # define END 			   -1
 # define CMD 				0 //CMD deve essere zero, altrimenti non funziona treenew con il token
-# define SEMICOLON			1
-# define OR 				2
-# define AND 				3
-# define PIPELINE 			4
-# define SUBSHELL_START 	5
-# define SUBSHELL_END 		6
+# define SEMICOLON			0
+# define OR 				1
+# define AND 				2
+# define PIPELINE 			3
+# define SUBSHELL_START 	4
+# define SUBSHELL_END 		5
 
 # define REDIR_INPUT 		0 	// '< filename'
 # define REDIR_HEREDOC 		1	// '<< limiter'
@@ -29,6 +29,9 @@
 # define REDIR_OUTPUT_FD 	4 	// '>&n'
 # define REDIR_APPEND 		5 	// '>> filename o n>> filename'
 # define REDIR_APPEND_FD 	6 	// '>>&n'
+
+static const char g_parser_tokens[6]
+	= {';', '|', '&', '|', '(', ')'};
 
 # define BEFORE 0
 # define AFTER  1
