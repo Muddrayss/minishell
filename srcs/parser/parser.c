@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 15:14:14 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/24 15:40:22 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int8_t   check_syntax(t_list *lexered_params)
             next_elem = (t_lexer *)lexered_params->next->content;
         if (lexered_params->prev)
             prev_elem = (t_lexer *)lexered_params->prev->content;
-        if (elem->token)
+        if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END)
         {
             if (!prev_elem || !next_elem || !prev_elem->cmd_str || !next_elem->cmd_str)
             {
@@ -85,8 +85,7 @@ static int8_t check_parenthesis(t_list *lexered_params)
         {
             n_open--;
             if (n_open < 0)
-                ft_putstr_fd("minishell: syntax error near unexpected token: ')'\n", STDERR_FILENO);
-            return (-1);
+                return (ft_putstr_fd("minishell: syntax error near unexpected token: ')'\n", STDERR_FILENO), -1);
         }
         lexered_params = lexered_params->next;
     }

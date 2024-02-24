@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 14:58:48 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/24 15:29:04 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void merge_separators(t_list **lexered_params)
         }
         node = node->next;
     }
-    printf("stringa finale: %s\n", ((t_lexer *)(*lexered_params)->content)->cmd_str);
 }
 
 static void merge_ampersands(t_list **head, t_list **node)
