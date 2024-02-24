@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 15:29:04 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/24 16:11:07 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void merge_separators(t_list **lexered_params)
             else if (elem->token == ';')
                 elem->token = SEMICOLON;
         }
-        node = node->next;
+        if (node)
+            node = node->next;
     }
 }
 

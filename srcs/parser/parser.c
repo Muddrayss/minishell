@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 15:40:22 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/24 16:09:00 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,13 @@ static int8_t   check_syntax(t_list *lexered_params)
         {
             if (!prev_elem || !next_elem || !prev_elem->cmd_str || !next_elem->cmd_str)
             {
-                ft_putstr_fd("minishell: syntax error near unexpected token: '", STDERR_FILENO);
-                write(STDERR_FILENO, &g_parser_tokens[(int)elem->token], 1);
-                write(STDERR_FILENO, "'\n", 2);
-                return (-1);
+                if (!prev_elem || !next_elem || prev_elem->token == SUBSHELL_START || next_elem->token == SUBSHELL_END)
+                {  
+                    ft_putstr_fd("minishell: syntax error near unexpected token: '", STDERR_FILENO);
+                    write(STDERR_FILENO, &g_parser_tokens[(int)elem->token], 1);
+                    write(STDERR_FILENO, "'\n", 2);
+                    return (-1);
+                }
             }
         }
         lexered_params = lexered_params->next;
