@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:16:55 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 18:19:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/25 18:35:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,47 @@
 
 static void     remove_fd_nums(char *cmd_str, uint32_t idx_redir);
 static void     remove_filename(char *cmd_str, uint32_t idx_redir);
-static void     fill_redir_input(t_list **redirs, char *str, uint32_t i);
+static void     fill_redir_input(t_list **redirs, t_lexer *elem, uint32_t *i);
 static void     fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno);
-static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append);
+static void     fill_redir_output(t_list **redirs, t_lexer *elem, uint32_t *i, bool is_append);
 static int32_t  get_fd_num(char *str, uint32_t idx_redir, uint8_t before_after);
-static char     *get_filename(char *str, uint32_t idx_redir);
+static char     *get_filename(char *str, uint32_t *idx_redir);
 static t_redir  *init_redir(void);
 
-t_list  *fill_redirs(char *cmd_str)
+t_list  *fill_redirs(t_lexer *elem)
 {
     t_list          *redirs;
     uint32_t        i;
     static int32_t  heredoc_fileno = 0;
 
-    if (!cmd_str)
+    if (!elem || !elem->cmd_str)
         return (NULL);
     i = 0;
     redirs = NULL;
-    while (cmd_str[i])
+    while (elem->cmd_str[i])
     {
-        if (cmd_str[i] == '<')
+        if (elem->cmd_str[i] == '$')
+            elem->cmd_str = replace_env_var(elem->cmd_str, *(elem->dollar_array++), &i);
+        else if (elem->cmd_str[i] == '<' && elem->redirs_array++)
         {
-            if (cmd_str[i + 1] == '<')
-                fill_redir_heredoc(&redirs, cmd_str, ++i, heredoc_fileno);
+            if (elem->cmd_str[i + 1] == '<' && elem->redirs_array)
+            {
+                fill_redir_heredoc(&redirs, elem->cmd_str, ++i, heredoc_fileno);
+                elem->redirs_array++;
+            }
             else
-                fill_redir_input(&redirs, cmd_str, i);
+                fill_redir_input(&redirs, elem, &i);
         }
-        else if (cmd_str[i] == '>')
+        else if (elem->cmd_str[i] == '>' && elem->redirs_array++)
         {
-            if (cmd_str[i + 1] == '>')
-                fill_redir_output(&redirs, cmd_str, ++i, true);
+            if (elem->cmd_str[i + 1] == '>' && elem->redirs_array)
+            {
+                i++;
+                fill_redir_output(&redirs, elem, &i, true);
+                elem->redirs_array++;
+            }
             else
-                fill_redir_output(&redirs, cmd_str, i, false);
+                fill_redir_output(&redirs, elem, &i, false);
         }
         i++;
     }
@@ -85,38 +94,58 @@ static void fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t h
 
     redir = init_redir();
     redir->type = REDIR_HEREDOC;
-    redir->filename = get_filename(str, i);
+    redir->filename = get_filename(str, &i);
     redir->heredoc_fileno = heredoc_fileno;
     lstadd_front(redirs, lstnew_p(redir));
 }
 
-static void    fill_redir_input(t_list **redirs, char *str, uint32_t i)
+static void    fill_redir_input(t_list **redirs, t_lexer *elem, uint32_t *i)
 {
     t_redir         *redir;
+    char            *dollar;
+    uint32_t        j;
 
     redir = init_redir();
     redir->type = REDIR_INPUT_FD;
-    redir->fds[0] = get_fd_num(str, i, AFTER);
+    redir->fds[0] = get_fd_num(elem->cmd_str, *i, AFTER);
     if (redir->fds[0] == -42)
     {
         redir->type = REDIR_INPUT;
-        redir->filename = get_filename(str, i);
+        redir->filename = get_filename(elem->cmd_str, i);
+        dollar = ft_strchr(redir->filename, '$');
+        while (dollar)
+        {
+            j = 0;
+            redir->filename = replace_env_var(redir->filename, *(elem->dollar_array++), &j);
+            dollar += j;
+            dollar = ft_strchr(dollar, '$');
+        }
     }
     lstadd_front(redirs, lstnew_p(redir));
 }
 
-static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append)
+static void     fill_redir_output(t_list **redirs, t_lexer *elem, uint32_t *i, bool is_append)
 {
-    t_redir *redir;
+    t_redir     *redir;
+    char        *dollar;
+    uint32_t    j;
 
     redir = init_redir();
     redir->type = REDIR_APPEND_FD * (is_append) + REDIR_OUTPUT_FD * (!is_append);
-    redir->fds[1] = get_fd_num(str, i, AFTER);
-    redir->fds[0] = get_fd_num(str, i, BEFORE);
+    redir->fds[1] = get_fd_num(elem->cmd_str, *i, AFTER);
+    redir->fds[0] = get_fd_num(elem->cmd_str, *i, BEFORE);
     if (redir->fds[1] == -42)
     {
         redir->type = REDIR_APPEND * (is_append) + REDIR_OUTPUT * (!is_append);
-        redir->filename = get_filename(str, i);
+        redir->filename = get_filename(elem->cmd_str, i);
+        dollar = ft_strchr(redir->filename, '$');
+        while (dollar)
+        {
+            j = 0;
+            redir->filename = replace_env_var(redir->filename, *(elem->dollar_array++), &j);
+            dollar += j;
+            dollar = ft_strchr(dollar, '$');
+        }
     }
     if (redir->fds[0] == -42)
         redir->fds[0] = STDOUT_FILENO;
@@ -136,14 +165,14 @@ static t_redir *init_redir(void)
     return (redir);
 }
 
-static char *get_filename(char *str, uint32_t idx_redir)
+static char *get_filename(char *str, uint32_t *idx_redir)
 {
 	char 		*filename;
 	uint32_t 	len;
 	uint32_t 	i;
 	
 	filename = NULL;
-	i = idx_redir + 1;
+	i = *idx_redir + 1;
 	while (str[i] && is_shell_space(str[i]))
 		i++;
 	len = 0;
@@ -151,6 +180,7 @@ static char *get_filename(char *str, uint32_t idx_redir)
 		len++;
 	filename = calloc_p(len + 1, sizeof(char));
 	ft_strlcpy(filename, &str[i], len + 1);
+    *idx_redir += len + i + 1;
 	return (filename);
 }
 

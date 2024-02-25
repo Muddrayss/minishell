@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 19:14:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/25 17:19:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
     if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
     exec_redirs(elem->cmd->redirs);
-    elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str);
     elem->cmd->cmd_str = replace_wildcards(elem->cmd->cmd_str);
     exec(ft_getenv("PATH"), elem->cmd->cmd_str);
 }
@@ -181,8 +180,6 @@ static void exec_file_redirs(t_redir *redir)
     int dup_target;
 
     file_fd = -42;
-    if (ft_strchr(redir->filename, '$'))
-        redir->filename = replace_env_vars(redir->filename);
     file_fd = open_redir_file(redir);
     if (redir->type == REDIR_INPUT || redir->type == REDIR_INPUT_FD || redir->type == REDIR_HEREDOC)
         dup_target = STDIN_FILENO;

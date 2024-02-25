@@ -6,17 +6,39 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 20:59:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 19:27:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/25 18:46:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
 static char *rebuild_str(char *str, uint32_t i, char *env_value, char *env_name);
-static char *get_env_name(char *str, uint32_t i);
+static char *get_env_name(char *str, uint32_t *i);
 static char *get_env_value(char *env_name);
 
-char *replace_env_vars(char *str)
+char    *replace_env_var(char *str, bool to_replace, uint32_t *i)
+{
+    char    *env_name;
+    char    *env_value;
+    char    *new_str;
+
+    new_str = str;
+    if (to_replace)
+    {
+        if (str[*i + 1] != '<' && str[*i + 1] != '>')
+        {
+            env_name = get_env_name(str, i);
+            if (!env_name)
+                return (str);
+            env_value = get_env_value(env_name);
+            new_str = rebuild_str(str, *i, env_value, env_name);
+            free(str);
+        }
+    }
+    return (new_str);
+}
+
+char    *replace_env_vars(char *str)
 {
     char        *tmp;
     char        *env_name;
@@ -24,17 +46,16 @@ char *replace_env_vars(char *str)
     uint32_t    i;
 
     i = 0;
-    env_name = get_env_name(str, i);
+    env_name = get_env_name(str, &i);
     while (env_name)
     {
         env_value = get_env_value(env_name);
-        i = ft_strchr(str, '$') - str;
         tmp = rebuild_str(str, i, env_value, env_name);
         free(str);
         free(env_name);
         free(env_value);
         str = tmp;
-        env_name = get_env_name(str, i);
+        env_name = get_env_name(str, &i);
     }
     return (str);
 }
@@ -54,7 +75,7 @@ static char *rebuild_str(char *str, uint32_t i, char *env_value, char *env_name)
     return (new_str);
 }
 
-static char *get_env_name(char *str, uint32_t i)
+static char *get_env_name(char *str, uint32_t *i)
 {
     char        *end;
     char        *env_name;
@@ -62,18 +83,20 @@ static char *get_env_name(char *str, uint32_t i)
 
     if (!str)
         return (NULL);
-    while (str[i] && str[i] != '$')
-        i++;
-    if (!str[i] || !str[i + 1] || str[i + 1] == '$' || is_shell_space(str[i + 1]))
+    while (str[*i] && str[*i] != '$')
+        (*i)++;
+    if (!str[*i] || !str[*i + 1])
         return (NULL);
-    i++;
-    end = ft_strchr(str + i, ' ');
+    if (str[*i + 1] == '$' || is_shell_space(str[*i + 1]))
+        (*i)++;
+    (*i)++;
+    end = ft_strchr(str + *i, ' ');
     if (end)
-        len = (uint32_t)(end - (str + i));
+        len = (uint32_t)(end - (str + *i));
     else
-        len = ft_strlen(str + i);
+        len = ft_strlen(str + *i);
     env_name = (char *)malloc_p(sizeof(char) * (len + 1));
-    ft_strlcpy(env_name, str + i, len + 1);
+    ft_strlcpy(env_name, str + *i, len + 1);
     return (env_name);
 }
 
