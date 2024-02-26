@@ -6,15 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 13:31:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:08:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-
 static int8_t   check_syntax(t_list *lexered_params);
 static int8_t   check_parenthesis(t_list *lexered_params);
+static int8_t   check_redirs(t_list *lexered_params);
 static t_tree   *fill_tree(t_list *lexered_params, t_list *stop);
 static t_cmd    *init_cmd(char *cmd_str);
 static t_list   *skip_parenthesis(t_list *lexered_params);
@@ -27,12 +27,11 @@ t_tree	*parser(t_list *lexered_params)
     data = get_data();
     lstdelif(&lexered_params, &is_empty_cmd, &del_content_lexer);
     merge_separators(&lexered_params);
-    if (check_syntax(lexered_params) == -1) //TODO valutare se spostare il check_syntax in lexer
+    if (check_syntax(lexered_params) == -1)
     {
         g_status = 2;
         return (NULL);
     }
-
     data->parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
     *(data->parsed_params) = fill_tree(lexered_params, NULL);
     return (*(data->parsed_params));
@@ -97,6 +96,7 @@ static int8_t check_parenthesis(t_list *lexered_params)
     return (-1 * (n_open > 0)); //se ci sono parentesi aperte, ritorna -1
 }
 
+//deve comparare i caratteri ph_redir_r e ph_redir_l (NON i caratteri > e <)
 static int8_t   check_redirs(t_list *lexered_params)
 {
     //TODO
@@ -106,10 +106,12 @@ static int8_t   check_redirs(t_list *lexered_params)
     REDIR_OUTPUT 		9 	'cmd > filename' o 'cmd n> filename'
     REDIR_APPEND 		10  'cmd >> filename' o 'cmd n>> filename'
     */
+    (void)lexered_params;
+    return (0);
 }
 
 //stop parte da NULL
-static t_tree *fill_tree(t_list *lexered_params, t_list *stop)
+static t_tree   *fill_tree(t_list *lexered_params, t_list *stop)
 {
     t_tree  *node;
     t_lexer *elem;
@@ -126,13 +128,13 @@ static t_tree *fill_tree(t_list *lexered_params, t_list *stop)
         if (elem->token == SUBSHELL_END)
             treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
         else
-            treeadd_below(&node, treenew_p(elem->token, init_cmd(elem)));
+            treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
         return (node);
     }
     next_elem = (t_lexer *)lexered_params->next->content;
-    node = treenew_p(next_elem->token, init_cmd(next_elem));
+    node = treenew_p(next_elem->token, init_cmd(next_elem->cmd_str));
     if (elem->token != SUBSHELL_END)
-        treeadd_below(&node, treenew_p(elem->token, init_cmd(elem)));
+        treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
     else
         treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
     treeadd_below(&node, fill_tree(lexered_params->next->next, stop));
@@ -175,22 +177,34 @@ static t_list   *unskip_parenthesis(t_list *lexered_params)
     return (lexered_params->next); //ritorna uno dopo la parentesi aperta
 }
 
-static t_cmd    *init_cmd(t_lexer *elem)
+static t_cmd    *init_cmd(char *cmd_str)
 {
     t_cmd   *cmd;
 
     //TODO gestire caso con solo heredoc senza testo
     cmd = malloc_p(sizeof(t_cmd));
-    cmd->redirs = elem->cmd_redirs;
-    if (elem->cmd_str)
+    cmd->redirs = fill_redirs(cmd_str);
+    if (cmd_str)
     {
-        cmd->cmd_str = ft_strdup(cmd_str);
-        if (!cmd->cmd_str)
+        cmd_str = ft_strdup(cmd_str);
+        if (!cmd_str)
             ft_quit(ERR_MEM, "Error: failed to allocate memory");
+        restore_placeholders(cmd_str, g_ph_redirl);
+        restore_placeholders(cmd_str, g_ph_redirr);
     }
     else
-        cmd->cmd_str = NULL;
+        cmd_str = NULL;
     return (cmd);
+}
+
+void    restore_placeholders(char *cmd_str, char placeholder)
+{
+    uint32_t            i;
+
+    i = -1;
+    while (cmd_str[++i])
+        if (cmd_str[i] == placeholder)
+            cmd_str[i] = (placeholder * -1);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 12:45:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:04:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static bool 	is_token(char c);
 static void 	lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *input);
 static void 	lexer_add_token(t_list **lexered_params, char c);
-static void     restore_placeholders(char *str);
 
 t_list	*lexer(char *input)
 {
@@ -41,7 +40,7 @@ t_list	*lexer(char *input)
             else if (current_quote == *input)
                 current_quote = '\0';
         }
-        else if (!current_quote && (is_token(*input) || !*input))
+        else if (!current_quote && (is_token(*input) || *(input + 1) == '\0'))
         {
             cmd_str[cmd_len] = '\0';
             if (cmd_len > 0)
@@ -53,10 +52,9 @@ t_list	*lexer(char *input)
         }
         else
             cmd_len++;
-        input += *input != '\0';
+        input++;
     }
-    lstreverse(lexered_params);
-    return (*lexered_params);
+    return (free(cmd_str), lstreverse(lexered_params), *lexered_params);
 }
 
 static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *cmd_str_raw)
@@ -83,15 +81,17 @@ static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *cmd_s
         }
         if (*cmd_str_raw != master_quote) //non ELSE IF perch' le quotes devono essere scritte
         {
-            if (*cmd_str_raw == '<')
-                content->cmd_str[i++] = g_ph_redirl;
-            else if (*cmd_str_raw == '>')
+            if (master_quote == '\'' && *cmd_str_raw == '>')
                 content->cmd_str[i++] = g_ph_redirr;
+            else if (master_quote == '\'' && *cmd_str_raw == '<')
+                content->cmd_str[i++] = g_ph_redirl;
+            else if (master_quote && *cmd_str_raw == '*')
+                content->cmd_str[i++] = g_ph_asterisk;
             else
                 content->cmd_str[i++] = *cmd_str_raw;
         }
     }
-    restore_placeholders(content->cmd_str);
+    restore_placeholders(content->cmd_str, g_ph_asterisk);
     lstadd_front(lexered_params, lstnew_p(content));
 }
 
@@ -104,20 +104,7 @@ static void lexer_add_token(t_list **lexered_params, char c)
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
     content->token = c;
     content->cmd_str = NULL;
-    content->dollar_array = NULL;
     lstadd_front(lexered_params, lstnew_p(content));
-}
-
-static void restore_placeholders(char *str)
-{
-    uint32_t            i;
-    static const char   ph_table[3]
-        = {0, '<', '>'}; //stesso ordine del .h
-
-    i = -1;
-    while (str[++i])
-        if (str[i] < 0)
-            str[i] = ph_table[-str[i]];
 }
 
 static bool is_token(char c)
@@ -138,6 +125,5 @@ void	del_content_lexer(void *content)
 
 	elem = (t_lexer *)content;
 	free(elem->cmd_str);
-    free(elem->dollar_array);
     free(elem);
 }

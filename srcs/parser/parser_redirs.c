@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:16:55 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 02:51:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:05:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,8 @@ static char *get_filename(char *str, uint32_t idx_redir)
 		len++;
 	filename = calloc_p(len + 1, sizeof(char));
 	ft_strlcpy(filename, &str[i], len + 1);
+    restore_placeholders(filename, g_ph_redirl);
+    restore_placeholders(filename, g_ph_redirr);
 	return (filename);
 }
 

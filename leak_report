@@ -1,39 +1,140 @@
-==1474203== Memcheck, a memory error detector
-==1474203== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==1474203== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==1474203== Command: ./minishell
-==1474203== 
-==1474203== Conditional jump or move depends on uninitialised value(s)
-==1474203==    at 0x483EF58: strlen (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==1474203==    by 0x494ED14: __vfprintf_internal (vfprintf-internal.c:1688)
-==1474203==    by 0x4937D3E: printf (printf.c:33)
-==1474203==    by 0x10B39A: print_lexered_params (lexer.c:30)
-==1474203==    by 0x10B51A: lexer (lexer.c:69)
-==1474203==    by 0x10984B: minishell_loop (minishell.c:88)
-==1474203==    by 0x109616: main (minishell.c:27)
-==1474203== 
-minishell: syntax error near unexpected token: '|'
-exit
-==1474203== 
-==1474203== HEAP SUMMARY:
-==1474203==     in use at exit: 196,220 bytes in 211 blocks
-==1474203==   total heap usage: 853 allocs, 642 frees, 251,545 bytes allocated
-==1474203== 
-==1474203== 1 bytes in 1 blocks are definitely lost in loss record 1 of 51
-==1474203==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==1474203==    by 0x10AE09: malloc_p (protected_methods.c:21)
-==1474203==    by 0x10B614: lexer_add_cmd (lexer.c:96)
-==1474203==    by 0x10B48C: lexer (lexer.c:58)
-==1474203==    by 0x10984B: minishell_loop (minishell.c:88)
-==1474203==    by 0x109616: main (minishell.c:27)
-==1474203== 
-==1474203== LEAK SUMMARY:
-==1474203==    definitely lost: 1 bytes in 1 blocks
-==1474203==    indirectly lost: 0 bytes in 0 blocks
-==1474203==      possibly lost: 0 bytes in 0 blocks
-==1474203==    still reachable: 0 bytes in 0 blocks
-==1474203==         suppressed: 196,219 bytes in 210 blocks
-==1474203== 
-==1474203== Use --track-origins=yes to see where uninitialised values come from
-==1474203== For lists of detected and suppressed errors, rerun with: -s
-==1474203== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+==609866== Memcheck, a memory error detector
+==609866== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==609866== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==609866== Command: ./minishell
+==609866== 
+==609866== Invalid read of size 1
+==609866==    at 0x10F74F: ft_strcat (ft_strcat.c:24)
+==609866==    by 0x10B864: expand (expander.c:37)
+==609866==    by 0x10B4C6: lexer_add_cmd (lexer.c:66)
+==609866==    by 0x10B422: lexer (lexer.c:47)
+==609866==    by 0x10982B: minishell_loop (minishell.c:88)
+==609866==    by 0x1095F6: main (minishell.c:27)
+==609866==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==609866== 
+==609866== 
+==609866== Process terminating with default action of signal 11 (SIGSEGV)
+==609866==  Access not within mapped region at address 0x0
+==609866==    at 0x10F74F: ft_strcat (ft_strcat.c:24)
+==609866==    by 0x10B864: expand (expander.c:37)
+==609866==    by 0x10B4C6: lexer_add_cmd (lexer.c:66)
+==609866==    by 0x10B422: lexer (lexer.c:47)
+==609866==    by 0x10982B: minishell_loop (minishell.c:88)
+==609866==    by 0x1095F6: main (minishell.c:27)
+==609866==  If you believe this happened as a result of a stack
+==609866==  overflow in your program's main thread (unlikely but
+==609866==  possible), you can try to increase the size of the
+==609866==  main thread stack using the --main-stacksize= flag.
+==609866==  The main thread stack size used in this run was 8388608.
+==609866== 
+==609866== HEAP SUMMARY:
+==609866==     in use at exit: 208,191 bytes in 597 blocks
+==609866==   total heap usage: 828 allocs, 231 frees, 249,705 bytes allocated
+==609866== 
+==609866== 2 bytes in 1 blocks are still reachable in loss record 1 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
+==609866==    by 0x10B832: expand (expander.c:35)
+==609866==    by 0x10B4C6: lexer_add_cmd (lexer.c:66)
+==609866==    by 0x10B422: lexer (lexer.c:47)
+==609866==    by 0x10982B: minishell_loop (minishell.c:88)
+==609866==    by 0x1095F6: main (minishell.c:27)
+==609866== 
+==609866== 3 bytes in 1 blocks are still reachable in loss record 2 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10F311: ft_strtrim (ft_strtrim.c:30)
+==609866==    by 0x1097D8: minishell_loop (minishell.c:84)
+==609866==    by 0x1095F6: main (minishell.c:27)
+==609866== 
+==609866== 5 bytes in 1 blocks are still reachable in loss record 5 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10F3F4: ft_strdup (ft_strdup.c:22)
+==609866==    by 0x10B363: lexer (lexer.c:31)
+==609866==    by 0x10982B: minishell_loop (minishell.c:88)
+==609866==    by 0x1095F6: main (minishell.c:27)
+==609866== 
+==609866== 8 bytes in 1 blocks are still reachable in loss record 6 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
+==609866==    by 0x10B330: lexer (lexer.c:26)
+==609866==    by 0x10982B: minishell_loop (minishell.c:88)
+==609866==    by 0x1095F6: main (minishell.c:27)
+==609866== 
+==609866== 55 bytes in 1 blocks are still reachable in loss record 18 of 62
+==609866==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x49E5297: getcwd (getcwd.c:84)
+==609866==    by 0x10AFBC: getcwd_p (protected_methods.c:79)
+==609866==    by 0x10967F: init_data (minishell.c:48)
+==609866==    by 0x1095EC: main (minishell.c:25)
+==609866== 
+==609866== 616 bytes in 1 blocks are still reachable in loss record 26 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
+==609866==    by 0x10A4F9: envp_matrix_add (envp_matrix.c:100)
+==609866==    by 0x10A161: update_envp_matrix (envp_matrix.c:27)
+==609866==    by 0x10AB1A: ft_setenv (envp_table.c:71)
+==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
+==609866==    by 0x1096EE: init_data (minishell.c:54)
+==609866==    by 0x1095EC: main (minishell.c:25)
+==609866== 
+==609866== 1,216 bytes in 76 blocks are still reachable in loss record 33 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
+==609866==    by 0x10A9CE: ft_setenv (envp_table.c:42)
+==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
+==609866==    by 0x1096EE: init_data (minishell.c:54)
+==609866==    by 0x1095EC: main (minishell.c:25)
+==609866== 
+==609866== 1,223 bytes in 76 blocks are still reachable in loss record 34 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10F3F4: ft_strdup (ft_strdup.c:22)
+==609866==    by 0x10A9DE: ft_setenv (envp_table.c:43)
+==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
+==609866==    by 0x1096EE: init_data (minishell.c:54)
+==609866==    by 0x1095EC: main (minishell.c:25)
+==609866== 
+==609866== 1,824 bytes in 76 blocks are still reachable in loss record 36 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
+==609866==    by 0x10FD77: lstnew_p (lstnew_p.c:19)
+==609866==    by 0x10AADE: ft_setenv (envp_table.c:70)
+==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
+==609866==    by 0x1096EE: init_data (minishell.c:54)
+==609866==    by 0x1095EC: main (minishell.c:25)
+==609866== 
+==609866== 2,033 bytes in 76 blocks are still reachable in loss record 38 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10F3F4: ft_strdup (ft_strdup.c:22)
+==609866==    by 0x10A9F1: ft_setenv (envp_table.c:44)
+==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
+==609866==    by 0x1096EE: init_data (minishell.c:54)
+==609866==    by 0x1095EC: main (minishell.c:25)
+==609866== 
+==609866== 2,040 bytes in 1 blocks are still reachable in loss record 39 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10EF1B: ft_calloc (ft_calloc.c:23)
+==609866==    by 0x10AE47: calloc_p (protected_methods.c:33)
+==609866==    by 0x10ACA0: envp_table_init (envp_table.c:125)
+==609866==    by 0x1096EE: init_data (minishell.c:54)
+==609866==    by 0x1095EC: main (minishell.c:25)
+==609866== 
+==609866== 2,952 bytes in 76 blocks are still reachable in loss record 41 of 62
+==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==609866==    by 0x10EF1B: ft_calloc (ft_calloc.c:23)
+==609866==    by 0x10A595: envp_matrix_add (envp_matrix.c:105)
+==609866==    by 0x10A161: update_envp_matrix (envp_matrix.c:27)
+==609866==    by 0x10AB1A: ft_setenv (envp_table.c:71)
+==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
+==609866==    by 0x1096EE: init_data (minishell.c:54)
+==609866==    by 0x1095EC: main (minishell.c:25)
+==609866== 
+==609866== LEAK SUMMARY:
+==609866==    definitely lost: 0 bytes in 0 blocks
+==609866==    indirectly lost: 0 bytes in 0 blocks
+==609866==      possibly lost: 0 bytes in 0 blocks
+==609866==    still reachable: 11,977 bytes in 387 blocks
+==609866==         suppressed: 196,214 bytes in 210 blocks
+==609866== 
+==609866== For lists of detected and suppressed errors, rerun with: -s
+==609866== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+Segmentation fault (core dumped)

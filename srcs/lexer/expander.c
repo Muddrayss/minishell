@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 12:18:56 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 12:36:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:59:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,17 @@ char    *expand(char *str)
     char            *tmp;
     char            master_quote;
 
+    master_quote = '\0';
     i = -1;
     start = 0;    
-    while (true)
+    while (str[++i])
     {
-        if (str[i] == '\'' || str[i] == '"' || !str[i])
+        if (str[i] == '\'' || str[i] == '"' || !str[i + 1])
         {
             text_block = (char *)malloc_p(sizeof(char) * (i - start));
             ft_strlcpy(text_block, str, i - start);
             if (master_quote != '\'')
                 text_block = replace_env_vars(text_block);
-            if (!master_quote)
-                text_block = replace_wildcards(text_block);
             tmp = str;
             str = (char *)malloc_p(sizeof(char) * (start + ft_strlen(text_block) + ft_strlen(str + i) + 1));
             ft_strlcpy(str, tmp, start + 1);
@@ -45,8 +44,6 @@ char    *expand(char *str)
                 master_quote = '\0';
             start = i;
         }
-        if (!str[i++])
-            break ;
     }
     return (str);
 }

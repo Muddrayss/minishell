@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 12:40:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:04:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 typedef struct s_lexer
 {
 	char	*cmd_str;
-	bool    *dollar_array;
-    bool    *redirs_array;
     char	token;
 }t_lexer;
 
@@ -29,9 +27,11 @@ typedef struct s_list
 }t_list;
 
 static const char   g_ph_redirl
-    = -1;
+    = -'<';
 static const char   g_ph_redirr
-    = -2;
+    = -'>';
+static const char   g_ph_asterisk
+    = -'*';
 static const char   g_tokens[7]
     = {'|', ';', '&', '(', ')'};
 

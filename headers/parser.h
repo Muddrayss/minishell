@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 02:52:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 18:05:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ char    *replace_env_var(char *cmd_str);
 void 	clear_redirs(t_list *redirs, char *cmd_str);
 void 	merge_separators(t_list **lexered_params);
 bool 	is_empty_cmd(void *content);
+void    restore_placeholders(char *cmd_str, char placeholder);
 void    del_content_parser(void *content);
 void    del_content_redirs(void *content);
 
