@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:16:55 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 18:05:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 00:54:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ static char *get_filename(char *str, uint32_t idx_redir)
 	
 	filename = NULL;
 	i = idx_redir + 1;
-	while (str[i] && is_shell_space(str[i]))
+	while (str[i] != '\0' && is_shell_space(str[i]))
 		i++;
 	len = 0;
 	while (str[i + len] && !is_shell_space(str[i + len]))

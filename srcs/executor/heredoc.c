@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/25 18:45:17 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 00:47:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static void fill_heredoc(char *limiter, int fd)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, str_len + 1) == 0)
             break ;
-        str = replace_env_vars(str);
+        //TODO replace env vars
         ft_putstr_fd(str, fd);
         write(fd, "\n", 1);
         free(str);

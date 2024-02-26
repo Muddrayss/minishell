@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 02:22:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 00:55:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ static char *get_wildcard_str(char *str, uint32_t *idx)
     uint32_t    len;
     char        *wildcard_str;
 
-    while (str[*idx] && str[*idx] != '*')
+    while (str[*idx] > 0 && str[*idx] != '*')
         (*idx)++;
     if (str[*idx] != '*')
         return (NULL);
@@ -165,7 +165,7 @@ static char *get_wildcard_str(char *str, uint32_t *idx)
         (*idx)--;
     (*idx) += is_shell_space(str[*idx]);
     len = 1;
-    while (str[*idx + len] && !is_shell_space(str[*idx + len]))
+    while (str[*idx + len] > 0 && !is_shell_space(str[*idx + len]))
         len++;
     wildcard_str = (char *)malloc_p(sizeof(char) * (len + 1));
     ft_strlcpy(wildcard_str, &str[*idx], len + 1);
