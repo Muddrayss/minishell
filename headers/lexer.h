@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/25 16:01:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 02:51:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,19 @@ typedef struct s_list
     struct s_list	*prev;
 }t_list;
 
+#define N_PLACEHOLDERS 5
+
+static const char g_ph_asterisk = -1;
+static const char g_ph_dollar = -2;
+static const char g_ph_redirl = -3;
+static const char g_ph_redirr = -4;
+
+static const char   g_tokens[7]
+    = {'|', ';', '&', '(', ')'};
+
 t_list	*lexer(char *input);
 void	del_content_lexer(void *content);
+char    *replace_env_vars(char *cmd_str);
+char    *replace_wildcards(char *cmd_str);
 
 #endif

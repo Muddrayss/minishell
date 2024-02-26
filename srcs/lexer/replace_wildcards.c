@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/19 15:29:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 15:18:57 by egualand         ###   ########.fr       */
+/*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/26 02:22:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,14 @@ char    *replace_wildcards(char *str)
 {
     char        *wildcard_str;
     t_list      *matching_files;
-    char        *cwd;
+    static char *cwd;
     uint32_t    idx;
     uint32_t    pattern_len;
 
+    if (!cwd)
+        cwd = getcwd_p(NULL, 0);
     idx = 0;
     wildcard_str = get_wildcard_str(str, &idx);
-    cwd = getcwd(NULL, 0);
-    if (!cwd)
-        ft_quit(ERR_MEM, "Error: failed to get current working directory");
     while (wildcard_str)
     {
         pattern_len = ft_strlen(wildcard_str);
@@ -47,7 +46,9 @@ char    *replace_wildcards(char *str)
         free(wildcard_str);
         wildcard_str = get_wildcard_str(str, &idx);
     }
-    return (free(cwd), str);
+    free(cwd);
+    cwd = NULL; //perche' e' statica
+    return (str);
 }
 
 static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd)
@@ -156,8 +157,6 @@ static char *get_wildcard_str(char *str, uint32_t *idx)
     uint32_t    len;
     char        *wildcard_str;
 
-    if (!str)
-        return (NULL);
     while (str[*idx] && str[*idx] != '*')
         (*idx)++;
     if (str[*idx] != '*')

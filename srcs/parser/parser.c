@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/25 18:05:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 02:54:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static int8_t   check_syntax(t_list *lexered_params);
 static int8_t   check_parenthesis(t_list *lexered_params);
 static t_tree   *fill_tree(t_list *lexered_params, t_list *stop);
-static t_cmd    *init_cmd(t_lexer *node);
+static t_cmd    *init_cmd(char *cmd_str);
 static t_list   *skip_parenthesis(t_list *lexered_params);
 static t_list   *unskip_parenthesis(t_list *lexered_params);
 
@@ -115,13 +115,13 @@ static t_tree *fill_tree(t_list *lexered_params, t_list *stop)
         if (elem->token == SUBSHELL_END)
             treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
         else
-            treeadd_below(&node, treenew_p(elem->token, init_cmd(elem)));
+            treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
         return (node);
     }
     next_elem = (t_lexer *)lexered_params->next->content;
-    node = treenew_p(next_elem->token, init_cmd(next_elem));
+    node = treenew_p(next_elem->token, init_cmd(next_elem->cmd_str));
     if (elem->token != SUBSHELL_END)
-        treeadd_below(&node, treenew_p(elem->token, init_cmd(elem)));
+        treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
     else
         treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
     treeadd_below(&node, fill_tree(lexered_params->next->next, stop));
@@ -164,16 +164,16 @@ static t_list   *unskip_parenthesis(t_list *lexered_params)
     return (lexered_params->next); //ritorna uno dopo la parentesi aperta
 }
 
-static t_cmd    *init_cmd(t_lexer *node)
+static t_cmd    *init_cmd(char *cmd_str)
 {
     t_cmd   *cmd;
 
     cmd = malloc_p(sizeof(t_cmd));
-    cmd->redirs = fill_redirs(node);
-    clear_redirs(cmd->redirs, node->cmd_str);
-    if (node->cmd_str)
+    cmd->redirs = fill_redirs(cmd_str);
+    clear_redirs(cmd->redirs, cmd_str);
+    if (cmd_str)
     {
-        cmd->cmd_str = ft_strdup(node->cmd_str);
+        cmd->cmd_str = ft_strdup(cmd_str);
         if (!cmd->cmd_str)
             ft_quit(ERR_MEM, "Error: failed to allocate memory");
     }

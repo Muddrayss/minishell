@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/25 17:19:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 00:42:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
     if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
     exec_redirs(elem->cmd->redirs);
-    elem->cmd->cmd_str = replace_wildcards(elem->cmd->cmd_str);
     exec(ft_getenv("PATH"), elem->cmd->cmd_str);
 }
 

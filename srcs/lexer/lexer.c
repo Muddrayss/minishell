@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/25 19:10:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 02:59:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,11 @@
 static bool 	is_token(char c);
 static void 	lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *input);
 static void 	lexer_add_token(t_list **lexered_params, char c);
-
-
-void print_lexered_params(t_list *lexered_params)
-{
-    t_lexer *elem;
-
-    while (lexered_params)
-    {
-        elem = (t_lexer *)lexered_params->content;
-        if (elem->token)
-            printf("token: %c\n", elem->token);
-        else
-            printf("cmd_str: %s\n", elem->cmd_str);
-        lexered_params = lexered_params->next;
-    }
-}
-
+static void     restore_placeholders(char *str);
 t_list	*lexer(char *input)
 {
     uint32_t        cmd_len;
+    char            *cmd_str;
     char            current_quote;
     t_list         	**lexered_params;
 
@@ -43,6 +28,9 @@ t_list	*lexer(char *input)
     current_quote = '\0';
     get_data()->lexered_params = lexered_params;
     cmd_len = 0;
+    cmd_str = ft_strdup(input);
+    if (!cmd_str)
+        ft_quit(ERR_MEM, "Error: failed to allocate memory");
     while (*input != '\0')
     {
         if (*input == '\'' || *input == '"')
@@ -54,9 +42,12 @@ t_list	*lexer(char *input)
         }
         else if (!current_quote && (is_token(*input) || !*input))
         {
+            cmd_str[cmd_len] = '\0';
             if (cmd_len > 0)
-                lexer_add_cmd(lexered_params, cmd_len, input - cmd_len);
-            lexer_add_token(lexered_params, *input);
+                lexer_add_cmd(lexered_params, cmd_len, cmd_str);
+            lexer_add_token(lexered_params, *input++);
+            free(cmd_str);
+            cmd_str = ft_strdup(input);
             cmd_len = 0;
         }
         else
@@ -64,17 +55,13 @@ t_list	*lexer(char *input)
         input += *input != '\0';
     }
     lstreverse(lexered_params);
-    print_lexered_params(*lexered_params);
     return (*lexered_params);
 }
 
-static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *input)
+static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *cmd_str_raw)
 {
     int32_t         i;
     int32_t         j;
-    int32_t         k;
-    int32_t         n_dollars;
-    int32_t         n_redirs;
     t_lexer   		*content;
     char            master_quote;
 
@@ -82,47 +69,46 @@ static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *input
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
     content->token = 0;
     content->cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
-    n_dollars = 0;
-    n_redirs = 0;
-    i = -1;
-    while (input[++i])
-    {
-        n_dollars += (input[i] == '$');
-        n_redirs += (input[i] == '>' || input[i] == '<');
-    }
-    content->dollar_array = (bool *)malloc_p(sizeof(bool) * (n_dollars + 1));
-    content->redirs_array = (bool *)malloc_p(sizeof(bool) * (n_redirs + 1));
     i = 0;
     j = 0;
-    k = 0;
-    while (cmd_len--)
+    while (cmd_str_raw[i])
     {
-        if (*input == '\'' || *input == '"')
+        if (cmd_str_raw[i] == '\'' || cmd_str_raw[i] == '"')
         {
             if (!master_quote)
-                master_quote = *input;
-            else if (master_quote == *input)
+                master_quote = cmd_str_raw[i];
+            else if (master_quote == cmd_str_raw[i])
                 master_quote = '\0';
-            content->cmd_str[i++] = *input;
+            content->cmd_str[j++] = cmd_str_raw[i];
         }
-        else
+        if (cmd_str_raw[i] != master_quote)
         {
-            if (*input != master_quote)
-                content->cmd_str[i++] = *input;
-            if (*input == '$')
+            //TODO guardare caso  echo $PA"TH"
+            //TODO gestire meglio con tabelle
+            if (master_quote)
             {
-                if (master_quote == '\'' || !master_quote)
-                    content->dollar_array[j++] = true;
+                if (cmd_str_raw[i] == '*')
+                    content->cmd_str[j++] = g_ph_asterisk;
+                else if (cmd_str_raw[i] == '<')
+                    content->cmd_str[j++] = g_ph_redirl;
+                else if (cmd_str_raw[i] == '>')
+                    content->cmd_str[j++] = g_ph_redirr;
+                else if (cmd_str_raw[i] == '$' && master_quote == '\'')
+                    content->cmd_str[j++] = g_ph_dollar;
                 else
-                    content->dollar_array[j++] = false;
+                    content->cmd_str[j++] = cmd_str_raw[i];
             }
-            else if (*input == '>' || *input == '<')
-                content->redirs_array[k++] = true;
+            else
+                content->cmd_str[j++] = cmd_str_raw[i];
         }
-        input++;
+        i++;
     }
+    content->cmd_str = replace_env_vars(content->cmd_str);
+    content->cmd_str = replace_wildcards(content->cmd_str);
+    restore_placeholders(content->cmd_str);
     lstadd_front(lexered_params, lstnew_p(content));
 }
+
 
 static void lexer_add_token(t_list **lexered_params, char c)
 {
@@ -137,15 +123,26 @@ static void lexer_add_token(t_list **lexered_params, char c)
     lstadd_front(lexered_params, lstnew_p(content));
 }
 
+static void restore_placeholders(char *str)
+{
+    uint32_t      i;
+    static char   ph_table[N_PLACEHOLDERS + 1]
+    = {'\0', '*', '$', '<', '>'}; //stesso ordine del .h
+
+    i = -1;
+    while (str[++i])
+        if (str[i] < 0)
+            str[i] = ph_table[-str[i]];
+}
+
 static bool is_token(char c)
 {
-    int8_t			i;
-    static char     tokens[5] = {'|', ';', '&', '(', ')'};
-	static uint8_t	n_tokens = sizeof(tokens) / sizeof(tokens[0]);
+    int8_t			        i;
+	static const uint8_t	n_tokens = sizeof(g_tokens) / sizeof(g_tokens[0]);
 
 	i = -1;
    	while (++i < n_tokens)
-		if (tokens[i] == c)
+		if (g_tokens[i] == c)
 			return (true);
 	return (false);
 }
