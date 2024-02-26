@@ -16,7 +16,8 @@
 typedef struct s_lexer
 {
 	char	*cmd_str;
-    char	token;
+    	char	token;
+	bool    is_literal;
 }t_lexer;
 
 typedef struct s_list
