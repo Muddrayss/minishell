@@ -91,6 +91,7 @@ static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *cmd_s
                 content->cmd_str[i++] = *cmd_str_raw;
         }
     }
+    content->cmd_str = replace_wildcards(content->cmd_str);
     restore_placeholders(content->cmd_str, g_ph_asterisk);
     lstadd_front(lexered_params, lstnew_p(content));
 }
