@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 02:54:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/26 13:31:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_tree	*parser(t_list *lexered_params)
         g_status = 2;
         return (NULL);
     }
+
     data->parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
     *(data->parsed_params) = fill_tree(lexered_params, NULL);
     return (*(data->parsed_params));
@@ -43,7 +44,7 @@ static int8_t   check_syntax(t_list *lexered_params)
     t_lexer  *next_elem;
     t_lexer  *prev_elem;
 
-    if (check_parenthesis(lexered_params) == -1)
+    if (check_parenthesis(lexered_params) == -1 || check_redirs(lexered_params) == -1)
         return (-1);
     while (lexered_params)
     {
@@ -54,7 +55,7 @@ static int8_t   check_syntax(t_list *lexered_params)
             next_elem = (t_lexer *)lexered_params->next->content;
         if (lexered_params->prev)
             prev_elem = (t_lexer *)lexered_params->prev->content;
-        if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END)
+        if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END) //escludere anche tutte le reidirs
         {
             if (!prev_elem || !next_elem || !prev_elem->cmd_str || !next_elem->cmd_str)
             {
@@ -69,7 +70,6 @@ static int8_t   check_syntax(t_list *lexered_params)
         }
         lexered_params = lexered_params->next;
     }
-    //TODO fare check syntax per redirs
     return (0);
 }
 
@@ -97,6 +97,17 @@ static int8_t check_parenthesis(t_list *lexered_params)
     return (-1 * (n_open > 0)); //se ci sono parentesi aperte, ritorna -1
 }
 
+static int8_t   check_redirs(t_list *lexered_params)
+{
+    //TODO
+    /*
+    REDIR_INPUT 		7 	'< filename cmd' o 'cmd < filename'
+    REDIR_HEREDOC 		8	'<< limiter cmd' o 'cmd << limiter'
+    REDIR_OUTPUT 		9 	'cmd > filename' o 'cmd n> filename'
+    REDIR_APPEND 		10  'cmd >> filename' o 'cmd n>> filename'
+    */
+}
+
 //stop parte da NULL
 static t_tree *fill_tree(t_list *lexered_params, t_list *stop)
 {
@@ -115,13 +126,13 @@ static t_tree *fill_tree(t_list *lexered_params, t_list *stop)
         if (elem->token == SUBSHELL_END)
             treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
         else
-            treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
+            treeadd_below(&node, treenew_p(elem->token, init_cmd(elem)));
         return (node);
     }
     next_elem = (t_lexer *)lexered_params->next->content;
-    node = treenew_p(next_elem->token, init_cmd(next_elem->cmd_str));
+    node = treenew_p(next_elem->token, init_cmd(next_elem));
     if (elem->token != SUBSHELL_END)
-        treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
+        treeadd_below(&node, treenew_p(elem->token, init_cmd(elem)));
     else
         treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
     treeadd_below(&node, fill_tree(lexered_params->next->next, stop));
@@ -164,14 +175,14 @@ static t_list   *unskip_parenthesis(t_list *lexered_params)
     return (lexered_params->next); //ritorna uno dopo la parentesi aperta
 }
 
-static t_cmd    *init_cmd(char *cmd_str)
+static t_cmd    *init_cmd(t_lexer *elem)
 {
     t_cmd   *cmd;
 
+    //TODO gestire caso con solo heredoc senza testo
     cmd = malloc_p(sizeof(t_cmd));
-    cmd->redirs = fill_redirs(cmd_str);
-    clear_redirs(cmd->redirs, cmd_str);
-    if (cmd_str)
+    cmd->redirs = elem->cmd_redirs;
+    if (elem->cmd_str)
     {
         cmd->cmd_str = ft_strdup(cmd_str);
         if (!cmd->cmd_str)

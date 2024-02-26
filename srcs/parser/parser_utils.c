@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 16:11:07 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/26 13:22:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void merge_separators(t_list **lexered_params)
                 merge_ampersands(lexered_params, &node);
             else if (elem->token == '|')
                 merge_pipes(lexered_params, &node);
+            else if (elem->token == '>' || elem->token == '<')
+                merge_redirs(lexered_params, &node);
             else if (elem->token == '(')
                 elem->token = SUBSHELL_START;
             else if (elem->token == ')')
@@ -97,6 +99,27 @@ static void merge_pipes(t_list **head, t_list **node)
     }
     else
         elem->token = PIPELINE;
+}
+
+static void merge_redirs(t_list **head, t_list **node)
+{
+    t_lexer *elem;
+    t_lexer *next_elem;
+    t_list  *node_prev;
+
+    next_elem = NULL;
+    elem = (t_lexer *)(*node)->content;
+    if ((*node)->next)
+        next_elem = (t_lexer *)(*node)->next->content;
+    if (next_elem && next_elem->token == elem->token)
+    {
+        elem->token = REDIR_HEREDOC * (elem->token == '<') + REDIR_APPEND * (elem->token == '>');
+        node_prev = (*node)->prev;
+        lstremoveone(head, (*node)->next, del_content_lexer);
+        *node = node_prev;
+    }
+    else
+        elem->token = REDIR_INPUT * (elem->token == '<') + REDIR_OUTPUT * (elem->token == '>');
 }
 
 bool    is_empty_cmd(void *content)
