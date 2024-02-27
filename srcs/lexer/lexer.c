@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 01:26:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 11:42:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *cmd_s
     content->cmd_str[i] = '\0';
     content->cmd_str = replace_wildcards(content->cmd_str);
     restore_placeholders(content->cmd_str, g_ph_asterisk);
-    printf("cmd_str: %s\n", content->cmd_str);
     lstadd_front(lexered_params, lstnew_p(content));
 }
 
@@ -107,15 +106,18 @@ static uint32_t expand_dollar(char **cmd_str_new, char **cmd_str_raw)
     char        *env_name;
     uint32_t    env_name_len;
 
-    env_name_len = 0; //parte da zero per skippare il $
+    *cmd_str_raw += 1;
+    env_name_len = -1; //parte da zero per skippare il $
     while ((*cmd_str_raw)[++env_name_len])
         if ((*cmd_str_raw)[env_name_len] == ' ' || (*cmd_str_raw)[env_name_len] == '\'' || (*cmd_str_raw)[env_name_len] == '"' || (*cmd_str_raw)[env_name_len] == '$')
             break ;
-    env_name_len--;
     env_name = (char *)malloc_p(sizeof(char) * (env_name_len + 1));
     ft_strlcpy(env_name, *cmd_str_raw, env_name_len + 1);
     if (env_name[0] == '?')
+    {
         env_value = ft_utoa((int8_t)g_status);
+        env_name_len = 1;
+    }
     else
         env_value = ft_getenv(env_name);
     if (!env_value)
@@ -124,7 +126,7 @@ static uint32_t expand_dollar(char **cmd_str_new, char **cmd_str_raw)
     *cmd_str_new = (char *)malloc_p(sizeof(char) * (ft_strlen(*cmd_str_new) + ft_strlen(env_value)));
     ft_strcpy(*cmd_str_new, tmp);
     ft_strcat(*cmd_str_new, env_value);
-    *cmd_str_raw += env_name_len + 1;
+    *cmd_str_raw += env_name_len - 1;
     return (free(tmp), free(env_value), free(env_name), ft_strlen(*cmd_str_new));
 }
 

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 18:08:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 11:32:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,14 +186,14 @@ static t_cmd    *init_cmd(char *cmd_str)
     cmd->redirs = fill_redirs(cmd_str);
     if (cmd_str)
     {
-        cmd_str = ft_strdup(cmd_str);
-        if (!cmd_str)
+        cmd->cmd_str = ft_strdup(cmd_str);
+        if (!cmd->cmd_str)
             ft_quit(ERR_MEM, "Error: failed to allocate memory");
-        restore_placeholders(cmd_str, g_ph_redirl);
-        restore_placeholders(cmd_str, g_ph_redirr);
+        restore_placeholders(cmd->cmd_str, g_ph_redirl);
+        restore_placeholders(cmd->cmd_str, g_ph_redirr);
     }
     else
-        cmd_str = NULL;
+        cmd->cmd_str = NULL;
     return (cmd);
 }
 
