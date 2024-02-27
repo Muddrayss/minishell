@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 11:32:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:29:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ static t_cmd    *init_cmd(char *cmd_str)
     //TODO gestire caso con solo heredoc senza testo
     cmd = malloc_p(sizeof(t_cmd));
     cmd->redirs = fill_redirs(cmd_str);
+    clear_redirs(cmd->redirs, cmd_str);
     if (cmd_str)
     {
         cmd->cmd_str = ft_strdup(cmd_str);

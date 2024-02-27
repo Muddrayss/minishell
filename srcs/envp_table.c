@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 16:23:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:33:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ char	*ft_getenv(char *env_name)
 	t_list		**table;
     t_list      *bucket;
 
+	if (!env_name || !*env_name)
+		return (NULL);
 	table = get_data()->envp_table;
 	index = hash(env_name);
     bucket = table[index];
