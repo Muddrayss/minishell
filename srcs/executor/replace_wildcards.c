@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 20:14:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 22:50:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static char     *get_wildcard_str(char *str, uint32_t *i);
+static char     *get_wildcard_str(char *str, uint32_t *i, uint32_t *len);
 static char     *get_new_wildcard_str(char *basedir, char *entry, char *wildcard_str);
 static char     *get_base_dir(char **wildcard_str);
 static void     add_cwd(char **wildcard_str, char *cwd);
@@ -27,24 +27,24 @@ char    *replace_wildcards(char *str)
     char        *wildcard_str;
     t_list      *matching_files;
     static char *cwd;
-    uint32_t    i;
-    uint32_t    pattern_len;
+    uint32_t    idx;
+    uint32_t    len;
 
     if (!cwd)
         cwd = getcwd_p(NULL, 0);
-    i = 0;
-    wildcard_str = get_wildcard_str(str, &i);
+    idx = 0;
+    wildcard_str = get_wildcard_str(str, &idx, &len);
+    printf("wildcard_str: %s\n", wildcard_str);
     while (wildcard_str)
     {
-        pattern_len = ft_strlen(wildcard_str);
         add_cwd(&wildcard_str, cwd);
         matching_files = parse_wildcard_str(wildcard_str, cwd);
         sort_result(&matching_files);
-        str = insert_result(str, matching_files, i, pattern_len);
+        str = insert_result(str, matching_files, idx, len);
         lstclear(&matching_files, &free);
-        i += pattern_len;
+        idx += len;
         free(wildcard_str);
-        wildcard_str = get_wildcard_str(str, &i);
+        wildcard_str = get_wildcard_str(str, &idx, &len);
     }
     free(cwd);
     cwd = NULL; //perche' e' statica
@@ -156,9 +156,8 @@ static char *get_base_dir(char **wildcard_str)
     return (basedir);
 }
 
-static char *get_wildcard_str(char *str, uint32_t *i)
+static char *get_wildcard_str(char *str, uint32_t *i, uint32_t *len)
 {
-    uint32_t    len;
     char        *wildcard_str;
     char        master_quote;
 
@@ -180,11 +179,11 @@ static char *get_wildcard_str(char *str, uint32_t *i)
     while (*i > 0 && !is_shell_space(str[*i]))
         (*i)--;
     *i += is_shell_space(str[*i]);
-    len = 1;
-    while (str[*i + len] && !is_shell_space(str[*i + len]))
-        len++;
-    wildcard_str = (char *)malloc_p(sizeof(char) * (len + 1));
-    ft_strlcpy(wildcard_str, &str[*i], len + 1);
+    *len = 1;
+    while (str[*i + *len] && !is_shell_space(str[*i + *len]) && !is_quote(str[*i + *len]))
+        (*len)++;
+    wildcard_str = (char *)malloc_p(sizeof(char) * (*len + 1));
+    ft_strlcpy(wildcard_str, &str[*i], *len + 1);
     return (clear_quotes(wildcard_str));
 }
 
