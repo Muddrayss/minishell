@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 18:05:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 19:04:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_redir
 t_tree	*parser(t_list *params_head);
 t_list  *fill_redirs(char *cmd_str);
 char    *replace_env_var(char *cmd_str);
-void 	clear_redirs(t_list *redirs, char *cmd_str);
+char    *clear_redirs(t_list *redirs, char *cmd_str);
 void 	merge_separators(t_list **lexered_params);
 bool 	is_empty_cmd(void *content);
 void    restore_placeholders(char *cmd_str, char placeholder);

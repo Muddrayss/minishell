@@ -6,11 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 19:15:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:18:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+bool	is_quote(char c)
+{
+	return (c == '\'' || c == '"');
+}
 
 bool	is_shell_space(char c) //meglio cosi' altrimenti complicated conditional
 {

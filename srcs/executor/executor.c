@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/26 00:42:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 20:13:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ static void     exec_file_redirs(t_redir *redir);
 static int      open_redir_file(t_redir *redir);
 static void     wait_for_children(t_tree *parsed_params);
 static uint16_t get_n_pipelines(t_tree *parsed_params);
+
+//TODO togliere / da *
+//TODO unexpected quit con permesso negato e messaggio sbagliato
 
 void    executor(t_tree *parsed_params)
 {
@@ -134,6 +137,9 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
 {
     if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
+    elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str);
+    elem->cmd->cmd_str = replace_wildcards(elem->cmd->cmd_str);
+    elem->cmd->cmd_str = clear_quotes(elem->cmd->cmd_str);
     exec_redirs(elem->cmd->redirs);
     exec(ft_getenv("PATH"), elem->cmd->cmd_str);
 }
@@ -157,6 +163,9 @@ static void exec_redirs(t_list *redirs)
     while (redirs)
     {
         redir = (t_redir *)redirs->content;
+        redir->filename = replace_env_vars(redir->filename);
+        redir->filename = replace_wildcards(redir->filename);
+        redir->filename = clear_quotes(redir->filename);
         exec_fd_redirs(redir);
         exec_file_redirs(redir);
         redirs = redirs->next;
@@ -188,6 +197,7 @@ static void exec_file_redirs(t_redir *redir)
     reset_fd(&file_fd);
 }
 
+//TODO restituisce sempre 1
 static int  open_redir_file(t_redir *redir)
 {
     int     fd;

@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 00:55:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 20:14:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static char     *get_wildcard_str(char *str, uint32_t *idx);
+static char     *get_wildcard_str(char *str, uint32_t *i);
 static char     *get_new_wildcard_str(char *basedir, char *entry, char *wildcard_str);
 static char     *get_base_dir(char **wildcard_str);
 static void     add_cwd(char **wildcard_str, char *cwd);
@@ -27,24 +27,24 @@ char    *replace_wildcards(char *str)
     char        *wildcard_str;
     t_list      *matching_files;
     static char *cwd;
-    uint32_t    idx;
+    uint32_t    i;
     uint32_t    pattern_len;
 
     if (!cwd)
         cwd = getcwd_p(NULL, 0);
-    idx = 0;
-    wildcard_str = get_wildcard_str(str, &idx);
+    i = 0;
+    wildcard_str = get_wildcard_str(str, &i);
     while (wildcard_str)
     {
         pattern_len = ft_strlen(wildcard_str);
         add_cwd(&wildcard_str, cwd);
         matching_files = parse_wildcard_str(wildcard_str, cwd);
         sort_result(&matching_files);
-        str = insert_result(str, matching_files, idx, pattern_len);
+        str = insert_result(str, matching_files, i, pattern_len);
         lstclear(&matching_files, &free);
-        idx += pattern_len;
+        i += pattern_len;
         free(wildcard_str);
-        wildcard_str = get_wildcard_str(str, &idx);
+        wildcard_str = get_wildcard_str(str, &i);
     }
     free(cwd);
     cwd = NULL; //perche' e' statica
@@ -93,9 +93,12 @@ static char *get_full_entry(char *basedir, char *entry, char *cwd)
         basedir++;
         cwd++;
     }
+    if (*basedir)
+        basedir++;
     full_entry = (char *)malloc_p(sizeof(char) * (ft_strlen(basedir) + ft_strlen(entry) + 2));
     ft_strcpy(full_entry, basedir);
-    ft_strcat(full_entry, "/");
+    if (*basedir)
+        ft_strcat(full_entry, "/");
     ft_strcat(full_entry, entry);
     return (full_entry);
 }
@@ -115,6 +118,7 @@ static bool matches_pattern(char *pattern, struct dirent *entry, uint32_t idx)
     return (false);
 }
 
+//TODO deve controllare anche lui le quotes vedi comando echo srcs/*/"*.c"
 static char  *get_new_wildcard_str(char *basedir, char *wildcard_str, char *entry)
 {
     char        *new_wildcard_str;
@@ -152,24 +156,36 @@ static char *get_base_dir(char **wildcard_str)
     return (basedir);
 }
 
-static char *get_wildcard_str(char *str, uint32_t *idx)
+static char *get_wildcard_str(char *str, uint32_t *i)
 {
     uint32_t    len;
     char        *wildcard_str;
+    char        master_quote;
 
-    while (str[*idx] > 0 && str[*idx] != '*')
-        (*idx)++;
-    if (str[*idx] != '*')
+    if (!str)
         return (NULL);
-    while (*idx > 0 && !is_shell_space(str[*idx]))
-        (*idx)--;
-    (*idx) += is_shell_space(str[*idx]);
+    master_quote = '\0';
+    while (str[*i])
+    {
+        if (!master_quote && (is_quote(str[*i])))
+            master_quote = str[*i];
+        else if (master_quote && str[*i] == master_quote)
+            master_quote = '\0';
+        if (!master_quote && str[*i] == '*')
+            break ;
+        (*i)++;
+    }
+    if (str[*i] != '*')
+        return (NULL);
+    while (*i > 0 && !is_shell_space(str[*i]))
+        (*i)--;
+    *i += is_shell_space(str[*i]);
     len = 1;
-    while (str[*idx + len] > 0 && !is_shell_space(str[*idx + len]))
+    while (str[*i + len] && !is_shell_space(str[*i + len]))
         len++;
     wildcard_str = (char *)malloc_p(sizeof(char) * (len + 1));
-    ft_strlcpy(wildcard_str, &str[*idx], len + 1);
-    return (wildcard_str);
+    ft_strlcpy(wildcard_str, &str[*i], len + 1);
+    return (clear_quotes(wildcard_str));
 }
 
 static void sort_result(t_list **matching_files)

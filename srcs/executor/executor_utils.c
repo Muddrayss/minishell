@@ -6,11 +6,36 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:46:56 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 16:52:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:07:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
+
+char	*clear_quotes(char *str)
+{
+	uint32_t	i;
+	uint32_t	j;
+	char		*new_str;
+	char		master_quote;
+
+	i = 0;
+	j = 0;
+	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) + 1));
+	master_quote = '\0';
+	while (str[i])
+	{
+		if (!master_quote && (str[i] == '\'' || str[i] == '"'))
+			master_quote = str[i];
+		else if (master_quote && str[i] == master_quote)
+			master_quote = '\0';
+		else if (!master_quote || (master_quote && str[i] != master_quote))
+			new_str[j++] = str[i];
+		i++;
+	}
+	new_str[j] = '\0';
+	return (free(str), new_str);
+}
 
 void	exec_simple_cmd(char *path, char *cmd_str)
 {

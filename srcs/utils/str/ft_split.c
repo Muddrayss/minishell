@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:34:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 19:18:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:06:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static char	**fill_matrix(int n_words, char *s, char c, char **str_array);
 
+//TODO modificarlo per evitare le quotes
 char	**ft_split(char *s, char c)
 {
 	int		n_words;
