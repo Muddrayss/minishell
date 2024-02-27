@@ -6,14 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:16:55 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 19:21:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 23:53:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static char     *remove_fd_num(char *str, uint32_t idx_redir);
-static char     *remove_filename(char *str, uint32_t idx_redir);
+static char     *remove_chars(char *str, bool *to_remove_array);
+static void     remove_fd_num(char *str, uint32_t i, bool *to_remove_array);
+static uint32_t remove_filename(char *str, uint32_t i, bool *to_remove_array);
 static void     fill_redir_input(t_list **redirs, char *str, uint32_t i);
 static void     fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno);
 static void     fill_redir_output(t_list **redirs, char *str, uint32_t i, bool is_append);
@@ -64,13 +65,13 @@ t_list  *fill_redirs(char *cmd_str)
 char    *clear_redirs(t_list *redirs, char *cmd_str)
 {
     uint32_t    i;
+    bool        *to_remove_array;
     t_redir     *redir;
     char        master_quote;
-    uint32_t    to_skip;
-    char        *tmp;
 
     if (!cmd_str || !redirs)
         return (cmd_str);
+    to_remove_array = (bool *)calloc_p(ft_strlen(cmd_str), sizeof(bool));
     master_quote = '\0';
     i = -1;
     while (cmd_str[++i])
@@ -84,23 +85,54 @@ char    *clear_redirs(t_list *redirs, char *cmd_str)
             if (cmd_str[i] == '<' || cmd_str[i] == '>')
             {
                 redir = (t_redir *)redirs->content;
+                to_remove_array[i] = true;
+                to_remove_array[i + 1] = (cmd_str[i + 1] == '<' || cmd_str[i + 1] == '>');
                 if (redir->filename)
-                    cmd_str = remove_filename(cmd_str, i);
-                cmd_str = remove_fd_num(cmd_str, i);
-                to_skip = 1;
-                if (cmd_str[i + 1] == '<' || cmd_str[i + 1] == '>')
-                    to_skip++;
-                tmp = cmd_str;
-                cmd_str = (char *)calloc_p(ft_strlen(cmd_str) - to_skip + 1, sizeof(char));
-                ft_strlcpy(cmd_str, tmp, i);
-                ft_strcat(cmd_str, tmp + i + to_skip);
-                free(tmp);
-                redirs = redirs->next;
-                i--;
+                    i = remove_filename(cmd_str, i, to_remove_array);
+                if (redir->fds[0] != -42)
+                    remove_fd_num(cmd_str, i, to_remove_array);
             }
         }
     }
-    return (cmd_str);
+    return (remove_chars(cmd_str, to_remove_array));
+}
+
+static char *remove_chars(char *str, bool *to_remove_array)
+{
+    uint32_t    to_remove_len;
+    char        *new_str;
+    uint32_t    i;
+    uint32_t    j;
+
+    i = -1;
+    to_remove_len = 0;
+    while (str[++i])
+        to_remove_len += to_remove_array[i];
+    new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) - to_remove_len + 1));
+    i = -1;
+    j = 0;
+    while (str[++i])
+        if (!to_remove_array[i])
+            new_str[j++] = str[i];
+    new_str[i] = '\0';
+    return (new_str);
+}
+
+static void remove_fd_num(char *str, uint32_t i, bool *to_remove_array)
+{
+    i--;
+    while (i > 0 && ft_isdigit(str[i]))
+        to_remove_array[i--] = true;
+}
+
+static uint32_t remove_filename(char *str, uint32_t i, bool *to_remove_array)
+{
+    i += 1 + (str[i + 1] == '<' || str[i + 1] == '>');
+    while (str[i] && is_shell_space(str[i]))
+        to_remove_array[i++] = true;
+    while (str[i] && !is_shell_space(str[i])) // && !is_quote(str[i]))
+        to_remove_array[i++] = true;
+    return (i - 1);
 }
 
 static void fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno)
@@ -188,38 +220,4 @@ static int32_t get_fd_num(char *str, uint32_t i)
     if (ft_isdigit(str[i + 1]))
         num = ft_atou(&str[i + 1]);
     return (num);
-}
-
-static char *remove_fd_num(char *str, uint32_t idx_redir)
-{
-    char     *new_str;
-    uint32_t start;
-    uint32_t end;
-
-    start = idx_redir + 1 + (str[idx_redir + 1] == '<' || str[idx_redir + 1] == '>');
-    end = start;
-    while (str[end] && ft_isdigit(str[end]))
-        end++;
-    new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) - (end - start) + 1));
-    ft_strlcpy(new_str, str, start + 1);
-    ft_strcat(new_str, &str[end]);
-    return(free(str), new_str);
-}
-
-static char  *remove_filename(char *str, uint32_t idx_redir)
-{
-    char        *new_str;
-    uint32_t    start;
-    uint32_t    end;
-
-    start = idx_redir + 1 + (str[idx_redir + 1] == '<' || str[idx_redir + 1] == '>');
-    end = start;
-    while (str[end] && is_shell_space(str[end]))
-        end++;
-    while (str[end] && !is_shell_space(str[end]))
-        end++;
-    new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) - (end - start) + 1));
-    ft_strlcpy(new_str, str, start + 1);
-    ft_strcat(new_str, &str[end]);
-    return (free(str), new_str);
 }

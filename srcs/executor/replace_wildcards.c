@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 22:50:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 22:52:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char    *replace_wildcards(char *str)
         cwd = getcwd_p(NULL, 0);
     idx = 0;
     wildcard_str = get_wildcard_str(str, &idx, &len);
-    printf("wildcard_str: %s\n", wildcard_str);
     while (wildcard_str)
     {
         add_cwd(&wildcard_str, cwd);
