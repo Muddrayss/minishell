@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 00:56:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/27 01:26:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static bool 	is_token(char c);
 static void 	lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *input);
 static void 	lexer_add_token(t_list **lexered_params, char c);
-static uint32_t expand_dollar(char **cmd_str_new, char *cmd_str_raw);
+static uint32_t expand_dollar(char **cmd_str_new, char **cmd_str_raw);
 
 t_list	*lexer(char *input)
 {
@@ -29,7 +29,7 @@ t_list	*lexer(char *input)
     current_quote = '\0';
     get_data()->lexered_params = lexered_params;
     cmd_len = 0;
-    while (*input != '\0')
+    while (true)
     {
         if (*input == '\'' || *input == '"')
         {
@@ -38,7 +38,7 @@ t_list	*lexer(char *input)
             else if (current_quote == *input)
                 current_quote = '\0';
         }
-        else if (!current_quote && (is_token(*input) || *(input + 1) == '\0'))
+        else if (!current_quote && (is_token(*input) || *input == '\0'))
         {
             cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
             ft_strlcpy(cmd_str, input - cmd_len, cmd_len + 1);
@@ -47,8 +47,9 @@ t_list	*lexer(char *input)
             lexer_add_token(lexered_params, *input);
             cmd_len = 0;
         }
-        else
-            cmd_len++;
+        cmd_len++;
+        if (!*input)
+            break ;
         input++;
     }
     return (lstreverse(lexered_params), *lexered_params);
@@ -65,7 +66,7 @@ static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *cmd_s
     master_quote = '\0';
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
     content->token = 0;
-    content->cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
+    content->cmd_str = (char *)calloc_p(cmd_len + 1, sizeof(char));
     i = 0;
     while (cmd_len--)
     {
@@ -80,7 +81,7 @@ static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *cmd_s
         if (*cmd_str_raw != master_quote)
         {
             if (master_quote != '\'' && *cmd_str_raw == '$')
-                i = expand_dollar(&content->cmd_str, cmd_str_raw + 1);
+                i = expand_dollar(&content->cmd_str, &cmd_str_raw);
             else if (master_quote == '\'' && *cmd_str_raw == '>')
                 content->cmd_str[i++] = g_ph_redirr;
             else if (master_quote == '\'' && *cmd_str_raw == '<')
@@ -92,24 +93,27 @@ static void lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *cmd_s
         }
         cmd_str_raw++;
     }
+    content->cmd_str[i] = '\0';
     content->cmd_str = replace_wildcards(content->cmd_str);
     restore_placeholders(content->cmd_str, g_ph_asterisk);
+    printf("cmd_str: %s\n", content->cmd_str);
     lstadd_front(lexered_params, lstnew_p(content));
 }
 
-static uint32_t expand_dollar(char **cmd_str_new, char *cmd_str_raw)
+static uint32_t expand_dollar(char **cmd_str_new, char **cmd_str_raw)
 {
     char        *tmp;
     char        *env_value;
     char        *env_name;
     uint32_t    env_name_len;
 
-    env_name_len = -1;
-    while (cmd_str_raw[++env_name_len])
-        if (cmd_str_raw[env_name_len] == ' ' || cmd_str_raw[env_name_len] == '\'' || cmd_str_raw[env_name_len] == '"' || cmd_str_raw[env_name_len] == '$')
+    env_name_len = 0; //parte da zero per skippare il $
+    while ((*cmd_str_raw)[++env_name_len])
+        if ((*cmd_str_raw)[env_name_len] == ' ' || (*cmd_str_raw)[env_name_len] == '\'' || (*cmd_str_raw)[env_name_len] == '"' || (*cmd_str_raw)[env_name_len] == '$')
             break ;
+    env_name_len--;
     env_name = (char *)malloc_p(sizeof(char) * (env_name_len + 1));
-    ft_strlcpy(env_name, cmd_str_raw, env_name_len + 1);
+    ft_strlcpy(env_name, *cmd_str_raw, env_name_len + 1);
     if (env_name[0] == '?')
         env_value = ft_utoa((int8_t)g_status);
     else
@@ -117,10 +121,10 @@ static uint32_t expand_dollar(char **cmd_str_new, char *cmd_str_raw)
     if (!env_value)
         env_value = (char *)calloc_p(1, sizeof(char));
     tmp = *cmd_str_new;
-    *cmd_str_new = (char *)malloc_p(sizeof(char) * (ft_strlen(*cmd_str_new) + ft_strlen(env_value) - env_name_len));
-    ft_strcat(*cmd_str_new, tmp);
+    *cmd_str_new = (char *)malloc_p(sizeof(char) * (ft_strlen(*cmd_str_new) + ft_strlen(env_value)));
+    ft_strcpy(*cmd_str_new, tmp);
     ft_strcat(*cmd_str_new, env_value);
-    cmd_str_raw += env_name_len + 1;
+    *cmd_str_raw += env_name_len + 1;
     return (free(tmp), free(env_value), free(env_name), ft_strlen(*cmd_str_new));
 }
 

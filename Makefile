@@ -6,12 +6,12 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/26 12:45:22 by craimond         ###   ########.fr        #
+#    Updated: 2024/02/27 00:58:38 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-LEXER_SRCS = $(addprefix lexer/, lexer.c expander.c replace_env_vars.c replace_wildcards.c)
+LEXER_SRCS = $(addprefix lexer/, lexer.c replace_wildcards.c)
 PARSER_SRCS = $(addprefix parser/, parser.c parser_redirs.c parser_utils.c)
 EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_utils.c heredoc.c get_cmd_path.c)
 BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)

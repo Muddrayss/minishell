@@ -1,140 +1,472 @@
-==609866== Memcheck, a memory error detector
-==609866== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==609866== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==609866== Command: ./minishell
-==609866== 
-==609866== Invalid read of size 1
-==609866==    at 0x10F74F: ft_strcat (ft_strcat.c:24)
-==609866==    by 0x10B864: expand (expander.c:37)
-==609866==    by 0x10B4C6: lexer_add_cmd (lexer.c:66)
-==609866==    by 0x10B422: lexer (lexer.c:47)
-==609866==    by 0x10982B: minishell_loop (minishell.c:88)
-==609866==    by 0x1095F6: main (minishell.c:27)
-==609866==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
-==609866== 
-==609866== 
-==609866== Process terminating with default action of signal 11 (SIGSEGV)
-==609866==  Access not within mapped region at address 0x0
-==609866==    at 0x10F74F: ft_strcat (ft_strcat.c:24)
-==609866==    by 0x10B864: expand (expander.c:37)
-==609866==    by 0x10B4C6: lexer_add_cmd (lexer.c:66)
-==609866==    by 0x10B422: lexer (lexer.c:47)
-==609866==    by 0x10982B: minishell_loop (minishell.c:88)
-==609866==    by 0x1095F6: main (minishell.c:27)
-==609866==  If you believe this happened as a result of a stack
-==609866==  overflow in your program's main thread (unlikely but
-==609866==  possible), you can try to increase the size of the
-==609866==  main thread stack using the --main-stacksize= flag.
-==609866==  The main thread stack size used in this run was 8388608.
-==609866== 
-==609866== HEAP SUMMARY:
-==609866==     in use at exit: 208,191 bytes in 597 blocks
-==609866==   total heap usage: 828 allocs, 231 frees, 249,705 bytes allocated
-==609866== 
-==609866== 2 bytes in 1 blocks are still reachable in loss record 1 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
-==609866==    by 0x10B832: expand (expander.c:35)
-==609866==    by 0x10B4C6: lexer_add_cmd (lexer.c:66)
-==609866==    by 0x10B422: lexer (lexer.c:47)
-==609866==    by 0x10982B: minishell_loop (minishell.c:88)
-==609866==    by 0x1095F6: main (minishell.c:27)
-==609866== 
-==609866== 3 bytes in 1 blocks are still reachable in loss record 2 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10F311: ft_strtrim (ft_strtrim.c:30)
-==609866==    by 0x1097D8: minishell_loop (minishell.c:84)
-==609866==    by 0x1095F6: main (minishell.c:27)
-==609866== 
-==609866== 5 bytes in 1 blocks are still reachable in loss record 5 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10F3F4: ft_strdup (ft_strdup.c:22)
-==609866==    by 0x10B363: lexer (lexer.c:31)
-==609866==    by 0x10982B: minishell_loop (minishell.c:88)
-==609866==    by 0x1095F6: main (minishell.c:27)
-==609866== 
-==609866== 8 bytes in 1 blocks are still reachable in loss record 6 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
-==609866==    by 0x10B330: lexer (lexer.c:26)
-==609866==    by 0x10982B: minishell_loop (minishell.c:88)
-==609866==    by 0x1095F6: main (minishell.c:27)
-==609866== 
-==609866== 55 bytes in 1 blocks are still reachable in loss record 18 of 62
-==609866==    at 0x483DFAF: realloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x49E5297: getcwd (getcwd.c:84)
-==609866==    by 0x10AFBC: getcwd_p (protected_methods.c:79)
-==609866==    by 0x10967F: init_data (minishell.c:48)
-==609866==    by 0x1095EC: main (minishell.c:25)
-==609866== 
-==609866== 616 bytes in 1 blocks are still reachable in loss record 26 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
-==609866==    by 0x10A4F9: envp_matrix_add (envp_matrix.c:100)
-==609866==    by 0x10A161: update_envp_matrix (envp_matrix.c:27)
-==609866==    by 0x10AB1A: ft_setenv (envp_table.c:71)
-==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
-==609866==    by 0x1096EE: init_data (minishell.c:54)
-==609866==    by 0x1095EC: main (minishell.c:25)
-==609866== 
-==609866== 1,216 bytes in 76 blocks are still reachable in loss record 33 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
-==609866==    by 0x10A9CE: ft_setenv (envp_table.c:42)
-==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
-==609866==    by 0x1096EE: init_data (minishell.c:54)
-==609866==    by 0x1095EC: main (minishell.c:25)
-==609866== 
-==609866== 1,223 bytes in 76 blocks are still reachable in loss record 34 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10F3F4: ft_strdup (ft_strdup.c:22)
-==609866==    by 0x10A9DE: ft_setenv (envp_table.c:43)
-==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
-==609866==    by 0x1096EE: init_data (minishell.c:54)
-==609866==    by 0x1095EC: main (minishell.c:25)
-==609866== 
-==609866== 1,824 bytes in 76 blocks are still reachable in loss record 36 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10ADE9: malloc_p (protected_methods.c:21)
-==609866==    by 0x10FD77: lstnew_p (lstnew_p.c:19)
-==609866==    by 0x10AADE: ft_setenv (envp_table.c:70)
-==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
-==609866==    by 0x1096EE: init_data (minishell.c:54)
-==609866==    by 0x1095EC: main (minishell.c:25)
-==609866== 
-==609866== 2,033 bytes in 76 blocks are still reachable in loss record 38 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10F3F4: ft_strdup (ft_strdup.c:22)
-==609866==    by 0x10A9F1: ft_setenv (envp_table.c:44)
-==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
-==609866==    by 0x1096EE: init_data (minishell.c:54)
-==609866==    by 0x1095EC: main (minishell.c:25)
-==609866== 
-==609866== 2,040 bytes in 1 blocks are still reachable in loss record 39 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10EF1B: ft_calloc (ft_calloc.c:23)
-==609866==    by 0x10AE47: calloc_p (protected_methods.c:33)
-==609866==    by 0x10ACA0: envp_table_init (envp_table.c:125)
-==609866==    by 0x1096EE: init_data (minishell.c:54)
-==609866==    by 0x1095EC: main (minishell.c:25)
-==609866== 
-==609866== 2,952 bytes in 76 blocks are still reachable in loss record 41 of 62
-==609866==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==609866==    by 0x10EF1B: ft_calloc (ft_calloc.c:23)
-==609866==    by 0x10A595: envp_matrix_add (envp_matrix.c:105)
-==609866==    by 0x10A161: update_envp_matrix (envp_matrix.c:27)
-==609866==    by 0x10AB1A: ft_setenv (envp_table.c:71)
-==609866==    by 0x10AD0C: envp_table_init (envp_table.c:133)
-==609866==    by 0x1096EE: init_data (minishell.c:54)
-==609866==    by 0x1095EC: main (minishell.c:25)
-==609866== 
-==609866== LEAK SUMMARY:
-==609866==    definitely lost: 0 bytes in 0 blocks
-==609866==    indirectly lost: 0 bytes in 0 blocks
-==609866==      possibly lost: 0 bytes in 0 blocks
-==609866==    still reachable: 11,977 bytes in 387 blocks
-==609866==         suppressed: 196,214 bytes in 210 blocks
-==609866== 
-==609866== For lists of detected and suppressed errors, rerun with: -s
-==609866== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
-Segmentation fault (core dumped)
+==30931== Memcheck, a memory error detector
+==30931== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==30931== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==30931== Command: ./minishell
+==30931== 
+==30931== Invalid write of size 1
+==30931==    at 0x10F5C6: ft_strcpy (ft_strcpy.c:22)
+==30931==    by 0x10B89D: expand_dollar (lexer.c:125)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10F516: ft_strcat (ft_strcat.c:21)
+==30931==    by 0x10B8B3: expand_dollar (lexer.c:126)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid write of size 1
+==30931==    at 0x10F56C: ft_strcat (ft_strcat.c:26)
+==30931==    by 0x10B8B3: expand_dollar (lexer.c:126)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10F4E3: ft_strlen (ft_strlen.c:22)
+==30931==    by 0x10B8FF: expand_dollar (lexer.c:128)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid write of size 1
+==30931==    at 0x10B6A5: lexer_add_cmd (lexer.c:92)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid write of size 1
+==30931==    at 0x10B5BD: lexer_add_cmd (lexer.c:79)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69295 is 2 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid write of size 1
+==30931==    at 0x10B6D3: lexer_add_cmd (lexer.c:96)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69297 is 4 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10C03F: get_wildcard_str (replace_wildcards.c:160)
+==30931==    by 0x10BA4B: replace_wildcards (replace_wildcards.c:36)
+==30931==    by 0x10B6E4: lexer_add_cmd (lexer.c:97)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10C055: get_wildcard_str (replace_wildcards.c:160)
+==30931==    by 0x10BA4B: replace_wildcards (replace_wildcards.c:36)
+==30931==    by 0x10B6E4: lexer_add_cmd (lexer.c:97)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10C06B: get_wildcard_str (replace_wildcards.c:162)
+==30931==    by 0x10BA4B: replace_wildcards (replace_wildcards.c:36)
+==30931==    by 0x10B6E4: lexer_add_cmd (lexer.c:97)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69296 is 3 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10CA8A: restore_placeholders (parser.c:205)
+==30931==    by 0x10B704: lexer_add_cmd (lexer.c:98)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10CA5E: restore_placeholders (parser.c:206)
+==30931==    by 0x10B704: lexer_add_cmd (lexer.c:98)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x484ED24: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x4936D30: __vfprintf_internal (vfprintf-internal.c:1517)
+==30931==    by 0x492079E: printf (printf.c:33)
+==30931==    by 0x10B722: lexer_add_cmd (lexer.c:99)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x494B734: _IO_new_file_xsputn (fileops.c:1218)
+==30931==    by 0x494B734: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==30931==    by 0x493700B: outstring_func (vfprintf-internal.c:239)
+==30931==    by 0x493700B: __vfprintf_internal (vfprintf-internal.c:1517)
+==30931==    by 0x492079E: printf (printf.c:33)
+==30931==    by 0x10B722: lexer_add_cmd (lexer.c:99)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69295 is 2 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x48534F0: mempcpy (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x494B664: _IO_new_file_xsputn (fileops.c:1235)
+==30931==    by 0x494B664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==30931==    by 0x493700B: outstring_func (vfprintf-internal.c:239)
+==30931==    by 0x493700B: __vfprintf_internal (vfprintf-internal.c:1517)
+==30931==    by 0x492079E: printf (printf.c:33)
+==30931==    by 0x10B722: lexer_add_cmd (lexer.c:99)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x48534FE: mempcpy (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x494B664: _IO_new_file_xsputn (fileops.c:1235)
+==30931==    by 0x494B664: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==30931==    by 0x493700B: outstring_func (vfprintf-internal.c:239)
+==30931==    by 0x493700B: __vfprintf_internal (vfprintf-internal.c:1517)
+==30931==    by 0x492079E: printf (printf.c:33)
+==30931==    by 0x10B722: lexer_add_cmd (lexer.c:99)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69294 is 1 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10CBA2: fill_redirs (parser_redirs.c:34)
+==30931==    by 0x10C9C3: init_cmd (parser.c:186)
+==30931==    by 0x10C79C: fill_tree (parser.c:131)
+==30931==    by 0x10C462: parser (parser.c:36)
+==30931==    by 0x109873: minishell_loop (minishell.c:89)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10CAE3: fill_redirs (parser_redirs.c:36)
+==30931==    by 0x10C9C3: init_cmd (parser.c:186)
+==30931==    by 0x10C79C: fill_tree (parser.c:131)
+==30931==    by 0x10C462: parser (parser.c:36)
+==30931==    by 0x109873: minishell_loop (minishell.c:89)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10CB41: fill_redirs (parser_redirs.c:43)
+==30931==    by 0x10C9C3: init_cmd (parser.c:186)
+==30931==    by 0x10C79C: fill_tree (parser.c:131)
+==30931==    by 0x10C462: parser (parser.c:36)
+==30931==    by 0x109873: minishell_loop (minishell.c:89)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10F4E3: ft_strlen (ft_strlen.c:22)
+==30931==    by 0x10F1ED: ft_strdup (ft_strdup.c:22)
+==30931==    by 0x10C9DE: init_cmd (parser.c:189)
+==30931==    by 0x10C79C: fill_tree (parser.c:131)
+==30931==    by 0x10C462: parser (parser.c:36)
+==30931==    by 0x109873: minishell_loop (minishell.c:89)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10F246: ft_strdup (ft_strdup.c:26)
+==30931==    by 0x10C9DE: init_cmd (parser.c:189)
+==30931==    by 0x10C79C: fill_tree (parser.c:131)
+==30931==    by 0x10C462: parser (parser.c:36)
+==30931==    by 0x109873: minishell_loop (minishell.c:89)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Invalid read of size 1
+==30931==    at 0x10F230: ft_strdup (ft_strdup.c:28)
+==30931==    by 0x10C9DE: init_cmd (parser.c:189)
+==30931==    by 0x10C79C: fill_tree (parser.c:131)
+==30931==    by 0x10C462: parser (parser.c:36)
+==30931==    by 0x109873: minishell_loop (minishell.c:89)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931==  Address 0x4b69293 is 0 bytes after a block of size 3 alloc'd
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10AE72: malloc_p (protected_methods.c:21)
+==30931==    by 0x10B880: expand_dollar (lexer.c:124)
+==30931==    by 0x10B5F2: lexer_add_cmd (lexer.c:84)
+==30931==    by 0x10B4A7: lexer (lexer.c:45)
+==30931==    by 0x109863: minishell_loop (minishell.c:88)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Conditional jump or move depends on uninitialised value(s)
+==30931==    at 0x10FF77: is_builtin (builtins_handler.c:22)
+==30931==    by 0x10D991: launch_commands (executor.c:77)
+==30931==    by 0x10D8A6: executor (executor.c:47)
+==30931==    by 0x1098CF: minishell_loop (minishell.c:96)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30947== Conditional jump or move depends on uninitialised value(s)
+==30947==    at 0x10EDE2: ft_split (ft_split.c:23)
+==30947==    by 0x10E04F: exec (executor_utils.c:30)
+==30947==    by 0x10DC26: child (executor.c:138)
+==30947==    by 0x10DA4B: launch_commands (executor.c:88)
+==30947==    by 0x10DB7D: launch_standard_cmd (executor.c:124)
+==30947==    by 0x10D9C3: launch_commands (executor.c:80)
+==30947==    by 0x10D8A6: executor (executor.c:47)
+==30947==    by 0x1098CF: minishell_loop (minishell.c:96)
+==30947==    by 0x109616: main (minishell.c:27)
+==30947== 
+==30947== Conditional jump or move depends on uninitialised value(s)
+==30947==    at 0x484B235: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30947==    by 0x10D784: del_content_parser (parser_utils.c:118)
+==30947==    by 0x10FE8F: treeclear (treeclear.c:21)
+==30947==    by 0x10FE65: treeclear (treeclear.c:19)
+==30947==    by 0x109C77: free_data (minishell_utils.c:99)
+==30947==    by 0x10E09F: exec (executor_utils.c:35)
+==30947==    by 0x10DC26: child (executor.c:138)
+==30947==    by 0x10DA4B: launch_commands (executor.c:88)
+==30947==    by 0x10DB7D: launch_standard_cmd (executor.c:124)
+==30947==    by 0x10D9C3: launch_commands (executor.c:80)
+==30947==    by 0x10D8A6: executor (executor.c:47)
+==30947==    by 0x1098CF: minishell_loop (minishell.c:96)
+==30947== 
+==30947== Conditional jump or move depends on uninitialised value(s)
+==30947==    at 0x484B235: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30947==    by 0x10D784: del_content_parser (parser_utils.c:118)
+==30947==    by 0x10FE8F: treeclear (treeclear.c:21)
+==30947==    by 0x109C77: free_data (minishell_utils.c:99)
+==30947==    by 0x10E09F: exec (executor_utils.c:35)
+==30947==    by 0x10DC26: child (executor.c:138)
+==30947==    by 0x10DA4B: launch_commands (executor.c:88)
+==30947==    by 0x10DB7D: launch_standard_cmd (executor.c:124)
+==30947==    by 0x10D9C3: launch_commands (executor.c:80)
+==30947==    by 0x10D8A6: executor (executor.c:47)
+==30947==    by 0x1098CF: minishell_loop (minishell.c:96)
+==30947==    by 0x109616: main (minishell.c:27)
+==30947== 
+==30947== 
+==30947== HEAP SUMMARY:
+==30947==     in use at exit: 198,783 bytes in 215 blocks
+==30947==   total heap usage: 804 allocs, 589 frees, 265,975 bytes allocated
+==30947== 
+==30947== 9 bytes in 1 blocks are definitely lost in loss record 3 of 53
+==30947==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30947==    by 0x10F1FA: ft_strdup (ft_strdup.c:22)
+==30947==    by 0x10C9DE: init_cmd (parser.c:189)
+==30947==    by 0x10C79C: fill_tree (parser.c:131)
+==30947==    by 0x10C462: parser (parser.c:36)
+==30947==    by 0x109873: minishell_loop (minishell.c:89)
+==30947==    by 0x109616: main (minishell.c:27)
+==30947== 
+==30947== LEAK SUMMARY:
+==30947==    definitely lost: 9 bytes in 1 blocks
+==30947==    indirectly lost: 0 bytes in 0 blocks
+==30947==      possibly lost: 0 bytes in 0 blocks
+==30947==    still reachable: 0 bytes in 0 blocks
+==30947==         suppressed: 198,774 bytes in 214 blocks
+==30947== 
+==30947== Use --track-origins=yes to see where uninitialised values come from
+==30947== For lists of detected and suppressed errors, rerun with: -s
+==30947== ERROR SUMMARY: 60 errors from 27 contexts (suppressed: 0 from 0)
+==30931== Conditional jump or move depends on uninitialised value(s)
+==30931==    at 0x484B235: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10D784: del_content_parser (parser_utils.c:118)
+==30931==    by 0x10FE8F: treeclear (treeclear.c:21)
+==30931==    by 0x10FE65: treeclear (treeclear.c:19)
+==30931==    by 0x1098E9: minishell_loop (minishell.c:97)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== Conditional jump or move depends on uninitialised value(s)
+==30931==    at 0x484B235: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10D784: del_content_parser (parser_utils.c:118)
+==30931==    by 0x10FE8F: treeclear (treeclear.c:21)
+==30931==    by 0x1098E9: minishell_loop (minishell.c:97)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+exit
+==30931== 
+==30931== HEAP SUMMARY:
+==30931==     in use at exit: 198,783 bytes in 215 blocks
+==30931==   total heap usage: 811 allocs, 596 frees, 266,245 bytes allocated
+==30931== 
+==30931== 9 bytes in 1 blocks are definitely lost in loss record 3 of 53
+==30931==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==30931==    by 0x10F1FA: ft_strdup (ft_strdup.c:22)
+==30931==    by 0x10C9DE: init_cmd (parser.c:189)
+==30931==    by 0x10C79C: fill_tree (parser.c:131)
+==30931==    by 0x10C462: parser (parser.c:36)
+==30931==    by 0x109873: minishell_loop (minishell.c:89)
+==30931==    by 0x109616: main (minishell.c:27)
+==30931== 
+==30931== LEAK SUMMARY:
+==30931==    definitely lost: 9 bytes in 1 blocks
+==30931==    indirectly lost: 0 bytes in 0 blocks
+==30931==      possibly lost: 0 bytes in 0 blocks
+==30931==    still reachable: 0 bytes in 0 blocks
+==30931==         suppressed: 198,774 bytes in 214 blocks
+==30931== 
+==30931== Use --track-origins=yes to see where uninitialised values come from
+==30931== For lists of detected and suppressed errors, rerun with: -s
+==30931== ERROR SUMMARY: 59 errors from 26 contexts (suppressed: 0 from 0)
