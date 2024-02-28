@@ -56,8 +56,6 @@ void	free_data(void)
 
 	// close_all_fds(); forse e' questo cio che scazza readline
 	data = get_data();
-	if (!data)
-		return ;
 	free(data->starting_dir);
 	data->starting_dir = NULL;
 	ft_freematrix(data->cmd_args);
