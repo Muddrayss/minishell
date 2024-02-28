@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:29:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 13:33:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	init_data(char **envp)
 	data->main_pid = getpid();
 	data->input = NULL;
 	if (!data->starting_dir)
-		ft_quit(ERR_ENV, "Error: failed to get current working directory");
+		ft_quit(ERR_ENV, "Error: failed to initialize environment");
 	data->envp_matrix = calloc_p(ft_matrixsize(envp) + 1, sizeof(char *));
 	envp_table_init(envp);
 }
@@ -45,7 +45,7 @@ void init_general(void)
 {
 	char	*path;
 	
-	is_bad_errno(0, true);
+	set_bad_errnos();
 	path = ft_getenv("PATH");
 	g_status = 0;
 	exec_simple_cmd(path, "clear");

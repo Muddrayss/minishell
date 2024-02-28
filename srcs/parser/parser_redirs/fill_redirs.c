@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 23:57:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:45:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ t_list  *fill_redirs(char *cmd_str)
     }
     return (heredoc_fileno++, lstreverse(&redirs), redirs);
 }
-
 
 static void fill_redir_heredoc(t_list **redirs, char *str, uint32_t i, int32_t heredoc_fileno)
 {

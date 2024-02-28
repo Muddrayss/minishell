@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:56:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:48:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void     child(t_tree *elem, int fds[3], int8_t prev_type);
 static void     parent(pid_t pid, int fds[3], t_tree *node);
 static void     wait_for_children(t_tree *node);
 static t_tree   *skip_till_semicolon(t_tree *node);
-static void     get_n_pipelines(t_tree *node);
+static uint16_t get_n_pipelines(t_tree *node);
 
 //TODO unexpected quit  e messaggio sbagliato con permessi negati a creare file in root 
 

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:28:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:33:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 int	g_status;
 
-static void check_args(int argc, char **argv);
-static void	init_general(void);
-static void init_data(char **envp);
 static void minishell_loop(void);
 
 int	main(int argc, char **argv, char **envp)

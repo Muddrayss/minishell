@@ -6,11 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 22:52:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:57:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 static char     *get_wildcard_str(char *str, uint32_t *i, uint32_t *len);
 static char     *get_new_wildcard_str(char *basedir, char *entry, char *wildcard_str);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 14:33:09 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 13:06:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,8 @@ void    envp_table_init(char **envp) //gli viene passata la envp originale
 	char		*env_value;
 	uint32_t 	separator_idx;
 
-    //onn c'e' bisogno di contorllare se envp == NULL perche' la prendiamo con getenv_p
+	if (!envp || !*envp)
+		ft_quit(ERR_ENV, "Error: failed to initialize environment");
 	get_data()->envp_table = calloc_p(HASH_TABLE_SIZE, sizeof(t_list *)); //uso calloc cosi' inizializza tutti i bucket a NULL
 	while (*envp)
 	{

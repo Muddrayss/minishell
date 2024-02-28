@@ -6,14 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:33:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 13:00:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 static void	quit_from_main(uint8_t id);
-static void	free_data(void);
 // static void	close_all_fds(void);
 
 void	ft_quit(uint8_t id, char *msg)
@@ -51,7 +50,7 @@ static void	quit_from_main(uint8_t id)
 	}
 }
 
-static void	free_data(void)
+void	free_data(void)
 {
 	t_data	*data;
 
