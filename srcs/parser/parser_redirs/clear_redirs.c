@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 23:59:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:01:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ static char *remove_chars(char *str, bool *to_remove_array)
     while (str[++i])
         if (!to_remove_array[i])
             new_str[j++] = str[i];
-    new_str[i] = '\0';
+    new_str[j] = '\0';
     return (new_str);
 }

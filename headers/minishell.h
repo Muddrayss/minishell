@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 12:46:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:06:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ extern int g_status;
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
 # define MAX_FDS 1024
 
-void	check_args(int argc, char **argv);
+void	check_args(int argc, char **argv, char **envp);
 void	init_data(char **envp);
 void    init_general(void);
 t_data	*get_data(void);

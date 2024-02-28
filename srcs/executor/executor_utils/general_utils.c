@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:54:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:05:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void  exec(char *path, char *cmd_str)
 	data = get_data();
 	data->cmd_args = ft_split(cmd_str, ' ');
 	if (!data->cmd_args)
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
 	if (!data->cmd_args[0] || !data->cmd_args[0][0])
 	{
 		free_data();

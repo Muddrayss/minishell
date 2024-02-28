@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 12:33:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:37:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void minishell_loop(void);
 
 int	main(int argc, char **argv, char **envp)
 {
-	check_args(argc, argv);
+	check_args(argc, argv, envp);
 	init_data(envp);
 	init_general();
 	minishell_loop();

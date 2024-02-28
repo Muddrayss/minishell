@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:23:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 21:27:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	envp_matrix_remove(char **matrix, char *env_name, uint32_t name_len)
 	if (!env_name_cpy)
 	{
 		free(new_matrix);
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
 	}
 	j = 0;
 	i = 0;
@@ -73,7 +73,7 @@ void	envp_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_t
 	matrix = get_data()->envp_matrix;
 	env_name_cpy = ft_strjoin(elem.name, "=");
 	if (!env_name_cpy)
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
 	i = 0;
 	while (matrix[i])
 	{
@@ -106,7 +106,7 @@ void	envp_matrix_add(char **matrix, t_envp  elem, uint32_t name_len, uint32_t va
 	if (!new_matrix[i])
 	{
 		ft_freematrix(new_matrix);
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
 	}
 	ft_strcpy(new_matrix[i], elem.name);
 	new_matrix[i][name_len] = '=';
@@ -138,7 +138,7 @@ void	envp_matrix_print_export(void)
 
 	matrix = ft_strarrdup(get_data()->envp_matrix);
 	if (!matrix)
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
 	size = ft_matrixsize(matrix);
 	to_print = get_next_alphabetically(matrix, size);
 	while (to_print)

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:27:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 13:57:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 21:20:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # define ERR_SIGSETUP   8  //quando fallisce la funzione signal()
 # define ERR_WAIT       9
 
-# define N_ERRNOS       256
+# define N_ERRNOS       200
 
 static const uint8_t    g_bad_errnos[]
-    = { ENOMEM,
+    = {
         EFAULT,
         EMFILE,
         ENFILE,

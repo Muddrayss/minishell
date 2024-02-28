@@ -6,28 +6,24 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/28 00:36:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:12:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-//TODO refactor senza strchr e strdup, con malloc e len
 bool is_builtin(char *cmd_str)
 {
-	char	*cmd;
-	char 	*end;
-	char 	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
-	uint8_t	n_builtins;
+	char		*cmd;
+	uint32_t	len;
+	char 		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
+	uint8_t		n_builtins;
 	
-	if (!cmd_str)
-		return (false);
-	cmd = ft_strdup(cmd_str);
-	if (!cmd)
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
-	end = ft_strchr(cmd, ' ');
-	if (end)
-		*end = '\0';
+	len = -1;
+	while (cmd_str[++len] && !is_shell_space(cmd_str[len]))
+		len++;
+	cmd = (char *)malloc_p(sizeof(char) * (len + 1));
+	ft_strlcpy(cmd, cmd_str, len + 1);
 	n_builtins = sizeof(builtins) / sizeof(char *);
 	while (n_builtins--)
 		if (ft_strcmp(cmd, builtins[n_builtins]) == 0)

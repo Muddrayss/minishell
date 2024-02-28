@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:37:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 13:06:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:05:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	ft_setenv(char *env_name, char *env_value, bool replace)
 	if (!new_elem->name || !new_elem->value)
 	{
 		del_content_envptable(new_elem);
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
 	}
     bucket = table[index];
 	while (bucket) //ci entra solo se c'e' una collision
@@ -123,8 +123,6 @@ void    envp_table_init(char **envp) //gli viene passata la envp originale
 	char		*env_value;
 	uint32_t 	separator_idx;
 
-	if (!envp || !*envp)
-		ft_quit(ERR_ENV, "Error: failed to initialize environment");
 	get_data()->envp_table = calloc_p(HASH_TABLE_SIZE, sizeof(t_list *)); //uso calloc cosi' inizializza tutti i bucket a NULL
 	while (*envp)
 	{

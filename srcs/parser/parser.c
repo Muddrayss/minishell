@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:05:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 21:26:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ static t_cmd    *init_cmd(char *cmd_str)
 {
     t_cmd   *cmd;
 
-    //TODO gestire caso con solo heredoc senza testo
     cmd = malloc_p(sizeof(t_cmd));
     cmd->redirs = fill_redirs(cmd_str);
     cmd_str = clear_redirs(cmd->redirs, cmd_str);
@@ -113,7 +112,7 @@ static t_cmd    *init_cmd(char *cmd_str)
     {
         cmd->cmd_str = ft_strdup(cmd_str);
         if (!cmd->cmd_str)
-            ft_quit(ERR_MEM, "Error: failed to allocate memory");
+            ft_quit(ERR_MEM, "minishell: failed to allocate memory");
     }
     else
         cmd->cmd_str = NULL;

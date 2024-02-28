@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 13:00:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:08:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 static void	quit_from_main(uint8_t id);
-// static void	close_all_fds(void);
+static void	close_all_fds(void);
 
 void	ft_quit(uint8_t id, char *msg)
 {
@@ -22,7 +22,7 @@ void	ft_quit(uint8_t id, char *msg)
 		while (open("./tmp/print_sem", O_CREAT | O_EXCL, 0666) == EEXIST)
 			;
 		if (!msg)
-			ft_putstr_fd(strerror(errno), STDERR_FILENO);
+			perror("minishell");
 		else
 			ft_putstr_fd(msg, STDERR_FILENO);
 		write(STDERR_FILENO, "\n", 1);
@@ -54,7 +54,7 @@ void	free_data(void)
 {
 	t_data	*data;
 
-	// close_all_fds(); forse e' questo cio che scazza readline
+	close_all_fds();
 	data = get_data();
 	free(data->starting_dir);
 	data->starting_dir = NULL;
@@ -76,11 +76,11 @@ void	free_data(void)
 	data->input = NULL;
 }
 
-// static void	close_all_fds(void)
-// {
-// 	int		fd;
+static void	close_all_fds(void)
+{
+	int		fd;
 
-// 	fd = 2; //senza chiudere stdin e stdout
-// 	while (++fd < MAX_FDS)
-// 		close(fd); //NON close_p perche' la maggiorparte daranno errore
-// }
+	fd = 2; //senza chiudere stdin e stdout
+	while (++fd < MAX_FDS)
+		close(fd); //NON close_p perche' la maggiorparte daranno errore
+}

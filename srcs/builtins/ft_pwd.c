@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:59:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/19 15:44:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 20:24:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,17 @@
 
 void	ft_pwd(char **args)
 {
-	char	*buf;
+	char	*pwd;
 
 	(void)args;
-	buf = getcwd(NULL, 0);
-	if (!buf)
+	pwd = getcwd_p(NULL, 0);
+	if (!pwd)
 	{
-		perror("pwd: ");
+		ft_putstr_fd("pwd: PWD environvment variable not set", STDERR_FILENO);
 		g_status = EXIT_FAILURE;
 		return ;
 	}
-	ft_putstr_fd(buf, STDOUT_FILENO);
+	ft_putstr_fd(pwd, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);
-	free(buf);
 	g_status = EXIT_SUCCESS;
 }

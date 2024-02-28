@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 13:33:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 21:31:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,18 @@
 
 static void	clean_heredocs(char *path);
 
-void	check_args(int argc, char **argv)
+void	check_args(int argc, char **argv, char **envp)
 {
 	(void)argv;
 	if (argc > 1)
 	{
 		ft_putstr_fd("minishell: too many arguments\n", STDERR_FILENO);
 		exit(1);
+	}	
+	if (!envp || !*envp)
+	{
+		ft_putstr_fd("minishell: failed to initialize environvment\n", STDERR_FILENO);
+		exit(ERR_ENV);
 	}
 }
 
@@ -36,7 +41,7 @@ void	init_data(char **envp)
 	data->main_pid = getpid();
 	data->input = NULL;
 	if (!data->starting_dir)
-		ft_quit(ERR_ENV, "Error: failed to initialize environment");
+		ft_quit(ERR_ENV, "minishell: failed to initialize environment");
 	data->envp_matrix = calloc_p(ft_matrixsize(envp) + 1, sizeof(char *));
 	envp_table_init(envp);
 }
@@ -53,21 +58,16 @@ void init_general(void)
 	exec_simple_cmd(path, "mkdir -p tmp");
 }
 
-//TODO refactor con malloc_p
 static void	clean_heredocs(char *path)
 {
 	t_data	*data;
-    char    *tmpdir_name;
 	char	*cmd;
 
 	data = get_data();
-    tmpdir_name = ft_strjoin(data->starting_dir, "/tmp");
-	if (!tmpdir_name)
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
-	cmd = ft_strjoin("rm -rf ", tmpdir_name);
-	free(tmpdir_name);
-	if (!cmd)
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
+	cmd = (char *)calloc_p(ft_strlen(data->starting_dir) + 12, sizeof(char));
+	ft_strcpy(cmd, "rm -rf ");
+	ft_strcat(cmd, data->starting_dir);
+	ft_strcat(cmd, "/tmp");
     exec_simple_cmd(path, cmd);
 	free(cmd);
 }
