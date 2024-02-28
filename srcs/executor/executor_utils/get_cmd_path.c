@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 17:24:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 00:47:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static bool is_custom_bin(char *cmd)
 		if (ft_strnstr(cmd, prefixes[i], ft_strlen(prefixes[i])) != NULL)
 			return (true);
 	return (false);
-} 
+}
 
 static char *concat_path_cmd(char *dir, char *cmd)
 {
@@ -87,6 +87,7 @@ static char *search_cmd_in_dirs(char **dirs, char *cmd)
     return (NULL);
 }
 
+//TODO refactor con malloc_p
 static char	*get_custom_bin(char *path)
 {
 	char	*full_path;
@@ -113,6 +114,7 @@ static char	*get_custom_bin(char *path)
     return (free(tmp), free(full_path), NULL);
 }
 
+//TODO refactor con malloc_p
 static void	throw_file_error(char *file)
 {
 	char	*tmp;

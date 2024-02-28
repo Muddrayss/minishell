@@ -6,13 +6,12 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 18:19:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 00:08:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static bool 	is_token(char c);
 static void 	lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *input);
 static void 	lexer_add_token(t_list **lexered_params, char c);
 
@@ -77,23 +76,3 @@ static void lexer_add_token(t_list **lexered_params, char c)
     lstadd_front(lexered_params, lstnew_p(content));
 }
 
-static bool is_token(char c)
-{
-    int8_t			        i;
-	static const uint8_t	n_tokens = sizeof(g_tokens) / sizeof(g_tokens[0]);
-
-	i = -1;
-   	while (++i < n_tokens)
-		if (g_tokens[i] == c)
-			return (true);
-	return (false);
-}
-
-void	del_content_lexer(void *content)
-{
-	t_lexer	*elem;
-
-	elem = (t_lexer *)content;
-	free(elem->cmd_str);
-    free(elem);
-}

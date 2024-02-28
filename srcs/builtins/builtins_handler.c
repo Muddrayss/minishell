@@ -6,12 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/27 11:19:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 00:36:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
+//TODO refactor senza strchr e strdup, con malloc e len
 bool is_builtin(char *cmd_str)
 {
 	char	*cmd;

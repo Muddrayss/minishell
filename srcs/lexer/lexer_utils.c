@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_utils.c                                  :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:33:53 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/28 00:07:33 by craimond          #+#    #+#             */
+/*   Updated: 2024/02/28 00:13:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "../../headers/minishell.h"
 
-t_data *get_data(void)
+void	del_content_lexer(void *content)
 {
-	static t_data data;
+	t_lexer	*elem;
 
-	return (&data);
+	elem = (t_lexer *)content;
+	free(elem->cmd_str);
+    free(elem);
 }

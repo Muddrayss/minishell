@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 16:39:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/28 00:08:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static const char   g_tokens[7]
     = {'|', ';', '&', '(', ')'};
 
 t_list	*lexer(char *input);
+bool	is_token(char c);
 void	del_content_lexer(void *content);
 
 #endif
