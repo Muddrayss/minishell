@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 18:02:32 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/29 19:58:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 static char     *get_wildcard_str(char *str, uint32_t *i, uint32_t *len);
 static char     *get_new_wildcard_str(char *basedir, char *entry, char *wildcard_str);
-static char     *get_base_dir(char **wildcard_str);
-static void     add_cwd(char **wildcard_str, char *cwd);
-static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd);
+static char     *get_base_dir(char **wildcard_str, bool *is_root);
+static char     *add_cwd(char *wildcard_str, char *cwd);
+static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root);
 static bool     matches_pattern(char *pattern, struct dirent *entry, uint32_t idx);
-static char     *get_full_entry(char *basedir, char *entry, char *cwd);
+static char     *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root);
 static void     sort_result(t_list **matching_files);
 static char     *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len);
 
+//TODO le cartelle nascoste vengono mostrate anche se non dovrebbero. comparare echo /*/*
 char    *replace_wildcards(char *str)
 {
     char        *wildcard_str;
@@ -38,8 +39,8 @@ char    *replace_wildcards(char *str)
     wildcard_str = get_wildcard_str(str, &idx, &len);
     while (wildcard_str)
     {
-        add_cwd(&wildcard_str, cwd);
-        matching_files = parse_wildcard_str(wildcard_str, cwd);
+        wildcard_str = add_cwd(wildcard_str, cwd);
+        matching_files = parse_wildcard_str(wildcard_str, cwd, false);
         sort_result(&matching_files);
         str = insert_result(str, matching_files, idx, len);
         lstclear(&matching_files, &free);
@@ -47,11 +48,10 @@ char    *replace_wildcards(char *str)
         free(wildcard_str);
         wildcard_str = get_wildcard_str(str, &idx, &len);
     }
-    free(cwd);
-    return (str);
+    return (free(cwd), str);
 }
 
-static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd)
+static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
 {
     char            *basedir;
     char            *new_wildcard_str;
@@ -61,7 +61,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd)
     char            *full_entry;
 
     matching_files = NULL;
-    basedir = get_base_dir(&wildcard_str);
+    basedir = get_base_dir(&wildcard_str, &is_root);
     dir = opendir_p(basedir);
     while (dir)
     {
@@ -70,21 +70,21 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd)
             break ;
         if (entry->d_name[0] == '.' || !matches_pattern(wildcard_str, entry, 0))
             continue ;
-        full_entry = get_full_entry(basedir, entry->d_name, cwd);
+        full_entry = get_full_entry(basedir, entry->d_name, cwd, is_root);
         new_wildcard_str = get_new_wildcard_str(basedir, wildcard_str, entry->d_name);
         if (!new_wildcard_str)
             lstadd_front(&matching_files, lstnew_p(full_entry));
         else
         {
             free(full_entry);
-            lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str, cwd));
+            lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str, cwd, is_root));
         }
         free(new_wildcard_str);
     }
     return (free(basedir), closedir(dir), matching_files);
 }
 
-static char *get_full_entry(char *basedir, char *entry, char *cwd)
+static char *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root)
 {
     char    *full_entry;
 
@@ -95,10 +95,14 @@ static char *get_full_entry(char *basedir, char *entry, char *cwd)
     }
     if (*basedir)
         basedir++;
-    full_entry = (char *)malloc_p(sizeof(char) * (ft_strlen(basedir) + ft_strlen(entry) + 2));
-    ft_strcpy(full_entry, basedir);
-    if (*basedir)
+    full_entry = (char *)calloc_p(ft_strlen(basedir) + ft_strlen(entry) + 2 + is_root, sizeof(char));
+    if (is_root)
         ft_strcat(full_entry, "/");
+    if (*basedir)
+    {
+        ft_strcat(full_entry, basedir);
+        ft_strcat(full_entry, "/");
+    }
     ft_strcat(full_entry, entry);
     return (full_entry);
 }
@@ -128,14 +132,15 @@ static char  *get_new_wildcard_str(char *basedir, char *wildcard_str, char *entr
         return (NULL);
     size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(wildcard_str) + 3;
     new_wildcard_str = (char *)calloc_p(size, sizeof(char));
-    ft_strcpy(new_wildcard_str, basedir);
+    if (basedir[0] != '/')
+        ft_strcpy(new_wildcard_str, basedir);
     ft_strcat(new_wildcard_str, "/");
     ft_strcat(new_wildcard_str, entry);
     ft_strcat(new_wildcard_str, wildcard_str);
     return (new_wildcard_str);
 }
 
-static char *get_base_dir(char **wildcard_str)
+static char *get_base_dir(char **wildcard_str, bool *is_root)
 {
     char        *basedir;
     uint32_t    end;
@@ -152,6 +157,11 @@ static char *get_base_dir(char **wildcard_str)
     basedir = (char *)malloc_p(sizeof(char) * (end + 1));
     ft_strlcpy(basedir, *wildcard_str, end + 1);
     *wildcard_str += end + 1;
+    if (!basedir[0])
+    {
+        *is_root = true;
+        return (free(basedir), ft_strdup("/"));
+    }
     return (basedir);
 }
 
@@ -210,21 +220,22 @@ static void sort_result(t_list **matching_files)
     }
 }
 
-static void add_cwd(char **wildcard_str, char *cwd)
+static char *add_cwd(char *wildcard_str, char *cwd)
 {
     char    *new_wildcard_str;
 
-    new_wildcard_str = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(*wildcard_str) + 2));
-    if ((*wildcard_str)[0] != '/')
+    if (wildcard_str[0] == '/')
     {
-        ft_strcpy(new_wildcard_str, cwd);
-        ft_strcat(new_wildcard_str, "/");
-        ft_strcat(new_wildcard_str, *wildcard_str);
+        new_wildcard_str = ft_strdup(wildcard_str);
+        if (!new_wildcard_str)
+            ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+        return (free(wildcard_str), new_wildcard_str);
     }
-    free(*wildcard_str);
-    *wildcard_str = new_wildcard_str;
-    printf("cmd[0]: %c\n", (*wildcard_str)[0]); // TODO: Weird space at the start of the string
-    printf("new wildcard str:%s\n", *wildcard_str);
+    new_wildcard_str = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(wildcard_str) + 2));
+    ft_strcpy(new_wildcard_str, cwd);
+    ft_strcat(new_wildcard_str, "/");
+    ft_strcat(new_wildcard_str, wildcard_str);
+    return (free(wildcard_str), new_wildcard_str);
 }
 
 static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len)
