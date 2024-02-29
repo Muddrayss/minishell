@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_redirs.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:39:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:25:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:40:49 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void exec_redirs(t_list *redirs)
     while (redirs)
     {
         redir = (t_redir *)redirs->content;
-        redir->filename = replace_env_vars(redir->filename);
+        redir->filename = replace_env_vars(redir->filename, false);
         redir->filename = replace_wildcards(redir->filename);
         redir->filename = clear_quotes(redir->filename);
         exec_fd_redirs(redir);

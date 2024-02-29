@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 20:05:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:41:16 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static void fill_heredoc(char *limiter, int fd)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, str_len + 1) == 0)
             break ;
-        //TODO replace env vars
+        str = replace_env_vars(str, true);
         ft_putstr_fd(str, fd);
         write(fd, "\n", 1);
         free(str);

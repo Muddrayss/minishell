@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_matrix.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:27:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 14:48:13 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,14 @@ void	envp_matrix_replace(char **matrix, t_envp elem, uint32_t name_len, uint32_t
 	env_name_cpy = ft_strjoin(elem.name, "=");
 	if (!env_name_cpy)
 		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+	name_len++;
 	i = 0;
 	while (matrix[i])
 	{
 		if (ft_strncmp(matrix[i], env_name_cpy, name_len + 1) == 0)
 		{
 			tmp = matrix[i];
-			matrix[i] = (char *)malloc_p(sizeof(char) * name_len + value_len + 2);
+			matrix[i] = (char *)malloc_p(sizeof(char) * name_len + value_len + 1);
 			free(tmp);
 			ft_strlcpy(matrix[i], env_name_cpy, name_len + 1);
 			ft_strcat(matrix[i], elem.value);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:22:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:40:54 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
 {
     if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
-    elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str);
+    elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str, false);
     elem->cmd->cmd_str = replace_wildcards(elem->cmd->cmd_str);
     //elem->cmd->cmd_str = clear_quotes(elem->cmd->cmd_str); LE QUOTES VANNO LASCIATE, SE NE OCCUPA SPLIT
     exec_redirs(elem->cmd->redirs);

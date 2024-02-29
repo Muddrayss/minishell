@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clear_redirs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 20:01:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:09:51 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,5 @@ static char *remove_chars(char *str, bool *to_remove_array)
         if (!to_remove_array[i])
             new_str[j++] = str[i];
     new_str[j] = '\0';
-    return (new_str);
+    return (free(to_remove_array), new_str);
 }

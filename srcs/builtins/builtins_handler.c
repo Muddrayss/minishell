@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/28 20:12:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 14:32:00 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ bool is_builtin(char *cmd_str)
 	char 		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	uint8_t		n_builtins;
 	
-	len = -1;
-	while (cmd_str[++len] && !is_shell_space(cmd_str[len]))
+	len = 0;
+	while (cmd_str[len] && !is_shell_space(cmd_str[len]))
 		len++;
 	cmd = (char *)malloc_p(sizeof(char) * (len + 1));
 	ft_strlcpy(cmd, cmd_str, len + 1);

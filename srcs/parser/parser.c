@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:26:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:08:40 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +107,7 @@ static t_cmd    *init_cmd(char *cmd_str)
 
     cmd = malloc_p(sizeof(t_cmd));
     cmd->redirs = fill_redirs(cmd_str);
-    cmd_str = clear_redirs(cmd->redirs, cmd_str);
-    if (cmd_str)
-    {
-        cmd->cmd_str = ft_strdup(cmd_str);
-        if (!cmd->cmd_str)
-            ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-    }
-    else
-        cmd->cmd_str = NULL;
+    cmd->cmd_str = clear_redirs(cmd->redirs, cmd_str);
     return (cmd);
 }
 

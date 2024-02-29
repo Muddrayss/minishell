@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:31:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 14:30:44 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
