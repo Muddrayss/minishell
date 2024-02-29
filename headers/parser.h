@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 12:46:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 17:40:22 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,10 @@
 # define SUBSHELL_START 	5
 # define SUBSHELL_END 		6
 
-# define REDIR_INPUT 		0 	// '< filename'
-# define REDIR_HEREDOC 		1	// '<< limiter'
-# define REDIR_INPUT_FD 	2 	// '<&n'
-# define REDIR_OUTPUT 		3 	// '> filename o n> filename'
-# define REDIR_OUTPUT_FD 	4 	// '>&n'
-# define REDIR_APPEND 		5 	// '>> filename o n>> filename'
-# define REDIR_APPEND_FD 	6 	// '>>&n'
+# define REDIR_INPUT 		0 	// < filename
+# define REDIR_HEREDOC 		1	// << limiter
+# define REDIR_OUTPUT 		2 	// > filename
+# define REDIR_APPEND 		3 	// >> filename
 
 static const char g_parser_tokens[7]
 = {'\0', ';', '|', '&', '|', '(', ')'};
@@ -53,7 +50,6 @@ typedef struct s_tree
 typedef struct s_redir
 {
 	int8_t		type;
-	int			fds[2];
 	char 		*filename; // o limiter in caso dell heredoc
 	int32_t		heredoc_fileno; //eventuale numero da appendere al nome del heredoc
 }t_redir;
@@ -62,7 +58,7 @@ t_tree	*parser(t_list *lexered_params);
 void	merge_separators(t_list **lexered_params);
 int8_t  check_syntax(t_list *lexered_params);
 t_list  *fill_redirs(char *cmd_str);
-char    *clear_redirs(t_list *redirs, char *cmd_str);
+char    *clear_redirs(char *cmd_str);
 bool    is_empty_cmd(void *content);
 void    del_content_parser(void *content);
 void    del_content_redirs(void *content);

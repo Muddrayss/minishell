@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   merge_separators.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:00:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:23:24 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void merge_separators(t_list **lexered_params)
     }
 }
 
-//TODO refactor
+//TODO refractor
 static void merge_ampersands(t_list **head, t_list **node)
 {
     t_lexer *elem;

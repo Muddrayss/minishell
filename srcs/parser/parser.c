@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 16:08:40 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/29 17:40:36 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,13 @@ static t_cmd    *init_cmd(char *cmd_str)
     t_cmd   *cmd;
 
     cmd = malloc_p(sizeof(t_cmd));
-    cmd->redirs = fill_redirs(cmd_str);
-    cmd->cmd_str = clear_redirs(cmd->redirs, cmd_str);
+    cmd->cmd_str = NULL;
+    cmd->redirs = NULL;
+    if (cmd_str)
+    {
+        cmd->redirs = fill_redirs(cmd_str);
+        cmd->cmd_str = clear_redirs(cmd_str);
+    }
     return (cmd);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:22:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 18:02:32 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ char    *replace_wildcards(char *str)
     uint32_t    idx;
     uint32_t    len;
 
+    str = ft_strdup(str);
+    if (!str)
+        ft_quit(ERR_MEM, "minishell: failed to allocate memory");
     cwd = getcwd_p(NULL, 0);
     idx = 0;
     wildcard_str = get_wildcard_str(str, &idx, &len);
@@ -212,11 +215,16 @@ static void add_cwd(char **wildcard_str, char *cwd)
     char    *new_wildcard_str;
 
     new_wildcard_str = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(*wildcard_str) + 2));
-    ft_strcpy(new_wildcard_str, cwd);
-    ft_strcat(new_wildcard_str, "/");
-    ft_strcat(new_wildcard_str, *wildcard_str);
+    if ((*wildcard_str)[0] != '/')
+    {
+        ft_strcpy(new_wildcard_str, cwd);
+        ft_strcat(new_wildcard_str, "/");
+        ft_strcat(new_wildcard_str, *wildcard_str);
+    }
     free(*wildcard_str);
     *wildcard_str = new_wildcard_str;
+    printf("cmd[0]: %c\n", (*wildcard_str)[0]); // TODO: Weird space at the start of the string
+    printf("new wildcard str:%s\n", *wildcard_str);
 }
 
 static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len)

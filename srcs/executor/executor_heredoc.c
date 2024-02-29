@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 15:41:16 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:47:52 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,11 @@ static int fill_in_child(char *limiter, int heredoc_fd)
 static void fill_heredoc(char *limiter, int fd)
 {
     char    *str;
+    char    *tmp;
     size_t  str_len;
-  
+
     str = NULL;
-    while (1)
+    while (true)
     {
         str = readline("> ");
         if (!str)
@@ -100,9 +101,11 @@ static void fill_heredoc(char *limiter, int fd)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, str_len + 1) == 0)
             break ;
+        tmp = str;
         str = replace_env_vars(str, true);
         ft_putstr_fd(str, fd);
         write(fd, "\n", 1);
+        free(tmp);
         free(str);
         str = NULL; //per evitare la double free
     }

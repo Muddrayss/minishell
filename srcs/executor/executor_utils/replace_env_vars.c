@@ -6,18 +6,22 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 16:06:14 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/29 17:24:29 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
 static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes);
+
 char    *replace_env_vars(char *str, bool ignore_quotes)
 {
     char        master_quote;
     uint32_t    i;
 
+    str = ft_strdup(str);
+    if (!str)
+        ft_quit(ERR_MEM, "minishell: failed to allocate memory");
     i = 0;
     master_quote = '\0';
     while (str[i])
@@ -62,6 +66,7 @@ static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
     ft_strlcpy(new_str, str - *i - 1, *i + 1);
     ft_strcat(new_str, env_value);
     ft_strcat(new_str, str + env_name_len);
+    free(str - *i - 1);
     *i += ft_strlen(env_value) - 1;
     return (free(env_name), new_str);
 }

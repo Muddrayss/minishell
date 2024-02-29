@@ -6,7 +6,7 @@
 /*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 14:48:13 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:22:44 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void	envp_matrix_print_export(void)
 	free(matrix);	
 }
 
-//TODO refactor il sorting di env_matrix_print_export
+//TODO refractor il sorting di env_matrix_print_export
 static char	*get_next_alphabetically(char **matrix, uint32_t size)
 {
 	uint32_t	i;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:22:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:52:43 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int8_t check_parenthesis(t_list *lexered_params)
 
 static int8_t   check_redirs(t_list *lexered_params)
 {
-    //TODO
+    // TODO: implementare la funzione
     /*
     REDIR_INPUT 		7 	'< filename cmd' o 'cmd < filename'
     REDIR_HEREDOC 		8	'<< limiter cmd' o 'cmd << limiter'
@@ -81,7 +81,7 @@ static int8_t   check_redirs(t_list *lexered_params)
 
 static void	throw_syntax_error(char token)
 {
-	ft_putstr_fd("Syntax error near unexpected token'", STDERR_FILENO);
-	write(STDERR_FILENO, &token, 1);
+    ft_putstr_fd("Syntax error near unexpected token: '", STDERR_FILENO);
+    write(STDERR_FILENO, &token, 1);
 	ft_putstr_fd("'\n", STDERR_FILENO);
 }
