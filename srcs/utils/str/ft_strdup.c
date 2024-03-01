@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 13:52:49 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/12 00:08:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:20:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_strdup(char *s)
 
 	if (!s)
 		return (NULL);
-	dst = malloc(sizeof(char) * (ft_strlen(s) + 3));
+	dst = (char *)malloc(sizeof(char) * (ft_strlen(s) + 3));
 	if (dst == NULL)
 		return (NULL);
 	i = 0;

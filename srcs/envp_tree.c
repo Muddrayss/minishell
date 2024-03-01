@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:12:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 17:32:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:39:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,14 @@ t_envp_tree *envp_tree_remove(t_envp_tree *root, char *name, uint16_t name_len)
     else
     {
         if (root->left == NULL)
-        {
-            tmp = root->right;
-            return (tmp);
-        }
+            return (root->right);
         else if (root->right == NULL)
-        {
-            tmp = root->left;
-            return (tmp);
-        }
+            return (root->left);
         tmp = envp_tree_findmin(root->right);
         root->str = tmp->str;
         root->right = envp_tree_remove(root->right, tmp->str, name_len);
     }
-    return root;
+    return (root);
 }
 
 t_envp_tree *envp_tree_find(t_envp_tree *root, char *name, uint16_t name_len)

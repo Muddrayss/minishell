@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 17:40:36 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:18:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static t_cmd    *init_cmd(char *cmd_str)
 {
     t_cmd   *cmd;
 
-    cmd = malloc_p(sizeof(t_cmd));
+    cmd = (t_cmd *)malloc_p(sizeof(t_cmd));
     cmd->cmd_str = NULL;
     cmd->redirs = NULL;
     if (cmd_str)

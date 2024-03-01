@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_redirs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 17:39:27 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:19:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static t_redir *init_redir(void)
 {
     t_redir *redir;
 
-    redir = malloc_p(sizeof(t_redir));
+    redir = (t_redir *)malloc_p(sizeof(t_redir));
     redir->filename = NULL;
     redir->heredoc_fileno = -1;
     redir->type = -1;

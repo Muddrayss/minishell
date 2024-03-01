@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 16:47:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:18:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char *concat_path_cmd(char *dir, char *cmd)
 	char 		*full_path;
 
 	size = ft_strlen(dir) + ft_strlen(cmd) + 2; // +2 for '/' and '\0'
-	full_path = malloc_p(size);
+	full_path = (char *)malloc_p(sizeof(char) * size);
 	ft_strcpy(full_path, dir);
 	ft_strcat(full_path, "/");
     ft_strcat(full_path, cmd);

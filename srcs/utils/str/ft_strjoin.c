@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:12:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:05:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:19:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_strjoin( char *s1,  char *s2)
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	i = -1;
-	newstr = malloc(sizeof(char) * (s1_len + s2_len + 1));
+	newstr = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
 	if (newstr == NULL)
 		return (NULL);
 	while (s1[++i] != '\0')

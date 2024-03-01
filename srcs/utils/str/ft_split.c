@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:34:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 18:06:17 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:19:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	**ft_split(char *s, char c)
 		if (s[i] == c && s[i + 1] != c && s[i + 1] != '\0')
 			n_words++;
 	}
-	str_array = malloc(sizeof(char *) * (n_words + 1));
+	str_array = (char **)malloc(sizeof(char *) * (n_words + 1));
 	if (str_array == NULL)
 		return (NULL);
 	str_array[n_words] = NULL;
@@ -59,7 +59,7 @@ static char	**fill_matrix(int n_words, char *s, char c, char **str_array)
 			s++;
 		while (s[len] != c && s[len] != '\0')
 			len++;
-		str_array[g] = malloc(sizeof(char) * (len + 1));
+		str_array[g] = (char *)malloc(sizeof(char) * (len + 1));
 		if (str_array[g] == NULL)
 			return (ft_freematrix(str_array), NULL);
 		str_array[g][len++] = '\0';

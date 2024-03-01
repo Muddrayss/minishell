@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 17:31:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:56:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,25 @@ void    envp_init(char **envp)
     t_data      *data;
     char        **matrix;
     t_envp_tree *tree;
+    char        *str;
 
     data = get_data();
     tree = NULL;
     size = ft_matrixsize(envp);
-    matrix = malloc_p(sizeof(char *) * (size + 1));
+    data->envp_size = size;
+    matrix = (char **)malloc_p(sizeof(char *) * (size + 1));
     matrix[size] = NULL;
     while (size--)
     {
-        tree = envp_tree_add(tree, envp[size]);
-        matrix[size] = ft_strdup(envp[size]);
-        if (!matrix[size])
+        str = ft_strdup(envp[size]);
+        if (!str)
         {
             ft_freematrix(matrix);
+            envp_tree_clear(tree);
             ft_quit(ERR_MEM, "minishell: failed to allocate memory");
         }
+        tree = envp_tree_add(tree, str);
+        matrix[size] = str;
     }
     data->envp_tree = tree;
     data->envp_matrix = matrix;
@@ -45,13 +49,16 @@ void    envp_init(char **envp)
 void	ft_setenv(char *name, char *value, bool replace)
 {
     char        *str;
+    t_data      *data;
 
+    data = get_data();
     str = ft_strjoin(name, value);
     if (!str)
         ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-    if (replace)
+    if (replace && ft_getenv(name))
         ft_unsetenv(name);
-    envp_tree_add(get_data()->envp_tree, str);
+    data->envp_size++;
+    data->envp_tree = envp_tree_add(data->envp_tree, str);
     envp_matrix_add(str);
 }
 
@@ -59,9 +66,14 @@ void	ft_setenv(char *name, char *value, bool replace)
 void	ft_unsetenv(char *name)
 {
     uint16_t    name_len;
+    t_data      *data;
 
+    if (!ft_getenv(name))
+        return ;
     name_len = ft_strlen(name);
-    envp_tree_remove(get_data()->envp_tree, name, name_len);
+    data = get_data();
+    data->envp_size--;
+    data->envp_tree = envp_tree_remove(data->envp_tree, name, name_len);
     envp_matrix_remove(name, name_len);
 }
 

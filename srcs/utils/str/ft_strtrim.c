@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 16:36:23 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 17:24:14 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:20:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_strtrim(char *s1, char *set)
 	i = ft_strlen(s1);
 	while (i > 0 && ft_cinstr(set, s1[i - 1]))
 		i--;
-	newstr = malloc(sizeof(char) * (i + 1));
+	newstr = (char *)malloc(sizeof(char) * (i + 1));
 	if (newstr == NULL)
 		return (free(start), NULL);
 	newstr[i] = '\0';

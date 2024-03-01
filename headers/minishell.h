@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 16:13:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:21:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_data
 	char		**cmd_args;
 	t_envp_tree	*envp_tree;
 	char		**envp_matrix;
+	uint16_t	envp_size;
 	char		*starting_dir;
 	t_list		**lexered_params;
 	t_tree  	**parsed_params;
