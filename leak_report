@@ -1,84 +1,45 @@
-==552350== Memcheck, a memory error detector
-==552350== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==552350== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==552350== Command: ./minishell
-==552350== 
+==563301== Memcheck, a memory error detector
+==563301== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==563301== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==563301== Command: ./minishell
+==563301== 
 exit
-==552350== 
-==552350== HEAP SUMMARY:
-==552350==     in use at exit: 205,339 bytes in 254 blocks
-==552350==   total heap usage: 1,276 allocs, 1,022 frees, 295,546 bytes allocated
-==552350== 
-==552350== 16 bytes in 2 blocks are definitely lost in loss record 7 of 66
-==552350==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==552350==    by 0x110130: malloc_p (alloc.c:21)
-==552350==    by 0x10B7F3: remove_chars (clear_redirs.c:70)
-==552350==    by 0x10B69C: clear_redirs (clear_redirs.c:46)
-==552350==    by 0x10B0DC: init_cmd (parser.c:114)
-==552350==    by 0x10AF0B: fill_tree (parser.c:61)
-==552350==    by 0x10AD86: parser (parser.c:33)
-==552350==    by 0x1096E1: minishell_loop (minishell.c:47)
-==552350==    by 0x1095FA: main (minishell.c:24)
-==552350== 
-==552350== 24 bytes in 1 blocks are definitely lost in loss record 10 of 66
-==552350==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==552350==    by 0x110130: malloc_p (alloc.c:21)
-==552350==    by 0x109C2B: envp_tree_new (envp_tree.c:19)
-==552350==    by 0x109C7F: envp_tree_add (envp_tree.c:29)
-==552350==    by 0x109CB2: envp_tree_add (envp_tree.c:31)
-==552350==    by 0x109CB2: envp_tree_add (envp_tree.c:31)
-==552350==    by 0x109CED: envp_tree_add (envp_tree.c:33)
-==552350==    by 0x109CED: envp_tree_add (envp_tree.c:33)
-==552350==    by 0x109CB2: envp_tree_add (envp_tree.c:31)
-==552350==    by 0x109CED: envp_tree_add (envp_tree.c:33)
-==552350==    by 0x10A3A3: envp_init (envp_utils.c:41)
-==552350==    by 0x109882: init_data (minishell_init.c:45)
-==552350== 
-==552350== 24 bytes in 1 blocks are definitely lost in loss record 11 of 66
-==552350==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==552350==    by 0x110130: malloc_p (alloc.c:21)
-==552350==    by 0x109C2B: envp_tree_new (envp_tree.c:19)
-==552350==    by 0x109C7F: envp_tree_add (envp_tree.c:29)
-==552350==    by 0x109CB2: envp_tree_add (envp_tree.c:31)
-==552350==    by 0x109CB2: envp_tree_add (envp_tree.c:31)
-==552350==    by 0x109CB2: envp_tree_add (envp_tree.c:31)
-==552350==    by 0x109CED: envp_tree_add (envp_tree.c:33)
-==552350==    by 0x109CB2: envp_tree_add (envp_tree.c:31)
-==552350==    by 0x109CED: envp_tree_add (envp_tree.c:33)
-==552350==    by 0x10A3A3: envp_init (envp_utils.c:41)
-==552350==    by 0x109882: init_data (minishell_init.c:45)
-==552350== 
-==552350== 24 bytes in 1 blocks are definitely lost in loss record 12 of 66
-==552350==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==552350==    by 0x110130: malloc_p (alloc.c:21)
-==552350==    by 0x109C2B: envp_tree_new (envp_tree.c:19)
-==552350==    by 0x109C7F: envp_tree_add (envp_tree.c:29)
-==552350==    by 0x109CED: envp_tree_add (envp_tree.c:33)
-==552350==    by 0x109CED: envp_tree_add (envp_tree.c:33)
-==552350==    by 0x109CED: envp_tree_add (envp_tree.c:33)
-==552350==    by 0x10A48E: ft_setenv (envp_utils.c:61)
-==552350==    by 0x10EA41: ft_export (ft_export.c:45)
-==552350==    by 0x10E33C: exec_builtin (builtins_handler.c:44)
-==552350==    by 0x10CD21: exec (general_utils.c:64)
-==552350==    by 0x10C3C2: child (executor.c:144)
-==552350== 
-==552350== 88 bytes in 7 blocks are definitely lost in loss record 20 of 66
-==552350==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==552350==    by 0x110130: malloc_p (alloc.c:21)
-==552350==    by 0x10B7F3: remove_chars (clear_redirs.c:70)
-==552350==    by 0x10B69C: clear_redirs (clear_redirs.c:46)
-==552350==    by 0x10B0DC: init_cmd (parser.c:114)
-==552350==    by 0x10AE83: fill_tree (parser.c:55)
-==552350==    by 0x10AD86: parser (parser.c:33)
-==552350==    by 0x1096E1: minishell_loop (minishell.c:47)
-==552350==    by 0x1095FA: main (minishell.c:24)
-==552350== 
-==552350== LEAK SUMMARY:
-==552350==    definitely lost: 176 bytes in 12 blocks
-==552350==    indirectly lost: 0 bytes in 0 blocks
-==552350==      possibly lost: 0 bytes in 0 blocks
-==552350==    still reachable: 0 bytes in 0 blocks
-==552350==         suppressed: 205,163 bytes in 242 blocks
-==552350== 
-==552350== For lists of detected and suppressed errors, rerun with: -s
-==552350== ERROR SUMMARY: 5 errors from 5 contexts (suppressed: 0 from 0)
+==563301== 
+==563301== HEAP SUMMARY:
+==563301==     in use at exit: 205,246 bytes in 253 blocks
+==563301==   total heap usage: 1,103 allocs, 850 frees, 289,698 bytes allocated
+==563301== 
+==563301== 48 bytes in 2 blocks are definitely lost in loss record 13 of 63
+==563301==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==563301==    by 0x110175: malloc_p (alloc.c:21)
+==563301==    by 0x109C4B: envp_tree_new (envp_tree.c:19)
+==563301==    by 0x109C9F: envp_tree_add (envp_tree.c:29)
+==563301==    by 0x109D0D: envp_tree_add (envp_tree.c:33)
+==563301==    by 0x109D0D: envp_tree_add (envp_tree.c:33)
+==563301==    by 0x109D0D: envp_tree_add (envp_tree.c:33)
+==563301==    by 0x10A4CA: ft_setenv (envp_utils.c:61)
+==563301==    by 0x10EA86: ft_export (ft_export.c:45)
+==563301==    by 0x10E381: exec_builtin (builtins_handler.c:44)
+==563301==    by 0x10CD66: exec (general_utils.c:64)
+==563301==    by 0x10C407: child (executor.c:144)
+==563301== 
+==563301== 81 bytes in 9 blocks are definitely lost in loss record 18 of 63
+==563301==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==563301==    by 0x110175: malloc_p (alloc.c:21)
+==563301==    by 0x10B82F: remove_chars (clear_redirs.c:70)
+==563301==    by 0x10B6D8: clear_redirs (clear_redirs.c:46)
+==563301==    by 0x10B118: init_cmd (parser.c:114)
+==563301==    by 0x10AEBF: fill_tree (parser.c:55)
+==563301==    by 0x10ADC2: parser (parser.c:33)
+==563301==    by 0x109701: minishell_loop (minishell.c:47)
+==563301==    by 0x10961A: main (minishell.c:24)
+==563301== 
+==563301== LEAK SUMMARY:
+==563301==    definitely lost: 129 bytes in 11 blocks
+==563301==    indirectly lost: 0 bytes in 0 blocks
+==563301==      possibly lost: 0 bytes in 0 blocks
+==563301==    still reachable: 0 bytes in 0 blocks
+==563301==         suppressed: 205,117 bytes in 242 blocks
+==563301== 
+==563301== For lists of detected and suppressed errors, rerun with: -s
+==563301== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)

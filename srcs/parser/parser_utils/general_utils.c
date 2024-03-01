@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:01:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 19:27:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void    del_content_parser(void *content)
 {
     t_tree  *elem;
 
+    if (!content)
+        return ;
     elem = (t_tree *)content;
     lstclear(&elem->cmd->redirs, &del_content_redirs);
     free(elem->cmd->cmd_str);

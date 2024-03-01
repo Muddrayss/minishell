@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:12:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 19:03:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 19:33:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ void envp_print_export(t_envp_tree *root)
     env_name = tmp;
     printf("declare -x %s", env_name);
     if (env_value && *env_value)
-        printf("=\"%s\"\n", env_value);
+        printf("=\"%s\"", env_value);
+    printf("\n");
     free(tmp);
     envp_print_export(root->left);
     envp_print_export(root->right);
