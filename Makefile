@@ -6,7 +6,7 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/02/28 13:49:13 by craimond         ###   ########.fr        #
+#    Updated: 2024/03/01 16:18:01 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ PARSER_SRCS = $(addprefix parser/, parser.c $(PARSER_REDIRS) $(PARSER_UTILS))
 EXECUTOR_UTILS = $(addprefix executor_utils/, general_utils.c get_cmd_path.c replace_env_vars.c replace_wildcards.c)
 EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_heredoc.c executor_redirs.c $(EXECUTOR_UTILS))
 BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)
-GENERAL_SRCS = minishell.c minishell_init.c minishell_exit.c minishell_utils.c envp_table.c envp_matrix.c signals.c conditionals.c xmalloc.c
+GENERAL_SRCS = minishell.c minishell_init.c minishell_exit.c minishell_utils.c envp_tree.c envp_matrix.c envp_utils.c signals.c conditionals.c xmalloc.c
 GENERAL_UTILS_SRCS = $(addprefix general/, ft_freematrix.c ft_atou.c ft_isdigit.c ft_matrixsize.c ft_utoa.c ft_calloc.c)
 LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstadd_back.c lstlast.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c)
 STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_split.c ft_strtrim.c ft_strdup.c ft_strarrdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strcmp_lower.c ft_strchr.c ft_tolower.c)
@@ -28,7 +28,7 @@ UTILS_SRCS = $(addprefix utils/, $(GENERAL_UTILS_SRCS) $(STR_UTILS_SRCS) $(LST_U
 
 SRCS = $(addprefix srcs/, $(GENERAL_SRCS) $(LEXER_SRCS) $(PARSER_SRCS) $(EXECUTOR_SRCS)  $(BUILTIN_SRCS) $(UTILS_SRCS))		
 OBJS = $(SRCS:.c=.o)
-HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h envp_utils.h utils.h protected_methods.h colors.h)
+HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h envp.h utils.h protected_methods.h colors.h)
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread -g #TODO remove -g

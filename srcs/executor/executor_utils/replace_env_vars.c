@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_env_vars.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 17:24:29 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:06:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
     char        *new_str;
     char        *env_value;
     char        *env_name;
+    char        *tmp;
     int32_t     env_name_len;
 
     str += *i + 1;
@@ -59,7 +60,13 @@ static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
         env_name_len = 1;
     }
     else
-        env_value = ft_getenv(env_name);
+    {
+        tmp = ft_strjoin(env_name, "=");
+        if (!tmp)
+            ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+        env_value = ft_getenv(tmp);
+        free(tmp);
+    }
     if (!env_value)
         env_value = "";
     new_str = (char *)calloc_p(*i + ft_strlen(str) + ft_strlen(env_value) - ft_strlen(env_name) + 1, sizeof(char));

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:29:39 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/23 14:50:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:16:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ void ft_env(char **args)
 		g_status = EXIT_FAILURE;
 		return ;
 	}
-	envp_matrix_print_env();
+	envp_print_env();
 	g_status = EXIT_SUCCESS;
 }

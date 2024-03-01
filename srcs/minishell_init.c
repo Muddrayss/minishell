@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 14:30:44 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:12:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ void	init_data(char **envp)
 	data->input = NULL;
 	if (!data->starting_dir)
 		ft_quit(ERR_ENV, "minishell: failed to initialize environment");
-	data->envp_matrix = calloc_p(ft_matrixsize(envp) + 1, sizeof(char *));
-	envp_table_init(envp);
+	envp_init(envp);
 }
 
 void init_general(void)
@@ -51,7 +50,7 @@ void init_general(void)
 	char	*path;
 	
 	set_bad_errnos();
-	path = ft_getenv("PATH");
+	path = ft_getenv("PATH=");
 	g_status = 0;
 	exec_simple_cmd(path, "clear");
 	clean_heredocs(path);

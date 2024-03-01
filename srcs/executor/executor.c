@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 17:34:36 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:47:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ static void child(t_tree *elem, int fds[3], int8_t prev_type)
     free(tmp);
     //elem->cmd->cmd_str = clear_quotes(elem->cmd->cmd_str); LE QUOTES VANNO LASCIATE, SE NE OCCUPA SPLIT
     exec_redirs(elem->cmd->redirs);
-    exec(ft_getenv("PATH"), elem->cmd->cmd_str);
+    exec(ft_getenv("PATH="), elem->cmd->cmd_str);
 }
 
 static void parent(pid_t pid, int fds[3], t_tree *node)

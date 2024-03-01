@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 20:08:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 17:33:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void	quit_from_main(uint8_t id)
 	}
 }
 
+//TODO free_and_null non sarebbe male ft_free_and_null(void **ptr)
 void	free_data(void)
 {
 	t_data	*data;
@@ -62,6 +63,8 @@ void	free_data(void)
 	data->cmd_args = NULL;
 	ft_freematrix(data->envp_matrix);
 	data->envp_matrix = NULL;
+	envp_tree_clear(data->envp_tree);
+	data->envp_tree = NULL;
 	free(data->cmd_path);
 	lstclear(data->lexered_params, &del_content_lexer);
 	free(data->lexered_params);
@@ -69,9 +72,6 @@ void	free_data(void)
 	treeclear(data->parsed_params, &del_content_parser);
 	free(data->parsed_params);
 	data->parsed_params = NULL;
-	envp_table_clear(data->envp_table);
-	free(data->envp_table);
-	data->envp_table = NULL;
 	free(data->input);
 	data->input = NULL;
 }

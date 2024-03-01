@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/28 20:22:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:36:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void ft_cd(char **args)
 		free(cwd);
 		return ;
 	}
-	ft_setenv("OLDPWD", cwd, true);
+	ft_setenv("OLDPWD=", cwd, true);
 	free(cwd);
 	cwd = getcwd_p(NULL, 0);
 	if (!cwd)
 		return ;
-	ft_setenv("PWD", cwd, true);
+	ft_setenv("PWD=", cwd, true);
 	free(cwd);
 	g_status = EXIT_SUCCESS;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:27:44 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/29 14:39:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:36:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,36 @@
 
 void	ft_export(char **args)
 {
-	int		i;
-	char 	*sep;
+	char	*env_name;
+	char	*env_value;
+	char	*sep;
 	
 	if (!args[1])
 	{
-		envp_matrix_print_export();
+		envp_print_export(get_data()->envp_tree);
 		g_status = EXIT_SUCCESS;
 		return ;
 	}
-	i = 0;
-	while (args[++i])
+	while (*args)
 	{
-		sep = ft_strchr(args[i], '=');
-		if (!sep)
-			ft_setenv(args[i], "", true);
+		sep = ft_strchr(*args, '=');
+		if (sep)
+		{
+			env_name = (char *)malloc(sep - *args + 1);
+			ft_strlcpy(env_name, *args, sep - *args + 1);
+			env_value = ft_strdup(sep + 1);
+		}
 		else
 		{
-			*sep = '\0';
-			ft_setenv(args[i], sep + 1, true);
+			env_name = ft_strdup(*args);
+			env_value = ft_strdup("");
 		}
+		if (!env_name || !env_value)
+			ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+		ft_setenv(env_name, env_value, true);
+		free(env_name);
+		free(env_value);
+		args++;
 	}
 	g_status = EXIT_SUCCESS;
 }

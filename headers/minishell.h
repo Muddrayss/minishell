@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 20:06:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:13:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # include "parser.h"
 # include "executor.h"
 # include "signals.h"
-# include "envp_utils.h"
+# include "envp.h"
 # include "utils.h"
 # include "protected_methods.h"
 # include "errors.h"
@@ -47,15 +47,15 @@
 
 typedef struct s_data
 {
-	char	*cmd_path;
-	char	**cmd_args;
-	t_list	**envp_table;
-	char	**envp_matrix;
-	char	*starting_dir;
-	t_list	**lexered_params;
-	t_tree  **parsed_params;
-	char 	*input;
-	pid_t 	main_pid;
+	char		*cmd_path;
+	char		**cmd_args;
+	t_envp_tree	*envp_tree;
+	char		**envp_matrix;
+	char		*starting_dir;
+	t_list		**lexered_params;
+	t_tree  	**parsed_params;
+	char 		*input;
+	pid_t 		main_pid;
 }t_data;
 
 extern int g_status;
