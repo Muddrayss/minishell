@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:55:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:22:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,16 @@ char *get_cmd_path(char *path, char *cmd)
 {
     char *entry;
     char *full_path;
+	char *path_cpy;
 
 	full_path = NULL;
     if (!path || !cmd)
         return (NULL);
-    if (is_custom_bin(cmd))
+    if (is_custom_bin(cmd)){
         return (get_custom_bin(cmd));
-    entry = ft_strtok(path, ':');
+	}
+	path_cpy = strdup_p(path);
+    entry = ft_strtok(path_cpy, ':');
 	while (entry)
 	{
     	full_path = search_cmd_in_dirs(entry, cmd);
@@ -35,6 +38,7 @@ char *get_cmd_path(char *path, char *cmd)
 			break ;
 		entry = ft_strtok(NULL, ':');
 	}
+	free_and_null((void **)&path_cpy);
     if (!entry)
 	{
 		ft_putstr_fd("minishell: command not found: '", STDERR_FILENO);

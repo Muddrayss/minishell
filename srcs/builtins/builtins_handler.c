@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 15:49:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:12:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ void exec_builtin(char **cmd_args)
 	while (n_builtins--)
 		if (ft_strcmp(cmd_args[0], builtins[n_builtins]) == 0)
 			builtin_functions[n_builtins](cmd_args);
-	free_and_null((void **)&cmd_args);			
+	if (data->cmd_args)
+		free_and_null((void **)&data->cmd_args[0]);
+	free_and_null((void **)&data->cmd_args);	
 	free_and_null((void **)&data->input);
 	lstclear(&data->lexered_params, &del_content_lexer);
 	free_and_null((void **)&data->lexered_params);
