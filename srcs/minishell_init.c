@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 17:36:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 18:45:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	init_data(char **envp)
 	data->main_pid = getpid();
 	data->cmd_args = NULL;
 	data->input = NULL;
+	envp_init(envp);
 	if (!data->starting_dir)
 		ft_quit(ERR_ENV, "minishell: failed to initialize environment");
-	envp_init(envp);
 }
 
 void init_general(void)
