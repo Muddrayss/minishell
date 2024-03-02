@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 19:56:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 20:00:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_list  *fill_redirs(char *cmd_str)
     return (heredoc_fileno++, lstreverse(&redirs), redirs);
 }
 
+//TODO leak with echo text > filename (filename not freed)
 static void init_redir(t_list **redirs, char type, char *str, uint16_t heredoc_fileno)
 {
     t_redir *redir;

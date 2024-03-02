@@ -6,13 +6,12 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 18:30:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 20:01:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-//TODO double free con env senza nulla
 void    envp_init(char **envp)
 {
     uint16_t    size;
