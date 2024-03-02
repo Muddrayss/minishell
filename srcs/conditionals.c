@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:12:51 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:14:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:56:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 bool is_quote(char c)
 {
     return (c == '\'' || c == '\"');
+}
+
+bool is_redir(char c)
+{
+	return (c == '<' || c == '>');
 }
 
 bool is_token(char c)

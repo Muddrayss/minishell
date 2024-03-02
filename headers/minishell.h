@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:58:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:56:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	ft_quit(uint8_t id, char *msg);
 void    free_data(void);
 bool    is_shell_space(char c);
 bool 	is_quote(char c);
+bool 	is_redir(char c);
 bool 	is_empty_str(char *str);
 void	*cxmalloc(size_t size); // TODO: to remove
 

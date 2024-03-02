@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 19:24:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:27:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	exec_simple_cmd(char *path, char *cmd_str)
 	wait(NULL);
 }
 
-//TODO refractor
 void  exec(char *path, char *cmd_str)
 {
 	t_data	*data;

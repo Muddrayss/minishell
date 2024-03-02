@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 17:21:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:37:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static char     *get_full_entry(char *basedir, char *entry, char *cwd, bool is_r
 static t_list   *sort_result(t_list *matching_files);
 static char     *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len);
 
-//TODO lettera tagliata nel caso /*/*
 void    replace_wildcards(char **str)
 {
     char        *wildcard_str;
