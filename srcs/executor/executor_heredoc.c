@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:01:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:47:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ static int fill_in_child(char *limiter, int heredoc_fd)
 static void fill_heredoc(char *limiter, int fd)
 {
     char    *str;
-    char    *tmp;
     size_t  str_len;
 
     str = NULL;
@@ -103,11 +102,9 @@ static void fill_heredoc(char *limiter, int fd)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, str_len + 1) == 0)
             break ;
-        tmp = str;
-        str = replace_env_vars(str, true);
+        replace_env_vars(&str, true);
         ft_putstr_fd(str, fd);
         write(fd, "\n", 1);
-        free_and_null((void **)&tmp);
         free_and_null((void **)&str);
     }
     free_and_null((void **)&str);

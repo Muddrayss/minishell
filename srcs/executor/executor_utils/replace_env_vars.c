@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:07:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:42:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,23 @@
 
 static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes);
 
-char    *replace_env_vars(char *str, bool ignore_quotes)
+void    replace_env_vars(char **str, bool ignore_quotes)
 {
     char        master_quote;
     uint32_t    i;
 
-    str = strdup_p(str);
     i = 0;
     master_quote = '\0';
-    while (str[i])
+    while ((*str)[i])
     {
-        if (!master_quote && (is_quote(str[i])))
-            master_quote = str[i];
-        else if (master_quote && str[i] == master_quote)
+        if (!master_quote && (is_quote((*str)[i])))
+            master_quote = (*str)[i];
+        else if (master_quote && (*str)[i] == master_quote)
             master_quote = '\0';
-        if (str[i] == '$' && (ignore_quotes || master_quote != '\'' ))
-            str = expand_dollar(str, &i, ignore_quotes);
+        if ((*str)[i] == '$' && (ignore_quotes || master_quote != '\'' ))
+            *str = expand_dollar(*str, &i, ignore_quotes);
         i++;
     }
-    return (str);
 }
 
 static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)

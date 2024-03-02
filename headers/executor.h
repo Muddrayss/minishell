@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:23:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:46:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ char    *get_heredoc_filename(int32_t id);
 void    exec_redirs(t_list *redirs);
 char    *get_cmd_path(char *path, char *cmd);
 char    **get_cmd_args(char *cmd_str);
-char 	*replace_env_vars(char *str, bool ignore_quotes);
-char 	*replace_wildcards(char *str);
-char	*clear_quotes(char *str);
+void    replace_env_vars(char **str, bool ignore_quotes);
+void    replace_wildcards(char **str);
+void    clear_quotes(char **str);
 void    exec(char *path, char *cmd_str);
 void	exec_simple_cmd(char *path, char *cmd_str);
 

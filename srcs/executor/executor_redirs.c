@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:39:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 13:47:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:44:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,15 @@ static int open_redir_file(t_redir *redir);
 void exec_redirs(t_list *redirs)
 {
     t_redir *redir;
-    char    *tmp;
 
     while (redirs)
     {
         redir = (t_redir *)redirs->content;
-        tmp = redir->filename;
         if (redir->filename)
         {
-            redir->filename = replace_env_vars(redir->filename, false);
-            free_and_null((void **)&tmp);
-            tmp = redir->filename;
-            redir->filename = replace_wildcards(redir->filename);
-            free_and_null((void **)&tmp);
-            redir->filename = clear_quotes(redir->filename);
+            replace_env_vars(&redir->filename, false);
+            replace_wildcards(&redir->filename);
+            clear_quotes(&redir->filename);
         }
         exec_file_and_fd_redirs(redir);
         redirs = redirs->next;

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:18:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:47:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,16 +145,12 @@ t_tree   *skip_till_semicolon(t_tree *node)
 static void child(t_tree *node, int fds[3], int8_t prev_type)
 {
     t_parser    *elem;
-    char        *tmp;
 
     elem = (t_parser *)node->content;
     if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
-    elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str, false);
-    tmp = elem->cmd->cmd_str;
-    elem->cmd->cmd_str = replace_wildcards(elem->cmd->cmd_str);
-    free_and_null((void **)&tmp);
-    //elem->cmd->cmd_str = clear_quotes(elem->cmd->cmd_str); LE QUOTES VANNO LASCIATE, SE NE OCCUPA SPLIT
+    replace_env_vars(&elem->cmd->cmd_str, false);
+    replace_wildcards(&elem->cmd->cmd_str);
     exec_redirs(elem->cmd->redirs);
     exec(ft_getenv("PATH="), elem->cmd->cmd_str);
 }

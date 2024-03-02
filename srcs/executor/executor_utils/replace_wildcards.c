@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:06:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:48:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static char     *get_full_entry(char *basedir, char *entry, char *cwd, bool is_r
 static t_list   *sort_result(t_list *matching_files);
 static char     *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len);
 
-//TODO le cartelle nascoste vengono mostrate anche se non dovrebbero. comparare echo /*/*
+//TODO lettera tagliata nel caso /*/*
 //TODO refractor, togliere il bisogno di strdup e di variabili temporanee a chi chiama, (servivano perche' replace wildcards viene chiamata in ogni caso, sia se ci sono effettivamente var da rimpiazzare che non)
-char    *replace_wildcards(char *str)
+void    replace_wildcards(char **str)
 {
     char        *wildcard_str;
     t_list      *matching_files;
@@ -32,22 +32,21 @@ char    *replace_wildcards(char *str)
     uint32_t    idx;
     uint32_t    len;
 
-    str = strdup_p(str);
     cwd = getcwd_p(NULL, 0);
     idx = 0;
-    wildcard_str = get_wildcard_str(str, &idx, &len);
+    wildcard_str = get_wildcard_str(*str, &idx, &len);
     while (wildcard_str)
     {
         wildcard_str = add_cwd(wildcard_str, cwd);
         matching_files = parse_wildcard_str(wildcard_str, cwd, false);
         matching_files = sort_result(matching_files);
-        str = insert_result(str, matching_files, idx, len);
+        *str = insert_result(*str, matching_files, idx, len);
         lstclear(&matching_files, &free);
         idx += len;
         free_and_null((void **)&wildcard_str);
-        wildcard_str = get_wildcard_str(str, &idx, &len);
+        wildcard_str = get_wildcard_str(*str, &idx, &len);
     }
-    return (free_and_null((void **)&cwd), str);
+    free_and_null((void **)&cwd);
 }
 
 static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
@@ -192,7 +191,7 @@ static char *get_wildcard_str(char *str, uint32_t *i, uint32_t *len)
         (*len)++;
     wildcard_str = (char *)malloc_p(sizeof(char) * (*len + 1));
     ft_strlcpy(wildcard_str, &str[*i], *len + 1);
-    return (clear_quotes(wildcard_str));
+    return (clear_quotes(&wildcard_str), wildcard_str);
 }
 
 static t_list *sort_result(t_list *matching_files)

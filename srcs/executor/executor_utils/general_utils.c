@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:23:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:41:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*clear_quotes(char *str)
+void	clear_quotes(char **str)
 {
 	uint32_t	i;
 	uint32_t	j;
@@ -21,20 +21,21 @@ char	*clear_quotes(char *str)
 
 	i = 0;
 	j = 0;
-	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) + 1));
+	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(*str) + 1));
 	master_quote = '\0';
-	while (str[i])
+	while ((*str)[i])
 	{
-		if (!master_quote && (str[i] == '\'' || str[i] == '"'))
-			master_quote = str[i];
-		else if (master_quote && str[i] == master_quote)
+		if (!master_quote && ((*str)[i] == '\'' || (*str)[i] == '"'))
+			master_quote = (*str)[i];
+		else if (master_quote && (*str)[i] == master_quote)
 			master_quote = '\0';
-		else if (!master_quote || (master_quote && str[i] != master_quote))
-			new_str[j++] = str[i];
+		else if (!master_quote || (master_quote && (*str)[i] != master_quote))
+			new_str[j++] = (*str)[i];
 		i++;
 	}
 	new_str[j] = '\0';
-	return (new_str);
+	free_and_null((void **)str);
+	*str = new_str;
 }
 
 void	exec_simple_cmd(char *path, char *cmd_str)
