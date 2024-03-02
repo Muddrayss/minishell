@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:45:49 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:20:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 22:09:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,11 @@ uint8_t *set_bad_errnos()
     static uint8_t  n_bad_errnos
     = sizeof(g_bad_errnos) / sizeof(g_bad_errnos[0]);
     uint8_t         i;
-    uint8_t         j;
 
     i = -1;
     errnos = get_errnos();
-    while (++i < N_ERRNOS)
-    {
-        j = -1;
-        while (++j < n_bad_errnos)
-            if (errnos[i] == g_bad_errnos[j])
-                errnos[i] = true;
-    }
+    while (++i < n_bad_errnos)
+        errnos[g_bad_errnos[i]] = true;
     return (errnos);
 }
 
