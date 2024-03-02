@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:48:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:04:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static t_list   *sort_result(t_list *matching_files);
 static char     *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len);
 
 //TODO lettera tagliata nel caso /*/*
-//TODO refractor, togliere il bisogno di strdup e di variabili temporanee a chi chiama, (servivano perche' replace wildcards viene chiamata in ogni caso, sia se ci sono effettivamente var da rimpiazzare che non)
 void    replace_wildcards(char **str)
 {
     char        *wildcard_str;

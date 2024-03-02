@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:57:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:00:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	free_data(void)
 	close_all_fds();
 	data = get_data();
 	free_and_null((void **)&data->starting_dir);
+	free_and_null((void **)&data->cmd_args[0]);
 	free_and_null((void **)&data->cmd_args);
 	treeclear(&data->envp_tree, &free);
 	free_and_null((void **)&data->envp_matrix);

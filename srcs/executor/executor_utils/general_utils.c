@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:41:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:58:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	clear_quotes(char **str)
 		i++;
 	}
 	new_str[j] = '\0';
-	free_and_null((void **)str);
+	//free_and_null((void **)str);
 	*str = new_str;
 }
 
@@ -51,6 +51,7 @@ void	exec_simple_cmd(char *path, char *cmd_str)
 	wait(NULL);
 }
 
+//TODO refractor
 void  exec(char *path, char *cmd_str)
 {
 	t_data	*data;
@@ -69,10 +70,7 @@ void  exec(char *path, char *cmd_str)
 	{
 		cmd_path = get_cmd_path(path, data->cmd_args[0]);
 		if (!cmd_path)
-		{
-			free_data();
 			exit(CMD_NOT_FOUND);
-		}
 		execve(cmd_path, data->cmd_args, get_data()->envp_matrix);
 		if (errno != ENOEXEC)
 			ft_quit(EXEC_FAILURE, strjoin_p("minishell: failed to execute command: ", data->cmd_args[0]));
