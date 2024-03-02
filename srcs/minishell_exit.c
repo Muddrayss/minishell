@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:55:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:57:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_quit(uint8_t id, char *msg)
 		unlink("./tmp/print_sem");
 	}
 	if (id == EXEC_FAILURE)
-		ft_freenull((void **)&msg);
+		free_and_null((void **)&msg);
 	quit_from_main((uint8_t)id);
 }
 
@@ -56,16 +56,14 @@ void	free_data(void)
 
 	close_all_fds();
 	data = get_data();
-	ft_freenull((void **)&data->starting_dir);
-	ft_freematrix(data->cmd_args);
-	data->cmd_args = NULL;
+	free_and_null((void **)&data->starting_dir);
+	free_and_null((void **)&data->cmd_args);
 	treeclear(&data->envp_tree, &free);
-	ft_freematrix(data->envp_matrix);
+	free_and_null((void **)&data->envp_matrix);
 	data->envp_matrix = NULL;
-	ft_freenull((void **)&data->cmd_path);
 	lstclear(&data->lexered_params, &del_content_lexer);
 	treeclear(&data->parsed_params, &del_content_parser);
-	ft_freenull((void **)&data->input);
+	free_and_null((void **)&data->input);
 }
 
 static void	close_all_fds(void)

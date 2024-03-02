@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:06:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ char    *replace_wildcards(char *str)
     uint32_t    idx;
     uint32_t    len;
 
-    str = ft_strdup(str);
-    if (!str)
-        ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+    str = strdup_p(str);
     cwd = getcwd_p(NULL, 0);
     idx = 0;
     wildcard_str = get_wildcard_str(str, &idx, &len);
@@ -46,10 +44,10 @@ char    *replace_wildcards(char *str)
         str = insert_result(str, matching_files, idx, len);
         lstclear(&matching_files, &free);
         idx += len;
-        ft_freenull((void **)&wildcard_str);
+        free_and_null((void **)&wildcard_str);
         wildcard_str = get_wildcard_str(str, &idx, &len);
     }
-    return (ft_freenull((void **)&cwd), str);
+    return (free_and_null((void **)&cwd), str);
 }
 
 static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
@@ -77,12 +75,12 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
             lstadd_front(&matching_files, lstnew_p(full_entry));
         else
         {
-            ft_freenull((void **)&full_entry);
+            free_and_null((void **)&full_entry);
             lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str, cwd, is_root));
         }
-        ft_freenull((void **)&new_wildcard_str);
+        free_and_null((void **)&new_wildcard_str);
     }
-    return (ft_freenull((void **)&basedir), closedir(dir), matching_files);
+    return (free_and_null((void **)&basedir), closedir(dir), matching_files);
 }
 
 static char *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root)
@@ -161,7 +159,7 @@ static char *get_base_dir(char **wildcard_str, bool *is_root)
     if (!basedir[0])
     {
         *is_root = true;
-        return (ft_freenull((void **)&basedir), ft_strdup("/"));
+        return (free_and_null((void **)&basedir), strdup_p("/"));
     }
     return (basedir);
 }
@@ -228,16 +226,14 @@ static char *add_cwd(char *wildcard_str, char *cwd)
 
     if (wildcard_str[0] == '/')
     {
-        new_wildcard_str = ft_strdup(wildcard_str);
-        if (!new_wildcard_str)
-            ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-        return (ft_freenull((void **)&wildcard_str), new_wildcard_str);
+        new_wildcard_str = strdup_p(wildcard_str);
+        return (free_and_null((void **)&wildcard_str), new_wildcard_str);
     }
     new_wildcard_str = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(wildcard_str) + 2));
     ft_strcpy(new_wildcard_str, cwd);
     ft_strcat(new_wildcard_str, "/");
     ft_strcat(new_wildcard_str, wildcard_str);
-    return (ft_freenull((void **)&wildcard_str), new_wildcard_str);
+    return (free_and_null((void **)&wildcard_str), new_wildcard_str);
 }
 
 static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len)
@@ -267,5 +263,5 @@ static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint
         node = node->next;
     }
     ft_strcat(new_str, &str[idx + pattern_len]);
-    return (ft_freenull((void **)&str), new_str);
+    return (free_and_null((void **)&str), new_str);
 }

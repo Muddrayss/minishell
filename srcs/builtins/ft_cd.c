@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:47:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ void ft_cd(char **args)
 	{
 		perror("cd");
 		g_status = EXIT_FAILURE;
-		ft_freenull((void **)&cwd);
+		free_and_null((void **)&cwd);
 		return ;
 	}
 	ft_setenv("OLDPWD=", cwd, true);
-	ft_freenull((void **)&cwd);
+	free_and_null((void **)&cwd);
 	cwd = getcwd_p(NULL, 0);
 	if (!cwd)
 		return ;
 	ft_setenv("PWD=", cwd, true);
-	ft_freenull((void **)&cwd);
+	free_and_null((void **)&cwd);
 	g_status = EXIT_SUCCESS;
 }

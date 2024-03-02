@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:02:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void    del_content_parser(void *content)
         return ;
     elem = (t_parser *)content;
     lstclear(&elem->cmd->redirs, &del_content_redirs);
-    ft_freenull((void **)&elem->cmd->cmd_str);
-    ft_freenull((void **)&elem->cmd);
-    ft_freenull((void **)&elem);
+    free_and_null((void **)&elem->cmd->cmd_str);
+    free_and_null((void **)&elem->cmd);
+    free_and_null((void **)&elem);
 }
 
 void    del_content_redirs(void *content)
@@ -40,6 +40,6 @@ void    del_content_redirs(void *content)
     t_redir *elem;
 
     elem = (t_redir *)content;
-    ft_freenull((void **)&elem->filename);
-    ft_freenull((void **)&content);
+    free_and_null((void **)&elem->filename);
+    free_and_null((void **)&content);
 }

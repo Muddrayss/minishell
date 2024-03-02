@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:07:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,9 @@ void ft_unset(char **args)
 	{
 		if (!ft_strchr(*args, '='))
 		{
-			name = ft_strjoin(*args, "=");
-			if (!name)
-				ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+			name = strjoin_p(*args, "=");
 			ft_unsetenv(name);
-			ft_freenull((void **)&name);
+			free_and_null((void **)&name);
 		}
 		else 
 		{

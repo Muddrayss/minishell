@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:17:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,10 @@ void	init_data(char **envp)
 	t_data	*data;
 	
 	data = get_data();
-	data->cmd_args = NULL;
-	data->cmd_path = NULL;
 	data->lexered_params = NULL;
 	data->starting_dir = getcwd_p(NULL, 0);
 	data->main_pid = getpid();
+	data->cmd_args = NULL;
 	data->input = NULL;
 	if (!data->starting_dir)
 		ft_quit(ERR_ENV, "minishell: failed to initialize environment");
@@ -68,5 +67,5 @@ static void	clean_heredocs(char *path)
 	ft_strcat(cmd, data->starting_dir);
 	ft_strcat(cmd, "/tmp");
     exec_simple_cmd(path, cmd);
-	ft_freenull((void **)&cmd);
+	free_and_null((void **)&cmd);
 }

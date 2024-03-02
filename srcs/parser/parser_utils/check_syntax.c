@@ -3,27 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 16:52:43 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 14:50:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
 static int8_t   check_parenthesis(t_list *lexered_params);
+static int8_t   check_quotes(t_list *lexered_params);
+static int8_t   check_tokens(t_list *lexered_params);
 static int8_t   check_redirs(t_list *lexered_params);
 static void     throw_syntax_error(char token);
 
 int8_t   check_syntax(t_list *lexered_params)
 {
+    if (check_parenthesis(lexered_params) == -1)
+        return (-1);
+    if (check_quotes(lexered_params) == -1)
+        return (-1);
+    if (check_tokens(lexered_params) == -1)
+        return (-1);
+    if (check_redirs(lexered_params) == -1)
+        return (-1);
+    return (0);
+}
+
+static int8_t    check_tokens(t_list *lexered_params)
+{
     t_lexer  *elem;
     t_lexer  *next_elem;
     t_lexer  *prev_elem;
 
-    if (check_parenthesis(lexered_params) == -1 || check_redirs(lexered_params) == -1)
-        return (-1);
     while (lexered_params)
     {
         elem = (t_lexer *)lexered_params->content;
@@ -33,7 +46,7 @@ int8_t   check_syntax(t_list *lexered_params)
             next_elem = (t_lexer *)lexered_params->next->content;
         if (lexered_params->prev)
             prev_elem = (t_lexer *)lexered_params->prev->content;
-        if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END) //escludere anche tutte le reidirs
+        if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END)
             if (!prev_elem || !next_elem || !prev_elem->cmd_str || !next_elem->cmd_str)
                 if (!prev_elem || !next_elem || prev_elem->token == SUBSHELL_START || next_elem->token == SUBSHELL_END)
                     return (throw_syntax_error(g_parser_tokens[(int)elem->token]), -1);
@@ -42,7 +55,7 @@ int8_t   check_syntax(t_list *lexered_params)
     return (0);
 }
 
-static int8_t check_parenthesis(t_list *lexered_params)
+static int8_t   check_parenthesis(t_list *lexered_params)
 {
     int32_t     n_open;
     t_lexer     *elem;
@@ -75,6 +88,14 @@ static int8_t   check_redirs(t_list *lexered_params)
     REDIR_OUTPUT 		9 	'cmd > filename' o 'cmd n> filename'
     REDIR_APPEND 		10  'cmd >> filename' o 'cmd n>> filename'
     */
+    (void)lexered_params;
+    return (0);
+}
+
+static int8_t check_quotes(t_list *lexered_params)
+{
+    //TODO : dwdwad
+
     (void)lexered_params;
     return (0);
 }

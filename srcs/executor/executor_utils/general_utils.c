@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:23:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,29 @@ char	*clear_quotes(char *str)
 		i++;
 	}
 	new_str[j] = '\0';
-	return (ft_freenull((void **)&str), new_str);
+	return (new_str);
 }
 
 void	exec_simple_cmd(char *path, char *cmd_str)
 {
 	pid_t	pid;
+	char	*cmd;
 
+	cmd = strdup_p(cmd_str);
 	pid = fork_p();
 	if (pid == 0)
-		exec(path, cmd_str);
+		exec(path, cmd);
+	free_and_null((void **)&cmd);
 	wait(NULL);
 }
 
 void  exec(char *path, char *cmd_str)
 {
 	t_data	*data;
+	char	*cmd_path;
 
 	data = get_data();
-	data->cmd_args = ft_split(cmd_str, ' ');
-	if (!data->cmd_args)
-		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+	data->cmd_args = get_cmd_args(cmd_str);
 	if (!data->cmd_args[0] || !data->cmd_args[0][0])
 	{
 		free_data();
@@ -64,12 +66,19 @@ void  exec(char *path, char *cmd_str)
 		exec_builtin(data->cmd_args);
 	else
 	{
-		data->cmd_path = get_cmd_path(path, data->cmd_args[0]);
-		execve(data->cmd_path, data->cmd_args, data->envp_matrix);
+		cmd_path = get_cmd_path(path, data->cmd_args[0]);
+		if (!cmd_path)
+		{
+			free_data();
+			exit(CMD_NOT_FOUND);
+		}
+		execve(cmd_path, data->cmd_args, get_data()->envp_matrix);
 		if (errno != ENOEXEC)
-			ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", data->cmd_args[0]));
+			ft_quit(EXEC_FAILURE, strjoin_p("minishell: failed to execute command: ", data->cmd_args[0]));
 		free_data();
 		exit(0);
 	}
 }
+
+
 

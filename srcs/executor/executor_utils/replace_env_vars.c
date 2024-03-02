@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:07:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ char    *replace_env_vars(char *str, bool ignore_quotes)
     char        master_quote;
     uint32_t    i;
 
-    str = ft_strdup(str);
-    if (!str)
-        ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+    str = strdup_p(str);
     i = 0;
     master_quote = '\0';
     while (str[i])
@@ -61,11 +59,9 @@ static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
     }
     else
     {
-        tmp = ft_strjoin(env_name, "=");
-        if (!tmp)
-            ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+        tmp = strjoin_p(env_name, "=");
         env_value = ft_getenv(tmp);
-        ft_freenull((void **)&tmp);
+        free_and_null((void **)&tmp);
     }
     if (!env_value)
         env_value = "";
@@ -75,5 +71,5 @@ static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
     ft_strcat(new_str, str + env_name_len);
     free(str - *i - 1);
     *i += ft_strlen(env_value) - 1;
-    return (ft_freenull((void **)&env_name), new_str);
+    return (free_and_null((void **)&env_name), new_str);
 }

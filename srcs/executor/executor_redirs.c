@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:39:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:47:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void exec_redirs(t_list *redirs)
         if (redir->filename)
         {
             redir->filename = replace_env_vars(redir->filename, false);
-            ft_freenull((void **)&tmp);
+            free_and_null((void **)&tmp);
             tmp = redir->filename;
             redir->filename = replace_wildcards(redir->filename);
-            ft_freenull((void **)&tmp);
+            free_and_null((void **)&tmp);
             redir->filename = clear_quotes(redir->filename);
         }
         exec_file_and_fd_redirs(redir);
@@ -65,7 +65,7 @@ static int  open_redir_file(t_redir *redir)
     {
         heredoc_filename = get_heredoc_filename(redir->heredoc_fileno); 
         fd = open_p(heredoc_filename, O_RDONLY, 0644);
-        ft_freenull((void **)&heredoc_filename);
+        free_and_null((void **)&heredoc_filename);
     }
     else if (redir->type == REDIR_OUTPUT)
         fd = open_p(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);

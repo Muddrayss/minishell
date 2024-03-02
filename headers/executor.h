@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 15:40:34 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:23:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void    create_heredocs(t_tree *tree, int *status);
 char    *get_heredoc_filename(int32_t id);
 void    exec_redirs(t_list *redirs);
 char    *get_cmd_path(char *path, char *cmd);
+char    **get_cmd_args(char *cmd_str);
 char 	*replace_env_vars(char *str, bool ignore_quotes);
-// char    *replace_env_vars_heredoc(char *str);
 char 	*replace_wildcards(char *str);
 char	*clear_quotes(char *str);
 void    exec(char *path, char *cmd_str);

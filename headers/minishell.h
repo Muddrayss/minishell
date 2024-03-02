@@ -6,12 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 23:39:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:58:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+//TODO mettere tutti i const
+//TODO mettere le giuste size alle variabili
+//TODO mettere le variabili piu' pesanti sopra
 
 # include <curses.h>
 # include <dirent.h>
@@ -61,7 +65,6 @@ typedef struct s_tree
 
 typedef struct s_data
 {
-	char		*cmd_path;
 	char		**cmd_args;
 	t_tree		*envp_tree;
 	char		**envp_matrix;

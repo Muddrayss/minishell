@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:32:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void merge_ampersands(t_list **head, t_list **node)
         ft_strcpy(prev_elem->cmd_str, tmp);
         ft_strcat(prev_elem->cmd_str, "&");
         ft_strcat(prev_elem->cmd_str, next_elem->cmd_str);
-        ft_freenull((void **)&tmp);
+        free_and_null((void **)&tmp);
         node_prev = (*node)->prev;
         lstremoveone(head, (*node)->next, &del_content_lexer);
         lstremoveone(head, (*node), &del_content_lexer);

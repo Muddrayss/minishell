@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:27:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ void	envp_matrix_remove(char *env_name, uint32_t name_len)
 	while (old_size--)
 	{
 		if (ft_strncmp(matrix[old_size], env_name, name_len) == 0)
-			ft_freenull((void **)&matrix[old_size]);
+			free_and_null((void **)&matrix[old_size]);
 		else
 			new_matrix[i--] = matrix[old_size];
 	}
-	ft_freenull((void **)&matrix);
+	free_and_null((void **)&matrix);
 	data->envp_matrix = new_matrix;
 	return ;
 }
@@ -54,7 +54,7 @@ void	envp_matrix_add(char *str)
 	while (size--)
 		new_matrix[size] = matrix[size];
 	data->envp_matrix = new_matrix;
-	ft_freenull((void **)&matrix); //non ft_freematrix
+	free_and_null((void **)&matrix); //non ft_freematrix
 	return ;
 }
 

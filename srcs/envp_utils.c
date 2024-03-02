@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:58:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:07:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,7 @@ void    envp_init(char **envp)
     matrix[size] = NULL;
     while (size--)
     {
-        str = ft_strdup(envp[size]);
-        if (!str)
-        {
-            ft_freematrix(matrix);
-            treeclear(&tree, &free);
-            ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-        }
+        str = strdup_p(envp[size]);
         tree = envp_tree_add(tree, str);
         matrix[size] = str;
     }
@@ -52,9 +46,7 @@ void	ft_setenv(char *name, char *value, bool replace)
     t_data      *data;
 
     data = get_data();
-    str = ft_strjoin(name, value);
-    if (!str)
-        ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+    str = strjoin_p(name, value);
     if (replace && ft_getenv(name))
         ft_unsetenv(name);
     data->envp_size++;

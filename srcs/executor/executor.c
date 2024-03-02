@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:18:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ static void child(t_tree *node, int fds[3], int8_t prev_type)
     elem->cmd->cmd_str = replace_env_vars(elem->cmd->cmd_str, false);
     tmp = elem->cmd->cmd_str;
     elem->cmd->cmd_str = replace_wildcards(elem->cmd->cmd_str);
-    ft_freenull((void **)&tmp);
+    free_and_null((void **)&tmp);
     //elem->cmd->cmd_str = clear_quotes(elem->cmd->cmd_str); LE QUOTES VANNO LASCIATE, SE NE OCCUPA SPLIT
     exec_redirs(elem->cmd->redirs);
     exec(ft_getenv("PATH="), elem->cmd->cmd_str);

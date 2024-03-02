@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:42:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:47:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:59:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,5 @@ void	treeclear(t_tree **tree, void (*del)(void *))
     treeclear(&(*tree)->right, del);
     del((*tree)->content);
     (*tree)->content = NULL;
-    ft_freenull((void **)tree);
+    free_and_null((void **)tree);
 }

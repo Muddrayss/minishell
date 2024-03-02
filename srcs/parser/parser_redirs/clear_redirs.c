@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:06:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ char    *clear_redirs(char *cmd_str)
     bool        *to_remove_array;
     char        master_quote;
 
-    cmd_str = ft_strdup(cmd_str);
-    if (!cmd_str)
-        ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+    cmd_str = strdup_p(cmd_str);
     to_remove_array = (bool *)calloc_p(ft_strlen(cmd_str), sizeof(bool));
     master_quote = '\0';
     i = -1;
@@ -74,5 +72,5 @@ static char *remove_chars(char *str, bool *to_remove_array)
         if (!to_remove_array[i])
             new_str[j++] = str[i];
     new_str[j] = '\0';
-    return (ft_freenull((void **)&to_remove_array), ft_freenull((void **)&str), new_str);
+    return (free_and_null((void **)&to_remove_array), free_and_null((void **)&str), new_str);
 }

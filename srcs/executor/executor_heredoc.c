@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:01:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void create_heredocs(t_tree *tree, int *status)
                 continue ;
             filename = get_heredoc_filename(redir->heredoc_fileno);
             fd = open_p(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            ft_freenull((void **)&filename);
+            free_and_null((void **)&filename);
             *status = fill_in_child(redir->filename, fd);
             if (*status != 0)
                 return ;
@@ -59,11 +59,11 @@ char    *get_heredoc_filename(int32_t id)
     size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx)
-        return (ft_freenull((void **)&idx), ft_freenull((void **)&filename), ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
+        return (free_and_null((void **)&idx), free_and_null((void **)&filename), ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
     ft_strcpy(filename, data->starting_dir);
     ft_strcat(filename, "/tmp/.heredoc_");
     ft_strcat(filename, idx);
-    return (ft_freenull((void **)&idx), filename);
+    return (free_and_null((void **)&idx), filename);
 }
 
 static int fill_in_child(char *limiter, int heredoc_fd)
@@ -107,10 +107,10 @@ static void fill_heredoc(char *limiter, int fd)
         str = replace_env_vars(str, true);
         ft_putstr_fd(str, fd);
         write(fd, "\n", 1);
-        ft_freenull((void **)&tmp);
-        ft_freenull((void **)&str);
+        free_and_null((void **)&tmp);
+        free_and_null((void **)&str);
     }
-    ft_freenull((void **)&str);
+    free_and_null((void **)&str);
     free_data();
     exit(0);
 }
