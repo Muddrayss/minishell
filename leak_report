@@ -1,76 +1,52 @@
-==33822== Memcheck, a memory error detector
-==33822== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==33822== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==33822== Command: ./minishell
-==33822== 
+==577567== Memcheck, a memory error detector
+==577567== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==577567== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==577567== Command: ./minishell
+==577567== 
 exit
-==33822== Invalid free() / delete / delete[] / realloc()
-==33822==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==33822==    by 0x10F2CB: ft_freenull (ft_freenull.c:19)
-==33822==    by 0x10EEED: ft_freematrix (ft_freematrix.c:39)
-==33822==    by 0x109B56: free_data (minishell_exit.c:63)
-==33822==    by 0x10A793: death_mode (signals.c:70)
-==33822==    by 0x490251F: ??? (in /usr/lib/x86_64-linux-gnu/libc.so.6)
-==33822==    by 0x490275A: kill (syscall-template.S:120)
-==33822==    by 0x109AD2: quit_from_main (minishell_exit.c:48)
-==33822==    by 0x109A69: ft_quit (minishell_exit.c:33)
-==33822==    by 0x10968D: minishell_loop (minishell.c:41)
-==33822==    by 0x10961A: main (minishell.c:24)
-==33822==  Address 0x4b20d90 is 0 bytes inside a block of size 34 free'd
-==33822==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==33822==    by 0x1103E5: treeclear (treeclear.c:21)
-==33822==    by 0x1103B8: treeclear (treeclear.c:19)
-==33822==    by 0x1103B8: treeclear (treeclear.c:19)
-==33822==    by 0x1103B8: treeclear (treeclear.c:19)
-==33822==    by 0x1103D2: treeclear (treeclear.c:20)
-==33822==    by 0x1103B8: treeclear (treeclear.c:19)
-==33822==    by 0x1103B8: treeclear (treeclear.c:19)
-==33822==    by 0x1103D2: treeclear (treeclear.c:20)
-==33822==    by 0x109B46: free_data (minishell_exit.c:62)
-==33822==    by 0x10A793: death_mode (signals.c:70)
-==33822==    by 0x490251F: ??? (in /usr/lib/x86_64-linux-gnu/libc.so.6)
-==33822==  Block was alloc'd at
-==33822==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==33822==    by 0x10F766: ft_strdup (ft_strdup.c:22)
-==33822==    by 0x10A302: envp_init (envp_utils.c:34)
-==33822==    by 0x10987C: init_data (minishell_init.c:45)
-==33822==    by 0x109610: main (minishell.c:22)
-==33822== 
-==33822== 
-==33822== HEAP SUMMARY:
-==33822==     in use at exit: 208,366 bytes in 228 blocks
-==33822==   total heap usage: 586 allocs, 424 frees, 239,366 bytes allocated
-==33822== 
-==33822== 3 bytes in 1 blocks are still reachable in loss record 2 of 69
-==33822==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==33822==    by 0x1104AE: malloc_p (alloc.c:21)
-==33822==    by 0x10AB51: lexer (lexer.c:40)
-==33822==    by 0x1096FA: minishell_loop (minishell.c:46)
-==33822==    by 0x10961A: main (minishell.c:24)
-==33822== 
-==33822== 16 bytes in 1 blocks are still reachable in loss record 11 of 69
-==33822==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==33822==    by 0x1104AE: malloc_p (alloc.c:21)
-==33822==    by 0x10AC25: lexer_add_cmd (lexer.c:60)
-==33822==    by 0x10AB91: lexer (lexer.c:42)
-==33822==    by 0x1096FA: minishell_loop (minishell.c:46)
-==33822==    by 0x10961A: main (minishell.c:24)
-==33822== 
-==33822== 24 bytes in 1 blocks are still reachable in loss record 15 of 69
-==33822==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==33822==    by 0x1104AE: malloc_p (alloc.c:21)
-==33822==    by 0x1100E0: lstnew_p (lstnew_p.c:19)
-==33822==    by 0x10AC48: lexer_add_cmd (lexer.c:63)
-==33822==    by 0x10AB91: lexer (lexer.c:42)
-==33822==    by 0x1096FA: minishell_loop (minishell.c:46)
-==33822==    by 0x10961A: main (minishell.c:24)
-==33822== 
-==33822== LEAK SUMMARY:
-==33822==    definitely lost: 0 bytes in 0 blocks
-==33822==    indirectly lost: 0 bytes in 0 blocks
-==33822==      possibly lost: 0 bytes in 0 blocks
-==33822==    still reachable: 43 bytes in 3 blocks
-==33822==         suppressed: 208,323 bytes in 225 blocks
-==33822== 
-==33822== For lists of detected and suppressed errors, rerun with: -s
-==33822== ERROR SUMMARY: 66 errors from 1 contexts (suppressed: 0 from 0)
+==577567== Invalid free() / delete / delete[] / realloc()
+==577567==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==577567==    by 0x10F1AA: ft_freenull (ft_freenull.c:19)
+==577567==    by 0x10EDEA: ft_freematrix (ft_freematrix.c:24)
+==577567==    by 0x109B2F: free_data (minishell_exit.c:63)
+==577567==    by 0x10A75B: death_mode (signals.c:70)
+==577567==    by 0x48C741F: ??? (in /usr/lib/x86_64-linux-gnu/libpthread-2.31.so)
+==577567==    by 0x49193DA: kill (syscall-template.S:78)
+==577567==    by 0x109AAB: quit_from_main (minishell_exit.c:48)
+==577567==    by 0x109A42: ft_quit (minishell_exit.c:33)
+==577567==    by 0x109687: minishell_loop (minishell.c:39)
+==577567==    by 0x10961A: main (minishell.c:24)
+==577567==  Address 0x4aff240 is 0 bytes inside a block of size 16 free'd
+==577567==    at 0x483CA3F: free (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==577567==    by 0x110311: treeclear (treeclear.c:21)
+==577567==    by 0x1102FE: treeclear (treeclear.c:20)
+==577567==    by 0x1102E4: treeclear (treeclear.c:19)
+==577567==    by 0x1102FE: treeclear (treeclear.c:20)
+==577567==    by 0x1102FE: treeclear (treeclear.c:20)
+==577567==    by 0x1102FE: treeclear (treeclear.c:20)
+==577567==    by 0x1102FE: treeclear (treeclear.c:20)
+==577567==    by 0x1102E4: treeclear (treeclear.c:19)
+==577567==    by 0x1102FE: treeclear (treeclear.c:20)
+==577567==    by 0x1102FE: treeclear (treeclear.c:20)
+==577567==    by 0x1102E4: treeclear (treeclear.c:19)
+==577567==  Block was alloc'd at
+==577567==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==577567==    by 0x10F646: ft_strdup (ft_strdup.c:22)
+==577567==    by 0x10A2D2: envp_init (envp_utils.c:34)
+==577567==    by 0x109870: init_data (minishell_init.c:45)
+==577567==    by 0x109610: main (minishell.c:22)
+==577567== 
+==577567== 
+==577567== HEAP SUMMARY:
+==577567==     in use at exit: 204,755 bytes in 218 blocks
+==577567==   total heap usage: 604 allocs, 464 frees, 235,610 bytes allocated
+==577567== 
+==577567== LEAK SUMMARY:
+==577567==    definitely lost: 0 bytes in 0 blocks
+==577567==    indirectly lost: 0 bytes in 0 blocks
+==577567==      possibly lost: 0 bytes in 0 blocks
+==577567==    still reachable: 0 bytes in 0 blocks
+==577567==         suppressed: 204,755 bytes in 218 blocks
+==577567== 
+==577567== For lists of detected and suppressed errors, rerun with: -s
+==577567== ERROR SUMMARY: 78 errors from 1 contexts (suppressed: 0 from 0)

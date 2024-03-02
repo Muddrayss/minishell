@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 23:46:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:22:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 static t_list 	*lexer_add_cmd(t_list *lexered_params, uint32_t cmd_len, char *input);
 static t_list 	*lexer_add_token(t_list *lexered_params, char c);
 
-t_list	*lexer(char *input)
+void    lexer(char *input)
 {
     uint32_t        cmd_len;
     char            *cmd_str;
     char            current_quote;
-    t_list         	*lexered_params;
+    t_data          *data;
 
-    lexered_params = NULL;
+    data = get_data();
     current_quote = '\0';
-    get_data()->lexered_params = lexered_params;
+    data->lexered_params = NULL;
     cmd_len = 0;
     while (true)
     {
@@ -39,8 +39,8 @@ t_list	*lexer(char *input)
         {
             cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
             ft_strlcpy(cmd_str, input - cmd_len, cmd_len + 1);
-            lexered_params = lexer_add_cmd(lexered_params, cmd_len, cmd_str);
-            lexered_params = lexer_add_token(lexered_params, *input);
+            data->lexered_params = lexer_add_cmd(data->lexered_params, cmd_len, cmd_str);
+            data->lexered_params = lexer_add_token(data->lexered_params, *input);
             cmd_len = -1;
         }
         cmd_len++;
@@ -48,7 +48,7 @@ t_list	*lexer(char *input)
             break ;
         input++;
     }
-    return (lstreverse(&lexered_params), lexered_params);
+    lstreverse(&data->lexered_params);
 }
 
 static t_list   *lexer_add_cmd(t_list *lexered_params, uint32_t cmd_len, char *cmd_str_raw)

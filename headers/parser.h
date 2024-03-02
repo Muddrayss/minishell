@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 22:32:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:23:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,6 @@ typedef struct s_command
 	t_list	*redirs;
 }t_cmd;
 
-// typedef struct s_tree
-// {
-// 	int8_t			type;
-// 	t_cmd			*cmd;
-// 	struct s_tree 	*left;
-// 	struct s_tree	*right;
-// }t_tree;
-
 typedef struct s_parser
 {
 	int8_t	type;
@@ -60,7 +52,7 @@ typedef struct s_redir
 	int32_t		heredoc_fileno; //eventuale numero da appendere al nome del heredoc
 }t_redir;
 
-t_tree	*parser(t_list *lexered_params);
+void	parser(t_list *lexered_params);
 void	merge_separators(t_list **lexered_params);
 int8_t  check_syntax(t_list *lexered_params);
 t_list  *fill_redirs(char *cmd_str);

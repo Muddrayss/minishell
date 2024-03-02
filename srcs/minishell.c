@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:23:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int	main(int argc, char **argv, char **envp)
 static void	minishell_loop()
 {
 	t_data 		*data;
-	t_list		*lexered_params;
-	t_tree		*parsed_params;
 
 	data = get_data();
 	while (true)
@@ -43,13 +41,13 @@ static void	minishell_loop()
 		if (data->input[0] == '\0' || is_empty_str(data->input))
 			continue ;
 		add_history(data->input);
-		lexered_params = lexer(data->input);
-		parsed_params = parser(lexered_params);
-		lstclear(&data->lexered_params, &del_content_lexer); //potrebbe dare problemi se albero condivide elementi del lexer
-		if (!parsed_params)
+		lexer(data->input);
+		parser(data->lexered_params);
+		lstclear(&data->lexered_params, &del_content_lexer);
+		if (!data->parsed_params)
 			continue ;
 		set_signals(S_SILENT, true);
-		executor(parsed_params);
+		executor(data->parsed_params);
 		treeclear(&data->parsed_params, &del_content_parser);
 	}
 }
