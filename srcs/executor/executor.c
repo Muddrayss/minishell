@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:47:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 18:54:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ static void parent(t_tree *node, int fds[3], pid_t pid)
         waitpid_p(pid, &g_status, 0);
         g_status = WEXITSTATUS(g_status);
         reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
+        //TODO setenv per _=
     }
 }
 
