@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:27:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:52:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,6 @@ void	envp_print_env(void)
 	matrix = get_data()->envp_matrix;
 	i = -1;
 	while (matrix[++i])
-		if (*(ft_strchr(matrix[i], '=') + 1))
+		if (*(ft_strchr(matrix[i], '=')))
 			printf("%s\n", matrix[i]);
 }

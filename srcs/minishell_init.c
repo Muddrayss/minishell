@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:17:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:36:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	check_args(int argc, char **argv, char **envp)
 	{
 		ft_putstr_fd("minishell: too many arguments\n", STDERR_FILENO);
 		exit(1);
-	}	
+	}
 	if (!envp || !*envp)
 	{
 		ft_putstr_fd("minishell: failed to initialize environvment\n", STDERR_FILENO);
@@ -32,7 +32,7 @@ void	check_args(int argc, char **argv, char **envp)
 void	init_data(char **envp)
 {
 	t_data	*data;
-	
+
 	data = get_data();
 	data->lexered_params = NULL;
 	data->starting_dir = getcwd_p(NULL, 0);

@@ -6,15 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:07:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:53:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-//envp_matrix e envp_tree condividono le stesse stringhe (stesse malloc)
-//envp_matrix_remove fa la free, envp_tree_remove no (quindi e' IMPORTANTE L'ORDINE di chiamata)
-
+//TODO double free con env senza nulla
 void    envp_init(char **envp)
 {
     uint16_t    size;
