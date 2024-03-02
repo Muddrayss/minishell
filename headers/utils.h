@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 16:11:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:29:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ char	    *ft_strchr(char *s, int c);
 char        ft_tolower(char c);
 
 void        *ft_calloc(size_t count, size_t size);
+void        ft_freenull(void **ptr);
 void	    ft_freematrix(char **matrix);
 size_t	    ft_matrixsize(char **matrix);
 int		    ft_isdigit(int c);
 int 	    ft_atou(char *nptr);
 char        *ft_utoa(unsigned int n);
+
 
 t_list	    *lstnew_p(void *content);
 void	    lstadd_front(t_list **lst, t_list *new);
@@ -47,9 +49,9 @@ void	    lstdelone(t_list *lst, void (*del)(void *));
 void        lstremoveone(t_list **head, t_list *to_remove, void (*del)(void *));
 void	    lstdelif(t_list **lst, bool (*f)(void *), void (*del)(void *));
 
-t_tree	    *treenew_p(int8_t type, t_cmd *cmd);
-void 	    treeadd_below(t_tree **head, t_tree *new);
-t_tree	    *tree_last(t_tree *head);
+t_tree	    *treenew_p(void *content);
+t_tree      *treeadd_below(t_tree *node, t_tree *new);
+t_tree      *tree_first(t_tree *root);
 void	    treeclear(t_tree **tree, void (*del)(void *));
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 17:40:22 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/01 22:32:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,19 @@ typedef struct s_command
 	t_list	*redirs;
 }t_cmd;
 
-typedef struct s_tree
+// typedef struct s_tree
+// {
+// 	int8_t			type;
+// 	t_cmd			*cmd;
+// 	struct s_tree 	*left;
+// 	struct s_tree	*right;
+// }t_tree;
+
+typedef struct s_parser
 {
-	int8_t			type;
-	t_cmd			*cmd;
-	struct s_tree 	*left;
-	struct s_tree	*right;
-}t_tree;
+	int8_t	type;
+	t_cmd	*cmd;
+}t_parser;
 
 typedef struct s_redir
 {

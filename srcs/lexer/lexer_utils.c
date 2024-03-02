@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:07:33 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 00:13:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@ void	del_content_lexer(void *content)
 	t_lexer	*elem;
 
 	elem = (t_lexer *)content;
-	free(elem->cmd_str);
-    free(elem);
+	ft_freenull((void **)&elem->cmd_str);
+    ft_freenull((void **)&elem);
 }

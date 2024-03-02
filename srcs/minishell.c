@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 16:26:33 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	minishell_loop()
 	{
 		//TODO gestire linea lunga che supera colonne
 		set_signals(S_INTERACTIVE, true);
-		free(data->input);
+		ft_freenull((void **)&data->input);
 		data->input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!data->input)
 			ft_quit(123, "exit");
@@ -45,16 +45,12 @@ static void	minishell_loop()
 		add_history(data->input);
 		lexered_params = lexer(data->input);
 		parsed_params = parser(lexered_params);
-		lstclear(data->lexered_params, &del_content_lexer); //potrebbe dare problemi se albero condivide elementi del lexer
-		free(data->lexered_params);
-		data->lexered_params = NULL;
+		lstclear(&data->lexered_params, &del_content_lexer); //potrebbe dare problemi se albero condivide elementi del lexer
 		if (!parsed_params)
 			continue ;
 		set_signals(S_SILENT, true);
 		executor(parsed_params);
-		treeclear(data->parsed_params, &del_content_parser);
-		free(data->parsed_params);
-		data->parsed_params = NULL;
+		treeclear(&data->parsed_params, &del_content_parser);
 	}
 }
 

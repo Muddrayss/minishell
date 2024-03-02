@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/29 14:32:00 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ bool is_builtin(char *cmd_str)
 	n_builtins = sizeof(builtins) / sizeof(char *);
 	while (n_builtins--)
 		if (ft_strcmp(cmd, builtins[n_builtins]) == 0)
-			return (free(cmd), true);
-	return (free(cmd), false);
+			return (ft_freenull((void **)&cmd), true);
+	return (ft_freenull((void **)&cmd), false);
 }
 
 void exec_builtin(char **cmd_args)
@@ -45,9 +45,7 @@ void exec_builtin(char **cmd_args)
 	data = get_data();
 	ft_freematrix(data->cmd_args);
 	data->cmd_args = NULL;
-	free(data->input);
-	data->input = NULL;
-	lstclear(data->lexered_params, &del_content_lexer);
-	free(data->lexered_params);
-	data->lexered_params = NULL;
+	ft_freenull((void **)&data->input);
+	lstclear(&data->lexered_params, &del_content_lexer);
+	ft_freenull((void **)&data->lexered_params);
 }

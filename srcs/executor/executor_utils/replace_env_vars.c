@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 17:06:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
         if (!tmp)
             ft_quit(ERR_MEM, "minishell: failed to allocate memory");
         env_value = ft_getenv(tmp);
-        free(tmp);
+        ft_freenull((void **)&tmp);
     }
     if (!env_value)
         env_value = "";
@@ -75,5 +75,5 @@ static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
     ft_strcat(new_str, str + env_name_len);
     free(str - *i - 1);
     *i += ft_strlen(env_value) - 1;
-    return (free(env_name), new_str);
+    return (ft_freenull((void **)&env_name), new_str);
 }

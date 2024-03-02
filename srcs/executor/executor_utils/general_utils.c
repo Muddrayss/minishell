@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 16:46:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*clear_quotes(char *str)
 		i++;
 	}
 	new_str[j] = '\0';
-	return (free(str), new_str);
+	return (ft_freenull((void **)&str), new_str);
 }
 
 void	exec_simple_cmd(char *path, char *cmd_str)

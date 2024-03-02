@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 18:21:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 23:39:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,20 @@
 # include <limits.h>
 # include <dirent.h>
 
+typedef struct s_list
+{
+    void			*content;
+    struct s_list	*next;
+    struct s_list	*prev;
+}t_list;
+
+typedef struct s_tree
+{
+	void			*content;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}t_tree;
+
 # include "builtins.h"
 # include "lexer.h"
 # include "parser.h"
@@ -49,12 +63,12 @@ typedef struct s_data
 {
 	char		*cmd_path;
 	char		**cmd_args;
-	t_envp_tree	*envp_tree;
+	t_tree		*envp_tree;
 	char		**envp_matrix;
 	uint16_t	envp_size;
 	char		*starting_dir;
-	t_list		**lexered_params;
-	t_tree  	**parsed_params;
+	t_list		*lexered_params;
+	t_tree  	*parsed_params;
 	char 		*input;
 	pid_t 		main_pid;
 }t_data;

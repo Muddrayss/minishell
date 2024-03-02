@@ -6,52 +6,32 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:12:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 19:33:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-t_envp_tree *envp_tree_new(char *str)
-{
-    t_envp_tree  *new;
-
-    new = (t_envp_tree *)malloc_p(sizeof(t_envp_tree));
-    new->str = str;
-    new->left = NULL;
-    new->right = NULL;
-    return (new);
-}
-
-t_envp_tree *envp_tree_add(t_envp_tree *root, char *str)
+t_tree *envp_tree_add(t_tree *root, char *str)
 {
     if (!root)
-        return (envp_tree_new(str));
-    if (ft_strcmp(str, root->str) < 0)
+        return (treenew_p(str));
+    if (ft_strcmp(str, (char *)root->content) < 0)
         root->left = envp_tree_add(root->left, str);
-    else if (ft_strcmp(str, root->str) > 0)
+    else if (ft_strcmp(str, (char *)root->content) > 0)
         root->right = envp_tree_add(root->right, str);
     return (root);
 }
 
-t_envp_tree *envp_tree_findmin(t_envp_tree *root)
+t_tree *envp_tree_remove(t_tree *root, char *name, uint16_t name_len)
 {
-    if (!root)
-        return (NULL);
-    while (root->left)
-        root = root->left;
-    return (root);
-}
-
-t_envp_tree *envp_tree_remove(t_envp_tree *root, char *name, uint16_t name_len)
-{
-    t_envp_tree *tmp;
+    t_tree *tmp;
 
     if (!root)
         return (NULL);
-    if (ft_strncmp(name, root->str, name_len) < 0)
+    if (ft_strncmp(name, (char *)root->content, name_len) < 0)
         root->left = envp_tree_remove(root->left, name, name_len);
-    else if (ft_strncmp(name, root->str, name_len) > 0)
+    else if (ft_strncmp(name, (char *)root->content, name_len) > 0)
         root->right = envp_tree_remove(root->right, name, name_len);
     else
     {
@@ -59,34 +39,25 @@ t_envp_tree *envp_tree_remove(t_envp_tree *root, char *name, uint16_t name_len)
             return (root->right);
         else if (root->right == NULL)
             return (root->left);
-        tmp = envp_tree_findmin(root->right);
-        root->str = tmp->str;
-        root->right = envp_tree_remove(root->right, tmp->str, name_len);
+        tmp = tree_first(root->right);
+        root->content = tmp->content;
+        root->right = envp_tree_remove(root->right, (char *)tmp->content, name_len);
     }
     return (root);
 }
 
-t_envp_tree *envp_tree_find(t_envp_tree *root, char *name, uint16_t name_len)
+t_tree *envp_tree_find(t_tree *root, char *name, uint16_t name_len)
 {
     if (!root)
         return (NULL);
-    if (ft_strncmp(name, root->str, name_len) < 0)
+    if (ft_strncmp(name, (char *)root->content, name_len) < 0)
         return (envp_tree_find(root->left, name, name_len));
-    else if (ft_strncmp(name, root->str, name_len) > 0)
+    else if (ft_strncmp(name, (char *)root->content, name_len) > 0)
         return (envp_tree_find(root->right, name, name_len));
     return (root);
 }
 
-void envp_tree_clear(t_envp_tree *root)
-{
-    if (!root)
-        return ;
-    envp_tree_clear(root->left);
-    envp_tree_clear(root->right);
-    free(root);
-}
-
-void envp_print_export(t_envp_tree *root)
+void envp_print_export(t_tree *root)
 {
     char    *env_name;
     char    *env_value;
@@ -95,7 +66,7 @@ void envp_print_export(t_envp_tree *root)
 
     if (!root)
         return ;
-    tmp = ft_strdup(root->str);
+    tmp = ft_strdup((char *)root->content);
     if (!tmp)
         ft_quit(ERR_MEM, "minishell: failed to allocate memory");
     sep = ft_strchr(tmp, '=');
@@ -111,7 +82,7 @@ void envp_print_export(t_envp_tree *root)
     if (env_value && *env_value)
         printf("=\"%s\"", env_value);
     printf("\n");
-    free(tmp);
+    ft_freenull((void **)&tmp);
     envp_print_export(root->left);
     envp_print_export(root->right);
 }

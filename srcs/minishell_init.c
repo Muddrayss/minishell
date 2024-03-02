@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 17:12:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,5 @@ static void	clean_heredocs(char *path)
 	ft_strcat(cmd, data->starting_dir);
 	ft_strcat(cmd, "/tmp");
     exec_simple_cmd(path, cmd);
-	free(cmd);
+	ft_freenull((void **)&cmd);
 }

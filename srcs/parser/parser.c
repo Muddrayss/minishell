@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 19:31:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 23:19:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
 static t_tree   *fill_tree(t_list *lexered_params, t_list *stop);
-static t_cmd    *init_cmd(char *cmd_str);
+static t_parser *init_cmd(char type, char *cmd_str);
 static t_list   *skip_parenthesis(t_list *lexered_params);
 static t_list   *unskip_parenthesis(t_list *lexered_params);
 
@@ -29,9 +29,8 @@ t_tree	*parser(t_list *lexered_params)
         g_status = 2;
         return (NULL);
     }
-    data->parsed_params = (t_tree **)malloc_p(sizeof(t_tree *));
-    *(data->parsed_params) = fill_tree(lexered_params, NULL);
-    return (*(data->parsed_params));
+    data->parsed_params = fill_tree(lexered_params, NULL);
+    return (data->parsed_params);
 }
 
 //stop parte da NULL
@@ -48,20 +47,20 @@ static t_tree   *fill_tree(t_list *lexered_params, t_list *stop)
         return (fill_tree(skip_parenthesis(lexered_params), stop));
     if (lexered_params->next == stop)
     {
-        node = treenew_p(END, init_cmd(NULL)); //uso END come nodo vuoto, che serve solo per poter mettere il comando a sinistra invece che destra. così l'executor i comandi li ha solo a sinistra
+        node = treenew_p(init_cmd(END, NULL)); //uso END come nodo vuoto, che serve solo per poter mettere il comando a sinistra invece che destra. così l'executor i comandi li ha solo a sinistra
         if (elem->token == SUBSHELL_END)
-            treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
+            node = treeadd_below(node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
         else
-            treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
+            node = treeadd_below(node, treenew_p(init_cmd(elem->token, elem->cmd_str)));
         return (node);
     }
     next_elem = (t_lexer *)lexered_params->next->content;
-    node = treenew_p(next_elem->token, init_cmd(next_elem->cmd_str));
+    node = treenew_p(init_cmd(next_elem->token, next_elem->cmd_str));
     if (elem->token != SUBSHELL_END)
-        treeadd_below(&node, treenew_p(elem->token, init_cmd(elem->cmd_str)));
+        node = treeadd_below(node, treenew_p(init_cmd(elem->token, elem->cmd_str)));
     else
-        treeadd_below(&node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
-    treeadd_below(&node, fill_tree(lexered_params->next->next, stop));
+        node = treeadd_below(node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
+    node = treeadd_below(node, fill_tree(lexered_params->next->next, stop));
     return (node);
 }
 
@@ -101,11 +100,15 @@ static t_list   *unskip_parenthesis(t_list *lexered_params)
     return (lexered_params->next); //ritorna uno dopo la parentesi aperta
 }
 
-static t_cmd    *init_cmd(char *cmd_str)
+static t_parser *init_cmd(char type, char *cmd_str)
 {
-    t_cmd   *cmd;
+    t_parser    *node;
+    t_cmd       *cmd;
 
+    node = (t_parser *)malloc_p(sizeof(t_parser));
     cmd = (t_cmd *)malloc_p(sizeof(t_cmd));
+    node->cmd = cmd;
+    node->type = type;
     cmd->cmd_str = NULL;
     cmd->redirs = NULL;
     if (cmd_str)
@@ -113,7 +116,7 @@ static t_cmd    *init_cmd(char *cmd_str)
         cmd->redirs = fill_redirs(cmd_str);
         cmd->cmd_str = clear_redirs(cmd_str);
     }
-    return (cmd);
+    return (node);
 }
 
 

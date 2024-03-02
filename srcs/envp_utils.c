@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 19:02:17 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:58:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void    envp_init(char **envp)
     uint16_t    size;
     t_data      *data;
     char        **matrix;
-    t_envp_tree *tree;
+    t_tree      *tree;
     char        *str;
 
     data = get_data();
@@ -35,7 +35,7 @@ void    envp_init(char **envp)
         if (!str)
         {
             ft_freematrix(matrix);
-            envp_tree_clear(tree);
+            treeclear(&tree, &free);
             ft_quit(ERR_MEM, "minishell: failed to allocate memory");
         }
         tree = envp_tree_add(tree, str);
@@ -80,13 +80,13 @@ void	ft_unsetenv(char *name)
 //NAME DEVE ESSERE COMPRESO DI '='
 char	*ft_getenv(char *name)
 {
-    t_envp_tree *found;
-    char        *value;
+    t_tree *found;
+    char   *value;
 
     found = envp_tree_find(get_data()->envp_tree, name, ft_strlen(name));
     if (found)
     {
-        value = ft_strchr(found->str, '=');
+        value = ft_strchr((char *)found->content, '=');
         if (value)
             return (value + 1);
         else

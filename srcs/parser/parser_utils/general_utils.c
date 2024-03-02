@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 19:27:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,15 @@ bool    is_empty_cmd(void *content)
 
 void    del_content_parser(void *content)
 {
-    t_tree  *elem;
+    t_parser  *elem;
 
     if (!content)
         return ;
-    elem = (t_tree *)content;
+    elem = (t_parser *)content;
     lstclear(&elem->cmd->redirs, &del_content_redirs);
-    free(elem->cmd->cmd_str);
-    free(elem->cmd);
+    ft_freenull((void **)&elem->cmd->cmd_str);
+    ft_freenull((void **)&elem->cmd);
+    ft_freenull((void **)&elem);
 }
 
 void    del_content_redirs(void *content)
@@ -39,6 +40,6 @@ void    del_content_redirs(void *content)
     t_redir *elem;
 
     elem = (t_redir *)content;
-    free(elem->filename);
-    free(content);
+    ft_freenull((void **)&elem->filename);
+    ft_freenull((void **)&content);
 }

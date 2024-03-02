@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_freematrix.c                                    :+:      :+:    :+:   */
+/*   tree_first.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/03 20:21:37 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 01:04:18 by craimond         ###   ########.fr       */
+/*   Created: 2024/03/01 23:00:05 by craimond          #+#    #+#             */
+/*   Updated: 2024/03/01 23:16:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	ft_freematrix(char **matrix)
+t_tree *tree_first(t_tree *root)
 {
-    char    **tmp;
-
-    if (!matrix)
-        return ;
-    tmp = matrix;
-    while (*tmp)
-    {
-        ft_freenull((void **)tmp);
-        tmp++;
-    }
-    ft_freenull((void **)&matrix);
+    if (!root)
+        return (NULL);
+    while (root->left)
+        root = root->left;
+    return (root);
 }

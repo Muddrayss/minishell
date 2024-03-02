@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 19:58:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ static char     *add_cwd(char *wildcard_str, char *cwd);
 static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root);
 static bool     matches_pattern(char *pattern, struct dirent *entry, uint32_t idx);
 static char     *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root);
-static void     sort_result(t_list **matching_files);
+static t_list   *sort_result(t_list *matching_files);
 static char     *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len);
 
 //TODO le cartelle nascoste vengono mostrate anche se non dovrebbero. comparare echo /*/*
+//TODO refractor, togliere il bisogno di strdup e di variabili temporanee a chi chiama, (servivano perche' replace wildcards viene chiamata in ogni caso, sia se ci sono effettivamente var da rimpiazzare che non)
 char    *replace_wildcards(char *str)
 {
     char        *wildcard_str;
@@ -41,14 +42,14 @@ char    *replace_wildcards(char *str)
     {
         wildcard_str = add_cwd(wildcard_str, cwd);
         matching_files = parse_wildcard_str(wildcard_str, cwd, false);
-        sort_result(&matching_files);
+        matching_files = sort_result(matching_files);
         str = insert_result(str, matching_files, idx, len);
         lstclear(&matching_files, &free);
         idx += len;
-        free(wildcard_str);
+        ft_freenull((void **)&wildcard_str);
         wildcard_str = get_wildcard_str(str, &idx, &len);
     }
-    return (free(cwd), str);
+    return (ft_freenull((void **)&cwd), str);
 }
 
 static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
@@ -76,12 +77,12 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
             lstadd_front(&matching_files, lstnew_p(full_entry));
         else
         {
-            free(full_entry);
+            ft_freenull((void **)&full_entry);
             lstadd_back(&matching_files, parse_wildcard_str(new_wildcard_str, cwd, is_root));
         }
-        free(new_wildcard_str);
+        ft_freenull((void **)&new_wildcard_str);
     }
-    return (free(basedir), closedir(dir), matching_files);
+    return (ft_freenull((void **)&basedir), closedir(dir), matching_files);
 }
 
 static char *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root)
@@ -160,7 +161,7 @@ static char *get_base_dir(char **wildcard_str, bool *is_root)
     if (!basedir[0])
     {
         *is_root = true;
-        return (free(basedir), ft_strdup("/"));
+        return (ft_freenull((void **)&basedir), ft_strdup("/"));
     }
     return (basedir);
 }
@@ -196,28 +197,29 @@ static char *get_wildcard_str(char *str, uint32_t *i, uint32_t *len)
     return (clear_quotes(wildcard_str));
 }
 
-static void sort_result(t_list **matching_files)
+static t_list *sort_result(t_list *matching_files)
 {
-    t_list  *node;
+    t_list  *head;
     t_list  *next;
     char    *tmp;
 
-    node = *matching_files;
-    while (node)
+    head = matching_files;
+    while (matching_files)
     {
-        next = node->next;
+        next = matching_files->next;
         while (next)
         {
-            if (ft_strcmp_lower(node->content, next->content) > 0)
+            if (ft_strcmp_lower(matching_files->content, next->content) > 0)
             {
-                tmp = node->content;
-                node->content = next->content;
+                tmp = matching_files->content;
+                matching_files->content = next->content;
                 next->content = tmp;
             }
             next = next->next;
         }
-        node = node->next;
+        matching_files = matching_files->next;
     }
+    return (head);
 }
 
 static char *add_cwd(char *wildcard_str, char *cwd)
@@ -229,13 +231,13 @@ static char *add_cwd(char *wildcard_str, char *cwd)
         new_wildcard_str = ft_strdup(wildcard_str);
         if (!new_wildcard_str)
             ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-        return (free(wildcard_str), new_wildcard_str);
+        return (ft_freenull((void **)&wildcard_str), new_wildcard_str);
     }
     new_wildcard_str = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(wildcard_str) + 2));
     ft_strcpy(new_wildcard_str, cwd);
     ft_strcat(new_wildcard_str, "/");
     ft_strcat(new_wildcard_str, wildcard_str);
-    return (free(wildcard_str), new_wildcard_str);
+    return (ft_freenull((void **)&wildcard_str), new_wildcard_str);
 }
 
 static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint32_t pattern_len)
@@ -265,5 +267,5 @@ static char *insert_result(char *str, t_list *matching_files, uint32_t idx, uint
         node = node->next;
     }
     ft_strcat(new_str, &str[idx + pattern_len]);
-    return (free(str), new_str);
+    return (ft_freenull((void **)&str), new_str);
 }

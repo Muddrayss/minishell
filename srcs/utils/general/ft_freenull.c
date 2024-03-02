@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_freematrix.c                                    :+:      :+:    :+:   */
+/*   ft_freenull.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/03 20:21:37 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 01:04:18 by craimond         ###   ########.fr       */
+/*   Created: 2024/03/02 00:07:21 by craimond          #+#    #+#             */
+/*   Updated: 2024/03/02 00:51:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	ft_freematrix(char **matrix)
+void	ft_freenull(void **ptr)
 {
-    char    **tmp;
-
-    if (!matrix)
+    if (!ptr)
         return ;
-    tmp = matrix;
-    while (*tmp)
-    {
-        ft_freenull((void **)tmp);
-        tmp++;
-    }
-    ft_freenull((void **)&matrix);
+    free(*ptr);
+    *ptr = NULL;
 }

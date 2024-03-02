@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/01 18:57:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void ft_unset(char **args)
 			if (!name)
 				ft_quit(ERR_MEM, "minishell: failed to allocate memory");
 			ft_unsetenv(name);
-			free(name);
+			ft_freenull((void **)&name);
 		}
 		else 
 		{

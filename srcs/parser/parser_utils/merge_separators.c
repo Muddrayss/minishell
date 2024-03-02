@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   merge_separators.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/29 16:23:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void merge_ampersands(t_list **head, t_list **node)
         ft_strcpy(prev_elem->cmd_str, tmp);
         ft_strcat(prev_elem->cmd_str, "&");
         ft_strcat(prev_elem->cmd_str, next_elem->cmd_str);
-        free(tmp);
+        ft_freenull((void **)&tmp);
         node_prev = (*node)->prev;
         lstremoveone(head, (*node)->next, &del_content_lexer);
         lstremoveone(head, (*node), &del_content_lexer);

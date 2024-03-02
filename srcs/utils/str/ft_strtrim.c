@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 16:36:23 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/01 18:20:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:33:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ char	*ft_strtrim(char *s1, char *set)
 		i--;
 	newstr = (char *)malloc(sizeof(char) * (i + 1));
 	if (newstr == NULL)
-		return (free(start), NULL);
+		return (ft_freenull((void **)&start), NULL);
 	newstr[i] = '\0';
 	while (i > 0)
 	{
 		newstr[i - 1] = s1[i - 1];
 		i--;
 	}
-	return (free(start), newstr);
+	return (ft_freenull((void **)&start), newstr);
 }
 
 static bool	ft_cinstr(char *str, char c)
