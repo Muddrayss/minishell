@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 17:04:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 17:21:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static char *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root)
         basedir++;
         cwd++;
     }
-    if (*basedir)
+    if (*basedir == '/')
         basedir++;
     full_entry = (char *)calloc_p(ft_strlen(basedir) + ft_strlen(entry) + 2 + is_root, sizeof(char));
     if (is_root)
