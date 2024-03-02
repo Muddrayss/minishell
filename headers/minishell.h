@@ -6,12 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 19:15:49 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:56:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+//TODO mettere tutti i const
+//TODO mettere le giuste size alle variabili
+//TODO mettere le variabili piu' pesanti sopra
 
 # include <curses.h>
 # include <dirent.h>
@@ -34,12 +38,26 @@
 # include <limits.h>
 # include <dirent.h>
 
+typedef struct s_list
+{
+    void			*content;
+    struct s_list	*next;
+    struct s_list	*prev;
+}t_list;
+
+typedef struct s_tree
+{
+	void			*content;
+	struct s_tree	*left;
+	struct s_tree	*right;
+}t_tree;
+
 # include "builtins.h"
 # include "lexer.h"
 # include "parser.h"
 # include "executor.h"
 # include "signals.h"
-# include "envp_utils.h"
+# include "envp.h"
 # include "utils.h"
 # include "protected_methods.h"
 # include "errors.h"
@@ -47,15 +65,15 @@
 
 typedef struct s_data
 {
-	char	*cmd_path;
-	char	**cmd_args;
-	t_list	**envp_table;
-	char	**envp_matrix;
-	char	*starting_dir;
-	t_list	**lexered_params;
-	t_tree  **parsed_params;
-	char 	*input;
-	pid_t 	main_pid;
+	char		**cmd_args;
+	t_tree		*envp_tree;
+	char		**envp_matrix;
+	uint16_t	envp_size;
+	char		*starting_dir;
+	t_list		*lexered_params;
+	t_tree  	*parsed_params;
+	char 		*input;
+	pid_t 		main_pid;
 }t_data;
 
 extern int g_status;
@@ -63,18 +81,17 @@ extern int g_status;
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
 # define MAX_FDS 1024
 
+void	check_args(int argc, char **argv, char **envp);
+void	init_data(char **envp);
+void    init_general(void);
 t_data	*get_data(void);
-void	clean_heredocs(char *path);
-void 	ft_quit(uint8_t id, char *msg);
-void 	free_data(void);
-void	quit_from_main(uint8_t id);
-void 	close_all_fds(void);
-void 	ft_parse_error(char token);
-void	ft_syntax_error(char token);
-bool	is_shell_space(char c);
+void	ft_quit(uint8_t id, char *msg);
+void    free_data(void);
+bool    is_shell_space(char c);
+bool 	is_quote(char c);
+bool 	is_redir(char c);
 bool 	is_empty_str(char *str);
 void	*cxmalloc(size_t size); // TODO: to remove
 
 //#define malloc(x)    cxmalloc(x)
-
 #endif

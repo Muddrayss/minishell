@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/23 19:15:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:12:09 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,21 @@
 
 bool is_builtin(char *cmd_str)
 {
-	char	*cmd;
-	char 	*end;
-	char 	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
-	uint8_t	n_builtins;
+	char		*cmd;
+	uint32_t	len;
+	char 		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
+	uint8_t		n_builtins;
 	
-	if (!cmd_str)
-		return (false);
-	cmd = ft_strdup(cmd_str);
-	if (!cmd)
-		ft_quit(ERR_MEM, "Error: failed to allocate memory");
-	end = ft_strchr(cmd, ' ');
-	if (end)
-		*end = '\0';
+	len = 0;
+	while (cmd_str[len] && !is_shell_space(cmd_str[len]))
+		len++;
+	cmd = (char *)malloc_p(sizeof(char) * (len + 1));
+	ft_strlcpy(cmd, cmd_str, len + 1);
 	n_builtins = sizeof(builtins) / sizeof(char *);
 	while (n_builtins--)
 		if (ft_strcmp(cmd, builtins[n_builtins]) == 0)
-			return (free(cmd), true);
-	return (free(cmd), false);
+			return (free_and_null((void **)&cmd), true);
+	return (free_and_null((void **)&cmd), false);
 }
 
 void exec_builtin(char **cmd_args)
@@ -41,16 +38,15 @@ void exec_builtin(char **cmd_args)
 	uint8_t	n_builtins;
 	t_data	*data;
 
+	data = get_data();
 	n_builtins = sizeof(builtins) / sizeof(char *);
 	while (n_builtins--)
 		if (ft_strcmp(cmd_args[0], builtins[n_builtins]) == 0)
 			builtin_functions[n_builtins](cmd_args);
-	data = get_data();
-	ft_freematrix(data->cmd_args);
-	data->cmd_args = NULL;
-	free(data->input);
-	data->input = NULL;
-	lstclear(data->lexered_params, &del_content_lexer);
-	free(data->lexered_params);
-	data->lexered_params = NULL;
+	if (data->cmd_args)
+		free_and_null((void **)&data->cmd_args[0]);
+	free_and_null((void **)&data->cmd_args);	
+	free_and_null((void **)&data->input);
+	lstclear(&data->lexered_params, &del_content_lexer);
+	free_and_null((void **)&data->lexered_params);
 }

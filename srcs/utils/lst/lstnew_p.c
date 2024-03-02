@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 13:21:24 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/12 00:08:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:19:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_list	*lstnew_p(void *content)
 {
 	t_list	*new_node;
 
-	new_node = malloc_p(sizeof(t_list));
+	new_node = (t_list *)malloc_p(sizeof(t_list));
 	new_node->content = content;
 	new_node->next = NULL;
     new_node->prev = NULL;

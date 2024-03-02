@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   merge_separators.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 16:11:07 by egualand         ###   ########.fr       */
+/*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
+/*   Updated: 2024/03/02 15:32:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../../headers/minishell.h"
 
 static void merge_ampersands(t_list **head, t_list **node);
 static void merge_pipes(t_list **head, t_list **node);
@@ -42,6 +42,7 @@ void merge_separators(t_list **lexered_params)
     }
 }
 
+//TODO refractor
 static void merge_ampersands(t_list **head, t_list **node)
 {
     t_lexer *elem;
@@ -52,7 +53,6 @@ static void merge_ampersands(t_list **head, t_list **node)
 
     next_elem = NULL;
     prev_elem = NULL;
-    //TODO gestire i segfault di next e prev
     elem = (t_lexer *)(*node)->content;
     if ((*node)->next)
         next_elem = (t_lexer *)(*node)->next->content;
@@ -70,7 +70,7 @@ static void merge_ampersands(t_list **head, t_list **node)
         ft_strcpy(prev_elem->cmd_str, tmp);
         ft_strcat(prev_elem->cmd_str, "&");
         ft_strcat(prev_elem->cmd_str, next_elem->cmd_str);
-        free(tmp);
+        free_and_null((void **)&tmp);
         node_prev = (*node)->prev;
         lstremoveone(head, (*node)->next, &del_content_lexer);
         lstremoveone(head, (*node), &del_content_lexer);
@@ -97,33 +97,4 @@ static void merge_pipes(t_list **head, t_list **node)
     }
     else
         elem->token = PIPELINE;
-}
-
-bool    is_empty_cmd(void *content)
-{
-    t_lexer *elem;
-
-    elem = (t_lexer *)content;
-    if (elem->token == 0 && is_empty_str(elem->cmd_str))
-        return (true);
-    return (false);
-}
-
-void    del_content_parser(void *content)
-{
-    t_tree  *elem;
-
-    elem = (t_tree *)content;
-    lstclear(&elem->cmd->redirs, &del_content_redirs);
-    free(elem->cmd->cmd_str);
-    free(elem->cmd);
-}
-
-void    del_content_redirs(void *content)
-{
-    t_redir *elem;
-
-    elem = (t_redir *)content;
-    free(elem->filename);
-    free(content);
 }

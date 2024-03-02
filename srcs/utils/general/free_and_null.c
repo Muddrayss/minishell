@@ -1,37 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   free_and_null.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/03 20:12:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:05:50 by craimond         ###   ########.fr       */
+/*   Created: 2024/03/02 00:07:21 by craimond          #+#    #+#             */
+/*   Updated: 2024/03/02 00:51:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*ft_strjoin( char *s1,  char *s2)
+void	free_and_null(void **ptr)
 {
-	char	*newstr;
-	int		i;
-	int		n;
-	size_t	s1_len;
-	size_t	s2_len;
-
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	i = -1;
-	newstr = malloc(sizeof(char) * (s1_len + s2_len + 1));
-	if (newstr == NULL)
-		return (NULL);
-	while (s1[++i] != '\0')
-		newstr[i] = s1[i];
-	n = i;
-	i = -1;
-	while (s2[++i] != '\0')
-		newstr[n + i] = s2[i];
-	newstr[n + i] = '\0';
-	return (newstr);
+    if (!ptr)
+        return ;
+    free(*ptr);
+    *ptr = NULL;
 }

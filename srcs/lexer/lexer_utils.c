@@ -1,33 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 13:52:49 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/12 00:08:13 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/28 00:07:33 by craimond          #+#    #+#             */
+/*   Updated: 2024/03/02 16:00:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../headers/minishell.h"
+#include "../../headers/minishell.h"
 
-char	*ft_strdup(char *s)
+void	del_content_lexer(void *content)
 {
-	char	*dst;
-	int		i;
+	t_lexer	*elem;
 
-	if (!s)
-		return (NULL);
-	dst = malloc(sizeof(char) * (ft_strlen(s) + 3));
-	if (dst == NULL)
-		return (NULL);
-	i = 0;
-	while (s[i] != '\0')
-	{
-		dst[i] = s[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
+	elem = (t_lexer *)content;
+	free_and_null((void **)&elem->cmd_str);
+    free_and_null((void **)&elem);
 }

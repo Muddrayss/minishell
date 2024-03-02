@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   treeclear.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:42:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 17:29:23 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:59:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	treeclear(t_tree **tree, void (*del)(void *))
         return ;
     treeclear(&(*tree)->left, del);
     treeclear(&(*tree)->right, del);
-    del(*tree);
-    free(*tree);
-    *tree = NULL;
+    del((*tree)->content);
+    (*tree)->content = NULL;
+    free_and_null((void **)tree);
 }

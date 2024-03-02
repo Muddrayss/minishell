@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 16:07:27 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:23:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,10 @@
 # define SUBSHELL_START 	5
 # define SUBSHELL_END 		6
 
-# define REDIR_INPUT 		0 	// '< filename'
-# define REDIR_HEREDOC 		1	// '<< limiter'
-# define REDIR_INPUT_FD 	2 	// '<&n'
-# define REDIR_OUTPUT 		3 	// '> filename o n> filename'
-# define REDIR_OUTPUT_FD 	4 	// '>&n'
-# define REDIR_APPEND 		5 	// '>> filename o n>> filename'
-# define REDIR_APPEND_FD 	6 	// '>>&n'
+# define REDIR_INPUT 		0 	// < filename
+# define REDIR_HEREDOC 		1	// << limiter
+# define REDIR_OUTPUT 		2 	// > filename
+# define REDIR_APPEND 		3 	// >> filename
 
 static const char g_parser_tokens[7]
 = {'\0', ';', '|', '&', '|', '(', ')'};
@@ -42,27 +39,25 @@ typedef struct s_command
 	t_list	*redirs;
 }t_cmd;
 
-typedef struct s_tree
+typedef struct s_parser
 {
-	int8_t			type;
-	t_cmd			*cmd;
-	struct s_tree 	*left;
-	struct s_tree	*right;
-}t_tree;
+	int8_t	type;
+	t_cmd	*cmd;
+}t_parser;
 
 typedef struct s_redir
 {
 	int8_t		type;
-	int			fds[2];
 	char 		*filename; // o limiter in caso dell heredoc
 	int32_t		heredoc_fileno; //eventuale numero da appendere al nome del heredoc
 }t_redir;
 
-t_tree	*parser(t_list *params_head);
-t_list 	*fill_redirs(char *cmd_str);
-void 	clear_redirs(t_list *redirs, char *cmd_str);
-void 	merge_separators(t_list **lexered_params);
-bool 	is_empty_cmd(void *content);
+void	parser(t_list *lexered_params);
+void	merge_separators(t_list **lexered_params);
+int8_t  check_syntax(t_list *lexered_params);
+t_list  *fill_redirs(char *cmd_str);
+char    *clear_redirs(char *cmd_str);
+bool    is_empty_cmd(void *content);
 void    del_content_parser(void *content);
 void    del_content_redirs(void *content);
 

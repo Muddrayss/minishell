@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 11:02:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:07:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/01 18:19:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_utoa(unsigned int n)
 
 	n_long = n;
 	n_len = nbr_len(n_long);
-	str = malloc((n_len + 1) * sizeof(char));
+	str = (char *)malloc((n_len + 1) * sizeof(char));
 	if (str == NULL)
 		return (NULL);
 	if (n_long == 0)

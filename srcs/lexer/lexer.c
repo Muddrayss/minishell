@@ -3,82 +3,77 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/20 17:33:09 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 13:22:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static bool 	is_token(char c);
-static void 	lexer_add_cmd(t_list **lexered_params, uint32_t cmd_len, char *input);
-static void 	lexer_add_token(t_list **lexered_params, char c);
+static t_list 	*lexer_add_cmd(t_list *lexered_params, uint32_t cmd_len, char *input);
+static t_list 	*lexer_add_token(t_list *lexered_params, char c);
 
-t_list	*lexer(char *input)
+void    lexer(char *input)
 {
     uint32_t        cmd_len;
-    t_list         	**lexered_params;
+    char            *cmd_str;
+    char            current_quote;
+    t_data          *data;
 
-	lexered_params = (t_list **)malloc_p(sizeof(t_list *));
-    *lexered_params = NULL;
-    get_data()->lexered_params = lexered_params;
-    //TODO gestire ' e "" qui. aggiungere alla cmd_str invece che a TOKEN (flag stop?)
-    while (*input != '\0')
+    data = get_data();
+    current_quote = '\0';
+    data->lexered_params = NULL;
+    cmd_len = 0;
+    while (true)
     {
-        cmd_len = 0;
-        while (input[cmd_len] && !is_token(input[cmd_len]))
-            cmd_len++;
-        if (cmd_len > 0)
-            lexer_add_cmd(lexered_params, cmd_len, input);
-        input += cmd_len;
-		if (input[0] != '\0')
-            lexer_add_token(lexered_params, *input++);
+        if (is_quote(*input))
+        {
+            if (!current_quote)
+                current_quote = *input;
+            else if (current_quote == *input)
+                current_quote = '\0';
+        }
+        else if (!current_quote && (is_token(*input) || *input == '\0'))
+        {
+            cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
+            ft_strlcpy(cmd_str, input - cmd_len, cmd_len + 1);
+            data->lexered_params = lexer_add_cmd(data->lexered_params, cmd_len, cmd_str);
+            data->lexered_params = lexer_add_token(data->lexered_params, *input);
+            cmd_len = -1;
+        }
+        cmd_len++;
+        if (!*input)
+            break ;
+        input++;
     }
-    lstreverse(lexered_params); //per mettere la testa al posto giusto (la lista era stata riempita al contrario)
-    return (*lexered_params);
+    lstreverse(&data->lexered_params);
 }
 
-static void lexer_add_cmd(t_list **lexered_params,uint32_t cmd_len, char *input)
+static t_list   *lexer_add_cmd(t_list *lexered_params, uint32_t cmd_len, char *cmd_str_raw)
 {
     t_lexer   		*content;
-
+    
+    if (cmd_len <= 0)
+        return (lexered_params);
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
-    content->cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
     content->token = 0;
-    ft_strlcpy(content->cmd_str, input, cmd_len + 1);
-    lstadd_front(lexered_params, lstnew_p(content));
+    content->cmd_str = cmd_str_raw;
+    lstadd_front(&lexered_params, lstnew_p(content));
+    return (lexered_params);
 }
 
-static void lexer_add_token(t_list **lexered_params, char c)
+static t_list *lexer_add_token(t_list *lexered_params, char c)
 {
     t_lexer   		*content;
 
+    if (!c)
+        return (lexered_params);
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
     content->token = c;
     content->cmd_str = NULL;
-    lstadd_front(lexered_params, lstnew_p(content));
+    lstadd_front(&lexered_params, lstnew_p(content));
+    return (lexered_params);
 }
 
-static bool is_token(char c)
-{
-    int8_t			i;
-    static char     tokens[5] = {'|', ';', '&', '(', ')'};
-	static uint8_t	n_tokens = sizeof(tokens) / sizeof(tokens[0]);
-
-	i = -1;
-   	while (++i < n_tokens)
-		if (tokens[i] == c)
-			return (true);
-	return (false);
-}
-
-void	del_content_lexer(void *content)
-{
-	t_lexer	*elem;
-
-	elem = (t_lexer *)content;
-	free(elem->cmd_str);
-    free(elem);
-}

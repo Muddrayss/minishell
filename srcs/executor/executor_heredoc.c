@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
+/*   executor_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/23 14:16:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 16:47:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@ static void     fill_heredoc(char *limiter, int fd);
 
 void create_heredocs(t_tree *tree, int *status)
 {
-    t_list  *redirs;
-    t_redir *redir;
-    int     fd;
-    char    *filename;
+    t_list      *redirs;
+    t_redir     *redir;
+    int         fd;
+    char        *filename;
+    t_parser    *elem;
 
     if (!tree || *status != 0)
         return ;
-    if (tree->type == CMD)
+    elem = (t_parser *)tree->content;
+    if (elem->type == CMD)
     {
-        redirs = (t_list *)tree->cmd->redirs;
+        redirs = (t_list *)elem->cmd->redirs;
         while (redirs)
         {
             redir = (t_redir *)redirs->content;
@@ -35,7 +37,7 @@ void create_heredocs(t_tree *tree, int *status)
                 continue ;
             filename = get_heredoc_filename(redir->heredoc_fileno);
             fd = open_p(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            free(filename);
+            free_and_null((void **)&filename);
             *status = fill_in_child(redir->filename, fd);
             if (*status != 0)
                 return ;
@@ -45,7 +47,6 @@ void create_heredocs(t_tree *tree, int *status)
     create_heredocs(tree->right, status);
 }
 
-//usare strcat invece che strlcat
 char    *get_heredoc_filename(int32_t id)
 {
     t_data      *data;
@@ -58,11 +59,11 @@ char    *get_heredoc_filename(int32_t id)
     size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx) + 2;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx)
-        return (free(idx), free(filename), ft_quit(ERR_MEM, "Error: failed to allocate memory"), NULL);
+        return (free_and_null((void **)&idx), free_and_null((void **)&filename), ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
     ft_strcpy(filename, data->starting_dir);
     ft_strcat(filename, "/tmp/.heredoc_");
     ft_strcat(filename, idx);
-    return (free(idx), filename);
+    return (free_and_null((void **)&idx), filename);
 }
 
 static int fill_in_child(char *limiter, int heredoc_fd)
@@ -88,9 +89,9 @@ static void fill_heredoc(char *limiter, int fd)
 {
     char    *str;
     size_t  str_len;
-  
+
     str = NULL;
-    while (1)
+    while (true)
     {
         str = readline("> ");
         if (!str)
@@ -101,13 +102,12 @@ static void fill_heredoc(char *limiter, int fd)
         str_len = ft_strlen(str);
         if (ft_strncmp(limiter, str, str_len + 1) == 0)
             break ;
-        str = replace_env_vars(str);
+        replace_env_vars(&str, true);
         ft_putstr_fd(str, fd);
         write(fd, "\n", 1);
-        free(str);
-        str = NULL; //per evitare la double free
+        free_and_null((void **)&str);
     }
-    free(str);
+    free_and_null((void **)&str);
     free_data();
     exit(0);
 }

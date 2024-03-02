@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:21:37 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 15:20:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:01:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 void	ft_freematrix(char **matrix)
 {
-    unsigned int	i;
+    char    **tmp;
 
     if (!matrix)
         return ;
-    i = 0;
-    while (matrix[i])
-        free(matrix[i++]);
-    free(matrix);
+    tmp = matrix;
+    while (*tmp)
+    {
+        free_and_null((void **)tmp);
+        tmp++;
+    }
+    free_and_null((void **)&matrix);
 }

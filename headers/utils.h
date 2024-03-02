@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 16:11:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:02:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 # define UTILS_H
 
 void    	ft_putstr_fd(char *s, int fd);
-char    	*ft_strdup(char *s);
-char	    **ft_strarrdup(char **arr);
-char		**ft_split(char *s, char c);
-char 		*ft_strtrim(char *s1, char *set);
+char    	*strdup_p(char *s);
+char        *ft_strtok(char *str, char sep);
+char 		*strtrim_p(char *s1, char *set);
 uint32_t    ft_strlen(char *s);
-char        *ft_strjoin(char *s1, char *s2);
+char        *strjoin_p(char *s1, char *s2);
 char	    *ft_strnstr(char *big, char *little, size_t len);
 char        *ft_strcpy(char *dst, char *src);
 size_t	    ft_strlcpy(char *dst,  char *src, size_t size);
@@ -31,6 +30,7 @@ char	    *ft_strchr(char *s, int c);
 char        ft_tolower(char c);
 
 void        *ft_calloc(size_t count, size_t size);
+void        free_and_null(void **ptr);
 void	    ft_freematrix(char **matrix);
 size_t	    ft_matrixsize(char **matrix);
 int		    ft_isdigit(int c);
@@ -47,9 +47,9 @@ void	    lstdelone(t_list *lst, void (*del)(void *));
 void        lstremoveone(t_list **head, t_list *to_remove, void (*del)(void *));
 void	    lstdelif(t_list **lst, bool (*f)(void *), void (*del)(void *));
 
-t_tree	    *treenew_p(int8_t type, t_cmd *cmd);
-void 	    treeadd_below(t_tree **head, t_tree *new);
-t_tree	    *tree_last(t_tree *head);
+t_tree	    *treenew_p(void *content);
+t_tree      *treeadd_below(t_tree *node, t_tree *new);
+t_tree      *tree_first(t_tree *root);
 void	    treeclear(t_tree **tree, void (*del)(void *));
 
 #endif

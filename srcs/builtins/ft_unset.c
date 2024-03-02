@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/18 17:52:24 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 19:05:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,18 @@
 
 void ft_unset(char **args)
 {
-	int		i;
 	uint8_t	exit_status;
+	char	*name;
 
-	i = 0;
 	exit_status = EXIT_SUCCESS;
-	while (args[++i])
+	while (*(++args))
 	{
-		if (ft_strchr(args[i], '=') == NULL)	
-			ft_unsetenv(args[i]);
+		if (!ft_strchr(*args, '='))
+		{
+			name = strjoin_p(*args, "=");
+			ft_unsetenv(name);
+			free_and_null((void **)&name);
+		}
 		else 
 		{
 			ft_putstr_fd("unset: not a valid identifier\n", STDERR_FILENO);

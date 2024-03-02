@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:38:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:06:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 00:29:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,3 @@ void    lstreverse(t_list **lst)
     }
     *lst = prev;
 }
-
-// 1 -> 2 -> 3 -> 4 -> 5 -> NULL
-// prev = NULL
-// next = 2
-// 1 -> NULL
-// prev = 1
-// next = 3
-// 2 -> 1 -> NULL
-// prev = 2
-// next = 4
-// 3 -> 2 -> 1 -> NULL
-// prev = 3
-// next = 5
-// 4 -> 3 -> 2 -> 1 -> NULL
-// prev = 4
-// next = NULL
-// 5 -> 4 -> 3 -> 2 -> 1 -> NULL
-// prev = 5
-// next = NULL
-// 5 -> 4 -> 3 -> 2 -> 1 -> NULL

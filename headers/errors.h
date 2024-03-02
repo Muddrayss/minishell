@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:27:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/24 15:08:58 by egualand         ###   ########.fr       */
+/*   Updated: 2024/02/28 21:20:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,21 @@
 # define ERR_ENV        7   //quando non viene trovata una var di ambiente essenziale al corretto funzionamento (tipo PWD ci serve per sapere dove mettere la cartella temp)
 # define ERR_SIGSETUP   8  //quando fallisce la funzione signal()
 # define ERR_WAIT       9
+
+# define N_ERRNOS       200
+
+static const uint8_t    g_bad_errnos[]
+    = {
+        EFAULT,
+        EMFILE,
+        ENFILE,
+        EIO,
+        ENOSPC,
+        EPIPE,
+        EAGAIN,
+        ELOOP };
+
+uint8_t *set_bad_errnos();
+bool    is_bad_errno(int errno_value);
 
 #endif
