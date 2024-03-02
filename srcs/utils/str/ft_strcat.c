@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:17:06 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:07:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:49:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*ft_strcat(char *dest, char *src)
 {
-	unsigned int	i;
-	unsigned int	j;
+	uint16_t	i;
+	uint16_t	j;
 
 	i = 0;
 	while (dest[i] != '\0')

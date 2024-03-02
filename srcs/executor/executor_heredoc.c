@@ -6,20 +6,20 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:47:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:40:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static int      fill_in_child(char *limiter, int heredoc_fd);
-static void     fill_heredoc(char *limiter, int fd);
+static uint8_t  fill_in_child(char *limiter, uint16_t heredoc_fd);
+static void     fill_heredoc(char *limiter, uint16_t fd);
 
-void create_heredocs(t_tree *tree, int *status)
+void create_heredocs(t_tree *tree, uint8_t *status)
 {
     t_list      *redirs;
     t_redir     *redir;
-    int         fd;
+    uint16_t    fd;
     char        *filename;
     t_parser    *elem;
 
@@ -47,16 +47,16 @@ void create_heredocs(t_tree *tree, int *status)
     create_heredocs(tree->right, status);
 }
 
-char    *get_heredoc_filename(int32_t id)
+char    *get_heredoc_filename(uint16_t id)
 {
     t_data      *data;
     char        *idx;
     char        *filename;
-    size_t      size;
+    uint16_t    size;
 
     data = get_data();
-    idx = ft_utoa((uint32_t)id);
-    size = ft_strlen(data->starting_dir) + ft_strlen("/tmp/.heredoc_") + ft_strlen(idx) + 2;
+    idx = ft_itoa((uint16_t)id);
+    size = ft_strlen(data->starting_dir) + ft_strlen(idx) + 16;
     filename = ft_calloc(size, sizeof(char));
     if (!filename || !idx)
         return (free_and_null((void **)&idx), free_and_null((void **)&filename), ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
@@ -66,10 +66,10 @@ char    *get_heredoc_filename(int32_t id)
     return (free_and_null((void **)&idx), filename);
 }
 
-static int fill_in_child(char *limiter, int heredoc_fd)
+static uint8_t fill_in_child(char *limiter, uint16_t heredoc_fd)
 {
-    pid_t   pid;
-    int     status;
+    pid_t       pid;
+    int32_t     status;
 
     pid = fork_p();
     if (pid == 0)
@@ -82,13 +82,13 @@ static int fill_in_child(char *limiter, int heredoc_fd)
         waitpid_p(pid, &status, 0);
         status = WEXITSTATUS(status);
     }
-    return (status);
+    return ((uint8_t)status);
 }
 
-static void fill_heredoc(char *limiter, int fd)
+static void fill_heredoc(char *limiter, uint16_t fd)
 {
-    char    *str;
-    size_t  str_len;
+    char        *str;
+    uint16_t    str_len;
 
     str = NULL;
     while (true)

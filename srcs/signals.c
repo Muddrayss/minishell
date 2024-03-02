@@ -6,23 +6,23 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/02/22 18:12:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:39:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-static void silent_mode(int signo);
-static void interactive_mode(int signo);
-static void heredoc_mode(int signo);
-static void command_mode(int signo);
-static void death_mode(int signo, siginfo_t *info, void *context);
-static void safe_exit(int signo);
+static void silent_mode(int32_t signo);
+static void interactive_mode(int32_t signo);
+static void heredoc_mode(int32_t signo);
+static void command_mode(int32_t signo);
+static void death_mode(int32_t signo, siginfo_t *info, void *context);
+static void safe_exit(int32_t signo);
 
-void    set_signals(int8_t mode, bool is_main)
+void    set_signals(uint8_t mode, bool is_main)
 {
-    struct sigaction  sa;
-    void    (*sig_handler[4])(int) = {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode}; //order has to be the same as the defines in the header file
+    struct sigaction    sa;
+    __sighandler_t      sig_handler[] = {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode}; //order has to be the same as the defines in the header file
 
     signal_p(SIGINT, sig_handler[mode]);
     signal_p(SIGQUIT, sig_handler[mode]);
@@ -39,14 +39,14 @@ void    set_signals(int8_t mode, bool is_main)
     }
 }
 
-static void safe_exit(int signo)
+static void safe_exit(int32_t signo)
 {
     (void)signo;
     free_data();
     exit(0);
 }
 
-static void death_mode(int signo, siginfo_t *info, void *context)
+static void death_mode(int32_t signo, siginfo_t *info, void *context)
 {
     static uint8_t  id
     = 0;
@@ -72,7 +72,7 @@ static void death_mode(int signo, siginfo_t *info, void *context)
     }
 }
 
-static void silent_mode(int signo)
+static void silent_mode(int32_t signo)
 {
     if (signo == SIGINT)
         g_status = 130;
@@ -80,7 +80,7 @@ static void silent_mode(int signo)
         g_status = 131;
 }
 
-static void interactive_mode(int signo)
+static void interactive_mode(int32_t signo)
 {
     if (signo == SIGINT)
     {
@@ -94,7 +94,7 @@ static void interactive_mode(int signo)
         ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
 }
 
-static void heredoc_mode(int signo)
+static void heredoc_mode(int32_t signo)
 {
     if (signo == SIGINT)
     {
@@ -105,7 +105,7 @@ static void heredoc_mode(int signo)
         ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
 }
 
-static void command_mode(int signo)
+static void command_mode(int32_t signo)
 {
     if (signo == SIGINT)
     {

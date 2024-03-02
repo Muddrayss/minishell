@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 14:50:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:06:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int8_t    check_tokens(t_list *lexered_params)
         if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END)
             if (!prev_elem || !next_elem || !prev_elem->cmd_str || !next_elem->cmd_str)
                 if (!prev_elem || !next_elem || prev_elem->token == SUBSHELL_START || next_elem->token == SUBSHELL_END)
-                    return (throw_syntax_error(g_parser_tokens[(int)elem->token]), -1);
+                    return (throw_syntax_error(g_parser_tokens[(int8_t)elem->token]), -1);
         lexered_params = lexered_params->next;
     }
     return (0);
@@ -57,7 +57,7 @@ static int8_t    check_tokens(t_list *lexered_params)
 
 static int8_t   check_parenthesis(t_list *lexered_params)
 {
-    int32_t     n_open;
+    int16_t     n_open;
     t_lexer     *elem;
 
     n_open = 0;

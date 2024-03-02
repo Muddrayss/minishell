@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 16:05:57 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/22 16:11:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:50:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-int  ft_strcmp_lower(const char *s1, const char *s2)
+int16_t  ft_strcmp_lower(const char *s1, const char *s2)
 {
     char   first_lower;
     char   second_lower;

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 19:56:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:41:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_data
 	pid_t 		main_pid;
 }t_data;
 
-extern int g_status;
+extern uint8_t g_status;
 
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
 # define MAX_FDS 1024

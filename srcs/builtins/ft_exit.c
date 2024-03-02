@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/20 19:32:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:35:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static bool is_long_overflow(char *str);
 
 void ft_exit(char **args)
 {
-	int8_t	id;
+	uint8_t	id;
 
 	if (!args[1])
 	{
@@ -32,7 +32,7 @@ void ft_exit(char **args)
 	}
 	if (is_number(args[1]) && !is_long_overflow(args[1]))
 	{
-		id = ft_atou(args[1]);
+		id = (uint8_t)ft_atoi(args[1]);
 		free_data();
 		exit(id);
 	}

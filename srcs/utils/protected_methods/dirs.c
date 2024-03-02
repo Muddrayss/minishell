@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:39:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:11:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:44:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ char   *getcwd_p(char *buf, size_t size)
     return (cwd);
 }
 
-int    chdir_p(char *path)
+int32_t    chdir_p(char *path)
 {
-    int    ret;
+    int32_t    ret;
 
     ret = chdir(path);
     if (ret == -1 && is_bad_errno(errno))

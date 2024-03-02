@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:12:51 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 19:56:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:24:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ bool is_redir(char c)
 
 bool is_token(char c)
 {
-    int8_t			        i;
+    uint8_t			        i;
 	static const uint8_t	n_tokens = sizeof(g_tokens) / sizeof(g_tokens[0]);
 
-	i = -1;
-   	while (++i < n_tokens)
-		if (g_tokens[i] == c)
+	i = 0;
+   	while (i < n_tokens)
+		if (g_tokens[i++] == c)
 			return (true);
 	return (false);
 }

@@ -6,18 +6,18 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 13:22:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:28:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static t_list 	*lexer_add_cmd(t_list *lexered_params, uint32_t cmd_len, char *input);
+static t_list 	*lexer_add_cmd(t_list *lexered_params, uint16_t cmd_len, char *input);
 static t_list 	*lexer_add_token(t_list *lexered_params, char c);
 
 void    lexer(char *input)
 {
-    uint32_t        cmd_len;
+    uint16_t        cmd_len;
     char            *cmd_str;
     char            current_quote;
     t_data          *data;
@@ -51,7 +51,7 @@ void    lexer(char *input)
     lstreverse(&data->lexered_params);
 }
 
-static t_list   *lexer_add_cmd(t_list *lexered_params, uint32_t cmd_len, char *cmd_str_raw)
+static t_list   *lexer_add_cmd(t_list *lexered_params, uint16_t cmd_len, char *cmd_str_raw)
 {
     t_lexer   		*content;
     

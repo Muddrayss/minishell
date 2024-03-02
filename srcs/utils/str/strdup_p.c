@@ -14,8 +14,8 @@
 
 char	*strdup_p(char *s)
 {
-	char	*dst;
-	int		i;
+	char		*dst;
+	uint16_t	i;
 
 	if (!s)
 		return (NULL);

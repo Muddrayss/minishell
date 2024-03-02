@@ -6,29 +6,29 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:41:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 13:53:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:20:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-int    open_p(char *path, int flags, uint16_t permissions)
+uint16_t    open_p(char *path, int32_t flags, uint16_t permissions)
 {
-    int    fd;
+    int16_t fd;
 
     fd = open(path, flags, permissions);
     if (fd == -1)
         ft_quit(ERR_FD, NULL);
-    return (fd);
+    return ((uint16_t)fd);
 }
 
-void    close_p(int fd)
+void    close_p(int16_t fd)
 {
     if (close(fd) == -1)
         ft_quit(ERR_FD, NULL);
 }
 
-void    reset_fd(int *fd)
+void    reset_fd(int16_t *fd)
 {
     if (*fd >= 0)
         close_p(*fd);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 20:00:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:29:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@ t_list  *fill_redirs(char *cmd_str)
 {
     t_list          *redirs;
     uint16_t        i;
-    static uint16_t heredoc_fileno = 0;
+    static uint16_t heredoc_fileno
+        = 0;
     char            master_quote;
     char            type;
 
-    i = -1;
+    i = 0;
     redirs = NULL;
     master_quote = '\0';
-    while (cmd_str[++i])
+    while (cmd_str[i])
     {
         if (!master_quote && (is_quote(cmd_str[i])))
             master_quote = cmd_str[i];
@@ -40,6 +41,7 @@ t_list  *fill_redirs(char *cmd_str)
                 type = REDIR_APPEND * (cmd_str[i + 1] == '>') + REDIR_OUTPUT * (cmd_str[i + 1] != '>');
             init_redir(&redirs, type, cmd_str + i, heredoc_fileno);
         }
+        i++;
     }
     return (heredoc_fileno++, lstreverse(&redirs), redirs);
 }
@@ -59,8 +61,8 @@ static void init_redir(t_list **redirs, char type, char *str, uint16_t heredoc_f
 static char *get_filename(char *str) //str in posizione della redir (> <)
 {
 	char 		*filename;
-	uint32_t 	len;
-	uint32_t 	i;
+	uint16_t 	len;
+	uint16_t 	i;
 	
 	filename = NULL;
     i = 1; //per skippare > < 

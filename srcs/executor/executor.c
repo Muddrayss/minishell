@@ -6,26 +6,26 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 19:37:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:26:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void     launch_commands(t_tree *node, int8_t prev_type, int fds[3]);
-static void     launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3]);
-static void     launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3]);
-static void     child(t_tree *node, int fds[3], int8_t prev_type);
-static void     parent(t_tree *node, int fds[3], pid_t pid);
-static void     wait_for_children(t_tree *node);
+static void     launch_commands(t_tree *node, int8_t prev_type, int16_t fds[3]);
 static t_tree   *skip_till_semicolon(t_tree *node);
+static void     launch_builtin_cmd(t_tree *node, int8_t prev_type, int16_t fds[3]);
+static void     launch_standard_cmd(t_tree *node, int8_t prev_type, int16_t fds[3]);
+static void     child(t_tree *node, int16_t fds[3], int8_t prev_type);
+static void     parent(t_tree *node, int16_t fds[3], pid_t pid);
+static void     wait_for_children(t_tree *node);
 static uint16_t get_n_pipelines(t_tree *node);
 
 void    executor(t_tree *parsed_params)
 {
-    int     original_status;
-    int     heredoc_status;
-    int     fds[5] = {-42, -42, -42, -42, -42}; //pipe read, pipe write, prev_output, original stdin, original stdout
+    uint8_t     original_status;
+    uint8_t     heredoc_status;
+    int16_t     fds[5] = {-42, -42, -42, -42, -42}; //pipe read, pipe write, prev_output, original stdin, original stdout
 
     fds[3] = dup_p(STDIN_FILENO);
     fds[4] = dup_p(STDOUT_FILENO);
@@ -54,7 +54,7 @@ void    executor(t_tree *parsed_params)
 //command in the pipeline (cmd3 in this case) to complete, along with 
 //all preceding commands in the pipeline, before it finishes.
 
-static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
+static void launch_commands(t_tree *node, int8_t prev_type, int16_t fds[3])
 {
     t_parser    *elem;
     t_parser    *left_elem;
@@ -87,7 +87,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int fds[3])
 // of built-in commands, the commands are executed sequentially, not in parallel
 // as they would be if each command in the pipeline were an external command that
 // required a new process to be spawned.
-static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3])
+static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int16_t fds[3])
 {
     t_parser    *elem;
 
@@ -103,7 +103,7 @@ static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int fds[3])
     dup2_p(fds[4], STDOUT_FILENO);
 }
 
-static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3])
+static void launch_standard_cmd(t_tree *node, int8_t prev_type, int16_t fds[3])
 {
     t_parser    *elem;
     pid_t       pid;
@@ -128,7 +128,7 @@ static void launch_standard_cmd(t_tree *node, int8_t prev_type, int fds[3])
         parent(node, fds, pid);
 }
 
-t_tree   *skip_till_semicolon(t_tree *node)
+static t_tree   *skip_till_semicolon(t_tree *node)
 {
     t_parser    *elem;
 
@@ -140,7 +140,7 @@ t_tree   *skip_till_semicolon(t_tree *node)
     return (skip_till_semicolon(node->right));
 }
 
-static void child(t_tree *node, int fds[3], int8_t prev_type)
+static void child(t_tree *node, int16_t fds[3], int8_t prev_type)
 {
     t_parser    *elem;
 
@@ -153,31 +153,33 @@ static void child(t_tree *node, int fds[3], int8_t prev_type)
     exec(ft_getenv("PATH="), elem->cmd->cmd_str);
 }
 
-static void parent(t_tree *node, int fds[3], pid_t pid)
+static void parent(t_tree *node, int16_t fds[3], pid_t pid)
 {
     t_parser    *elem;
+    int32_t     status;
 
     elem = (t_parser *)node->content;
     reset_fd(&fds[1]);
     fds[2] = fds[0];
     if (elem->type != PIPELINE)
     {
-        waitpid_p(pid, &g_status, 0);
-        g_status = WEXITSTATUS(g_status);
+        waitpid_p(pid, &status, 0);
+        g_status = WEXITSTATUS(status);
         reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
         //TODO setenv per _=
     }
 }
 
-void wait_for_children(t_tree *node) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
+static void wait_for_children(t_tree *node) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
 {
     uint16_t    n_to_wait;
+    int32_t     status;
 
     n_to_wait = get_n_pipelines(node); //numero di pipeline SULLO STESSO LAYER
     while (n_to_wait--)
     {
-        waitpid_p(0, &g_status, 0);
-        g_status = WEXITSTATUS(g_status);
+        waitpid_p(0, &status, 0);
+        g_status = WEXITSTATUS(status);
         //funziona cosi', exit non e' immediato. basta guardare il caso 'sleep 3 && (sleep 2 | exit)'
     }
 }

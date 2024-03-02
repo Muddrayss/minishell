@@ -6,15 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:33:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:08:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:12:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-uint32_t     ft_strlen(char *str)
+uint16_t    ft_strlen(const char *str)
 {
-    uint32_t     i;
+    uint16_t    i;
 
     if (!str)
         return (0);

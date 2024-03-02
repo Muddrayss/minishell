@@ -6,19 +6,19 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/27 18:05:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:17:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static int  skip_flags(char **args, bool *is_n);
+static uint16_t  skip_flags(char **args, bool *is_n);
 
 //TODO quando viene chiamato con flag, readline si scazza
 void ft_echo(char **args)
 {
-    int     i;
-    bool    is_n;
+    uint16_t    i;
+    bool        is_n;
 
     i = skip_flags(args, &is_n);
     while (args[i])
@@ -33,16 +33,14 @@ void ft_echo(char **args)
     g_status = EXIT_SUCCESS;
 }
 
-static int  skip_flags(char **args, bool *is_n)
+static uint16_t  skip_flags(char **args, bool *is_n)
 {
-    int i;
-    int j;
+    uint16_t i;
+    uint16_t j;
 
     *is_n = false;
     i = 0;
-    if (!args[1])
-        return (1);
-    if (args[1][0] != '-')
+    if (!args[1] || args[1][0] != '-')
         return (1);
     while (args[++i])
     {

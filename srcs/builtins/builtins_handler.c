@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 19:12:09 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:16:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,39 @@
 
 bool is_builtin(char *cmd_str)
 {
-	char		*cmd;
-	uint32_t	len;
-	char 		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
-	uint8_t		n_builtins;
-	
-	len = 0;
-	while (cmd_str[len] && !is_shell_space(cmd_str[len]))
-		len++;
-	cmd = (char *)malloc_p(sizeof(char) * (len + 1));
-	ft_strlcpy(cmd, cmd_str, len + 1);
-	n_builtins = sizeof(builtins) / sizeof(char *);
-	while (n_builtins--)
-		if (ft_strcmp(cmd, builtins[n_builtins]) == 0)
+	char					*cmd;
+	uint16_t				i;
+	char 					*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
+	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
+
+	i = 0;
+	while (cmd_str[i] && !is_shell_space(cmd_str[i]))
+		i++;
+	cmd = (char *)malloc_p(sizeof(char) * (i + 1));
+	ft_strlcpy(cmd, cmd_str, i + 1);
+	i = 0;
+	while (i < n_builtins)
+		if (ft_strcmp(cmd, builtins[i++]) == 0)
 			return (free_and_null((void **)&cmd), true);
 	return (free_and_null((void **)&cmd), false);
 }
 
 void exec_builtin(char **cmd_args)
 {
-	char	*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
-	void	(*builtin_functions[])(char **) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
-	uint8_t	n_builtins;
-	t_data	*data;
+	static const char		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
+	static void 			(*const builtin_functions[])(char **) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
+	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
+	t_data					*data;
+	uint8_t					i;
 
 	data = get_data();
-	n_builtins = sizeof(builtins) / sizeof(char *);
-	while (n_builtins--)
+	i = 0;
+	while (i < n_builtins)
+	{
 		if (ft_strcmp(cmd_args[0], builtins[n_builtins]) == 0)
 			builtin_functions[n_builtins](cmd_args);
+		i++;
+	}
 	if (data->cmd_args)
 		free_and_null((void **)&data->cmd_args[0]);
 	free_and_null((void **)&data->cmd_args);	

@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:39:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:44:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:11:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void exec_file_and_fd_redirs(t_redir *redir);
-static int open_redir_file(t_redir *redir);
+static void     exec_dup(t_redir *redir);
+static uint16_t open_redir_file(t_redir *redir);
 
 void exec_redirs(t_list *redirs)
 {
@@ -28,32 +28,30 @@ void exec_redirs(t_list *redirs)
             replace_wildcards(&redir->filename);
             clear_quotes(&redir->filename);
         }
-        exec_file_and_fd_redirs(redir);
+        exec_dup(redir);
         redirs = redirs->next;
     }
 }
 
-static void exec_file_and_fd_redirs(t_redir *redir)
+static void exec_dup(t_redir *redir)
 {
-    int file_fd;
+    uint16_t    file_fd;
 
-    file_fd = open_redir_file(redir);
-    if (file_fd == -1)
+    if (!redir->filename)
         return ;
+    file_fd = open_redir_file(redir);
     if (redir->type == REDIR_INPUT || redir->type == REDIR_HEREDOC)
         dup2_p(file_fd, STDIN_FILENO);
     else if (redir->type == REDIR_OUTPUT || redir->type == REDIR_APPEND)
         dup2_p(file_fd, STDOUT_FILENO);
-    reset_fd(&file_fd);
+    reset_fd((int16_t *)&file_fd);
 }
 
-static int  open_redir_file(t_redir *redir)
+static uint16_t  open_redir_file(t_redir *redir)
 {
-    int     fd;
-    char    *heredoc_filename;
+    uint16_t     fd;
+    char         *heredoc_filename;
 
-    if (!redir->filename)
-        return (-1);
     if (redir->type == REDIR_INPUT)
         fd = open_p(redir->filename, O_RDONLY, 0644);
     else if (redir->type == REDIR_HEREDOC)

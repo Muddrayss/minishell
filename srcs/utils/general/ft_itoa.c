@@ -6,19 +6,19 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 11:02:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 18:19:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:42:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static int	nbr_len(long n);
+static uint8_t	nbr_len(long n);
 
-char	*ft_utoa(unsigned int n)
+char	*ft_itoa(int32_t n)
 {
-	char	*str;
-	int		n_len;
-	long	n_long;
+	char		*str;
+	uint8_t		n_len;
+	int64_t		n_long;
 
 	n_long = n;
 	n_len = nbr_len(n_long);
@@ -36,9 +36,9 @@ char	*ft_utoa(unsigned int n)
 	return (str);
 }
 
-static int	nbr_len(long n)
+static uint8_t	nbr_len(int64_t n)
 {
-	int	i;
+	uint8_t	i;
 
 	i = 0;
 	if (n <= 0)

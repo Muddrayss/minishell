@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:27:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/28 21:20:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:37:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static const uint8_t    g_bad_errnos[]
         EAGAIN,
         ELOOP };
 
-uint8_t *set_bad_errnos();
+void    set_errnos();
 bool    is_bad_errno(int errno_value);
 
 #endif

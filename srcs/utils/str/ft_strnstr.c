@@ -6,17 +6,17 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:15:35 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:07:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:18:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*ft_strnstr( char *big,  char *little, size_t len)
+char	*ft_strnstr(const char *big, const char *little, uint16_t len)
 {
-	size_t	i;
-	size_t	n;
-	size_t	little_len;
+	uint16_t	i;
+	uint16_t	n;
+	uint16_t	little_len;
 
 	i = 0;
 	n = 0;

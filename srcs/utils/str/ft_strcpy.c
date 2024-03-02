@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:18:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:07:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:50:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 
 char	*ft_strcpy(char *dest, char *src)
 {
-	unsigned int	i;
+	uint16_t	i;
 
-	i = -1;
-	while (src[++i] != '\0')
+	i = 0;
+	while (src[i] != '\0')
+	{
 		dest[i] = src[i];
+		i++;
+	}
 	dest[i] = '\0';
 	return (dest);
 }

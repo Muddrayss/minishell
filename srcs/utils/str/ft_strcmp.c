@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 11:32:24 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/21 15:51:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:16:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
+int16_t	ft_strcmp(const char *s1, const char *s2)
 {
 	while (*s1 && (*s1 == *s2))
 	{

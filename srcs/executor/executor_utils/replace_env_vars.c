@@ -6,18 +6,18 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:42:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:13:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes);
+static char *expand_dollar(char *str, uint16_t *i, bool ignore_quotes);
 
 void    replace_env_vars(char **str, bool ignore_quotes)
 {
     char        master_quote;
-    uint32_t    i;
+    uint16_t    i;
 
     i = 0;
     master_quote = '\0';
@@ -33,13 +33,13 @@ void    replace_env_vars(char **str, bool ignore_quotes)
     }
 }
 
-static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
+static char *expand_dollar(char *str, uint16_t *i, bool ignore_quotes)
 {
     char        *new_str;
     char        *env_value;
     char        *env_name;
     char        *tmp;
-    int32_t     env_name_len;
+    uint16_t     env_name_len;
 
     str += *i + 1;
     env_name_len = -1;
@@ -52,7 +52,7 @@ static char *expand_dollar(char *str, uint32_t *i, bool ignore_quotes)
     ft_strlcpy(env_name, str, env_name_len + 1);
     if (env_name[0] == '?')
     {
-        env_value = ft_utoa((int8_t)g_status);
+        env_value = ft_itoa((uint8_t)g_status);
         env_name_len = 1;
     }
     else

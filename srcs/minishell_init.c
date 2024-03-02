@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 18:45:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:37:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void init_general(void)
 {
 	char	*path;
 	
-	set_bad_errnos();
+	set_errnos();
 	path = ft_getenv("PATH=");
 	g_status = 0;
 	exec_simple_cmd(path, "clear");

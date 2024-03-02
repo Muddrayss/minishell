@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   xmalloc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 14:07:50 by egualand          #+#    #+#             */
-/*   Updated: 2024/02/20 15:21:30 by egualand         ###   ########.fr       */
+/*   Updated: 2024/03/02 23:02:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void *cxmalloc(size_t size)
         return (NULL);
     }
     
-    #undef malloc
+    #undef malloc //TODO to remove, against norme
     
     return (malloc(size));
 }

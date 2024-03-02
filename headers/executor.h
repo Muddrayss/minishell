@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:46:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:07:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # define CMD_NOT_FOUND  127
 
 void    executor(t_tree *parsed_params);
-void    create_heredocs(t_tree *tree, int *status);
-char    *get_heredoc_filename(int32_t id);
+void    create_heredocs(t_tree *tree, uint8_t *status);
+char    *get_heredoc_filename(uint16_t id);
 void    exec_redirs(t_list *redirs);
 char    *get_cmd_path(char *path, char *cmd);
 char    **get_cmd_args(char *cmd_str);

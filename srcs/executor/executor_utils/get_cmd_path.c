@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 19:36:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/02 22:23:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,17 @@ char	*get_cmd_path(char *path, char *cmd)
 
 static bool is_custom_bin(char *cmd)
 {
-	int8_t		i;
-	static char	*prefixes[] =
+	uint8_t				i;
+	static const char	*prefixes[] =
 	{"./", "../", "/", NULL};
 	
-	i = -1;
-	while (prefixes[++i])	
+	i = 0;
+	while (prefixes[i])
+	{
 		if (ft_strnstr(cmd, prefixes[i], ft_strlen(prefixes[i])) != NULL)
 			return (true);
+		i++;
+	}	
 	return (false);
 }
 
