@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 20:13:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 20:17:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_list  *fill_redirs(const char *const cmd_str)
 
     i = 0;
     redirs = NULL;
+    type = -1;
     master_quote = '\0';
     while (cmd_str[i])
     {
