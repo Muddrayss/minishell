@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 22:56:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:48:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	envp_matrix_remove(char *env_name, uint16_t name_len)
 	data = get_data();
 	matrix = data->envp_matrix;
 	old_size = data->envp_size + 1;
-	new_matrix = (char **)malloc_p(sizeof(char *) * (old_size + 1 - 1)); //+1 e -1
+	new_matrix = (char **)malloc_p(sizeof(char *) * old_size); //+1 e -1
 	new_matrix[old_size - 1] = NULL;
 	i = old_size - 2;
 	while (old_size--)

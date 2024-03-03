@@ -1,0 +1,127 @@
+srcs/lexer/lexer.c: In function ‘lexer’:
+srcs/lexer/lexer.c:44:23: warning: unsigned conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} changes value from ‘-1’ to ‘65535’ [-Wsign-conversion]
+   44 |             cmd_len = -1;
+      |                       ^
+In file included from srcs/parser/parser_redirs/../../../headers/minishell.h:57,
+                 from srcs/parser/parser_redirs/fill_redirs.c:13:
+srcs/parser/parser_redirs/fill_redirs.c: In function ‘fill_redirs’:
+srcs/parser/parser_redirs/../../../headers/parser.h:28:33: warning: conversion from ‘int’ to ‘char’ may change value [-Wconversion]
+   28 | # define REDIR_APPEND           3       // >> filename
+      |                                 ^
+srcs/parser/parser_redirs/fill_redirs.c:41:24: note: in expansion of macro ‘REDIR_APPEND’
+   41 |                 type = REDIR_APPEND * (cmd_str[i + 1] == '>') + REDIR_OUTPUT * (cmd_str[i + 1] != '>');
+      |                        ^~~~~~~~~~~~
+srcs/parser/parser_redirs/fill_redirs.c: In function ‘init_redir’:
+srcs/parser/parser_redirs/fill_redirs.c:57:29: warning: conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+   57 |     redir->heredoc_fileno = -1 * (type != REDIR_HEREDOC) + heredoc_fileno * (type == REDIR_HEREDOC);
+      |                             ^
+srcs/parser/parser_redirs/clear_redirs.c: In function ‘remove_filename’:
+srcs/parser/parser_redirs/clear_redirs.c:47:10: warning: conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+   47 |     i += 1 + (str[i + 1] == '<' || str[i + 1] == '>');
+      |          ^
+srcs/parser/parser_redirs/clear_redirs.c: In function ‘remove_chars’:
+srcs/parser/parser_redirs/clear_redirs.c:66:45: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   66 |     new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) - to_remove_len + 1));
+      |                                             ^
+srcs/parser/parser_utils/merge_separators.c: In function ‘merge_ampersands’:
+srcs/parser/parser_utils/merge_separators.c:69:60: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   69 |         prev_elem->cmd_str = (char *)malloc_p(sizeof(char) * (ft_strlen(prev_elem->cmd_str) + ft_strlen(next_elem->cmd_str) + 2));
+      |                                                            ^
+srcs/parser/parser_utils/check_syntax.c: In function ‘check_parenthesis’:
+srcs/parser/parser_utils/check_syntax.c:79:16: warning: conversion from ‘int’ to ‘int8_t’ {aka ‘signed char’} may change value [-Wconversion]
+   79 |     return (-1 * (n_open > 0)); //se ci sono parentesi aperte, ritorna -1
+      |            ~~~~^~~~~~~~~~~~~~~
+srcs/executor/executor.c: In function ‘executor’:
+srcs/executor/executor.c:30:14: warning: conversion to ‘int16_t’ {aka ‘short int’} from ‘uint16_t’ {aka ‘short unsigned int’} may change the sign of the result [-Wsign-conversion]
+   30 |     fds[3] = dup_p(STDIN_FILENO);
+      |              ^~~~~
+srcs/executor/executor.c:31:14: warning: conversion to ‘int16_t’ {aka ‘short int’} from ‘uint16_t’ {aka ‘short unsigned int’} may change the sign of the result [-Wsign-conversion]
+   31 |     fds[4] = dup_p(STDOUT_FILENO);
+      |              ^~~~~
+srcs/executor/executor.c: In function ‘launch_builtin_cmd’:
+srcs/executor/executor.c:97:19: warning: conversion to ‘uint16_t’ {aka ‘short unsigned int’} from ‘int16_t’ {aka ‘short int’} may change the sign of the result [-Wsign-conversion]
+   97 |         dup2_p(fds[1], STDOUT_FILENO);
+      |                ~~~^~~
+srcs/executor/executor.c:103:15: warning: conversion to ‘uint16_t’ {aka ‘short unsigned int’} from ‘int16_t’ {aka ‘short int’} may change the sign of the result [-Wsign-conversion]
+  103 |     dup2_p(fds[4], STDOUT_FILENO);
+      |            ~~~^~~
+srcs/executor/executor.c: In function ‘launch_standard_cmd’:
+srcs/executor/executor.c:117:23: warning: conversion to ‘uint16_t’ {aka ‘short unsigned int’} from ‘int16_t’ {aka ‘short int’} may change the sign of the result [-Wsign-conversion]
+  117 |             dup2_p(fds[1], STDOUT_FILENO);
+      |                    ~~~^~~
+srcs/executor/executor.c: In function ‘child’:
+srcs/executor/executor.c:149:19: warning: conversion to ‘uint16_t’ {aka ‘short unsigned int’} from ‘int16_t’ {aka ‘short int’} may change the sign of the result [-Wsign-conversion]
+  149 |         dup2_p(fds[2], STDIN_FILENO);
+      |                ~~~^~~
+srcs/executor/executor.c: In function ‘parent’:
+srcs/executor/executor.c:167:20: warning: conversion from ‘int’ to ‘uint8_t’ {aka ‘unsigned char’} may change value [-Wconversion]
+  167 |         g_status = WEXITSTATUS(status);
+      |                    ^~~~~~~~~~~
+srcs/executor/executor.c: In function ‘wait_for_children’:
+srcs/executor/executor.c:182:20: warning: conversion from ‘int’ to ‘uint8_t’ {aka ‘unsigned char’} may change value [-Wconversion]
+  182 |         g_status = WEXITSTATUS(status);
+      |                    ^~~~~~~~~~~
+srcs/executor/executor_heredoc.c: In function ‘get_heredoc_filename’:
+srcs/executor/executor_heredoc.c:59:12: warning: conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+   59 |     size = ft_strlen(data->starting_dir) + ft_strlen(idx) + 16;
+      |            ^~~~~~~~~
+srcs/executor/executor_utils/get_cmd_path.c: In function ‘search_cmd_in_dirs’:
+srcs/executor/executor_utils/get_cmd_path.c:65:15: warning: conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+   65 |         len = ft_strlen(entry) + ft_strlen(cmd) + 2; // +2 for '/' and '\0'
+      |               ^~~~~~~~~
+srcs/executor/executor_utils/get_cmd_path.c: In function ‘get_custom_bin’:
+srcs/executor/executor_utils/get_cmd_path.c:81:70: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   81 |         full_path = (char *)calloc_p(ft_strlen(cwd) + ft_strlen(cmd) + 2, sizeof(char));
+      |                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+srcs/executor/executor_utils/replace_env_vars.c: In function ‘expand_dollar’:
+srcs/executor/executor_utils/replace_env_vars.c:45:20: warning: unsigned conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} changes value from ‘-1’ to ‘65535’ [-Wsign-conversion]
+   45 |     env_name_len = -1;
+      |                    ^
+srcs/executor/executor_utils/replace_env_vars.c:66:97: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   66 |     new_str = (char *)calloc_p(*i + ft_strlen(str) + ft_strlen(env_value) - ft_strlen(env_name) + 1, sizeof(char));
+      |                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+srcs/executor/executor_utils/replace_env_vars.c:71:11: warning: conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+   71 |     *i += ft_strlen(env_value) - 1;
+      |           ^~~~~~~~~
+srcs/executor/executor_utils/replace_wildcards.c: In function ‘get_full_entry’:
+srcs/executor/executor_utils/replace_wildcards.c:94:77: warning: conversion to ‘size_t’ {aka ‘long unsigned int’} from ‘int’ may change the sign of the result [-Wsign-conversion]
+   94 |     full_entry = (char *)calloc_p(ft_strlen(basedir) + ft_strlen(entry) + 2 + is_root, sizeof(char));
+      |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+srcs/executor/executor_utils/replace_wildcards.c: In function ‘get_new_wildcard_str’:
+srcs/executor/executor_utils/replace_wildcards.c:129:12: warning: conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+  129 |     size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(wildcard_str) + 3;
+      |            ^~~~~~~~~
+srcs/executor/executor_utils/replace_wildcards.c: In function ‘add_cwd’:
+srcs/executor/executor_utils/replace_wildcards.c:229:54: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+  229 |     new_wildcard_str = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(wildcard_str) + 2));
+      |                                                      ^
+srcs/executor/executor_utils/replace_wildcards.c: In function ‘insert_result’:
+srcs/executor/executor_utils/replace_wildcards.c:249:26: warning: conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+  249 |         filenames_len += ft_strlen(node->content) + 1; //+1 per lo spazio
+      |                          ^~~~~~~~~
+srcs/executor/executor_utils/replace_wildcards.c:252:12: warning: conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+  252 |     size = ft_strlen(str) - pattern_len + filenames_len + 1;
+      |            ^~~~~~~~~
+srcs/builtins/ft_export.c: In function ‘ft_export’:
+srcs/builtins/ft_export.c:32:64: warning: conversion to ‘long unsigned int’ from ‘long int’ may change the sign of the result [-Wsign-conversion]
+   32 |                         env_name = (char *)malloc(sizeof(char) * (sep - *args + 2));
+      |                                                                ^
+srcs/builtins/ft_export.c:33:65: warning: conversion from ‘long int’ to ‘uint16_t’ {aka ‘short unsigned int’} may change value [-Wconversion]
+   33 |                         ft_strlcpy(env_name, *args, sep - *args + 2);
+      |                                                     ~~~~~~~~~~~~^~~
+srcs/utils/general/ft_itoa.c: In function ‘ft_itoa’:
+srcs/utils/general/ft_itoa.c:33:36: warning: conversion from ‘int64_t’ {aka ‘long int’} to ‘char’ may change value [-Wconversion]
+   33 |                 str[n_len-- - 1] = (n_long % 10) + 48;
+      |                                    ^
+srcs/utils/str/strjoin_p.c: In function ‘strjoin_p’:
+srcs/utils/str/strjoin_p.c:22:48: warning: conversion to ‘long unsigned int’ from ‘int’ may change the sign of the result [-Wsign-conversion]
+   22 |         newstr = (char *)malloc_p(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+      |                                                ^
+srcs/utils/str/ft_strcat.c: In function ‘ft_strcat’:
+srcs/utils/str/ft_strcat.c:23:13: warning: unsigned conversion from ‘int’ to ‘uint16_t’ {aka ‘short unsigned int’} changes value from ‘-1’ to ‘65535’ [-Wsign-conversion]
+   23 |         j = -1;
+      |             ^
+srcs/utils/protected_methods/files.c: In function ‘open_p’:
+srcs/utils/protected_methods/files.c:19:10: warning: conversion from ‘int’ to ‘int16_t’ {aka ‘short int’} may change value [-Wconversion]
+   19 |     fd = open(path, flags, permissions);
+      |          ^~~~

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:13:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:59:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,9 @@ static char *expand_dollar(char *str, uint16_t *i, bool ignore_quotes)
     uint16_t     env_name_len;
 
     str += *i + 1;
-    env_name_len = -1;
-    while (str[++env_name_len])
-        if (str[env_name_len] == ' ' || is_quote(str[env_name_len]) || str[env_name_len] == '$')
-            break ;
+    env_name_len = 0;
+    while (str[env_name_len] && !is_shell_space(str[env_name_len]) && !is_quote(str[env_name_len]) && str[env_name_len] != '$')
+        env_name_len++;
     if (env_name_len == 0 && (!str[env_name_len] || is_shell_space(str[env_name_len]) || (ignore_quotes && is_quote(str[env_name_len]))))
         return (str - *i - 1);
     env_name = (char *)malloc_p(sizeof(char) * (env_name_len + 1));

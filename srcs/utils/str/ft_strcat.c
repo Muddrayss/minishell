@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:17:06 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:49:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 01:02:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,12 @@ char	*ft_strcat(char *dest, char *src)
 	i = 0;
 	while (dest[i] != '\0')
 		i++;
-	j = -1;
-	while (src[++j] != '\0')
+	j = 0;
+	while (src[j] != '\0')
+	{
 		dest[i + j] = src[j];
+		j++;
+	}
 	dest[i + j] = '\0';
 	return (dest);
 }

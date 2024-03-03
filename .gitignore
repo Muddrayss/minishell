@@ -9,6 +9,5 @@ minishell
 #leak_report
 *.o
 *.out
-*.txt
+# *.txt
 *.log
-#*.supp

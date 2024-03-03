@@ -6,20 +6,20 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:29:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:54:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static void     init_redir(t_list **redirs, char type, char *str, uint16_t heredoc_fileno);
+static void     init_redir(t_list **redirs, char type, char *str, int16_t heredoc_fileno);
 static char     *get_filename(char *str);
 
 t_list  *fill_redirs(char *cmd_str)
 {
     t_list          *redirs;
     uint16_t        i;
-    static uint16_t heredoc_fileno
+    static int16_t heredoc_fileno
         = 0;
     char            master_quote;
     char            type;
@@ -47,7 +47,7 @@ t_list  *fill_redirs(char *cmd_str)
 }
 
 //TODO leak with echo text > filename (filename not freed)
-static void init_redir(t_list **redirs, char type, char *str, uint16_t heredoc_fileno)
+static void init_redir(t_list **redirs, char type, char *str, int16_t heredoc_fileno)
 {
     t_redir *redir;
 

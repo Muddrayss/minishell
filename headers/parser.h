@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 22:42:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 00:53:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_redir
 {
 	int8_t		type;
 	char 		*filename; // o limiter in caso dell heredoc
-	uint16_t	heredoc_fileno; //eventuale numero da appendere al nome del heredoc
+	int16_t		heredoc_fileno; //eventuale numero da appendere al nome del heredoc
 }t_redir;
 
 void	parser(t_list *lexered_params);
