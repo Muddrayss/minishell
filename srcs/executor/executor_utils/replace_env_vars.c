@@ -33,6 +33,7 @@ void    replace_env_vars(char **str, bool ignore_quotes)
     }
 }
 
+//TODO refactor
 static char *expand_dollar(char *str, uint16_t *i, bool ignore_quotes)
 {
     char        *new_str;
