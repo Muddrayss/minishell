@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:28:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:35:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ static t_list 	*lexer_add_token(t_list *lexered_params, char c);
 
 void    lexer(char *input)
 {
-    uint16_t        cmd_len;
+    t_data          *data;
     char            *cmd_str;
     char            current_quote;
-    t_data          *data;
+    uint16_t        cmd_len;
 
     data = get_data();
     current_quote = '\0';

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:53:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:28:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@ static const char g_parser_tokens[7]
 
 typedef struct s_command
 {
-	char	*cmd_str;
 	t_list	*redirs;
+	char	*cmd_str;
 }t_cmd;
 
 typedef struct s_parser
 {
-	int8_t	type;
 	t_cmd	*cmd;
+	int8_t	type;
 }t_parser;
 
 typedef struct s_redir
 {
-	int8_t		type;
 	char 		*filename; // o limiter in caso dell heredoc
 	int16_t		heredoc_fileno; //eventuale numero da appendere al nome del heredoc
+	int8_t		type;
 }t_redir;
 
 void	parser(t_list *lexered_params);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:27:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:33:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static char     *insert_result(char *str, t_list *matching_files, uint16_t idx, 
 
 void    replace_wildcards(char **str)
 {
-    char        *wildcard_str;
     t_list      *matching_files;
+    char        *wildcard_str;
     char        *cwd;
     uint16_t    idx;
     uint16_t    len;
@@ -49,11 +49,11 @@ void    replace_wildcards(char **str)
 
 static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
 {
-    char            *basedir;
-    char            *new_wildcard_str;
-    t_list          *matching_files;
     DIR             *dir;
     struct dirent   *entry;
+    t_list          *matching_files;
+    char            *basedir;
+    char            *new_wildcard_str;
     char            *full_entry;
 
     matching_files = NULL;
@@ -235,8 +235,8 @@ static char *add_cwd(char *wildcard_str, char *cwd)
 
 static char *insert_result(char *str, t_list *matching_files, uint16_t idx, uint16_t pattern_len)
 {
-    char        *new_str;
     t_list      *node;
+    char        *new_str;
     uint16_t    size;
     uint16_t    filenames_len;
 

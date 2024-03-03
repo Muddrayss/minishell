@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:28:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:35:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static uint16_t remove_filename(char *str, uint16_t i, bool *to_remove_array);
 
 char    *clear_redirs(char *cmd_str)
 {
-    uint16_t    i;
     bool        *to_remove_array;
+    uint16_t    i;
     char        master_quote;
 
     cmd_str = strdup_p(cmd_str);

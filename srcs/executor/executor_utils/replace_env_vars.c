@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:59:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:32:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static char *expand_dollar(char *str, uint16_t *i, bool ignore_quotes);
 
 void    replace_env_vars(char **str, bool ignore_quotes)
 {
-    char        master_quote;
     uint16_t    i;
+    char        master_quote;
 
     i = 0;
     master_quote = '\0';

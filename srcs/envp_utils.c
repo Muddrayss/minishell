@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 20:01:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:40:50 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void    envp_init(char **envp)
 {
-    uint16_t    size;
     t_data      *data;
     char        **matrix;
     t_tree      *tree;
     char        *str;
+    uint16_t    size;
 
     data = get_data();
     tree = NULL;
@@ -39,8 +39,8 @@ void    envp_init(char **envp)
 //NAME DEVE ESSERE COMPRESO DI '='
 void	ft_setenv(char *name, char *value, bool replace)
 {
-    char        *str;
     t_data      *data;
+    char        *str;
 
     data = get_data();
     str = strjoin_p(name, value);
@@ -54,8 +54,8 @@ void	ft_setenv(char *name, char *value, bool replace)
 //NAME DEVE ESSERE COMPRESO DI '='
 void	ft_unsetenv(char *name)
 {
-    uint16_t    name_len;
     t_data      *data;
+    uint16_t    name_len;
 
     if (!ft_getenv(name))
         return ;

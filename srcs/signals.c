@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/03/03 00:39:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:40:15 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ static void safe_exit(int32_t signo);
 
 void    set_signals(uint8_t mode, bool is_main)
 {
-    struct sigaction    sa;
-    __sighandler_t      sig_handler[] = {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode}; //order has to be the same as the defines in the header file
+    struct sigaction            sa;
+    static const __sighandler_t sig_handler[] = {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode}; //order has to be the same as the defines in the header file
 
     signal_p(SIGINT, sig_handler[mode]);
     signal_p(SIGQUIT, sig_handler[mode]);
@@ -48,12 +48,9 @@ static void safe_exit(int32_t signo)
 
 static void death_mode(int32_t signo, siginfo_t *info, void *context)
 {
-    static uint8_t  id
-    = 0;
-    static uint8_t  n_signals
-    = 0;
-    static pid_t   pid
-    = -1;
+    static pid_t    pid = -1;
+    static uint8_t  id = 0;
+    static uint8_t  n_signals = 0;
 
     (void)context;
     if (pid == -1)

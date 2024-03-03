@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:41:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:26:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 //TODO mettere tutti i const
-//TODO mettere le giuste size alle variabili
 //TODO mettere le variabili piu' pesanti sopra
 
 # include <curses.h>

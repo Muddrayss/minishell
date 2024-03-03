@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 19:05:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:32:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void ft_unset(char **args)
 {
-	uint8_t	exit_status;
 	char	*name;
+	uint8_t	exit_status;
 
 	exit_status = EXIT_SUCCESS;
 	while (*(++args))

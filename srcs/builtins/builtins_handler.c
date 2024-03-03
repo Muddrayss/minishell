@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 00:16:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:31:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 bool is_builtin(char *cmd_str)
 {
+	char 					*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	char					*cmd;
 	uint16_t				i;
-	char 					*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
 
 	i = 0;
@@ -33,11 +33,11 @@ bool is_builtin(char *cmd_str)
 
 void exec_builtin(char **cmd_args)
 {
-	static const char		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
-	static void 			(*const builtin_functions[])(char **) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
-	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
 	t_data					*data;
 	uint8_t					i;
+	static void 			(*const builtin_functions[])(char **) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
+	static const char		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
+	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
 
 	data = get_data();
 	i = 0;

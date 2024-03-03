@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 13:26:58 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 13:53:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:38:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static char         *ft_strpbrk(char *str, char sep);
 
 char    *ft_strtok(char *str, char sep)
 {
-    static char     *current_token = NULL;
     char            *token;
     char            *end;
+    static char     *current_token = NULL;
 
     if (str)
         current_token = str;

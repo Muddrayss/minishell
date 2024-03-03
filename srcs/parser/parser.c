@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:28:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:36:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ static t_tree   *fill_tree(t_list *lexered_params, t_list *stop)
 
 static t_list	*skip_parenthesis(t_list *lexered_params)
 {
-	uint16_t	n_open;
 	t_lexer		*elem;
+	uint16_t	n_open;
 
 	n_open = 1;
 	while (n_open && lexered_params->next)
@@ -80,8 +80,8 @@ static t_list	*skip_parenthesis(t_list *lexered_params)
 
 static t_list   *unskip_parenthesis(t_list *lexered_params)
 {
-    uint16_t   n_close;
     t_lexer    *elem;
+    uint16_t   n_close;
 
     n_close = 1;
     while (n_close && lexered_params->prev)

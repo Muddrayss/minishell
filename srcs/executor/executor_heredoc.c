@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:40:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:34:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ static void     fill_heredoc(char *limiter, uint16_t fd);
 
 void create_heredocs(t_tree *tree, uint8_t *status)
 {
+    t_parser    *elem;
     t_list      *redirs;
     t_redir     *redir;
-    uint16_t    fd;
     char        *filename;
-    t_parser    *elem;
+    uint16_t    fd;
 
     if (!tree || *status != 0)
         return ;

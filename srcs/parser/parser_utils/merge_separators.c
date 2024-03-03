@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:32:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:36:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ void merge_separators(t_list **lexered_params)
 //TODO refractor
 static void merge_ampersands(t_list **head, t_list **node)
 {
+    t_list  *node_prev;
     t_lexer *elem;
     t_lexer *next_elem;
     t_lexer *prev_elem;
-    t_list  *node_prev;
     char    *tmp;
 
     next_elem = NULL;

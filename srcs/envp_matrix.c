@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:48:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:38:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ void	envp_matrix_remove(char *env_name, uint16_t name_len)
 
 void	envp_matrix_add(char *str)
 {
+	t_data		*data;
 	char		**matrix;
 	char		**new_matrix;
 	uint16_t	size;
-	t_data		*data;
 
 	data = get_data();
 	matrix = data->envp_matrix;
@@ -60,8 +60,8 @@ void	envp_matrix_add(char *str)
 
 void	envp_print_env(void)
 {
-	uint16_t	i;
 	char		**matrix;
+	uint16_t	i;
 
 	matrix = get_data()->envp_matrix;
 	i = 0;

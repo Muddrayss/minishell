@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:26:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:34:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,8 +172,8 @@ static void parent(t_tree *node, int16_t fds[3], pid_t pid)
 
 static void wait_for_children(t_tree *node) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
 {
-    uint16_t    n_to_wait;
     int32_t     status;
+    uint16_t    n_to_wait;
 
     n_to_wait = get_n_pipelines(node); //numero di pipeline SULLO STESSO LAYER
     while (n_to_wait--)

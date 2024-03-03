@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:12:51 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:24:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:38:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ bool is_token(char c)
 
 bool is_shell_space(char c)
 {
+    uint8_t			i;
     static char 	shell_spaces[] = {' ', '\n', '\t'};
     static uint8_t	n_spaces = sizeof(shell_spaces) / sizeof(shell_spaces[0]);
-    uint8_t			i;
 
     i = 0;
     while (i < n_spaces)

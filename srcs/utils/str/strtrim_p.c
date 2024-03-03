@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 16:36:23 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 15:00:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:38:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ static bool	ft_cinstr(char *str, char c);
 
 char	*strtrim_p(char *s1, char *set)
 {
-	char	*newstr;
-	char	*start;
-	size_t	i;
+	char		*newstr;
+	char		*start;
+	uint16_t	i;
 
 	start = s1;
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 22:23:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:32:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static void throw_cmd_not_found_error(char *cmd);
 
 char	*get_cmd_path(char *path, char *cmd)
 {
-    char *entry;
-    char *full_path;
-	char *path_cpy;
+    char	*entry;
+    char	*full_path;
+	char	*path_cpy;
 
 	full_path = NULL;
 	if (!path || !cmd)

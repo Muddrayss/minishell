@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:06:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 14:35:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ static int8_t    check_tokens(t_list *lexered_params)
 
 static int8_t   check_parenthesis(t_list *lexered_params)
 {
-    int16_t     n_open;
     t_lexer     *elem;
+    int16_t     n_open;
 
     n_open = 0;
     while (lexered_params)
