@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 19:23:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 23:26:05 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ static char	*get_custom_bin(const char *const cmd)
     	return (full_path);
 	ft_putstr_fd("minishell: error opening file '", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
     return (free_and_null((void **)&full_path), NULL);
 }
 
