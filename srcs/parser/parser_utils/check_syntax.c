@@ -75,8 +75,8 @@ static int8_t   check_parenthesis(t_list *lexered_params)
         lexered_params = lexered_params->next;
     }
     if (n_open)
-        throw_syntax_error('(');
-    return (-1 * (n_open > 0)); //se ci sono parentesi aperte, ritorna -1
+        return (throw_syntax_error('('), -1);
+    return (0); //se ci sono parentesi aperte, ritorna -1
 }
 
 static int8_t   check_redirs(t_list *lexered_params)
