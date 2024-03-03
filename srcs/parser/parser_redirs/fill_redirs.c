@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 19:36:34 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 20:13:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_list  *fill_redirs(const char *const cmd_str)
                 type = REDIR_APPEND * (cmd_str[i + 1] == '>') + REDIR_OUTPUT * (cmd_str[i + 1] != '>');
             init_redir(&redirs, type, cmd_str + i, heredoc_fileno);
         }
-        i++;
+        i += 1 + (type == REDIR_HEREDOC || type == REDIR_APPEND);
     }
     return (heredoc_fileno++, lstreverse(&redirs), redirs);
 }
@@ -52,7 +52,7 @@ static void init_redir(t_list **const redirs, const char type, const char *const
 
     redir = (t_redir *)malloc_p(sizeof(t_redir));
     redir->type = type;
-    redir->filename = get_filename(str);
+    redir->filename = get_filename(str + (type == REDIR_HEREDOC || type == REDIR_APPEND));
     redir->heredoc_fileno = -1 * (type != REDIR_HEREDOC) + heredoc_fileno * (type == REDIR_HEREDOC);
     lstadd_front(redirs, lstnew_p(redir));
 }
@@ -64,7 +64,7 @@ static char *get_filename(const char *const str) //str in posizione della redir 
 	uint16_t 	i;
 	
 	filename = NULL;
-    i = 1; //per skippare > < 
+    i = 1;
 	while (str[i] != '\0' && is_shell_space(str[i]))
 		i++;
 	len = 0;
