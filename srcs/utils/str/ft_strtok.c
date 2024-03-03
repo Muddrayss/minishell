@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 13:26:58 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:43:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:48:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char    *ft_strtok(char *const str, const char sep)
         return (NULL);
     }
     end = ft_strpbrk(current_token, sep);
-    if (end == NULL)
+    if (!end)
     {
         token = current_token;
         current_token = NULL;

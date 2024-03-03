@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:32:39 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:36:34 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ t_list  *fill_redirs(const char *const cmd_str)
     uint16_t        i;
     char            master_quote;
     char            type;
-    static int16_t heredoc_fileno
-        = 0;
+    static int16_t  heredoc_fileno = 0;
 
     i = 0;
     redirs = NULL;

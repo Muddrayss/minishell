@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 12:04:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:40:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:47:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*ft_calloc(const size_t nmemb, const size_t size)
 	if (nmemb != 0 && size > ULONG_MAX / nmemb)
 		return (NULL);
 	arr = (void *)malloc(size * nmemb);
-	if (arr == NULL)
+	if (!arr)
 		return (NULL);
 	ft_bzero(arr, size * nmemb);
 	return (arr);
@@ -29,8 +29,7 @@ void	*ft_calloc(const size_t nmemb, const size_t size)
 
 void	ft_bzero(void *const s, size_t n)
 {
-	char	*const ptr
-	= (char *const)s;
+	char	*const ptr = (char *)s;
 
 	while (n-- > 0)
 		ptr[n] = '\0';

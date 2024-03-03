@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 15:58:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:23:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,25 @@ void create_heredocs(const t_tree *const tree, uint8_t *const status)
 
 char    *get_heredoc_filename(const uint16_t id)
 {
-    t_data      *data;
-    char        *idx;
-    char        *filename;
-    uint16_t    size;
+    char            *filename;
+    const t_data    *const data = get_data();
+    const char      *const id_str = ft_itoa((uint16_t)id);
+    const uint16_t  size = ft_strlen(data->starting_dir) + ft_strlen(id_str) + 16;
 
-    data = get_data();
-    idx = ft_itoa((uint16_t)id);
-    size = ft_strlen(data->starting_dir) + ft_strlen(idx) + 16;
     filename = ft_calloc(size, sizeof(char));
-    if (!filename || !idx)
-        return (free_and_null((void **)&idx), free_and_null((void **)&filename), ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
+    if (!filename || !id_str)
+        return (free_and_null((void **)&id_str), free_and_null((void **)&filename), ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
     ft_strcpy(filename, data->starting_dir);
     ft_strcat(filename, "/tmp/.heredoc_");
-    ft_strcat(filename, idx);
-    return (free_and_null((void **)&idx), filename);
+    ft_strcat(filename, id_str);
+    return (free_and_null((void **)&id_str), filename);
 }
 
 static uint8_t fill_in_child(const char *const limiter, const uint16_t heredoc_fd)
 {
-    pid_t       pid;
     int32_t     status;
+    const pid_t pid = fork_p();
 
-    pid = fork_p();
     if (pid == 0)
     {
         set_signals(S_HEREDOC, false);

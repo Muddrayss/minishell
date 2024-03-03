@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:54:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:58:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,10 @@ void    envp_init(const char **const envp)
 //NAME DEVE ESSERE COMPRESO DI '='
 void	ft_setenv(const char *const name, const char *const value, const bool replace)
 {
-    t_data      *data;
-    char        *str;
+    t_data              *data;
+    const char *const   str = strjoin_p(name, value);
 
     data = get_data();
-    str = strjoin_p(name, value);
     if (replace && ft_getenv(name))
         ft_unsetenv(name);
     data->envp_size++;
@@ -69,10 +68,9 @@ void	ft_unsetenv(const char *const name)
 //NAME DEVE ESSERE COMPRESO DI '='
 char	*ft_getenv(const char *const name)
 {
-    t_tree *found;
-    char   *value;
+    char                *value;
+    const t_tree *const found = envp_tree_find(get_data()->envp_tree, name, ft_strlen(name));
 
-    found = envp_tree_find(get_data()->envp_tree, name, ft_strlen(name));
     if (found)
     {
         value = ft_strchr((char *)found->content, '=');

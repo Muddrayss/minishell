@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:16:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:14:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ void	clear_quotes(char **const str)
 	char		*new_str;
 	char		master_quote;
 
-	i = 0;
 	j = 0;
-	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(*str) + 1));
+	i = 0;
 	master_quote = '\0';
+	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(*str) + 1));
 	while ((*str)[i])
 	{
 		if (!master_quote && ((*str)[i] == '\'' || (*str)[i] == '"'))
@@ -40,10 +40,9 @@ void	clear_quotes(char **const str)
 
 void	exec_simple_cmd(const char *const path, const char *const cmd_str)
 {
-	pid_t	pid;
-	char	*cmd;
+	pid_t				pid;
+	const char *const 	cmd = strdup_p(cmd_str);
 
-	cmd = strdup_p(cmd_str);
 	pid = fork_p();
 	if (pid == 0)
 		exec(path, cmd);

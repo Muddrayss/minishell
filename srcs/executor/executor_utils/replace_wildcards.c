@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:35:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:28:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,12 @@ static char     *insert_result(const char *const str, const t_list *const matchi
 
 void    replace_wildcards(char **const str)
 {
-    t_list      *matching_files;
-    char        *wildcard_str;
-    char        *cwd;
-    uint16_t    idx;
-    uint16_t    len;
+    t_list              *matching_files;
+    char                *wildcard_str;
+    const char *const   cwd = getcwd_p(NULL, 0);
+    uint16_t            idx;
+    uint16_t            len;
 
-    cwd = getcwd_p(NULL, 0);
     idx = 0;
     wildcard_str = get_wildcard_str(*str, &idx, &len);
     while (wildcard_str)
@@ -49,16 +48,14 @@ void    replace_wildcards(char **const str)
 
 static t_list   *parse_wildcard_str(const char *wildcard_str, const char *const cwd, const bool is_root)
 {
-    DIR             *dir;
-    struct dirent   *entry;
-    t_list          *matching_files;
-    char            *basedir;
-    char            *new_wildcard_str;
-    char            *full_entry;
+    struct dirent       *entry;
+    t_list              *matching_files;
+    char                *new_wildcard_str;
+    char                *full_entry;
+    const char *const   basedir = get_base_dir(&wildcard_str, (bool *)&is_root);
+    const DIR  *const   dir = opendir_p(basedir);
 
     matching_files = NULL;
-    basedir = get_base_dir(&wildcard_str, (bool *)&is_root);
-    dir = opendir_p(basedir);
     while (dir)
     {
         entry = readdir_p(dir);
@@ -77,7 +74,7 @@ static t_list   *parse_wildcard_str(const char *wildcard_str, const char *const 
         }
         free_and_null((void **)&new_wildcard_str);
     }
-    return (free_and_null((void **)&basedir), closedir(dir), matching_files);
+    return (free_and_null((void **)&basedir), closedir((DIR *)dir), matching_files);
 }
 
 static char *get_full_entry(const char *basedir, const char *const entry, const char *cwd, const bool is_root)
@@ -194,11 +191,10 @@ static char *get_wildcard_str(const char *const str, uint16_t *const i, uint16_t
 
 static t_list *sort_result(t_list *matching_files)
 {
-    t_list  *head;
-    t_list  *next;
-    char    *tmp;
+    const t_list *const head = matching_files;
+    t_list              *next;
+    char                *tmp;
 
-    head = matching_files;
     while (matching_files)
     {
         next = matching_files->next;
@@ -214,7 +210,7 @@ static t_list *sort_result(t_list *matching_files)
         }
         matching_files = matching_files->next;
     }
-    return (head);
+    return ((t_list *)head);
 }
 
 static char *add_cwd(const char *wildcard_str, const char *const cwd)

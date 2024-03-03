@@ -6,32 +6,31 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:34:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
 
-static void     launch_commands(const t_tree *const node, const int8_t prev_type, int16_t *const fds);
-static void     launch_builtin_cmd(const t_tree *const node, const int8_t prev_type, int16_t *const fds);
-static void     launch_standard_cmd(const t_tree *const node, const int8_t prev_type, int16_t *const fds);
+static void     launch_commands(const t_tree *const node, const int8_t prev_type, int16_t fds[5]);
+static void     launch_builtin_cmd(const t_tree *const node, const int8_t prev_type, int16_t fds[5]);
+static void     launch_standard_cmd(const t_tree *const node, const int8_t prev_type, int16_t fds[5]);
 static t_tree   *skip_till_semicolon(const t_tree *const node);
-static void     child(const t_tree *const node, const int16_t *const fds, const int8_t prev_type);
-static void     parent(const t_tree *const node, int16_t *const fds, const pid_t pid);
+static void     child(const t_tree *const node, const int16_t fds[5], const int8_t prev_type);
+static void     parent(const t_tree *const node, int16_t fds[5], const pid_t pid);
 static void     wait_for_children(const t_tree *const node);
 static uint16_t get_n_pipelines(const t_tree *const node);
 
 
 void    executor(const t_tree *const parsed_params)
 {
-    uint8_t     original_status;
-    uint8_t     heredoc_status;
-    int16_t     fds[5] = {-42, -42, -42, -42, -42}; //pipe read, pipe write, prev_output, original stdin, original stdout
+    const uint8_t   original_status = g_status;
+    uint8_t         heredoc_status;
+    int16_t         fds[5] = {-42, -42, -42, -42, -42}; //pipe read, pipe write, prev_output, original stdin, original stdout
 
     fds[3] = dup_p(STDIN_FILENO);
     fds[4] = dup_p(STDOUT_FILENO);
-    original_status = g_status;
     heredoc_status = 0;
     create_heredocs(parsed_params, &heredoc_status);
     dup2(fds[3], STDIN_FILENO); //altrimenti se heredoc e' terminato con segnale 130, il comando dopo continua a scrivere nell'fd dell'heredoc
@@ -41,7 +40,7 @@ void    executor(const t_tree *const parsed_params)
             g_status = 130;
         return ;
     }
-    g_status = original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
+    g_status = (uint8_t)original_status; //fai fallire un comando, fai '<< here echo $?' scrivendo qualsiasi cosa nell heredoc, e vedi che echo $? ritorna l'errore del comando precedente (non 0 anche se heredoc e' stato eseguito correttamente)
     set_signals(S_COMMAND, true);
     launch_commands(parsed_params, -1, fds);
     wait_for_children(parsed_params);
@@ -56,7 +55,7 @@ void    executor(const t_tree *const parsed_params)
 //command in the pipeline (cmd3 in this case) to complete, along with 
 //all preceding commands in the pipeline, before it finishes.
 
-static void launch_commands(const t_tree *const node, const int8_t prev_type, int16_t *const fds)
+static void launch_commands(const t_tree *const node, const int8_t prev_type, int16_t fds[5])
 {
     t_parser    *elem;
     t_parser    *left_elem;
@@ -89,11 +88,10 @@ static void launch_commands(const t_tree *const node, const int8_t prev_type, in
 // of built-in commands, the commands are executed sequentially, not in parallel
 // as they would be if each command in the pipeline were an external command that
 // required a new process to be spawned.
-static void launch_builtin_cmd(const t_tree *const node, const int8_t prev_type, int16_t *const fds)
+static void launch_builtin_cmd(const t_tree *const node, const int8_t prev_type, int16_t fds[5])
 {
-    t_parser    *elem;
+    const t_parser *const   elem = (t_parser *)node->content;
 
-    elem = (t_parser *)node->content;
     if (elem->type == PIPELINE)
     {
         dup2_p(fds[1], STDOUT_FILENO);
@@ -105,13 +103,11 @@ static void launch_builtin_cmd(const t_tree *const node, const int8_t prev_type,
     dup2_p(fds[4], STDOUT_FILENO);
 }
 
-static void launch_standard_cmd(const t_tree *const node, const int8_t prev_type, int16_t *const fds)
+static void launch_standard_cmd(const t_tree *const node, const int8_t prev_type, int16_t fds[5])
 {
-    t_parser    *elem;
-    pid_t       pid;
+    const t_parser *const   elem = (t_parser *)node->content;
+    const pid_t             pid = fork_p();
 
-    elem = (t_parser *)node->content;
-    pid = fork_p();
     if (pid == 0)
     {
         if (elem->type == PIPELINE)
@@ -142,11 +138,10 @@ static t_tree   *skip_till_semicolon(const t_tree *const node)
     return (skip_till_semicolon(node->right));
 }
 
-static void child(const t_tree *const node, const int16_t *const fds, const int8_t prev_type)
+static void child(const t_tree *const node, const int16_t fds[5], const int8_t prev_type)
 {
-    t_parser    *elem;
+    const t_parser *const  elem = (t_parser *)node->content;
 
-    elem = (t_parser *)node->content;
     if (prev_type == PIPELINE)
         dup2_p(fds[2], STDIN_FILENO);
     replace_env_vars(&elem->cmd->cmd_str, false);
@@ -155,12 +150,11 @@ static void child(const t_tree *const node, const int16_t *const fds, const int8
     exec(ft_getenv("PATH="), elem->cmd->cmd_str);
 }
 
-static void parent(const t_tree *const node, int16_t *const fds, const pid_t pid)
+static void parent(const t_tree *const node, int16_t fds[5], const pid_t pid)
 {
-    t_parser    *elem;
-    int32_t     status;
+    const t_parser *const   elem = (t_parser *)node->content;
+    int32_t                 status;
 
-    elem = (t_parser *)node->content;
     reset_fd(&fds[1]);
     fds[2] = fds[0];
     if (elem->type != PIPELINE)

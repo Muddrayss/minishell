@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 17:06:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:23:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,9 @@ static bool is_custom_bin(const char *const cmd)
 
 static char *search_cmd_in_dirs(const char *const entry, const char *const cmd)
 {
-    char		*full_path;
-	uint16_t	len;
+    char			*full_path;
+	const uint16_t	len = ft_strlen(entry) + ft_strlen(cmd) + 2; // +2 for '/' and '\0';
 
-	len = ft_strlen(entry) + ft_strlen(cmd) + 2; // +2 for '/' and '\0'
 	full_path = (char *)malloc_p(sizeof(char) * len);
 	ft_strcpy(full_path, entry);
 	ft_strcat(full_path, "/");
@@ -74,17 +73,16 @@ static char *search_cmd_in_dirs(const char *const entry, const char *const cmd)
 
 static char	*get_custom_bin(const char *const cmd)
 {
-	char	*full_path;
-	char	*cwd;
+	char		*full_path;
+	const char	*cwd = getcwd_p(NULL, 0);
 
-	cwd = getcwd_p(NULL, 0);
 	full_path = (char *)calloc_p(ft_strlen(cwd) + ft_strlen(cmd) + 2, sizeof(char));
 	if (ft_strncmp(cmd, "../", 3) == 0 || ft_strncmp(cmd, "./", 2) == 0)
 	{
 		ft_strcpy(full_path, cwd);
 		ft_strcat(full_path, "/");
 	}
-	free(cwd);
+	free((char *)cwd);
 	ft_strcat(full_path, cmd);
 	if (access(full_path, X_OK) == 0)
     	return (full_path);

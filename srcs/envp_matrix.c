@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:45:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:55:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,9 @@ void	envp_matrix_add(const char *str)
 
 void	envp_print_env(void)
 {
-	char		**matrix;
-	uint16_t	i;
+	const char **const	matrix = (const char **)get_data()->envp_matrix;
+	uint16_t			i;
 
-	matrix = get_data()->envp_matrix;
 	i = 0;
 	while (matrix[i])
 	{

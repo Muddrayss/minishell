@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:56:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:59:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,10 @@ void	ft_quit(const uint8_t id, const char *const msg)
 
 static void	quit_from_main(const uint8_t id)
 {
-	t_data		*data;
-	uint8_t 	i;
+	uint8_t 			i;
+	const t_data *const	data = get_data();
 
 	i = 0;
-	data = get_data();
 	while (i < (sizeof(id) * 8))
 	{
 		if (id & (0x01 << i++))

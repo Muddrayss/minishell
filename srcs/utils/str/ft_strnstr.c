@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:15:35 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:42:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:46:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 char	*ft_strnstr(const char *big, const char *little, const uint16_t len)
 {
-	uint16_t	i;
-	uint16_t	n;
-	uint16_t	little_len;
+	uint16_t		i;
+	uint16_t		n;
+	const uint16_t	little_len = ft_strlen(little);
 
 	i = 0;
 	n = 0;
-	little_len = ft_strlen(little);
 	if (little[0] == '\0')
 		return ((char *)big);
 	while (i < len && big[i])

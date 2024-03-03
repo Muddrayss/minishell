@@ -19,9 +19,7 @@ char	*strdup_p(const char *const s)
 
 	if (!s)
 		return (NULL);
-	dst = (char *)malloc(sizeof(char) * (ft_strlen(s) + 3));
-	if (dst == NULL)
-		return (NULL);
+	dst = (char *)malloc_p(sizeof(char) * (ft_strlen(s) + 3));
 	i = 0;
 	while (s[i] != '\0')
 	{

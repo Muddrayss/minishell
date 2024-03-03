@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:07:33 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 16:43:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:35:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 void	del_content_lexer(const void *const content)
 {
-	t_lexer	*elem;
+	const t_lexer *const	elem = (t_lexer *)content;
 
-	elem = (t_lexer *)content;
 	free_and_null((void **)&elem->cmd_str);
     free_and_null((void **)&elem);
 }

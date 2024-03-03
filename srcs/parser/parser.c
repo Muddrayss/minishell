@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:30:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:40:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ static t_parser *init_cmd(const char type, const char *const cmd_str)
 {
     t_parser    *node;
     t_cmd       *cmd;
-    
 
     node = (t_parser *)malloc_p(sizeof(t_parser));
     cmd = (t_cmd *)malloc_p(sizeof(t_cmd));

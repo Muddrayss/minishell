@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:57:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 20:00:51 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,9 @@ void init_general(void)
 
 static void	clean_heredocs(const char *const path)
 {
-	t_data	*data;
+	const t_data *const data = get_data();
 	char	*cmd;
 
-	data = get_data();
 	cmd = (char *)calloc_p(ft_strlen(data->starting_dir) + 12, sizeof(char));
 	ft_strcpy(cmd, "rm -rf ");
 	ft_strcat(cmd, data->starting_dir);

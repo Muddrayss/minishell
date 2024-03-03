@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:39:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:44:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,35 @@
 
 DIR *opendir_p(const char *const name)
 {
-    DIR    *dir;
+    const DIR *const    dir = opendir(name);
 
-    dir = opendir(name);
     if (!dir && is_bad_errno(errno))
         ft_quit(ERR_MEM, NULL);
-    return (dir);
+    return ((DIR *)dir);
 }
 
 struct dirent   *readdir_p(const DIR *const dir)
 {
-    struct dirent    *entry;
+    const struct dirent *const   entry = readdir((DIR *)dir);
 
-    entry = readdir((DIR *)dir);
     if (!entry && is_bad_errno(errno))
         ft_quit(ERR_MEM, NULL);
-    return (entry);
+    return ((struct dirent *)entry);
 }
 
 char   *getcwd_p(const char *const buf, const size_t size)
 {
-    char    *cwd;
+    const char *const   cwd = getcwd((char *)buf, size);
 
-    cwd = getcwd((char *)buf, size);
     if (!cwd && is_bad_errno(errno))
         ft_quit(ERR_MEM, NULL);
-    return (cwd);
+    return ((char *)cwd);
 }
 
 int32_t    chdir_p(const char *const path)
 {
-    int32_t    ret;
+    const int32_t   ret = chdir(path);
 
-    ret = chdir(path);
     if (ret == -1 && is_bad_errno(errno))
         ft_quit(ERR_MEM, NULL);
     return (ret);
