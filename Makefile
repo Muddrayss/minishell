@@ -56,7 +56,7 @@ fclean: clean
 	@echo "Full cleaning of $(NAME) done!"
 
 leaks: all
-	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp ./$(NAME) 2> leak_report
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME) 2> leak_report
 	@echo "leak report generated"
 	@make clean
 
