@@ -12,7 +12,7 @@
 
 #include "../../../headers/minishell.h"
 
-void	free_and_null(void **ptr)
+void	free_and_null(void **const ptr)
 {
     if (!ptr)
         return ;

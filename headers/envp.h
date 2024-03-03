@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 17:21:31 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 22:41:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:56:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,18 @@
 # define REPLACE 0
 # define ADD 1
 
-void  	envp_init(char **envp);
-void	ft_setenv(char *env_name, char *env_value, bool replace);
-char    *ft_getenv(char *env_name);
-void	ft_unsetenv(char *env_name);
+void    envp_init(const char **const envp);
+void	ft_setenv(const char *const name, const char *const value, const bool replace);
+char	*ft_getenv(const char *const name);
+void	ft_unsetenv(const char *const name);
 
-t_tree	*envp_tree_add(t_tree *root, char *str);
-t_tree	*envp_tree_remove(t_tree *root, char *name, uint16_t name_len);
-t_tree	*envp_tree_find(t_tree *root, char *name, uint16_t name_len);
-void	envp_tree_print(t_tree *root);
-void	envp_tree_print_export(t_tree *root);
+t_tree *envp_tree_add(t_tree *const root, const char *const str);
+t_tree *envp_tree_remove(t_tree *const root, const char *const name, const uint16_t name_len);
+t_tree *envp_tree_find(const t_tree *const root, const char *const name, const uint16_t name_len);
+void	envp_print_export(const t_tree *const root);
 
-void	envp_matrix_remove(char *env_name, uint16_t name_len);
-void	envp_matrix_add(char *str);
+void	envp_matrix_add(const char *str);
+void	envp_matrix_remove(const char *const env_name, const uint16_t name_len);
 void	envp_print_env(void);
-void	envp_print_export(t_tree *root);
 
 #endif

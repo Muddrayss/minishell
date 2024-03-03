@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 22:57:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:56:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-static void	quit_from_main(uint8_t id);
+static void	quit_from_main(const uint8_t id);
 static void	close_all_fds(void);
 
-void	ft_quit(uint8_t id, char *msg)
+void	ft_quit(const uint8_t id, const char *const msg)
 {
 	if (errno != EINTR)
 	{
@@ -33,7 +33,7 @@ void	ft_quit(uint8_t id, char *msg)
 	quit_from_main((uint8_t)id);
 }
 
-static void	quit_from_main(uint8_t id)
+static void	quit_from_main(const uint8_t id)
 {
 	t_data		*data;
 	uint8_t 	i;
@@ -60,7 +60,7 @@ void	free_data(void)
 	if (data->cmd_args)
 		free_and_null((void **)&data->cmd_args[0]);
 	free_and_null((void **)&data->cmd_args);
-	treeclear(&data->envp_tree, &free);
+	treeclear(&data->envp_tree, (void *const)&free);
 	free_and_null((void **)&data->envp_matrix);
 	data->envp_matrix = NULL;
 	lstclear(&data->lexered_params, &del_content_lexer);

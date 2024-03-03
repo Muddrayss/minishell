@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:34:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:58:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static uint8_t  fill_in_child(char *limiter, uint16_t heredoc_fd);
-static void     fill_heredoc(char *limiter, uint16_t fd);
+static uint8_t  fill_in_child(const char *const limiter, const uint16_t heredoc_fd);
+static void     fill_heredoc(const char *const limiter, const uint16_t fd);
 
-void create_heredocs(t_tree *tree, uint8_t *status)
+void create_heredocs(const t_tree *const tree, uint8_t *const status)
 {
     t_parser    *elem;
     t_list      *redirs;
@@ -47,7 +47,7 @@ void create_heredocs(t_tree *tree, uint8_t *status)
     create_heredocs(tree->right, status);
 }
 
-char    *get_heredoc_filename(uint16_t id)
+char    *get_heredoc_filename(const uint16_t id)
 {
     t_data      *data;
     char        *idx;
@@ -66,7 +66,7 @@ char    *get_heredoc_filename(uint16_t id)
     return (free_and_null((void **)&idx), filename);
 }
 
-static uint8_t fill_in_child(char *limiter, uint16_t heredoc_fd)
+static uint8_t fill_in_child(const char *const limiter, const uint16_t heredoc_fd)
 {
     pid_t       pid;
     int32_t     status;
@@ -85,7 +85,7 @@ static uint8_t fill_in_child(char *limiter, uint16_t heredoc_fd)
     return ((uint8_t)status);
 }
 
-static void fill_heredoc(char *limiter, uint16_t fd)
+static void fill_heredoc(const char *const limiter, const uint16_t fd)
 {
     char        *str;
     uint16_t    str_len;

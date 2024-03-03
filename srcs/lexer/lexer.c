@@ -6,21 +6,20 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:35:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:30:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static t_list 	*lexer_add_cmd(t_list *lexered_params, uint16_t cmd_len, char *input);
-static t_list 	*lexer_add_token(t_list *lexered_params, char c);
-
-void    lexer(char *input)
+static t_list   *lexer_add_cmd(t_list *lexered_params, const uint16_t cmd_len, const char *const cmd_str_raw);
+static t_list   *lexer_add_token(t_list *lexered_params, const char c);
+void    lexer(const char *input)
 {
     t_data          *data;
     char            *cmd_str;
-    char            current_quote;
     uint16_t        cmd_len;
+    char            current_quote;
 
     data = get_data();
     current_quote = '\0';
@@ -51,7 +50,7 @@ void    lexer(char *input)
     lstreverse(&data->lexered_params);
 }
 
-static t_list   *lexer_add_cmd(t_list *lexered_params, uint16_t cmd_len, char *cmd_str_raw)
+static t_list   *lexer_add_cmd(t_list *lexered_params, const uint16_t cmd_len, const char *const cmd_str_raw)
 {
     t_lexer   		*content;
     
@@ -59,12 +58,12 @@ static t_list   *lexer_add_cmd(t_list *lexered_params, uint16_t cmd_len, char *c
         return (lexered_params);
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
     content->token = 0;
-    content->cmd_str = cmd_str_raw;
+    content->cmd_str = (char *)cmd_str_raw;
     lstadd_front(&lexered_params, lstnew_p(content));
     return (lexered_params);
 }
 
-static t_list *lexer_add_token(t_list *lexered_params, char c)
+static t_list *lexer_add_token(t_list *lexered_params, const char c)
 {
     t_lexer   		*content;
 

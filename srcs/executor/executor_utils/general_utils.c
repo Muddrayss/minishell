@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 19:27:15 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:16:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	clear_quotes(char **str)
+void	clear_quotes(char **const str)
 {
 	uint32_t	i;
 	uint32_t	j;
@@ -38,7 +38,7 @@ void	clear_quotes(char **str)
 	*str = new_str;
 }
 
-void	exec_simple_cmd(char *path, char *cmd_str)
+void	exec_simple_cmd(const char *const path, const char *const cmd_str)
 {
 	pid_t	pid;
 	char	*cmd;
@@ -51,20 +51,20 @@ void	exec_simple_cmd(char *path, char *cmd_str)
 	wait(NULL);
 }
 
-void  exec(char *path, char *cmd_str)
+void  exec(const char *const path, const char *const cmd_str)
 {
 	t_data	*data;
 	char	*cmd_path;
 
 	data = get_data();
-	data->cmd_args = get_cmd_args(cmd_str);
+	data->cmd_args = get_cmd_args((char *)cmd_str);
 	if (!data->cmd_args[0] || !data->cmd_args[0][0])
 	{
 		free_data();
 		exit(0);
 	}
 	if (is_builtin(data->cmd_args[0]))
-		exec_builtin(data->cmd_args);
+		exec_builtin((const char **)data->cmd_args);
 	else
 	{
 		cmd_path = get_cmd_path(path, data->cmd_args[0]);

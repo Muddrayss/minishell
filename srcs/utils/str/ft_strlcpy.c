@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:43:35 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 23:23:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:42:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-uint16_t	ft_strlcpy(char *dst,  char *src, uint16_t size)
+uint16_t	ft_strlcpy(char *dst, const char *src, const uint16_t size)
 {
 	uint16_t	i;
 	uint16_t	src_len;

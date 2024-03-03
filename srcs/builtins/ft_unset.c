@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 14:32:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-void ft_unset(char **args)
+void ft_unset(const char *const *args)
 {
 	char	*name;
 	uint8_t	exit_status;

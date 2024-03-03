@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:17:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static uint16_t  skip_flags(char **args, bool *is_n);
+static uint16_t  skip_flags(const char *const *args, bool *is_n);
 
 //TODO quando viene chiamato con flag, readline si scazza
-void ft_echo(char **args)
+void ft_echo(const char *const *args)
 {
     uint16_t    i;
     bool        is_n;
@@ -33,7 +33,7 @@ void ft_echo(char **args)
     g_status = EXIT_SUCCESS;
 }
 
-static uint16_t  skip_flags(char **args, bool *is_n)
+static uint16_t  skip_flags(const char *const *args, bool *is_n)
 {
     uint16_t i;
     uint16_t j;

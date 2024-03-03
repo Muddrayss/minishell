@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:32:40 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:22:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:12:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void   ft_putstr_fd(char *s, uint16_t fd)
+void   ft_putstr_fd(const char *s, const uint16_t fd)
 {
     write(fd, s, ft_strlen(s));
 }

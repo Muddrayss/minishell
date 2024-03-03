@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:36:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:30:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static t_tree   *fill_tree(t_list *lexered_params, t_list *stop);
-static t_parser *init_cmd(char type, char *cmd_str);
-static t_list   *skip_parenthesis(t_list *lexered_params);
-static t_list   *unskip_parenthesis(t_list *lexered_params);
+static t_parser *init_cmd(const char type, const char *const cmd_str);
+static t_tree   *fill_tree(const t_list *const lexered_params, const t_list *const stop);
+static t_list   *skip_parenthesis(const t_list *lexered_params);
+static t_list   *unskip_parenthesis(const t_list *lexered_params);
 
 void    parser(t_list *lexered_params)
 {
@@ -30,7 +30,7 @@ void    parser(t_list *lexered_params)
 }
 
 //stop parte da NULL
-static t_tree   *fill_tree(t_list *lexered_params, t_list *stop)
+static t_tree   *fill_tree(const t_list *const lexered_params, const t_list *const stop)
 {
     t_tree  *node;
     t_lexer *elem;
@@ -60,7 +60,7 @@ static t_tree   *fill_tree(t_list *lexered_params, t_list *stop)
     return (node);
 }
 
-static t_list	*skip_parenthesis(t_list *lexered_params)
+static t_list	*skip_parenthesis(const t_list *lexered_params)
 {
 	t_lexer		*elem;
 	uint16_t	n_open;
@@ -75,10 +75,10 @@ static t_list	*skip_parenthesis(t_list *lexered_params)
 		else if (elem->token == SUBSHELL_START)
 			n_open++;
 	}
-	return (lexered_params); //ritorna la parentesi chiusa
+	return ((t_list *)lexered_params); //ritorna la parentesi chiusa
 }
 
-static t_list   *unskip_parenthesis(t_list *lexered_params)
+static t_list   *unskip_parenthesis(const t_list *lexered_params)
 {
     t_lexer    *elem;
     uint16_t   n_close;
@@ -96,7 +96,7 @@ static t_list   *unskip_parenthesis(t_list *lexered_params)
     return (lexered_params->next); //ritorna uno dopo la parentesi aperta
 }
 
-static t_parser *init_cmd(char type, char *cmd_str)
+static t_parser *init_cmd(const char type, const char *const cmd_str)
 {
     t_parser    *node;
     t_cmd       *cmd;

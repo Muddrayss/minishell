@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 15:41:15 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 23:51:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-int16_t ft_strncmp(char *s1, char *s2, uint16_t n)
+int16_t ft_strncmp(const char *const s1, const char *const s2, const uint16_t n)
 {
 	uint16_t	i;
 

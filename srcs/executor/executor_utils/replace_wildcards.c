@@ -6,23 +6,23 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:33:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:35:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static char     *get_wildcard_str(char *str, uint16_t *i, uint16_t *len);
-static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root);
-static char     *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root);
-static bool     matches_pattern(char *pattern, struct dirent *entry, uint16_t idx);
-static char     *get_new_wildcard_str(char *basedir, char *wildcard_str, char *entry);
-static char     *get_base_dir(char **wildcard_str, bool *is_root);
+static t_list   *parse_wildcard_str(const char *const wildcard_str, const char *const cwd, const bool is_root);
+static char     *get_full_entry(const char *basedir, const char *const entry, const char *cwd, const bool is_root);
+static bool     matches_pattern(const char *pattern, const struct dirent *const entry, const uint16_t idx);
+static char     *get_new_wildcard_str(const char *const basedir, const char *wildcard_str, const char *const entry);
+static char     *get_base_dir(const char **const wildcard_str, bool *const is_root);
+static char     *get_wildcard_str(const char *const str, uint16_t *const i, uint16_t *const len);
 static t_list   *sort_result(t_list *matching_files);
-static char     *add_cwd(char *wildcard_str, char *cwd);
-static char     *insert_result(char *str, t_list *matching_files, uint16_t idx, uint16_t pattern_len);
+static char     *add_cwd(const char *wildcard_str, const char *const cwd);
+static char     *insert_result(const char *const str, const t_list *const matching_files, const uint16_t idx, const uint16_t pattern_len);
 
-void    replace_wildcards(char **str)
+void    replace_wildcards(char **const str)
 {
     t_list      *matching_files;
     char        *wildcard_str;
@@ -39,7 +39,7 @@ void    replace_wildcards(char **str)
         matching_files = parse_wildcard_str(wildcard_str, cwd, false);
         matching_files = sort_result(matching_files);
         *str = insert_result(*str, matching_files, idx, len);
-        lstclear(&matching_files, &free);
+        lstclear(&matching_files, (void *const)&free);
         idx += len;
         free_and_null((void **)&wildcard_str);
         wildcard_str = get_wildcard_str(*str, &idx, &len);
@@ -47,7 +47,7 @@ void    replace_wildcards(char **str)
     free_and_null((void **)&cwd);
 }
 
-static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
+static t_list   *parse_wildcard_str(const char *wildcard_str, const char *const cwd, const bool is_root)
 {
     DIR             *dir;
     struct dirent   *entry;
@@ -57,7 +57,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
     char            *full_entry;
 
     matching_files = NULL;
-    basedir = get_base_dir(&wildcard_str, &is_root);
+    basedir = get_base_dir(&wildcard_str, (bool *)&is_root);
     dir = opendir_p(basedir);
     while (dir)
     {
@@ -80,7 +80,7 @@ static t_list   *parse_wildcard_str(char *wildcard_str, char *cwd, bool is_root)
     return (free_and_null((void **)&basedir), closedir(dir), matching_files);
 }
 
-static char *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root)
+static char *get_full_entry(const char *basedir, const char *const entry, const char *cwd, const bool is_root)
 {
     char    *full_entry;
 
@@ -103,7 +103,7 @@ static char *get_full_entry(char *basedir, char *entry, char *cwd, bool is_root)
     return (full_entry);
 }
 
-static bool matches_pattern(char *pattern, struct dirent *entry, uint16_t idx)
+static bool matches_pattern(const char *pattern, const struct dirent *const entry, const uint16_t idx)
 {
     if (entry->d_name[idx] == '\0')
     {
@@ -118,7 +118,7 @@ static bool matches_pattern(char *pattern, struct dirent *entry, uint16_t idx)
     return (false);
 }
 
-static char  *get_new_wildcard_str(char *basedir, char *wildcard_str, char *entry)
+static char  *get_new_wildcard_str(const char *const basedir, const char *wildcard_str, const char *const entry)
 {
     char        *new_wildcard_str;
     uint16_t    size;
@@ -136,7 +136,7 @@ static char  *get_new_wildcard_str(char *basedir, char *wildcard_str, char *entr
     return (new_wildcard_str);
 }
 
-static char *get_base_dir(char **wildcard_str, bool *is_root)
+static char *get_base_dir(const char **const wildcard_str, bool *const is_root)
 {
     char        *basedir;
     uint16_t    end;
@@ -161,7 +161,7 @@ static char *get_base_dir(char **wildcard_str, bool *is_root)
     return (basedir);
 }
 
-static char *get_wildcard_str(char *str, uint16_t *i, uint16_t *len)
+static char *get_wildcard_str(const char *const str, uint16_t *const i, uint16_t *const len)
 {
     char        *wildcard_str;
     char        master_quote;
@@ -217,7 +217,7 @@ static t_list *sort_result(t_list *matching_files)
     return (head);
 }
 
-static char *add_cwd(char *wildcard_str, char *cwd)
+static char *add_cwd(const char *wildcard_str, const char *const cwd)
 {
     char    *new_wildcard_str;
 
@@ -233,7 +233,7 @@ static char *add_cwd(char *wildcard_str, char *cwd)
     return (free_and_null((void **)&wildcard_str), new_wildcard_str);
 }
 
-static char *insert_result(char *str, t_list *matching_files, uint16_t idx, uint16_t pattern_len)
+static char *insert_result(const char *const str, const t_list *const matching_files, const uint16_t idx, const uint16_t pattern_len)
 {
     t_list      *node;
     char        *new_str;
@@ -241,8 +241,8 @@ static char *insert_result(char *str, t_list *matching_files, uint16_t idx, uint
     uint16_t    filenames_len;
 
     if (!matching_files)
-        return (str);
-    node = matching_files;
+        return ((char *)str);
+    node = (t_list *)matching_files;
     filenames_len = 0;
     while(node)
     {
@@ -252,7 +252,7 @@ static char *insert_result(char *str, t_list *matching_files, uint16_t idx, uint
     size = ft_strlen(str) - pattern_len + filenames_len + 1;
     new_str = (char *)malloc_p(sizeof(char) * size);
     ft_strlcpy(new_str, str, idx + 1);
-    node = matching_files;
+    node = (t_list *)matching_files;
     while (node)
     {
         ft_strcat(new_str, node->content);

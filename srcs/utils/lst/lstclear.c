@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 13:45:40 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 13:24:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:11:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	lstclear(t_list **lst, void (*del)(void*))
+void	lstclear(t_list **const lst, void (*del)(const void *const))
 {
 	t_list	*tmp;
 

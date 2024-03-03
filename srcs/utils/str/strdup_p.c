@@ -12,7 +12,7 @@
 
 #include "../../../headers/minishell.h"
 
-char	*strdup_p(char *s)
+char	*strdup_p(const char *const s)
 {
 	char		*dst;
 	uint16_t	i;

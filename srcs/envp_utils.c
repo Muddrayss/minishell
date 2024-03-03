@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:40:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:54:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void    envp_init(char **envp)
+void    envp_init(const char **const envp)
 {
     t_data      *data;
     char        **matrix;
@@ -37,7 +37,7 @@ void    envp_init(char **envp)
 }
 
 //NAME DEVE ESSERE COMPRESO DI '='
-void	ft_setenv(char *name, char *value, bool replace)
+void	ft_setenv(const char *const name, const char *const value, const bool replace)
 {
     t_data      *data;
     char        *str;
@@ -52,7 +52,7 @@ void	ft_setenv(char *name, char *value, bool replace)
 }
 
 //NAME DEVE ESSERE COMPRESO DI '='
-void	ft_unsetenv(char *name)
+void	ft_unsetenv(const char *const name)
 {
     t_data      *data;
     uint16_t    name_len;
@@ -67,7 +67,7 @@ void	ft_unsetenv(char *name)
 }
 
 //NAME DEVE ESSERE COMPRESO DI '='
-char	*ft_getenv(char *name)
+char	*ft_getenv(const char *const name)
 {
     t_tree *found;
     char   *value;

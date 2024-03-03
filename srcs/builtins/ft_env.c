@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:29:39 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/01 16:16:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-void ft_env(char **args)
+void ft_env(const char *const *args)
 {
 	if (args[1])
 	{

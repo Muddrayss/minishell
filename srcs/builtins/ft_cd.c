@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 18:52:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-void ft_cd(char **args)
+void ft_cd(const char *const *args)
 {
 	char	*cwd;
 

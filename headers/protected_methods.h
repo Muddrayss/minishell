@@ -6,29 +6,32 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:34:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:49:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROTECTED_METHODS_H
 # define PROTECTED_METHODS_H
 
-void            *malloc_p(size_t size);
-void            *calloc_p(size_t nmemb, size_t size);
-uint16_t        open_p(char *path, int32_t flags, uint16_t permissions);
-void            close_p(int16_t fd);
-DIR             *opendir_p(char *path);
-struct dirent   *readdir_p(DIR *dir);
-char            *getcwd_p(char *buf, size_t size);
-int32_t         chdir_p(char *path);
-void            pipe_p(int16_t pipefd[2]);
+
+void            *malloc_p(const size_t size);
+void            *calloc_p(const size_t count, const size_t size);
+int32_t         chdir_p(const char *const path);
+DIR             *opendir_p(const char *const name);
+struct dirent   *readdir_p(const DIR *const dir);
+char            *getcwd_p(const char *const buf, const size_t size);
+uint16_t        dup_p(const uint16_t fd);
+void            dup2_p(const uint16_t oldfd, const uint16_t newfd);
+uint16_t        open_p(const char *const path, const int32_t flags, const uint16_t mode);
+void            close_p(const int16_t fd);
+void            reset_fd(int16_t *const fd);
+void            pipe_p(int16_t *const fds);
 pid_t           fork_p(void);
-uint16_t        dup_p(uint16_t fd);
-void            dup2_p(uint16_t oldfd, uint16_t newfd);
-void            wait_p(int32_t *status);
-void            waitpid_p(pid_t pid, int32_t *status, int32_t options);
-void            signal_p(int32_t signo, __sighandler_t handler);
-void            sigaction_p(int32_t signo, struct sigaction *act, struct sigaction *oldact);
-void	        reset_fd(int16_t *fd);
+void            signal_p(const int32_t signo, const __sighandler_t handler);
+void            sigaction_p(const int32_t signo, const struct sigaction *act, struct sigaction *oldact);
+bool            is_bad_errno(const int errno_value);
+void            set_errnos(void);
+void            wait_p(int32_t *const status);
+void            waitpid_p(const pid_t pid, int32_t *const status, const int32_t options);
 
 #endif

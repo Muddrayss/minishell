@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:42:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 13:59:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:44:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	treeclear(t_tree **tree, void (*del)(void *))
+void	treeclear(t_tree **const tree, void (*del)(const void *const))
 {
     if (!tree || !*tree)
         return ;

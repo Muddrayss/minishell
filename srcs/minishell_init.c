@@ -6,15 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:37:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:57:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-static void	clean_heredocs(char *path);
+static void	clean_heredocs(const char *const path);
 
-void	check_args(int argc, char **argv, char **envp)
+void	check_args(const int argc, const char **const argv, const char **const envp)
 {
 	(void)argv;
 	if (argc > 1)
@@ -29,7 +29,7 @@ void	check_args(int argc, char **argv, char **envp)
 	}
 }
 
-void	init_data(char **envp)
+void	init_data(const char **const envp)
 {
 	t_data	*data;
 
@@ -56,7 +56,7 @@ void init_general(void)
 	exec_simple_cmd(path, "mkdir -p tmp");
 }
 
-static void	clean_heredocs(char *path)
+static void	clean_heredocs(const char *const path)
 {
 	t_data	*data;
 	char	*cmd;

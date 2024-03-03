@@ -6,19 +6,19 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:35:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 17:44:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static int8_t   check_parenthesis(t_list *lexered_params);
-static int8_t   check_quotes(t_list *lexered_params);
-static int8_t   check_tokens(t_list *lexered_params);
-static int8_t   check_redirs(t_list *lexered_params);
+static int8_t   check_tokens(const t_list *lexered_params);
+static int8_t   check_parenthesis(const t_list *lexered_params);
+static int8_t   check_redirs(const t_list *lexered_params);
+static int8_t   check_quotes(const t_list *lexered_params);
 static void     throw_syntax_error(char token);
 
-int8_t   check_syntax(t_list *lexered_params)
+int8_t   check_syntax(const t_list *const lexered_params)
 {
     if (check_parenthesis(lexered_params) == -1)
         return (-1);
@@ -31,7 +31,7 @@ int8_t   check_syntax(t_list *lexered_params)
     return (0);
 }
 
-static int8_t    check_tokens(t_list *lexered_params)
+static int8_t    check_tokens(const t_list *lexered_params)
 {
     t_lexer  *elem;
     t_lexer  *next_elem;
@@ -55,7 +55,7 @@ static int8_t    check_tokens(t_list *lexered_params)
     return (0);
 }
 
-static int8_t   check_parenthesis(t_list *lexered_params)
+static int8_t   check_parenthesis(const t_list *lexered_params)
 {
     t_lexer     *elem;
     int16_t     n_open;
@@ -79,7 +79,7 @@ static int8_t   check_parenthesis(t_list *lexered_params)
     return (0); //se ci sono parentesi aperte, ritorna -1
 }
 
-static int8_t   check_redirs(t_list *lexered_params)
+static int8_t   check_redirs(const t_list *lexered_params)
 {
     // TODO: implementare la funzione
     /*
@@ -92,15 +92,15 @@ static int8_t   check_redirs(t_list *lexered_params)
     return (0);
 }
 
-static int8_t check_quotes(t_list *lexered_params)
+static int8_t check_quotes(const t_list *lexered_params)
 {
-    //TODO : dwdwad
+    //TODO : implementare la funzione
 
     (void)lexered_params;
     return (0);
 }
 
-static void	throw_syntax_error(char token)
+static void	throw_syntax_error(const char token)
 {
     ft_putstr_fd("Syntax error near unexpected token: '", STDERR_FILENO);
     write(STDERR_FILENO, &token, 1);

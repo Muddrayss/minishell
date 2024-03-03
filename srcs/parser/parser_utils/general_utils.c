@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 19:59:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:12:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-bool    is_empty_cmd(void *content)
+bool    is_empty_cmd(const void *const content)
 {
     t_lexer *elem;
 
@@ -22,7 +22,7 @@ bool    is_empty_cmd(void *content)
     return (false);
 }
 
-void    del_content_parser(void *content)
+void    del_content_parser(const void *const content)
 {
     t_parser  *elem;
 
@@ -35,7 +35,7 @@ void    del_content_parser(void *content)
     free_and_null((void **)&elem);
 }
 
-void    del_content_redirs(void *content)
+void    del_content_redirs(const void *const content)
 {
     t_redir *elem;
 

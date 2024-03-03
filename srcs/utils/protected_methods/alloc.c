@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:40:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 18:19:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:26:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void    *malloc_p(size_t size)
+void    *malloc_p(const size_t size)
 {
     void    *ptr;
 
@@ -24,7 +24,7 @@ void    *malloc_p(size_t size)
     return (ptr);
 }
 
-void    *calloc_p(size_t nmemb, size_t size)
+void    *calloc_p(const size_t nmemb, const size_t size)
 {
     void    *ptr;
 

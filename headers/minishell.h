@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:26:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:57:06 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//TODO mettere tutti i const
+//TODO mettere tutti i const anche alle variabili
 //TODO mettere le variabili piu' pesanti sopra
 
 # include <curses.h>
@@ -80,16 +80,16 @@ extern uint8_t g_status;
 # define MAX(a, b) (a * (a > b) + b * (a <= b))
 # define MAX_FDS 1024
 
-void	check_args(int argc, char **argv, char **envp);
-void	init_data(char **envp);
+void	check_args(const int argc, const char **const argv, const char **const envp);
+void	init_data(const char **const envp);
 void    init_general(void);
 t_data	*get_data(void);
-void	ft_quit(uint8_t id, char *msg);
+void	ft_quit(const uint8_t id, const char *const msg);
 void    free_data(void);
-bool    is_shell_space(char c);
-bool 	is_quote(char c);
-bool 	is_redir(char c);
-bool 	is_empty_str(char *str);
+bool    is_shell_space(const char c);
+bool 	is_quote(const char c);
+bool 	is_redir(const char c);
+bool 	is_empty_str(const char *str);
 void	*cxmalloc(size_t size); // TODO: to remove
 
 //#define malloc(x)    cxmalloc(x)

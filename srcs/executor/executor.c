@@ -6,22 +6,24 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:34:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void     launch_commands(t_tree *node, int8_t prev_type, int16_t fds[3]);
-static t_tree   *skip_till_semicolon(t_tree *node);
-static void     launch_builtin_cmd(t_tree *node, int8_t prev_type, int16_t fds[3]);
-static void     launch_standard_cmd(t_tree *node, int8_t prev_type, int16_t fds[3]);
-static void     child(t_tree *node, int16_t fds[3], int8_t prev_type);
-static void     parent(t_tree *node, int16_t fds[3], pid_t pid);
-static void     wait_for_children(t_tree *node);
-static uint16_t get_n_pipelines(t_tree *node);
 
-void    executor(t_tree *parsed_params)
+static void     launch_commands(const t_tree *const node, const int8_t prev_type, int16_t *const fds);
+static void     launch_builtin_cmd(const t_tree *const node, const int8_t prev_type, int16_t *const fds);
+static void     launch_standard_cmd(const t_tree *const node, const int8_t prev_type, int16_t *const fds);
+static t_tree   *skip_till_semicolon(const t_tree *const node);
+static void     child(const t_tree *const node, const int16_t *const fds, const int8_t prev_type);
+static void     parent(const t_tree *const node, int16_t *const fds, const pid_t pid);
+static void     wait_for_children(const t_tree *const node);
+static uint16_t get_n_pipelines(const t_tree *const node);
+
+
+void    executor(const t_tree *const parsed_params)
 {
     uint8_t     original_status;
     uint8_t     heredoc_status;
@@ -54,7 +56,7 @@ void    executor(t_tree *parsed_params)
 //command in the pipeline (cmd3 in this case) to complete, along with 
 //all preceding commands in the pipeline, before it finishes.
 
-static void launch_commands(t_tree *node, int8_t prev_type, int16_t fds[3])
+static void launch_commands(const t_tree *const node, const int8_t prev_type, int16_t *const fds)
 {
     t_parser    *elem;
     t_parser    *left_elem;
@@ -87,7 +89,7 @@ static void launch_commands(t_tree *node, int8_t prev_type, int16_t fds[3])
 // of built-in commands, the commands are executed sequentially, not in parallel
 // as they would be if each command in the pipeline were an external command that
 // required a new process to be spawned.
-static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int16_t fds[3])
+static void launch_builtin_cmd(const t_tree *const node, const int8_t prev_type, int16_t *const fds)
 {
     t_parser    *elem;
 
@@ -103,7 +105,7 @@ static void launch_builtin_cmd(t_tree *node, int8_t prev_type, int16_t fds[3])
     dup2_p(fds[4], STDOUT_FILENO);
 }
 
-static void launch_standard_cmd(t_tree *node, int8_t prev_type, int16_t fds[3])
+static void launch_standard_cmd(const t_tree *const node, const int8_t prev_type, int16_t *const fds)
 {
     t_parser    *elem;
     pid_t       pid;
@@ -128,7 +130,7 @@ static void launch_standard_cmd(t_tree *node, int8_t prev_type, int16_t fds[3])
         parent(node, fds, pid);
 }
 
-static t_tree   *skip_till_semicolon(t_tree *node)
+static t_tree   *skip_till_semicolon(const t_tree *const node)
 {
     t_parser    *elem;
 
@@ -140,7 +142,7 @@ static t_tree   *skip_till_semicolon(t_tree *node)
     return (skip_till_semicolon(node->right));
 }
 
-static void child(t_tree *node, int16_t fds[3], int8_t prev_type)
+static void child(const t_tree *const node, const int16_t *const fds, const int8_t prev_type)
 {
     t_parser    *elem;
 
@@ -153,7 +155,7 @@ static void child(t_tree *node, int16_t fds[3], int8_t prev_type)
     exec(ft_getenv("PATH="), elem->cmd->cmd_str);
 }
 
-static void parent(t_tree *node, int16_t fds[3], pid_t pid)
+static void parent(const t_tree *const node, int16_t *const fds, const pid_t pid)
 {
     t_parser    *elem;
     int32_t     status;
@@ -170,7 +172,7 @@ static void parent(t_tree *node, int16_t fds[3], pid_t pid)
     }
 }
 
-static void wait_for_children(t_tree *node) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
+static void wait_for_children(const t_tree *const node) //aspetta tutti i figli (apparte quelli che erano gia stati aspettati, ovvero ; | || e &&)
 {
     int32_t     status;
     uint16_t    n_to_wait;
@@ -184,7 +186,7 @@ static void wait_for_children(t_tree *node) //aspetta tutti i figli (apparte que
     }
 }
 
-static uint16_t get_n_pipelines(t_tree *node)
+static uint16_t get_n_pipelines(const t_tree *const node)
 {
     t_parser    *elem;
     t_parser    *left_elem;

@@ -6,15 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:32:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:18:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static char *expand_dollar(char *str, uint16_t *i, bool ignore_quotes);
+static char *expand_dollar(char *str, uint16_t *const i, const bool ignore_quotes);
 
-void    replace_env_vars(char **str, bool ignore_quotes)
+void    replace_env_vars(char **const str, const bool ignore_quotes)
 {
     uint16_t    i;
     char        master_quote;
@@ -34,7 +34,7 @@ void    replace_env_vars(char **str, bool ignore_quotes)
 }
 
 //TODO refactor
-static char *expand_dollar(char *str, uint16_t *i, bool ignore_quotes)
+static char *expand_dollar(char *str, uint16_t *const i, const bool ignore_quotes)
 {
     char        *new_str;
     char        *env_value;
@@ -47,7 +47,7 @@ static char *expand_dollar(char *str, uint16_t *i, bool ignore_quotes)
     while (str[env_name_len] && !is_shell_space(str[env_name_len]) && !is_quote(str[env_name_len]) && str[env_name_len] != '$')
         env_name_len++;
     if (env_name_len == 0 && (!str[env_name_len] || is_shell_space(str[env_name_len]) || (ignore_quotes && is_quote(str[env_name_len]))))
-        return (str - *i - 1);
+        return ((char *)(str - *i - 1));
     env_name = (char *)malloc_p(sizeof(char) * (env_name_len + 1));
     ft_strlcpy(env_name, str, env_name_len + 1);
     if (env_name[0] == '?')

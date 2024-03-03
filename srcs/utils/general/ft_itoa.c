@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 11:02:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:37:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:34:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 static uint8_t	nbr_len(long n);
 
-char	*ft_itoa(int32_t n)
+char	*ft_itoa(const int32_t n)
 {
 	int64_t		n_long;
 	char		*str;
 	uint8_t		n_len;
 
-	n_long = n;
+	n_long = (int64_t)n;
 	n_len = nbr_len(n_long);
 	str = (char *)malloc((n_len + 1) * sizeof(char));
 	if (str == NULL)

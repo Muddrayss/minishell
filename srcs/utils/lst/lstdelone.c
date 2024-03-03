@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 14:44:27 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 15:02:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:49:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	lstdelone(t_list *lst, void (*del)(void *))
+void	lstdelone(const t_list *const lst, void (*del)(const void *const))
 {
 	if (!lst|| !del)
 		return ;

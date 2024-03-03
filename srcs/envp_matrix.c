@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:38:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:45:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	envp_matrix_remove(char *env_name, uint16_t name_len)
+void	envp_matrix_remove(const char *const env_name, const uint16_t name_len)
 {
 	uint16_t	old_size;
 	uint16_t	i;
@@ -38,7 +38,7 @@ void	envp_matrix_remove(char *env_name, uint16_t name_len)
 	return ;
 }
 
-void	envp_matrix_add(char *str)
+void	envp_matrix_add(const char *str)
 {
 	t_data		*data;
 	char		**matrix;
@@ -50,7 +50,7 @@ void	envp_matrix_add(char *str)
 	size = data->envp_size;
 	new_matrix = (char **)malloc_p(sizeof(char *) * (size + 1));
 	new_matrix[size--] = NULL;
-	new_matrix[size] = str;
+	new_matrix[size] = (char *)str;
 	while (size--)
 		new_matrix[size] = matrix[size];
 	data->envp_matrix = new_matrix;

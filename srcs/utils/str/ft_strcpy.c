@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:18:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:50:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*ft_strcpy(char *dest, char *src)
+char	*ft_strcpy(char *const dest, const char *const src)
 {
 	uint16_t	i;
 

@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 15:21:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/01 23:29:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 17:51:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	lstadd_front(t_list **lst, t_list *new)
+void	lstadd_front(t_list **const lst, t_list *const new)
 {
     if (!lst || !new)
         return ;

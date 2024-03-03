@@ -6,21 +6,21 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:36:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:10:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static void merge_ampersands(t_list **head, t_list **node);
-static void merge_pipes(t_list **head, t_list **node);
+static void merge_ampersands(t_list **const head, t_list **const node);
+static void merge_pipes(t_list **const head, t_list **const node);
 
-void merge_separators(t_list **lexered_params)
+void merge_separators(t_list **const lexered_params)
 {
     t_list  *node;
     t_lexer *elem;
 
-    node = *lexered_params;
+    node = (t_list *)*lexered_params;
     while (node)
     {
         elem = (t_lexer *)node->content;
@@ -43,7 +43,7 @@ void merge_separators(t_list **lexered_params)
 }
 
 //TODO refractor
-static void merge_ampersands(t_list **head, t_list **node)
+static void merge_ampersands(t_list **const head, t_list **const node)
 {
     t_list  *node_prev;
     t_lexer *elem;
@@ -78,7 +78,7 @@ static void merge_ampersands(t_list **head, t_list **node)
     }
 }
 
-static void merge_pipes(t_list **head, t_list **node)
+static void merge_pipes(t_list **const head, t_list **const node)
 {
     t_lexer *elem;
     t_lexer *next_elem;

@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 14:31:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-bool is_builtin(char *cmd_str)
+bool is_builtin(const char *const cmd_str)
 {
 	char 					*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	char					*cmd;
@@ -31,11 +31,11 @@ bool is_builtin(char *cmd_str)
 	return (free_and_null((void **)&cmd), false);
 }
 
-void exec_builtin(char **cmd_args)
+void exec_builtin(const char *const *cmd_args)
 {
 	t_data					*data;
 	uint8_t					i;
-	static void 			(*const builtin_functions[])(char **) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
+	static void 			(*const builtin_functions[])(const char *const *) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
 	static const char		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
 
@@ -43,8 +43,8 @@ void exec_builtin(char **cmd_args)
 	i = 0;
 	while (i < n_builtins)
 	{
-		if (ft_strcmp(cmd_args[0], builtins[n_builtins]) == 0)
-			builtin_functions[n_builtins](cmd_args);
+		if (ft_strcmp(cmd_args[0], builtins[i]) == 0)
+			builtin_functions[i](cmd_args);
 		i++;
 	}
 	if (data->cmd_args)

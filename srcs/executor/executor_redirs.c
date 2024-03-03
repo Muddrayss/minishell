@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:39:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 00:11:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:33:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void     exec_dup(t_redir *redir);
-static uint16_t open_redir_file(t_redir *redir);
+static void         exec_dup(const t_redir *const redir);
+static uint16_t     open_redir_file(const t_redir *const redir);
 
-void exec_redirs(t_list *redirs)
+void exec_redirs(const t_list *redirs)
 {
     t_redir *redir;
 
@@ -33,7 +33,7 @@ void exec_redirs(t_list *redirs)
     }
 }
 
-static void exec_dup(t_redir *redir)
+static void exec_dup(const t_redir *const redir)
 {
     uint16_t    file_fd;
 
@@ -47,7 +47,7 @@ static void exec_dup(t_redir *redir)
     reset_fd((int16_t *)&file_fd);
 }
 
-static uint16_t  open_redir_file(t_redir *redir)
+static uint16_t  open_redir_file(const t_redir *const redir)
 {
     uint16_t     fd;
     char         *heredoc_filename;

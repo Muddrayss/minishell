@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:35:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 17:38:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static char     *remove_chars(char *str, bool *to_remove_array);
-static uint16_t remove_filename(char *str, uint16_t i, bool *to_remove_array);
+static uint16_t remove_filename(const char *const str, uint16_t i, bool *const to_remove_array);
+static char     *remove_chars(const char *const str, const bool *const to_remove_array);
 
-char    *clear_redirs(char *cmd_str)
+char    *clear_redirs(const char *cmd_str)
 {
     bool        *to_remove_array;
     uint16_t    i;
@@ -42,7 +42,7 @@ char    *clear_redirs(char *cmd_str)
     return (remove_chars(cmd_str, to_remove_array));
 }
 
-static uint16_t remove_filename(char *str, uint16_t i, bool *to_remove_array)
+static uint16_t remove_filename(const char *const str, uint16_t i, bool *const to_remove_array)
 {
     i += 1 + (str[i + 1] == '<' || str[i + 1] == '>');
     while (str[i] && is_shell_space(str[i]))
@@ -52,7 +52,7 @@ static uint16_t remove_filename(char *str, uint16_t i, bool *to_remove_array)
     return (i - 1);
 }
 
-static char *remove_chars(char *str, bool *to_remove_array)
+static char *remove_chars(const char *const str, const bool *const to_remove_array)
 {
     uint16_t    to_remove_len;
     char        *new_str;

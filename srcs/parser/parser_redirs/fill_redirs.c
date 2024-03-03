@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:35:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:32:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static void     init_redir(t_list **redirs, char type, char *str, int16_t heredoc_fileno);
-static char     *get_filename(char *str);
+static void     init_redir(t_list **const redirs, const char type, const char *const str, const int16_t heredoc_fileno);
+static char     *get_filename(const char *const str);
 
-t_list  *fill_redirs(char *cmd_str)
+t_list  *fill_redirs(const char *const cmd_str)
 {
     t_list          *redirs;
     uint16_t        i;
@@ -47,7 +47,7 @@ t_list  *fill_redirs(char *cmd_str)
 }
 
 //TODO leak with echo text > filename (filename not freed)
-static void init_redir(t_list **redirs, char type, char *str, int16_t heredoc_fileno)
+static void init_redir(t_list **const redirs, const char type, const char *const str, const int16_t heredoc_fileno)
 {
     t_redir *redir;
 
@@ -58,7 +58,7 @@ static void init_redir(t_list **redirs, char type, char *str, int16_t heredoc_fi
     lstadd_front(redirs, lstnew_p(redir));
 }
 
-static char *get_filename(char *str) //str in posizione della redir (> <)
+static char *get_filename(const char *const str) //str in posizione della redir (> <)
 {
 	char 		*filename;
 	uint16_t 	len;

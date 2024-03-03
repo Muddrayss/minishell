@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:12:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 22:33:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:17:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*strjoin_p( char *s1,  char *s2)
+char	*strjoin_p(const char *s1, const char *s2)
 {
 	char		*newstr;
 	uint16_t	i;

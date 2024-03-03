@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:07:33 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:00:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:43:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-void	del_content_lexer(void *content)
+void	del_content_lexer(const void *const content)
 {
 	t_lexer	*elem;
 

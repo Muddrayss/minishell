@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 20:47:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/02/12 00:08:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:11:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void    lstdelif(t_list **lst, bool (*f)(void *), void (*del)(void *))
+void    lstdelif(t_list **const lst, bool (*f)(const void *const), void (*del)(const void *const))
 {
     t_list    *tmp;
     t_list    *next;

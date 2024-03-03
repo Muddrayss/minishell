@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 14:31:07 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 16:48:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:15:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static uint16_t count_separators(char *str, char sep);
+static uint16_t count_separators(const char *str, const char sep);
 static void     quote_split(char *str);
 
 char    **get_cmd_args(char *cmd_str)
@@ -55,7 +55,7 @@ static void    quote_split(char *str)
     }
 }
 
-static uint16_t   count_separators(char *str, char sep)
+static uint16_t   count_separators(const char *str, const char sep)
 {
     uint16_t    n;
 

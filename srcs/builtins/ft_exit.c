@@ -6,16 +6,16 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/02 23:35:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static bool	is_number(char *str);
-static bool is_long_overflow(char *str);
+static bool	is_number(const char *str);
+static bool is_long_overflow(const char *str);
 
-void ft_exit(char **args)
+void ft_exit(const char *const *args)
 {
 	uint8_t	id;
 
@@ -43,7 +43,7 @@ void ft_exit(char **args)
 	exit(2);
 }
 
-static bool	is_number(char *str)
+static bool	is_number(const char *str)
 {
 	if (*str == '-' || *str == '+')
 		str++;
@@ -56,7 +56,7 @@ static bool	is_number(char *str)
 	return (true);
 }
 
-static bool	is_long_overflow(char *str)
+static bool	is_long_overflow(const char *str)
 {
 	if (*str == '-' || *str == '+')
 		str++;

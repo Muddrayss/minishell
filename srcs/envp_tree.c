@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:12:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 15:03:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:51:39 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-t_tree *envp_tree_add(t_tree *root, char *str)
+t_tree *envp_tree_add(t_tree *const root, const char *const str)
 {
     if (!root)
         return (treenew_p(str));
@@ -23,7 +23,7 @@ t_tree *envp_tree_add(t_tree *root, char *str)
     return (root);
 }
 
-t_tree *envp_tree_remove(t_tree *root, char *name, uint16_t name_len)
+t_tree *envp_tree_remove(t_tree *const root, const char *const name, const uint16_t name_len)
 {
     t_tree  *tmp;
 
@@ -46,7 +46,7 @@ t_tree *envp_tree_remove(t_tree *root, char *name, uint16_t name_len)
     return (root);
 }
 
-t_tree *envp_tree_find(t_tree *root, char *name, uint16_t name_len)
+t_tree *envp_tree_find(const t_tree *const root, const char *const name, const uint16_t name_len)
 {
     if (!root)
         return (NULL);
@@ -54,10 +54,10 @@ t_tree *envp_tree_find(t_tree *root, char *name, uint16_t name_len)
         return (envp_tree_find(root->left, name, name_len));
     else if (ft_strncmp(name, (char *)root->content, name_len) > 0)
         return (envp_tree_find(root->right, name, name_len));
-    return (root);
+    return ((t_tree *)root);
 }
 
-void envp_print_export(t_tree *root)
+void envp_print_export(const t_tree *const root)
 {
     char    *env_name;
     char    *env_value;

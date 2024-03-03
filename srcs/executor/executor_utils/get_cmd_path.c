@@ -6,18 +6,18 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 14:32:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/03 17:06:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static bool is_custom_bin(char *cmd);
-static char *search_cmd_in_dirs(char *entry, char *cmd);
-static char *get_custom_bin(char *path);
-static void throw_cmd_not_found_error(char *cmd);
+static bool is_custom_bin(const char *const cmd);
+static char *search_cmd_in_dirs(const char *const entry, const char *const cmd);
+static char	*get_custom_bin(const char *const cmd);
+static void throw_cmd_not_found_error(const char *const cmd);
 
-char	*get_cmd_path(char *path, char *cmd)
+char	*get_cmd_path(const char *const path, const char *const cmd)
 {
     char	*entry;
     char	*full_path;
@@ -41,7 +41,7 @@ char	*get_cmd_path(char *path, char *cmd)
     return (full_path);
 }
 
-static bool is_custom_bin(char *cmd)
+static bool is_custom_bin(const char *const cmd)
 {
 	uint8_t				i;
 	static const char	*prefixes[] =
@@ -57,7 +57,7 @@ static bool is_custom_bin(char *cmd)
 	return (false);
 }
 
-static char *search_cmd_in_dirs(char *entry, char *cmd)
+static char *search_cmd_in_dirs(const char *const entry, const char *const cmd)
 {
     char		*full_path;
 	uint16_t	len;
@@ -72,7 +72,7 @@ static char *search_cmd_in_dirs(char *entry, char *cmd)
     return (free_and_null((void **)&full_path), NULL);
 }
 
-static char	*get_custom_bin(char *cmd)
+static char	*get_custom_bin(const char *const cmd)
 {
 	char	*full_path;
 	char	*cwd;
@@ -93,7 +93,7 @@ static char	*get_custom_bin(char *cmd)
     return (free_and_null((void **)&full_path), NULL);
 }
 
-static void throw_cmd_not_found_error(char *cmd)
+static void throw_cmd_not_found_error(const char *const cmd)
 {
 	ft_putstr_fd("minishell: command not found: '", STDERR_FILENO);
     ft_putstr_fd(cmd, STDERR_FILENO);
