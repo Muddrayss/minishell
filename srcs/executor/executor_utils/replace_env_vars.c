@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 21:39:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 22:31:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char *get_env_name(const char *const str, const bool ignore_quotes)
 {
     char                *env_name;
     uint16_t            len;
-    static const char   stop_chars[] = {' ', '\t', '\n', '$', '\'', '\"', '\0'};
+    static const char   stop_chars[] = {' ', '\t', '\n', '$', '\'', '\"', ':', '\0'};
 
 	len = 0;
 	while (str[len] && ft_strchr(stop_chars, str[len]) == NULL)

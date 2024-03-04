@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 18:43:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 22:23:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int8_t   check_syntax(const t_list *const lexered_params)
         return (-1);
     if (check_tokens(lexered_params) == -1)
         return (-1);
-    if (check_redirs(lexered_params) == -1)
-        return (-1);
     if (check_quotes(lexered_params) == -1)
+        return (-1);
+    if (check_redirs(lexered_params) == -1) //needs to be after check_quotes
         return (-1);
     return (0);
 }
@@ -58,12 +58,13 @@ static int8_t   check_parenthesis(const t_list *lexered_params)
     return (0);
 }
 
-//TODO refractor
 static int8_t    check_tokens(const t_list *lexered_params)
 {
     t_lexer  *elem;
     t_lexer  *next_elem;
     t_lexer  *prev_elem;
+    bool     invalid_next;
+    bool     invalid_prev;
 
     while (lexered_params)
     {
@@ -75,9 +76,12 @@ static int8_t    check_tokens(const t_list *lexered_params)
         if (lexered_params->prev)
             prev_elem = (t_lexer *)lexered_params->prev->content;
         if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END)
-            if (!prev_elem || !next_elem || !prev_elem->cmd_str || !next_elem->cmd_str)
-                if (!prev_elem || !next_elem || prev_elem->token == SUBSHELL_START || next_elem->token == SUBSHELL_END)
-                    return (throw_syntax_error(g_parser_tokens[(int8_t)elem->token]), -1);
+        {
+            invalid_next = !next_elem || !next_elem->cmd_str || next_elem->token == SUBSHELL_END;
+            invalid_prev = !prev_elem || !prev_elem->cmd_str || prev_elem->token == SUBSHELL_START;;
+            if (invalid_next || invalid_prev)
+                return (throw_syntax_error(elem->token), -1);
+        }
         lexered_params = lexered_params->next;
     }
     return (0);
@@ -116,11 +120,9 @@ static int8_t   check_redirs(const t_list *lexered_params)
     t_lexer     *elem;
     uint16_t    i;
     char        master_quote;
-    uint8_t     ret;
 
-    ret = 0;
     master_quote = '\0';
-    while (lexered_params && ret == 0)
+    while (lexered_params)
     {
         elem = (t_lexer *)lexered_params->content;
         i = 0;
@@ -138,15 +140,14 @@ static int8_t   check_redirs(const t_list *lexered_params)
             }
             else if (!master_quote && is_redir(elem->cmd_str[i]))
             {
-                ret = check_redir_streak(elem->cmd_str + i);
-                ret += check_redir_pair(elem->cmd_str + i);
-                ret += check_filename_presence(elem->cmd_str + i);
+                if (check_redir_streak(elem->cmd_str + i) == 1||
+                    check_redir_pair(elem->cmd_str + i) == 1 ||
+                    check_filename_presence(elem->cmd_str + i) == 1)
+                    return (throw_syntax_error(elem->cmd_str[i]), -1);
             }
             i++;
         }
     }
-    if (ret)
-        return (throw_syntax_error(elem->cmd_str[i - 1]), -1);
     return (0);
 }
 
