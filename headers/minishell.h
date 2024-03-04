@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 17:32:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:45:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,6 @@ typedef struct s_tree
 	struct s_tree	*right;
 }t_tree;
 
-# include "builtins.h"
-# include "lexer.h"
-# include "parser.h"
-# include "executor.h"
-# include "signals.h"
-# include "envp.h"
-# include "utils.h"
-# include "protected_methods.h"
-# include "errors.h"
-# include "colors.h"
-
 typedef struct s_data
 {
 	char		**cmd_args;
@@ -74,6 +63,17 @@ typedef struct s_data
 	pid_t 		main_pid;
 }t_data;
 
+# include "builtins.h"
+# include "lexer.h"
+# include "parser.h"
+# include "executor.h"
+# include "signals.h"
+# include "envp.h"
+# include "utils.h"
+# include "protected_methods.h"
+# include "errors.h"
+# include "colors.h"
+
 extern uint8_t 		g_status;
 static const char 	g_shell_spaces[] = {' ', '\t', '\n'};
 
@@ -85,7 +85,5 @@ void    init_general(void);
 t_data	*get_data(void);
 void	ft_quit(const uint8_t id, const char *const msg);
 void    free_data(void);
-void	*cxmalloc(size_t size); // TODO: to remove
 
-//#define malloc(x)    cxmalloc(x)
 #endif

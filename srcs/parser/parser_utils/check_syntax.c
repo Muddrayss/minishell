@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 18:42:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:43:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ static int8_t   check_parenthesis(const t_list *lexered_params)
     }
     if (n_open)
         return (throw_syntax_error('('), -1);
-    return (0); //se ci sono parentesi aperte, ritorna -1
+    return (0);
 }
 
+//TODO refractor
 static int8_t    check_tokens(const t_list *lexered_params)
 {
     t_lexer  *elem;
