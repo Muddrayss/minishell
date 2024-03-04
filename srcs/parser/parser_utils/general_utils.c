@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 14:30:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:24:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ bool    is_empty_cmd(const void *const content)
     if (elem->token == 0 && is_empty_str(elem->cmd_str))
         return (true);
     return (false);
+}
+
+bool    is_redir(const char c)
+{
+	return (c == '<' || c == '>');
 }
 
 void    del_content_parser(const void *const content)

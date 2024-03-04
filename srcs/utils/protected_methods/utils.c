@@ -6,18 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:45:49 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 15:03:09 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:34:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
-
-static bool  *get_errnos(void);
-
-bool is_bad_errno(const int errno_value)
-{
-    return (get_errnos()[errno_value]);
-}
 
 void    set_errnos(void)
 {
@@ -32,7 +25,7 @@ void    set_errnos(void)
         errnos[g_bad_errnos[i++]] = true;
 }
 
-static bool  *get_errnos(void)
+bool  *get_errnos(void)
 {
     static bool errnos[N_ERRNOS] = {false};
 

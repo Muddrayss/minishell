@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:10:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:23:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int8_t  check_syntax(const t_list *const lexered_params);
 t_list  *fill_redirs(const char *const cmd_str);
 char    *clear_redirs(const char *cmd_str);
 bool    is_empty_cmd(const void *const content);
+bool 	is_redir(const char c);
 void    del_content_parser(const void *const content);
 void    del_content_redirs(const void *const content);
 

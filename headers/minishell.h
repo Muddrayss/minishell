@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 14:18:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:24:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ typedef struct s_data
 	pid_t 		main_pid;
 }t_data;
 
-extern uint8_t g_status;
+extern uint8_t 		g_status;
+static const char 	g_shell_spaces[] = {' ', '\t', '\n'};
 
-# define MAX(a, b) (a * (a > b) + b * (a <= b))
 # define MAX_FDS 1024
 
 void	check_args(const int argc, const char **const argv, const char **const envp);
@@ -83,10 +83,6 @@ void    init_general(void);
 t_data	*get_data(void);
 void	ft_quit(const uint8_t id, const char *const msg);
 void    free_data(void);
-bool    is_shell_space(const char c);
-bool 	is_quote(const char c);
-bool 	is_redir(const char c);
-bool 	is_empty_str(const char *str);
 void	*cxmalloc(size_t size); // TODO: to remove
 
 //#define malloc(x)    cxmalloc(x)

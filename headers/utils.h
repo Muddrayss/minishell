@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 08:58:10 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:52:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:32:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ uint16_t	ft_matrixsize(const char **const matrix);
 bool		ft_isdigit(const char c);
 int32_t     ft_atoi(const char *str);
 char        *ft_itoa(const int32_t n);
+void        set_errnos();
+bool        *get_errnos(void);
+bool        is_bad_errno(const int errno_value);
+bool        is_quote(const char c);
+bool        is_shell_space(const char c);
+bool        is_empty_str(const char *str);
 
 t_list	    *lstnew_p(const void *const content);
 void	    lstadd_front(t_list **const lst, t_list *const new);
