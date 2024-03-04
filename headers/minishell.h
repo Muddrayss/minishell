@@ -6,15 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:57:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 00:25:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//TODO mettere tutti i const anche alle variabili
-//TODO mettere le variabili piu' pesanti sopra
+//TODO trovare un modo per evitare il casting su free_and_null
 
 # include <curses.h>
 # include <dirent.h>

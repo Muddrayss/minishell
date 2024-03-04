@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 00:47:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ void exec_builtin(const char *const *cmd_args)
 			builtin_functions[i](cmd_args);
 		i++;
 	}
-	if (data->cmd_args)
-		free_and_null((void **)&data->cmd_args[0]);
 	free_and_null((void **)&data->cmd_args);	
 	free_and_null((void **)&data->input);
 	lstclear(&data->lexered_params, &del_content_lexer);
