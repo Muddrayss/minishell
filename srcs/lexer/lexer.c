@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 17:23:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:38:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void    lexer(const char *input)
     cmd_len = 0;
     while (true)
     {
-        cmd_str = NULL;
         if (is_quote(*input))
         {
             if (!current_quote)
@@ -38,8 +37,9 @@ void    lexer(const char *input)
             else if (current_quote == *input)
                 current_quote = '\0';
         }
-        else if (!current_quote && (is_token(*input) || *input == '\0'))
+        else if ((!current_quote && is_token(*input)) || *input == '\0')
         {
+            cmd_str = NULL;
             if (cmd_len > 0)
             {
                 cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));

@@ -6,9 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 15:24:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:32:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//TODO loop infinito quando si fa un comando qualsiasi
 
 #ifndef MINISHELL_H
 # define MINISHELL_H

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 16:55:47 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:42:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,30 @@ int8_t   check_syntax(const t_list *const lexered_params)
     return (0);
 }
 
+static int8_t   check_parenthesis(const t_list *lexered_params)
+{
+    t_lexer     *elem;
+    int16_t     n_open;
+
+    n_open = 0;
+    while (lexered_params)
+    {
+        elem = (t_lexer *)lexered_params->content;
+        if (elem->token == SUBSHELL_START)
+            n_open++;
+        else if (elem->token == SUBSHELL_END)
+        {
+            n_open--;
+            if (n_open < 0)
+                return (throw_syntax_error(')'), -1);
+        }
+        lexered_params = lexered_params->next;
+    }
+    if (n_open)
+        return (throw_syntax_error('('), -1);
+    return (0); //se ci sono parentesi aperte, ritorna -1
+}
+
 static int8_t    check_tokens(const t_list *lexered_params)
 {
     t_lexer  *elem;
@@ -58,28 +82,32 @@ static int8_t    check_tokens(const t_list *lexered_params)
     return (0);
 }
 
-static int8_t   check_parenthesis(const t_list *lexered_params)
+static int8_t check_quotes(const t_list *lexered_params)
 {
+    char        master_quote;
+    uint16_t    i;
     t_lexer     *elem;
-    int16_t     n_open;
 
-    n_open = 0;
-    while (lexered_params)
+    master_quote = '\0';
+    while (lexered_params && master_quote == '\0')
     {
         elem = (t_lexer *)lexered_params->content;
-        if (elem->token == SUBSHELL_START)
-            n_open++;
-        else if (elem->token == SUBSHELL_END)
-        {
-            n_open--;
-            if (n_open < 0)
-                return (throw_syntax_error(')'), -1);
-        }
         lexered_params = lexered_params->next;
+        if (!elem->cmd_str)
+            continue;
+        i = 0;
+        while (elem->cmd_str[i])
+        {
+            if (!master_quote && is_quote(elem->cmd_str[i]))
+                master_quote = elem->cmd_str[i];
+            else if (elem->cmd_str[i] == master_quote)
+                master_quote = '\0';
+            i++;
+        }
     }
-    if (n_open)
-        return (throw_syntax_error('('), -1);
-    return (0); //se ci sono parentesi aperte, ritorna -1
+    if (master_quote)
+        return (throw_syntax_error(master_quote), -1);
+    return (0);
 }
 
 static int8_t   check_redirs(const t_list *lexered_params)
@@ -139,33 +167,6 @@ static uint8_t check_redir_pair(const char *const cmd_str)
 static uint8_t check_filename_presence(const char *const cmd_str)
 {
     return (is_empty_str(cmd_str + 1));
-}
-
-static int8_t check_quotes(const t_list *lexered_params)
-{
-    char        master_quote;
-    uint16_t    i;
-    t_lexer     *elem;
-
-    i = 0;
-    master_quote = '\0';
-    while (lexered_params && master_quote == '\0')
-    {
-        elem = (t_lexer *)lexered_params->content;
-        lexered_params = lexered_params->next;
-        if (!elem->cmd_str)
-            continue;
-        while (elem->cmd_str[i])
-        {
-            if (!master_quote && is_quote(elem->cmd_str[i]))
-                master_quote = elem->cmd_str[i];
-            else if (elem->cmd_str[i] == master_quote)
-                master_quote = '\0';
-        }
-    }
-    if (master_quote)
-        return (throw_syntax_error(master_quote), -1);
-    return (0);
 }
 
 static void	throw_syntax_error(const char token)

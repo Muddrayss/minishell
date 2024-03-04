@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 13:58:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:56:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ static void launch_standard_cmd(const t_tree *const node, const int8_t prev_type
     {
         if (elem->type == PIPELINE)
         {
-            dprintf(2, "in child fds[1] = %d\n", fds[1]);
             dup2_p(fds[1], STDOUT_FILENO);
             reset_fd(&fds[0]);
             reset_fd(&fds[1]);
