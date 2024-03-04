@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 19:39:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:35:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void merge_separators(t_list **const lexered_params)
         elem = (t_lexer *)node->content;
         if (elem->token)
         {
+            //TODO Switch case
             if (elem->token == '&')
                 merge_ampersands(lexered_params, &node);
             else if (elem->token == '|')

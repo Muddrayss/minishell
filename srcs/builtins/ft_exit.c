@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:38:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static bool	is_number(const char *str)
 		str++;
 	while (*str)
 	{
-		if (ft_isdigit(*str) == false)
+		if (is_digit(*str) == false)
 			return (false);
 		str++;
 	}

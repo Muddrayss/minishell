@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 17:44:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:48:28 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 static int8_t   check_tokens(const t_list *lexered_params);
 static int8_t   check_parenthesis(const t_list *lexered_params);
 static int8_t   check_redirs(const t_list *lexered_params);
+static uint8_t  check_redir_streak(const char *const cmd_str);
+static uint8_t  check_redir_pair(const char *const cmd_str);
+static uint8_t  check_filename_presence(const char *const cmd_str);
 static int8_t   check_quotes(const t_list *lexered_params);
-static void     throw_syntax_error(char token);
+static void     throw_syntax_error(const char token);
 
 int8_t   check_syntax(const t_list *const lexered_params)
 {
@@ -81,22 +84,87 @@ static int8_t   check_parenthesis(const t_list *lexered_params)
 
 static int8_t   check_redirs(const t_list *lexered_params)
 {
-    // TODO: implementare la funzione
-    /*
-    REDIR_INPUT 		7 	'< filename cmd' o 'cmd < filename'
-    REDIR_HEREDOC 		8	'<< limiter cmd' o 'cmd << limiter'
-    REDIR_OUTPUT 		9 	'cmd > filename' o 'cmd n> filename'
-    REDIR_APPEND 		10  'cmd >> filename' o 'cmd n>> filename'
-    */
-    (void)lexered_params;
+    t_lexer     *elem;
+    uint16_t    i;
+    char        master_quote;
+    uint8_t     ret;
+
+    ret = 0;
+    master_quote = '\0';
+    while (lexered_params && ret == 0)
+    {
+        elem = (t_lexer *)lexered_params->content;
+        i = 0;
+        lexered_params = lexered_params->next;
+        if (!elem->cmd_str)
+            continue;
+        while (elem->cmd_str[i])
+        {
+            if (is_quote(elem->cmd_str[i]))
+            {
+                if (master_quote == '\0')
+                    master_quote = elem->cmd_str[i];
+                else if (master_quote == elem->cmd_str[i])
+                    master_quote = '\0';
+            }
+            else if (!master_quote && is_redir(elem->cmd_str[i]))
+            {
+                ret = check_redir_streak(elem->cmd_str + i);
+                ret += check_redir_pair(elem->cmd_str + i);
+                ret += check_filename_presence(elem->cmd_str + i);
+            }
+            i++;
+        }
+    }
+    if (ret)
+        return (throw_syntax_error(elem->cmd_str[i - 1]), -1);
     return (0);
+}
+
+static uint8_t check_redir_streak(const char *const cmd_str)
+{
+    uint16_t i;
+
+    i = 0;
+    while (cmd_str[i] && is_redir(cmd_str[i]))
+        i++;
+    return (i > 2);
+}
+
+static uint8_t check_redir_pair(const char *const cmd_str)
+{
+    return (is_redir(cmd_str[1]) && cmd_str[0] != cmd_str[1]);
+}
+
+static uint8_t check_filename_presence(const char *const cmd_str)
+{
+    return (is_empty_str(cmd_str + 1));
 }
 
 static int8_t check_quotes(const t_list *lexered_params)
 {
-    //TODO : implementare la funzione
+    char        master_quote;
+    uint16_t    i;
+    t_lexer     *elem;
 
-    (void)lexered_params;
+    i = 0;
+    master_quote = '\0';
+    while (lexered_params && master_quote == '\0')
+    {
+        elem = (t_lexer *)lexered_params->content;
+        lexered_params = lexered_params->next;
+        if (!elem->cmd_str)
+            continue;
+        while (elem->cmd_str[i])
+        {
+            if (!master_quote && is_quote(elem->cmd_str[i]))
+                master_quote = elem->cmd_str[i];
+            else if (elem->cmd_str[i] == master_quote)
+                master_quote = '\0';
+        }
+    }
+    if (master_quote)
+        return (throw_syntax_error(master_quote), -1);
     return (0);
 }
 

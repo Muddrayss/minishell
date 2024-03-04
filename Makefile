@@ -6,7 +6,7 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/03/04 15:33:41 by craimond         ###   ########.fr        #
+#    Updated: 2024/03/04 15:38:20 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ EXECUTOR_UTILS = $(addprefix executor_utils/, general_utils.c get_cmd_path.c get
 EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_heredoc.c executor_redirs.c $(EXECUTOR_UTILS))
 BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)
 GENERAL_SRCS = minishell.c minishell_init.c minishell_exit.c minishell_utils.c envp_tree.c envp_matrix.c envp_utils.c signals.c xmalloc.c
-GENERAL_UTILS_SRCS = $(addprefix general/, ft_freematrix.c ft_atoi.c ft_isdigit.c ft_matrixsize.c ft_itoa.c ft_calloc.c free_and_null.c  conditionals.c)
+GENERAL_UTILS_SRCS = $(addprefix general/, ft_freematrix.c ft_atoi.c ft_matrixsize.c ft_itoa.c ft_calloc.c free_and_null.c  conditionals.c)
 LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstadd_back.c lstlast.c lstclear.c lstreverse.c lstnew_p.c lstremoveone.c lstdelone.c lstdelif.c)
 STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_strtok.c strtrim_p.c strdup_p.c strjoin_p.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strcmp_lower.c ft_strchr.c ft_tolower.c)
 TREE_UTILS_SRCS = $(addprefix tree/, treeadd_below.c treeclear.c treenew_p.c tree_first.c)
