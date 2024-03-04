@@ -6,12 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 00:57:50 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 01:34:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
-
 
 static void     launch_commands(const t_tree *const node, const int8_t prev_type, int16_t fds[5]);
 static void     launch_builtin_cmd(const t_tree *const node, const int8_t prev_type, int16_t fds[5]);
@@ -22,7 +21,6 @@ static void     parent(const t_tree *const node, int16_t fds[5], const pid_t pid
 static void     wait_for_children(const t_tree *const node);
 static uint16_t get_n_pipelines(const t_tree *const node);
 
-
 void    executor(const t_tree *const parsed_params)
 {
     const uint8_t   original_status = g_status;
@@ -31,11 +29,8 @@ void    executor(const t_tree *const parsed_params)
 
     fds[3] = dup_p(STDIN_FILENO);
     fds[4] = dup_p(STDOUT_FILENO);
-    printf("fds[3] = %d\n", fds[3]);
-    printf("fds[4] = %d\n", fds[4]);
     heredoc_status = 0;
     create_heredocs(parsed_params, &heredoc_status);
-    printf("fds[3] = %d\n", fds[3]);
     dup2_p(fds[3], STDIN_FILENO); //altrimenti se heredoc e' terminato con segnale 130, il comando dopo continua a scrivere nell'fd dell'heredoc
     if (heredoc_status != 0)
     {
@@ -47,7 +42,6 @@ void    executor(const t_tree *const parsed_params)
     set_signals(S_COMMAND, true);
     launch_commands(parsed_params, -1, fds);
     wait_for_children(parsed_params);
-    printf("fds[3] = %d\n", fds[3]);
     dup2_p(fds[3], STDIN_FILENO);
 }
 
@@ -98,14 +92,12 @@ static void launch_builtin_cmd(const t_tree *const node, const int8_t prev_type,
 
     if (elem->type == PIPELINE)
     {
-        printf("fds[1] = %d\n", fds[1]);
         dup2_p(fds[1], STDOUT_FILENO);
         reset_fd(&fds[1]);
     }
     fds[2] = fds[0];
     set_signals(S_COMMAND, true);
     launch_commands(node->left, prev_type, fds);
-    printf("fds[4] = %d\n", fds[4]);
     dup2_p(fds[4], STDOUT_FILENO);
 }
 
@@ -118,7 +110,7 @@ static void launch_standard_cmd(const t_tree *const node, const int8_t prev_type
     {
         if (elem->type == PIPELINE)
         {
-            printf("fds[1] = %d\n", fds[1]);
+            dprintf(2, "in child fds[1] = %d\n", fds[1]);
             dup2_p(fds[1], STDOUT_FILENO);
             reset_fd(&fds[0]);
             reset_fd(&fds[1]);
