@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 16:52:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:55:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,17 @@ static uint8_t  check_filename_presence(const char *const cmd_str);
 static int8_t   check_quotes(const t_list *lexered_params);
 static void     throw_syntax_error(const char token);
 
-uint8_t   check_syntax(const t_list *const lexered_params)
+int8_t   check_syntax(const t_list *const lexered_params)
 {
-    uint8_t  ret;
-
-    ret = 0;
-    ret += check_parenthesis(lexered_params);
-    ret += check_tokens(lexered_params);
-    ret += check_redirs(lexered_params);
-    ret += check_quotes(lexered_params);
-    return (ret > 0);
+    if (check_parenthesis(lexered_params) == -1)
+        return (-1);
+    if (check_tokens(lexered_params) == -1)
+        return (-1);
+    if (check_redirs(lexered_params) == -1)
+        return (-1);
+    if (check_quotes(lexered_params) == -1)
+        return (-1);
+    return (0);
 }
 
 static int8_t    check_tokens(const t_list *lexered_params)
@@ -51,7 +52,7 @@ static int8_t    check_tokens(const t_list *lexered_params)
         if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END)
             if (!prev_elem || !next_elem || !prev_elem->cmd_str || !next_elem->cmd_str)
                 if (!prev_elem || !next_elem || prev_elem->token == SUBSHELL_START || next_elem->token == SUBSHELL_END)
-                    return (throw_syntax_error(g_parser_tokens[(int8_t)elem->token]), 1);
+                    return (throw_syntax_error(g_parser_tokens[(int8_t)elem->token]), -1);
         lexered_params = lexered_params->next;
     }
     return (0);
@@ -72,12 +73,12 @@ static int8_t   check_parenthesis(const t_list *lexered_params)
         {
             n_open--;
             if (n_open < 0)
-                return (throw_syntax_error(')'), 1);
+                return (throw_syntax_error(')'), -1);
         }
         lexered_params = lexered_params->next;
     }
     if (n_open)
-        return (throw_syntax_error('('), 1);
+        return (throw_syntax_error('('), -1);
     return (0); //se ci sono parentesi aperte, ritorna -1
 }
 
@@ -116,7 +117,7 @@ static int8_t   check_redirs(const t_list *lexered_params)
         }
     }
     if (ret)
-        return (throw_syntax_error(elem->cmd_str[i - 1]), 1);
+        return (throw_syntax_error(elem->cmd_str[i - 1]), -1);
     return (0);
 }
 

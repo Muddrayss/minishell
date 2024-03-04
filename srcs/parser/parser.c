@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 16:52:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:57:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void    parser(t_list *lexered_params)
 {
     lstdelif(&lexered_params, &is_empty_cmd, &del_content_lexer);
     merge_separators(&lexered_params);
-    if (check_syntax(lexered_params) == 1)
+    if (check_syntax(lexered_params) == -1)
     {
         g_status = 2;
         return ;
