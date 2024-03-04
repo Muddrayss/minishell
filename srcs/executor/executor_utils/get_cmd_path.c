@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 23:26:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:14:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static bool is_custom_bin(const char *const cmd);
 static char *search_cmd_in_dirs(const char *const entry, const char *const cmd);
 static char	*get_custom_bin(const char *const cmd);
-static void throw_cmd_not_found_error(const char *const cmd);
+static void throw_error(const char *const cmd);
 
 char	*get_cmd_path(const char *const path, const char *const cmd)
 {
@@ -37,7 +37,7 @@ char	*get_cmd_path(const char *const path, const char *const cmd)
 	}
 	free_and_null((void **)&path_cpy);
     if (!entry)
-		return (throw_cmd_not_found_error(cmd), free_data(), NULL);
+		return (throw_error(cmd), free_data(), NULL);
     return (full_path);
 }
 
@@ -92,7 +92,7 @@ static char	*get_custom_bin(const char *const cmd)
     return (free_and_null((void **)&full_path), NULL);
 }
 
-static void throw_cmd_not_found_error(const char *const cmd)
+static void throw_error(const char *const cmd)
 {
 	ft_putstr_fd("minishell: command not found: '", STDERR_FILENO);
     ft_putstr_fd(cmd, STDERR_FILENO);

@@ -6,11 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/04 00:47:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:50:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
+
+static void	free_builtins_data(void);
 
 bool is_builtin(const char *const cmd_str)
 {
@@ -33,13 +35,11 @@ bool is_builtin(const char *const cmd_str)
 
 void exec_builtin(const char *const *cmd_args)
 {
-	t_data					*data;
 	uint8_t					i;
 	static void 			(*const builtin_functions[])(const char *const *) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
 	static const char		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
 
-	data = get_data();
 	i = 0;
 	while (i < n_builtins)
 	{
@@ -47,6 +47,16 @@ void exec_builtin(const char *const *cmd_args)
 			builtin_functions[i](cmd_args);
 		i++;
 	}
+	free_builtins_data();
+}
+
+static void	free_builtins_data(void)
+{
+	t_data	*data;
+
+	data = get_data();
+	if (data->cmd_args)
+		free_and_null((void **)&data->cmd_args[0]);
 	free_and_null((void **)&data->cmd_args);	
 	free_and_null((void **)&data->input);
 	lstclear(&data->lexered_params, &del_content_lexer);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 19:59:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:12:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	close_all_fds(void)
 {
 	uint16_t	fd;
 
-	fd = 2; //senza chiudere stdin e stdout
-	while (++fd < MAX_FDS)
-		close(fd); //NON close_p perche' la maggiorparte daranno errore
+	fd = 0; //senza chiudere stdin e stdout
+	while (fd < MAX_FDS)
+		close(fd++); //NON close_p perche' la maggiorparte daranno errore
 }

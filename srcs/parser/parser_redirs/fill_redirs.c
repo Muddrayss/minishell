@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 20:17:35 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:15:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ t_list  *fill_redirs(const char *const cmd_str)
 
     i = 0;
     redirs = NULL;
-    type = -1;
     master_quote = '\0';
     while (cmd_str[i])
     {
+        type = -1;
         if (!master_quote && (is_quote(cmd_str[i])))
             master_quote = cmd_str[i];
         else if (master_quote && cmd_str[i] == master_quote)
@@ -46,7 +46,6 @@ t_list  *fill_redirs(const char *const cmd_str)
     return (heredoc_fileno++, lstreverse(&redirs), redirs);
 }
 
-//TODO leak with echo text > filename (filename not freed)
 static void init_redir(t_list **const redirs, const char type, const char *const str, const int16_t heredoc_fileno)
 {
     t_redir *redir;
@@ -58,7 +57,7 @@ static void init_redir(t_list **const redirs, const char type, const char *const
     lstadd_front(redirs, lstnew_p(redir));
 }
 
-static char *get_filename(const char *const str) //str in posizione della redir (> <)
+static char *get_filename(const char *const str)
 {
 	char 		*filename;
 	uint16_t 	len;
@@ -71,7 +70,7 @@ static char *get_filename(const char *const str) //str in posizione della redir 
 	len = 0;
 	while (str[i + len] && !is_shell_space(str[i + len]) && !is_quote(str[i + len]))
 		len++;
-	filename = calloc_p(len + 1, sizeof(char));
+	filename = malloc_p(sizeof(char) * len + 1);
 	ft_strlcpy(filename, &str[i], len + 1);
 	return (filename);
 }

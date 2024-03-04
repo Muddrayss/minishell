@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 19:14:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:40:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	clear_quotes(char **const str)
 	char		*new_str;
 	char		master_quote;
 
+	if (!ft_strchr(*str, '\'') && !ft_strchr(*str, '"'))
+		return ;
 	j = 0;
 	i = 0;
 	master_quote = '\0';
@@ -34,7 +36,7 @@ void	clear_quotes(char **const str)
 		i++;
 	}
 	new_str[j] = '\0';
-	//free_and_null((void **)str);
+	free_and_null((void **)str);
 	*str = new_str;
 }
 
@@ -56,7 +58,7 @@ void  exec(const char *const path, const char *const cmd_str)
 	char	*cmd_path;
 
 	data = get_data();
-	data->cmd_args = get_cmd_args((char *)cmd_str);
+	data->cmd_args = get_cmd_args(strdup_p(cmd_str));
 	if (!data->cmd_args[0] || !data->cmd_args[0][0])
 	{
 		free_data();
