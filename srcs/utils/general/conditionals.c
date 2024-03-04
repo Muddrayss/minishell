@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:12:51 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 15:37:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:28:27 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,15 @@ bool is_shell_space(const char c)
 
 bool is_empty_str(const char *str)
 {
-	return (strtrim_p(str, g_shell_spaces) == NULL);
+    if (!str)
+        return (true);
+    while (*str)
+    {
+        if (!ft_strchr(g_shell_spaces, *str))
+            return (false);
+        str++;
+    }
+    return (true);
 }
 
 bool is_bad_errno(const int erno)

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 00:44:52 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:04:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ static void	minishell_loop()
 		data->input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
 		if (!data->input)
 			ft_quit(123, "exit");
-		data->input = strtrim_p(data->input, " \t\n");
-		if (data->input[0] == '\0' || is_empty_str(data->input))
-			continue ;
 		add_history(data->input);
+		data->input = strtrim_p(data->input, " \t\n");
+		if (!data->input)
+			continue ;
 		lexer(data->input);
 		parser(data->lexered_params);
 		lstclear(&data->lexered_params, &del_content_lexer);

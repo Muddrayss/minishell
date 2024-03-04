@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 15:22:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:23:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static t_list   *lexer_add_cmd(t_list *lexered_params, const uint16_t cmd_len, c
 static t_list   *lexer_add_token(t_list *lexered_params, const char c);
 static bool     is_token(const char c);
 
+//TODO refractor
 void    lexer(const char *input)
 {
     t_data          *data;
@@ -29,6 +30,7 @@ void    lexer(const char *input)
     cmd_len = 0;
     while (true)
     {
+        cmd_str = NULL;
         if (is_quote(*input))
         {
             if (!current_quote)
@@ -38,8 +40,11 @@ void    lexer(const char *input)
         }
         else if (!current_quote && (is_token(*input) || *input == '\0'))
         {
-            cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
-            ft_strlcpy(cmd_str, input - cmd_len, cmd_len + 1);
+            if (cmd_len > 0)
+            {
+                cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
+                ft_strlcpy(cmd_str, input - cmd_len, cmd_len + 1);
+            }
             data->lexered_params = lexer_add_cmd(data->lexered_params, cmd_len, cmd_str);
             data->lexered_params = lexer_add_token(data->lexered_params, *input);
             cmd_len = -1;

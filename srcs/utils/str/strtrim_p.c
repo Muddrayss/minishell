@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 16:36:23 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 19:49:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:03:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ char	*strtrim_p(const char *s1, const char *const set)
 	const char *const	start = s1;
 	uint16_t			i;
 
+	if (!s1)
+		return (NULL);
+	if (!set)
+		return ((char *)s1);
 	i = 0;
 	while (*s1 != '\0' && ft_strchr(set, *s1))
 		s1++;
