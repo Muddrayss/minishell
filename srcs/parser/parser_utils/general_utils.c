@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:24:52 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 15:24:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:29:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,12 @@ void    del_content_parser(const void *const content)
     if (!content)
         return ;
     elem = (t_parser *)content;
-    lstclear(&elem->cmd->redirs, &del_content_redirs);
-    free_and_null((void **)&elem->cmd->cmd_str);
-    free_and_null((void **)&elem->cmd);
+    if (elem->cmd)
+    {
+        free_and_null((void **)&elem->cmd->cmd_str);
+        lstclear(&elem->cmd->redirs, &del_content_redirs);
+        free_and_null((void **)&elem->cmd);
+    }
     free_and_null((void **)&elem);
 }
 

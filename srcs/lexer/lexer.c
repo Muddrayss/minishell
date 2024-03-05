@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 23:47:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:07:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static t_list   *lexer_add_token(t_list *lexered_params, const char c);
 static bool     is_token(const char c);
 
 //TODO refractor
-//TODO non funziona ls | (echo ciao)
+
 void    lexer(const char *input)
 {
     t_data          *data;

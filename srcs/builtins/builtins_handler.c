@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/04 14:50:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:04:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool is_builtin(const char *const cmd_str)
 	return (free_and_null((void **)&cmd), false);
 }
 
-void exec_builtin(const char *const *cmd_args)
+void exec_builtin(const char **const cmd_args)
 {
 	uint8_t					i;
 	static void 			(*const builtin_functions[])(const char *const *) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
@@ -55,8 +55,7 @@ static void	free_builtins_data(void)
 	t_data	*data;
 
 	data = get_data();
-	if (data->cmd_args)
-		free_and_null((void **)&data->cmd_args[0]);
+	free_and_null((void **)&data->cmd_str);
 	free_and_null((void **)&data->cmd_args);	
 	free_and_null((void **)&data->input);
 	lstclear(&data->lexered_params, &del_content_lexer);

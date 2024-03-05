@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 19:30:38 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 15:38:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:50:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define BUILTINS_H
 
 bool is_builtin(const char *const cmd);
-void exec_builtin(const char *const *args);
+void exec_builtin(const char **const args);
 
 void ft_cd(const char *const *args);
 void ft_echo(const char *const *args);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 22:29:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:05:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,16 @@ typedef struct s_tree
 
 typedef struct s_data
 {
-	char		**cmd_args;
 	t_tree		*envp_tree;
-	char		**envp_matrix;
-	uint16_t	envp_size;
-	char		*starting_dir;
-	t_list		*lexered_params;
 	t_tree  	*parsed_params;
+	t_list		*lexered_params;
+	char		**cmd_args;
+	char		**envp_matrix;
+	char		*cmd_str;
 	char 		*input;
+	char		*starting_dir;
 	pid_t 		main_pid;
+	uint16_t	envp_size;
 }t_data;
 
 # include "builtins.h"

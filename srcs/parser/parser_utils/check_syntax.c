@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 22:23:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:23:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ static int8_t    check_tokens(const t_list *lexered_params)
             prev_elem = (t_lexer *)lexered_params->prev->content;
         if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END)
         {
-            invalid_next = !next_elem || !next_elem->cmd_str || next_elem->token == SUBSHELL_END;
-            invalid_prev = !prev_elem || !prev_elem->cmd_str || prev_elem->token == SUBSHELL_START;;
+            invalid_next = !next_elem || (!next_elem->cmd_str && next_elem->token != SUBSHELL_START) || next_elem->token == SUBSHELL_END;
+            invalid_prev = !prev_elem || (!prev_elem->cmd_str && prev_elem->token != SUBSHELL_END) || prev_elem->token == SUBSHELL_START;;
             if (invalid_next || invalid_prev)
                 return (throw_syntax_error(elem->token), -1);
         }

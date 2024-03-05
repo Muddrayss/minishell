@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 16:57:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:27:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,18 +99,15 @@ static t_list   *unskip_parenthesis(const t_list *lexered_params)
 static t_parser *init_cmd(const char type, const char *const cmd_str)
 {
     t_parser    *node;
-    t_cmd       *cmd;
 
     node = (t_parser *)malloc_p(sizeof(t_parser));
-    cmd = (t_cmd *)malloc_p(sizeof(t_cmd));
-    node->cmd = cmd;
     node->type = type;
-    cmd->cmd_str = NULL;
-    cmd->redirs = NULL;
+    node->cmd = NULL;
     if (cmd_str)
     {
-        cmd->redirs = fill_redirs(cmd_str);
-        cmd->cmd_str = clear_redirs(cmd_str);
+        node->cmd = (t_cmd *)malloc_p(sizeof(t_cmd));
+        node->cmd->redirs = fill_redirs(cmd_str);
+        node->cmd->cmd_str = clear_redirs(cmd_str);
     }
     return (node);
 }
