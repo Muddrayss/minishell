@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 14:28:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:34:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int8_t merge_separators(t_list **const lexered_params)
             else if (elem->token == ';')
                 elem->token = SEMICOLON;
         }
-        if (node)
+        if (node) //forse inutile?
             node = node->next;
     }
     return (ret);

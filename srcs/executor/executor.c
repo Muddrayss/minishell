@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 15:07:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:26:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,6 @@ void    executor(const t_tree *const parsed_params)
     wait_for_children(parsed_params);
     dup2_p(fds[3], STDIN_FILENO);
 }
-
-//Yes, when you use pipes within a subshell, such as in ( cmd1 | cmd2 | cmd3 ), 
-//the subshell will wait for the entire pipeline of commands to complete before it returns 
-//control to the rest of the script or command line. Each command in the pipeline 
-//is executed in parallel in its own sub-process: cmd1's output is piped into
-//cmd2, and cmd2's output is piped into cmd3. The subshell waits for the last
-//command in the pipeline (cmd3 in this case) to complete, along with 
-//all preceding commands in the pipeline, before it finishes.
 
 static void launch_commands(const t_tree *const node, const int8_t prev_type, int16_t fds[5])
 {

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 22:31:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:26:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void    replace_env_vars(char **const str, const bool ignore_quotes)
             master_quote = (*str)[i];
         else if (master_quote && (*str)[i] == master_quote)
             master_quote = '\0';
-        if ((*str)[i] == '$' && (ignore_quotes || master_quote != '\'' ))
+        if ((*str)[i] == '$' && (ignore_quotes || master_quote != '\''))
             *str = expand_dollar(*str, &i, ignore_quotes);
         i++;
     }
@@ -66,7 +66,7 @@ static char *get_env_name(const char *const str, const bool ignore_quotes)
 	len = 0;
 	while (str[len] && ft_strchr(stop_chars, str[len]) == NULL)
 		len++;
-	if (len == 0 && (!is_quote(str[len]) || (ignore_quotes)))
+	if (len == 0 && (!is_quote(str[len]) || ignore_quotes))
 		return (NULL);
     env_name = (char *)malloc_p(sizeof(char) * (len + 1));
     ft_strlcpy(env_name, str, len + 1);

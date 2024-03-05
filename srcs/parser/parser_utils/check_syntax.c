@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 16:16:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:32:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ static int8_t   check_redirs(const t_list *lexered_params)
             }
             else if (!master_quote && is_redir(elem->cmd_str[i]))
             {
-                if (check_redir_streak(elem->cmd_str + i) == 1||
+                if (check_redir_streak(elem->cmd_str + i) == 1 ||
                     check_redir_pair(elem->cmd_str + i) == 1 ||
                     check_filename_presence(elem->cmd_str + i) == 1)
                     return (throw_syntax_error(elem->cmd_str[i]), -1);

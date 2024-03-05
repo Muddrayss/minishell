@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 01:45:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 00:05:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:38:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ static char *get_pattern(const char *const str, uint16_t *const i, uint16_t *con
 {
     char        *pattern;
     char        master_quote;
+    const char  stop_chars[] = {' ', '\t', '\n', '\"', '\'', '\0'};
 
     if (!str)
         return (NULL);
@@ -181,7 +182,7 @@ static char *get_pattern(const char *const str, uint16_t *const i, uint16_t *con
         (*i)--;
     *i += is_shell_space(str[*i]);
     *len = 1;
-    while (str[*i + *len] && !is_shell_space(str[*i + *len]) && !is_quote(str[*i + *len]))
+    while (!ft_strchr(stop_chars, str[*i + *len]))
         (*len)++;
     pattern = (char *)malloc_p(sizeof(char) * (*len + 1));
     ft_strlcpy(pattern, &str[*i], *len + 1);
