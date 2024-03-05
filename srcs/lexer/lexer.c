@@ -6,82 +6,73 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 11:07:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 12:04:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static t_list   *lexer_add_cmd(t_list *lexered_params, const uint16_t cmd_len, const char *const cmd_str_raw);
-static t_list   *lexer_add_token(t_list *lexered_params, const char c);
+static void     add_cmd_and_token(t_list **const lexered_params, const char *const input, const uint16_t i);
+static void     lexer_add_cmd(t_list **const lexered_params, const uint16_t cmd_len, const char *const input);
+static void     lexer_add_token(t_list **const lexered_params, const char c);
 static bool     is_token(const char c);
 
-//TODO refractor
-
-void    lexer(const char *input)
+void lexer(const char *input)
 {
-    t_data          *data;
-    char            *cmd_str;
-    uint16_t        cmd_len;
-    char            current_quote;
+    t_data      *data;
+    uint16_t    i;
+    char        current_quote;
 
     data = get_data();
+    i = -1;
     current_quote = '\0';
-    data->lexered_params = NULL;
-    cmd_len = 0;
-    while (true)
+    while (input[++i])
     {
-        if (is_quote(*input))
+        if (is_quote(input[i]))
         {
             if (!current_quote)
-                current_quote = *input;
-            else if (current_quote == *input)
+                current_quote = input[i];
+            else if (current_quote == input[i])
                 current_quote = '\0';
         }
-        else if ((!current_quote && is_token(*input)) || *input == '\0')
+        else if (!current_quote && is_token(input[i]))
         {
-            cmd_str = NULL;
-            if (cmd_len > 0)
-            {
-                cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
-                ft_strlcpy(cmd_str, input - cmd_len, cmd_len + 1);
-            }
-            data->lexered_params = lexer_add_cmd(data->lexered_params, cmd_len, cmd_str);
-            data->lexered_params = lexer_add_token(data->lexered_params, *input);
-            cmd_len = -1;
+            add_cmd_and_token(&data->lexered_params, input, i);
+            input += i + 1;
+            i = -1;
         }
-        cmd_len++;
-        if (!*input)
-            break ;
-        input++;
     }
+    add_cmd_and_token(&data->lexered_params, input, i);
     lstreverse(&data->lexered_params);
 }
 
-static t_list   *lexer_add_cmd(t_list *lexered_params, const uint16_t cmd_len, const char *const cmd_str_raw)
+static void add_cmd_and_token(t_list **const lexered_params, const char *const input, const uint16_t i)
 {
-    t_lexer   		*content;
-    
-    if (cmd_len <= 0)
-        return (lexered_params);
-    content = (t_lexer *)malloc_p(sizeof(t_lexer));
-    content->token = 0;
-    content->cmd_str = (char *)cmd_str_raw;
-    lstadd_front(&lexered_params, lstnew_p(content));
-    return (lexered_params);
+    if (i > 0)
+        lexer_add_cmd(lexered_params, i, input);
+    if (input[i])
+        lexer_add_token(lexered_params, input[i]);
 }
 
-static t_list *lexer_add_token(t_list *lexered_params, const char c)
+static void lexer_add_cmd(t_list **const lexered_params, const uint16_t cmd_len, const char *const input)
 {
-    t_lexer   		*content;
+    t_lexer *content;
 
-    if (!c)
-        return (lexered_params);
+    content = (t_lexer *)malloc_p(sizeof(t_lexer));
+    content->token = 0;
+    content->cmd_str = (char *)malloc_p(sizeof(char) * (cmd_len + 1));
+    ft_strlcpy(content->cmd_str, input, cmd_len + 1);
+    lstadd_front(lexered_params, lstnew_p(content));
+}
+
+static void lexer_add_token(t_list **const lexered_params, const char c)
+{
+    t_lexer *content;
+
     content = (t_lexer *)malloc_p(sizeof(t_lexer));
     content->token = c;
     content->cmd_str = NULL;
-    lstadd_front(&lexered_params, lstnew_p(content));
-    return (lexered_params);
+    lstadd_front(lexered_params, lstnew_p(content));
 }
 
 static bool is_token(const char c)
