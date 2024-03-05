@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 11:05:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:22:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	check_args(const int argc, const char **const argv, const char **const envp
 void	init_data(const char **const envp);
 void    init_general(void);
 t_data	*get_data(void);
+void	clear_quotes(char **const str);
 void	ft_quit(const uint8_t id, const char *const msg);
 void    free_data(void);
 

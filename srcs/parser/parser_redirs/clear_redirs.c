@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 15:05:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:14:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,22 @@ char    *clear_redirs(const char *cmd_str)
 
 static uint16_t remove_filename(const char *const str, uint16_t i, bool *const to_remove_array)
 {
-    i += 1 + (str[i + 1] == '<' || str[i + 1] == '>');
+    char    master_quote;
+
+    i += 1 + is_redir(str[i + 1]);
+    master_quote = '\0';
     while (str[i] && is_shell_space(str[i]))
         to_remove_array[i++] = true;
-    while (str[i] && !is_shell_space(str[i])) // && !is_quote(str[i]))
+    while (str[i])
+    {
+        if (!master_quote && is_quote(str[i]))
+            master_quote = str[i];
+        else if (str[i] == master_quote)
+            master_quote = '\0';
+        if (!master_quote && is_shell_space(str[i]))
+            break ;
         to_remove_array[i++] = true;
+    }
     return (i - 1);
 }
 

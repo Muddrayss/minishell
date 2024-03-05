@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 14:33:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:16:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ static int8_t    check_tokens(const t_list *lexered_params)
             prev_elem = (t_lexer *)lexered_params->prev->content;
         if (elem->token && elem->token != SUBSHELL_START && elem->token != SUBSHELL_END)
         {
-            printf("token: %d\n", elem->token);
             invalid_next = !next_elem || (!next_elem->cmd_str && next_elem->token != SUBSHELL_START) || next_elem->token == SUBSHELL_END;
             invalid_prev = !prev_elem || (!prev_elem->cmd_str && prev_elem->token != SUBSHELL_END) || prev_elem->token == SUBSHELL_START;;
             if (invalid_next || invalid_prev)
@@ -168,7 +167,13 @@ static uint8_t check_redir_pair(const char *const cmd_str)
 
 static uint8_t check_filename_presence(const char *const cmd_str)
 {
-    return (is_empty_str(cmd_str + 1));
+    char    *tmp;
+    bool    filename_present;
+
+    tmp = strdup_p(cmd_str + 1);
+    clear_quotes(&tmp);
+    filename_present = is_empty_str(tmp);
+    return (free_and_null((void **)&tmp), filename_present);
 }
 
 void	throw_syntax_error(const char token)

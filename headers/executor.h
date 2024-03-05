@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 11:29:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:21:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	*get_cmd_path(const char *const path, const char *const cmd);
 char    **get_cmd_args(char **const cmd_str);
 void    replace_env_vars(char **const str, const bool ignore_quotes);
 void    replace_wildcards(char **str);
-void	clear_quotes(char **const str);
 void    exec_simple_cmd(const char *const path, const char *const cmd_str);
 void    exec(const char *const path, const char *const cmd_str);
 
