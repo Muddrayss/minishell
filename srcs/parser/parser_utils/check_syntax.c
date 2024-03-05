@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 10:23:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 12:16:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static int8_t   check_parenthesis(const t_list *lexered_params)
     return (0);
 }
 
+//TODO weird syntax error with token '&
 static int8_t    check_tokens(const t_list *lexered_params)
 {
     t_lexer  *elem;
@@ -80,7 +81,7 @@ static int8_t    check_tokens(const t_list *lexered_params)
             invalid_next = !next_elem || (!next_elem->cmd_str && next_elem->token != SUBSHELL_START) || next_elem->token == SUBSHELL_END;
             invalid_prev = !prev_elem || (!prev_elem->cmd_str && prev_elem->token != SUBSHELL_END) || prev_elem->token == SUBSHELL_START;;
             if (invalid_next || invalid_prev)
-                return (throw_syntax_error(elem->token), -1);
+                return (throw_syntax_error(g_parser_tokens[(int8_t)elem->token]), -1);
         }
         lexered_params = lexered_params->next;
     }
