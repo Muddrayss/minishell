@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 08:36:25 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 void ft_unset(const char *const *args)
 {
 	char	*name;
-	uint8_t	exit_status;
 
-	exit_status = EXIT_SUCCESS;
+	g_status = EXIT_SUCCESS;
 	while (*(++args))
 	{
 		if (!ft_strchr(*args, '='))
@@ -28,9 +27,8 @@ void ft_unset(const char *const *args)
 		}
 		else 
 		{
+			g_status = EXIT_FAILURE;
 			ft_putstr_fd("unset: not a valid identifier\n", STDERR_FILENO);
-			exit_status = EXIT_FAILURE;
 		}
 	}
-	g_status = exit_status;
 }

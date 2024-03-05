@@ -6,12 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 19:04:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 08:37:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
+//TODO refractor
 void ft_cd(const char *const *args)
 {
 	char	*cwd;

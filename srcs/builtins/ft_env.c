@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:29:39 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/03 16:54:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 08:36:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void ft_env(const char *const *args)
 {
+	g_status = EXIT_SUCCESS;
 	if (args[1])
 	{
-		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
 		g_status = EXIT_FAILURE;
+		ft_putstr_fd("env: too many arguments\n", STDERR_FILENO);
 		return ;
 	}
 	envp_print_env();
-	g_status = EXIT_SUCCESS;
 }

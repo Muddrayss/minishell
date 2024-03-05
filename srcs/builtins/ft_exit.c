@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/04 15:38:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 08:31:30 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,23 @@ void ft_exit(const char *const *args)
 	uint8_t	id;
 
 	if (!args[1])
+		id = g_status;
+	else if (args[2])
 	{
-		free_data();
-		exit(g_status);
-	}
-	if (args[2])
-	{
+		id = EXIT_FAILURE;
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
-		free_data();
-		exit(EXIT_FAILURE);
 	}
 	if (is_number(args[1]) && !is_long_overflow(args[1]))
-	{
 		id = (uint8_t)ft_atoi(args[1]);
-		free_data();
-		exit(id);
+	else
+	{
+		id = 2;
+		ft_putstr_fd("exit: ", STDERR_FILENO);
+		ft_putstr_fd(args[1], STDERR_FILENO);
+		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 	}
-	ft_putstr_fd("exit: ", STDERR_FILENO);
-	ft_putstr_fd(args[1], STDERR_FILENO);
-	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 	free_data();
-	exit(2);
+	exit(id);
 }
 
 static bool	is_number(const char *str)
