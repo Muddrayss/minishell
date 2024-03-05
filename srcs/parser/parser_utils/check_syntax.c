@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 12:18:33 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:20:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static uint8_t  check_redir_streak(const char *const cmd_str);
 static uint8_t  check_redir_pair(const char *const cmd_str);
 static uint8_t  check_filename_presence(const char *const cmd_str);
 static int8_t   check_quotes(const t_list *lexered_params);
-static void     throw_syntax_error(const char token);
 
 int8_t   check_syntax(const t_list *const lexered_params)
 {
@@ -173,7 +172,7 @@ static uint8_t check_filename_presence(const char *const cmd_str)
     return (is_empty_str(cmd_str + 1));
 }
 
-static void	throw_syntax_error(const char token)
+void	throw_syntax_error(const char token)
 {
     ft_putstr_fd("Syntax error near unexpected token: '", STDERR_FILENO);
     write(STDERR_FILENO, &token, 1);

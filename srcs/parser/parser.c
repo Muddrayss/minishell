@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:27 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 10:27:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:27:52 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ static t_list   *unskip_parenthesis(const t_list *lexered_params);
 void    parser(t_list *lexered_params)
 {
     lstdelif(&lexered_params, &is_empty_cmd, &del_content_lexer);
-    merge_separators(&lexered_params);
-    if (check_syntax(lexered_params) == -1)
+    if (merge_separators(&lexered_params) == -1 || check_syntax(lexered_params) == -1)
     {
         g_status = 2;
         return ;
@@ -29,7 +28,6 @@ void    parser(t_list *lexered_params)
     get_data()->parsed_params = fill_tree(lexered_params, NULL);
 }
 
-//stop parte da NULL
 static t_tree   *fill_tree(const t_list *const lexered_params, const t_list *const stop)
 {
     t_tree  *node;
@@ -43,7 +41,7 @@ static t_tree   *fill_tree(const t_list *const lexered_params, const t_list *con
         return (fill_tree(skip_parenthesis(lexered_params), stop));
     if (lexered_params->next == stop)
     {
-        node = treenew_p(init_cmd(END, NULL)); //uso END come nodo vuoto, che serve solo per poter mettere il comando a sinistra invece che destra. così l'executor i comandi li ha solo a sinistra
+        node = treenew_p(init_cmd(END, NULL));
         if (elem->token == SUBSHELL_END)
             node = treeadd_below(node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
         else
@@ -75,7 +73,7 @@ static t_list	*skip_parenthesis(const t_list *lexered_params)
 		else if (elem->token == SUBSHELL_START)
 			n_open++;
 	}
-	return ((t_list *)lexered_params); //ritorna la parentesi chiusa
+	return ((t_list *)lexered_params);
 }
 
 static t_list   *unskip_parenthesis(const t_list *lexered_params)
@@ -93,7 +91,7 @@ static t_list   *unskip_parenthesis(const t_list *lexered_params)
         else if (elem->token == SUBSHELL_START)
             n_close--;
     }
-    return (lexered_params->next); //ritorna uno dopo la parentesi aperta
+    return (lexered_params->next);
 }
 
 static t_parser *init_cmd(const char type, const char *const cmd_str)

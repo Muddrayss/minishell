@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:58:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 16:57:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:25:40 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ typedef struct s_redir
 }t_redir;
 
 void	parser(t_list *lexered_params);
-void 	merge_separators(t_list **const lexered_params);
+int8_t 	merge_separators(t_list **const lexered_params);
 int8_t 	check_syntax(const t_list *const lexered_params);
+void	throw_syntax_error(const char token);
 t_list  *fill_redirs(const char *const cmd_str);
 char    *clear_redirs(const char *cmd_str);
 bool    is_empty_cmd(const void *const content);
