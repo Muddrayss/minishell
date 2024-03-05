@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:59:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 08:35:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:08:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,5 @@ void	ft_pwd(const char *const *args)
 	ft_putstr_fd(pwd, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	g_status = EXIT_SUCCESS;
+	free_and_null((void **)&pwd);
 }
