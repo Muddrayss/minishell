@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 22:29:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 12:27:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void merge_ampersands(t_list **const head, t_list **const node)
     t_lexer *next_elem;
     t_lexer *prev_elem;
     char    *tmp;
+    uint16_t next_elem_len;
 
     next_elem = NULL;
     prev_elem = NULL;
@@ -63,16 +64,22 @@ static void merge_ampersands(t_list **const head, t_list **const node)
         elem->token = AND;
         lstremoveone(head, (*node)->next, &del_content_lexer);
     }
-    else if (prev_elem && next_elem && prev_elem->cmd_str)
+    else if (prev_elem && prev_elem->cmd_str)
     {
         tmp = prev_elem->cmd_str;
-        prev_elem->cmd_str = (char *)malloc_p(sizeof(char) * (ft_strlen(prev_elem->cmd_str) + ft_strlen(next_elem->cmd_str) + 2));
+        if (next_elem)
+            next_elem_len = ft_strlen(next_elem->cmd_str);
+        else
+            next_elem_len = 0;
+        prev_elem->cmd_str = (char *)malloc_p(sizeof(char) * ((ft_strlen(prev_elem->cmd_str) + next_elem_len + 2)));
         ft_strcpy(prev_elem->cmd_str, tmp);
         ft_strcat(prev_elem->cmd_str, "&");
-        ft_strcat(prev_elem->cmd_str, next_elem->cmd_str);
+        if (next_elem)
+            ft_strcat(prev_elem->cmd_str, next_elem->cmd_str);
         free_and_null((void **)&tmp);
         node_prev = (*node)->prev;
-        lstremoveone(head, (*node)->next, &del_content_lexer);
+        if (next_elem)
+            lstremoveone(head, (*node)->next, &del_content_lexer);
         lstremoveone(head, (*node), &del_content_lexer);
         *node = node_prev;
     }
