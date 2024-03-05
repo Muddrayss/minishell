@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:03:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 14:20:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:33:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static int8_t   check_parenthesis(const t_list *lexered_params)
     return (0);
 }
 
-//TODO weird syntax error with token '&'
 static int8_t    check_tokens(const t_list *lexered_params)
 {
     t_lexer  *elem;

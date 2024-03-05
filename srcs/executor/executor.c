@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 21:24:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:07:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,6 @@ static void launch_commands(const t_tree *const node, const int8_t prev_type, in
     child(node, fds, prev_type);
 }
 
-// Yes, you are correct. When Bash executes built-in commands,
-// these commands run directly within the context of the current shell process,
-// rather than in a new child process. This means that for a pipeline
-// of built-in commands, the commands are executed sequentially, not in parallel
-// as they would be if each command in the pipeline were an external command that
-// required a new process to be spawned.
 static void launch_builtin_cmd(const t_tree *const node, const int8_t prev_type, int16_t fds[5])
 {
     const t_parser *const   elem = (t_parser *)node->content;
@@ -159,8 +153,7 @@ static void parent(const t_tree *const node, int16_t fds[5], const pid_t pid)
     {
         waitpid_p(pid, &status, 0);
         g_status = WEXITSTATUS(status);
-        reset_fd(&fds[0]); //se dopo non c'e' pipe chiude la pipeline
-        //TODO setenv per _=
+        reset_fd(&fds[0]);
     }
 }
 

@@ -6,7 +6,7 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/03/05 11:20:12 by craimond         ###   ########.fr        #
+#    Updated: 2024/03/05 14:33:12 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ OBJS = $(SRCS:.c=.o)
 HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h envp.h utils.h protected_methods.h colors.h)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread -g #TODO remove -g
+CFLAGS = -Wall -Wextra -Werror -pthread -g
 RM = rm -f
 
 NAME = minishell

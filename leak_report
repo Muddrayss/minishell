@@ -1,23 +1,22 @@
-==34817== Memcheck, a memory error detector
-==34817== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==34817== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==34817== Command: ./minishell
-==34817== 
-Syntax error near unexpected token: '&'
+==46721== Memcheck, a memory error detector
+==46721== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==46721== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==46721== Command: ./minishell
+==46721== 
 exit
-==34817== 
-==34817== FILE DESCRIPTORS: 0 open at exit.
-==34817== 
-==34817== HEAP SUMMARY:
-==34817==     in use at exit: 204,809 bytes in 221 blocks
-==34817==   total heap usage: 663 allocs, 442 frees, 244,800 bytes allocated
-==34817== 
-==34817== LEAK SUMMARY:
-==34817==    definitely lost: 0 bytes in 0 blocks
-==34817==    indirectly lost: 0 bytes in 0 blocks
-==34817==      possibly lost: 0 bytes in 0 blocks
-==34817==    still reachable: 0 bytes in 0 blocks
-==34817==         suppressed: 204,809 bytes in 221 blocks
-==34817== 
-==34817== For lists of detected and suppressed errors, rerun with: -s
-==34817== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==46721== 
+==46721== FILE DESCRIPTORS: 0 open at exit.
+==46721== 
+==46721== HEAP SUMMARY:
+==46721==     in use at exit: 204,773 bytes in 218 blocks
+==46721==   total heap usage: 617 allocs, 399 frees, 244,173 bytes allocated
+==46721== 
+==46721== LEAK SUMMARY:
+==46721==    definitely lost: 0 bytes in 0 blocks
+==46721==    indirectly lost: 0 bytes in 0 blocks
+==46721==      possibly lost: 0 bytes in 0 blocks
+==46721==    still reachable: 0 bytes in 0 blocks
+==46721==         suppressed: 204,773 bytes in 218 blocks
+==46721== 
+==46721== For lists of detected and suppressed errors, rerun with: -s
+==46721== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

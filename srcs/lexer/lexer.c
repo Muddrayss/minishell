@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:03:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 12:04:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:04:47 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,21 @@ void lexer(const char *input)
 {
     t_data      *data;
     uint16_t    i;
-    char        current_quote;
+    char        master_quote;
 
     data = get_data();
     i = -1;
-    current_quote = '\0';
+    master_quote = '\0';
     while (input[++i])
     {
         if (is_quote(input[i]))
         {
-            if (!current_quote)
-                current_quote = input[i];
-            else if (current_quote == input[i])
-                current_quote = '\0';
+            if (!master_quote)
+                master_quote = input[i];
+            else if (master_quote == input[i])
+                master_quote = '\0';
         }
-        else if (!current_quote && is_token(input[i]))
+        else if (!master_quote && is_token(input[i]))
         {
             add_cmd_and_token(&data->lexered_params, input, i);
             input += i + 1;

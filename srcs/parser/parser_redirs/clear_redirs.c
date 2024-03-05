@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 17:38:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:05:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ char    *clear_redirs(const char *cmd_str)
     i = 0;
     while (cmd_str[i])
     {
-        if (!master_quote && (cmd_str[i] == '\'' || cmd_str[i] == '"'))
+        if (!master_quote && is_quote(cmd_str[i]))
             master_quote = cmd_str[i];
-        else if (master_quote && cmd_str[i] == master_quote)
+        else if (cmd_str[i] == master_quote)
             master_quote = '\0';
         if (!master_quote && is_redir(cmd_str[i]))
         {

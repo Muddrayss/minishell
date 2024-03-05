@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:55:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 15:15:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:59:32 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ t_list  *fill_redirs(const char *const cmd_str)
     while (cmd_str[i])
     {
         type = -1;
-        if (!master_quote && (is_quote(cmd_str[i])))
+        if (!master_quote && is_quote(cmd_str[i]))
             master_quote = cmd_str[i];
-        else if (master_quote && cmd_str[i] == master_quote)
+        else if (master_quote == cmd_str[i])
             master_quote = '\0';
         if (!master_quote && is_redir(cmd_str[i]))
         {
@@ -62,14 +62,23 @@ static char *get_filename(const char *const str)
 	char 		*filename;
 	uint16_t 	len;
 	uint16_t 	i;
+    char        master_quote;
 	
-	filename = NULL;
     i = 1;
-	while (str[i] != '\0' && is_shell_space(str[i]))
+	while (str[i] && is_shell_space(str[i]))
 		i++;
+    master_quote = '\0';
 	len = 0;
-	while (str[i + len] && !is_shell_space(str[i + len]) && !is_quote(str[i + len]))
+	while (str[i + len])
+    {
+        if (!master_quote && is_quote(str[i + len]))
+            master_quote = str[i + len];
+        else if (master_quote == str[i + len])
+            master_quote = '\0';
+        if (!master_quote && is_shell_space(str[i + len]))
+            break ;
 		len++;
+    }
 	filename = malloc_p(sizeof(char) * len + 1);
 	ft_strlcpy(filename, &str[i], len + 1);
 	return (filename);

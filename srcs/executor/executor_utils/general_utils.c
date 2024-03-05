@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 11:28:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:17:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ void	clear_quotes(char **const str)
 	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(*str) + 1));
 	while ((*str)[i])
 	{
-		if (!master_quote && ((*str)[i] == '\'' || (*str)[i] == '"'))
+		if (!master_quote && is_quote((*str)[i]))
 			master_quote = (*str)[i];
-		else if (master_quote && (*str)[i] == master_quote)
+		else if ((*str)[i] == master_quote)
 			master_quote = '\0';
-		else if (!master_quote || (master_quote && (*str)[i] != master_quote))
+		else
 			new_str[j++] = (*str)[i];
 		i++;
 	}
