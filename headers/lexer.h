@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 12:57:09 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 16:48:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 22:25:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_lexer
 
 static const char	g_lexer_tokens[7] = {'|', ';', '&', '(', ')'};
 
-void	lexer(const char *input);
-void	del_content_lexer(const void *const content);
+t_list	*lexer(const char *input);
 
 #endif

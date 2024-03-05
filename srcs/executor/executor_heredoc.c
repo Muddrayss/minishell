@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:08:45 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 23:38:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	create_heredocs(const t_tree *const tree, uint8_t *const status)
 				continue ;
 			filename = get_heredoc_filename(redir->heredoc_fileno);
 			fd = open_p(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			free_and_null((void **)&filename);
 			*status = fill_in_child(redir->filename, fd);
 			if (*status != 0)
 				return ;
@@ -56,11 +55,11 @@ char	*get_heredoc_filename(const uint16_t id)
 
 	filename = ft_calloc(size, sizeof(char));
 	if (!filename || !id_str)
-		return (free_and_null((void **)&id_str), free_and_null((void **)&filename), ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
+		return (ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
 	ft_strcpy(filename, data->starting_dir);
 	ft_strcat(filename, "/tmp/.heredoc_");
 	ft_strcat(filename, id_str);
-	return (free_and_null((void **)&id_str), filename);
+	return (filename);
 }
 
 static uint8_t	fill_in_child(const char *const limiter, const uint16_t heredoc_fd)
@@ -101,9 +100,7 @@ static void	fill_heredoc(const char *const limiter, const uint16_t fd)
 		replace_env_vars(&str, true);
 		ft_putstr_fd(str, fd);
 		write(fd, "\n", 1);
-		free_and_null((void **)&str);
 	}
-	free_and_null((void **)&str);
-	free_data();
+	lstclear(*get_resources_stack());
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:36:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 23:36:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,42 +28,29 @@ void	ft_quit(const uint8_t id, const char *const msg)
 		write(STDERR_FILENO, "\n", 1);
 		unlink("./tmp/print_sem");
 	}
-	if (id == EXEC_FAILURE)
-		free_and_null((void **)&msg);
 	quit_from_main((uint8_t)id);
 }
 
 static void	quit_from_main(const uint8_t id)
 {
-	uint8_t				i;
-	const t_data *const	data = get_data();
+	uint8_t		i;
+	const pid_t	main_pid = get_data()->main_pid;
 
 	i = 0;
 	while (i < (sizeof(id) * 8))
 	{
 		if (id & (0x01 << i++))
-			kill(data->main_pid, SIGUSR1);
+			kill(main_pid, SIGUSR1);
 		else
-			kill(data->main_pid, SIGUSR2);
+			kill(main_pid, SIGUSR2);
 		usleep(100);
 	}
 }
 
-void	free_data(void)
+void	free_resources(void)
 {
-	t_data	*data;
-
+	lstclear(*get_resources_stack());
 	close_all_fds();
-	data = get_data();
-	free_and_null((void **)&data->starting_dir);
-	free_and_null((void **)&data->cmd_str);
-	free_and_null((void **)&data->cmd_args);
-	treeclear(&data->envp_tree, (void *const)&free);
-	free_and_null((void **)&data->envp_matrix);
-	data->envp_matrix = NULL;
-	lstclear(&data->lexered_params, &del_content_lexer);
-	treeclear(&data->parsed_params, &del_content_parser);
-	free_and_null((void **)&data->input);
 }
 
 static void	close_all_fds(void)

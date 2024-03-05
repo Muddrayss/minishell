@@ -30,8 +30,6 @@ char		*ft_strchr(const char *const s, const char c);
 char		ft_tolower(const char c);
 
 void		*ft_calloc(const size_t count, const size_t size);
-void		free_and_null(void **const ptr);
-void		ft_freematrix(const char **const matrix);
 uint16_t	ft_matrixsize(const char **const matrix);
 bool		is_digit(const char c);
 int32_t		ft_atoi(const char *str);
@@ -44,15 +42,14 @@ bool		is_shell_space(const char c);
 bool		is_empty_str(const char *str);
 bool		is_digit(const char c);
 
-t_list		*lstnew_p(const void *const content);
+t_list		*lstnew(const void *const content, const bool is_resource_stack);
 void		lstadd_front(t_list **const lst, t_list *const new);
 t_list		*lstlast(const t_list *lst);
 void		lstadd_back(t_list **const lst, t_list *const new);
 void		lstreverse(t_list **const lst);
-void		lstclear(t_list **const lst, void (*del)(const void *const));
-void		lstdelone(const t_list *const lst, void (*del)(const void *const));
-void		lstremoveone(t_list **const head, t_list *const to_remove, void (*del)(const void *const));
-void		lstdelif(t_list **const lst, bool (*f)(const void *const), void (*del)(const void *const));
+void		lstclear(t_list *const lst);
+void		lstremoveone(t_list **const head, t_list *const to_remove);
+void		lstremoveif(t_list **const lst, bool (*f)(const void *const));
 
 t_tree		*treenew_p(const void *const content);
 t_tree		*treeadd_below(t_tree *const node, const t_tree *const new);

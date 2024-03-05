@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 16:49:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 23:49:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,16 +50,11 @@ typedef struct s_tree
 
 typedef struct s_data
 {
-	t_tree		*envp_tree;
-	t_tree		*parsed_params;
-	t_list		*lexered_params;
-	char		**cmd_args;
 	char		**envp_matrix;
-	char		*cmd_str;
-	char		*input;
+	t_tree		*envp_tree;
 	char		*starting_dir;
-	pid_t		main_pid;
 	uint16_t	envp_size;
+	pid_t		main_pid;
 }	t_data;
 
 # include "builtins.h"
@@ -74,16 +69,17 @@ typedef struct s_data
 # include "colors.h"
 
 extern uint8_t		g_status;
-static const char	g_shell_spaces[] = {' ', '\t', '\n'};
+static const char	g_shell_spaces[] = " \t\n";
 
 # define MAX_FDS 1024
 
 void	check_args(const int argc, const char **const argv, const char **const envp);
+t_data	*get_data(void);
 void	init_data(const char **const envp);
 void	init_general(void);
-t_data	*get_data(void);
-void	clear_quotes(char **const str);
+char	*clear_quotes(const char *const str);
+t_list	**get_resources_stack(void);
 void	ft_quit(const uint8_t id, const char *const msg);
-void	free_data(void);
+void	free_resources(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:40:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:23:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 00:07:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	*malloc_p(const size_t size)
 	ptr = malloc(size);
 	if (!ptr)
 		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+	lstadd_front(get_resources_stack(), lstnew(ptr, true));
 	return (ptr);
 }
 
@@ -33,5 +34,6 @@ void	*calloc_p(const size_t nmemb, const size_t size)
 	ptr = ft_calloc(nmemb, size);
 	if (!ptr)
 		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+	lstadd_front(get_resources_stack(), lstnew(ptr, true));
 	return (ptr);
 }

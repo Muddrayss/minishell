@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:13:57 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:14:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 21:51:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,5 @@ static char	*remove_chars(const char *const str, const bool *const to_remove_arr
 		i++;
 	}
 	new_str[j] = '\0';
-	return (free_and_null((void **)&to_remove_array), free_and_null((void **)&str), new_str);
+	return (new_str);
 }

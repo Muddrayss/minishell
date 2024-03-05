@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:03:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 23:38:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ char	*get_cmd_path(const char *const path, const char *const cmd)
 		full_path = search_cmd_in_dirs(entry, cmd);
 		entry = ft_strtok(NULL, ':');
 	}
-	free_and_null((void **)&path_cpy);
 	if (!entry)
-		return (throw_error(cmd), free_data(), NULL);
+		return (throw_error(cmd), lstclear(*get_resources_stack()), NULL);
 	return (full_path);
 }
 
@@ -67,7 +66,7 @@ static char *search_cmd_in_dirs(const char *const entry, const char *const cmd)
 	ft_strcat(full_path, cmd);
 	if (access(full_path, X_OK) == 0)
 		return (full_path);
-	return (free_and_null((void **)&full_path), NULL);
+	return (NULL);
 }
 
 static char	*get_custom_bin(const char *const cmd)
@@ -81,14 +80,13 @@ static char	*get_custom_bin(const char *const cmd)
 		ft_strcpy(full_path, cwd);
 		ft_strcat(full_path, "/");
 	}
-	free((char *)cwd);
 	ft_strcat(full_path, cmd);
 	if (access(full_path, X_OK) == 0)
 		return (full_path);
 	ft_putstr_fd("minishell: error opening file '", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd("'\n", STDERR_FILENO);
-	return (free_and_null((void **)&full_path), NULL);
+	return (NULL);
 }
 
 static void	throw_error(const char *const cmd)

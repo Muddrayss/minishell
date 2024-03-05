@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:37:10 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 23:58:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,21 @@ int	main(const int argc, const char **const argv, const char **const envp)
 
 static void	minishell_loop()
 {
-	t_data	*data;
+	char				*input;
+	static const char	prompt[] = RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT;
 
-	data = get_data();
 	while (true)
 	{
+		//TODO distinguish between temporary_data(resources-stack) and permanent_data(envp_matrix, envp_tree, starting_dir) 
 		set_signals(S_INTERACTIVE, true);
-		free_and_null((void **)&data->input);
-		data->input = readline(RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT);
-		if (!data->input)
+		input = readline(prompt);
+		if (!input)
 			ft_quit(123, "exit");
-		add_history(data->input);
-		data->input = strtrim_p(data->input, " \t\n");
-		if (!data->input)
-			continue ;
-		lexer(data->input);
-		parser(data->lexered_params);
-		lstclear(&data->lexered_params, &del_content_lexer);
-		if (!data->parsed_params)
+		add_history(input);
+		input = strtrim_p(input, g_shell_spaces);
+		if (!input)
 			continue ;
 		set_signals(S_SILENT, true);
-		executor(data->parsed_params);
-		treeclear(&data->parsed_params, &del_content_parser);
+		executor(parser(lexer(input)));
 	}
 }

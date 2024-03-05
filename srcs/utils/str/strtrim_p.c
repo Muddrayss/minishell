@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 16:36:23 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/04 17:03:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 22:54:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 char	*strtrim_p(const char *s1, const char *const set)
 {
-	char				*newstr;
-	const char *const	start = s1;
-	uint16_t			i;
+	char		*newstr;
+	uint16_t	i;
 
 	if (!s1)
 		return (NULL);
@@ -35,5 +34,5 @@ char	*strtrim_p(const char *s1, const char *const set)
 		newstr[i - 1] = s1[i - 1];
 		i--;
 	}
-	return (free_and_null((void **)&start), newstr);
+	return (newstr);
 }

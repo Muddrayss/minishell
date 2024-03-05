@@ -167,13 +167,7 @@ static uint8_t	check_redir_pair(const char *const cmd_str)
 
 static uint8_t	check_filename_presence(const char *const cmd_str)
 {
-	char	*tmp;
-	bool	filename_present;
-
-	tmp = strdup_p(cmd_str + 1);
-	clear_quotes(&tmp);
-	filename_present = is_empty_str(tmp);
-	return (free_and_null((void **)&tmp), filename_present);
+	return (is_empty_str(clear_quotes(cmd_str + 1)));
 }
 
 void	throw_syntax_error(const char token)

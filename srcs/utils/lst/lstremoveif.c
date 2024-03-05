@@ -1,21 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_and_null.c                                      :+:      :+:    :+:   */
+/*   lstremoveif.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/02 00:07:21 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 00:51:47 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/08 20:47:47 by craimond          #+#    #+#             */
+/*   Updated: 2024/03/05 23:01:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	free_and_null(void **const ptr)
+void	lstremoveif(t_list **const lst, bool (*f)(const void *const))
 {
-	if (!ptr)
-		return ;
-	free(*ptr);
-	*ptr = NULL;
+	t_list	*tmp;
+	t_list	*next;
+
+	tmp = *lst;
+	while (tmp)
+	{
+		if (f(tmp->content) == true)
+		{
+			next = tmp->next;
+			if (tmp->prev)
+				tmp->prev->next = tmp->next;
+			else
+				*lst = tmp->next;
+			if (tmp->next)
+				tmp->next->prev = tmp->prev;
+			tmp = next;
+		}
+		else
+			tmp = tmp->next;
+	}
 }

@@ -1,33 +1,22 @@
-==67511== Memcheck, a memory error detector
-==67511== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==67511== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==67511== Command: ./minishell
-==67511== 
-cmd_str: clear
-cmd_str: rm
--rf
-/nfs/homes/craimond/Desktop/Minishell/Minishell_Github/tmp
-cmd_str: mkdir
--p
-tmp
-cmd_str: echo
-ciao
-
- '' 
+==37732== Memcheck, a memory error detector
+==37732== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==37732== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==37732== Command: ./minishell
+==37732== 
 exit
-==67511== 
-==67511== FILE DESCRIPTORS: 0 open at exit.
-==67511== 
-==67511== HEAP SUMMARY:
-==67511==     in use at exit: 204,776 bytes in 218 blocks
-==67511==   total heap usage: 618 allocs, 400 frees, 252,401 bytes allocated
-==67511== 
-==67511== LEAK SUMMARY:
-==67511==    definitely lost: 0 bytes in 0 blocks
-==67511==    indirectly lost: 0 bytes in 0 blocks
-==67511==      possibly lost: 0 bytes in 0 blocks
-==67511==    still reachable: 0 bytes in 0 blocks
-==67511==         suppressed: 204,776 bytes in 218 blocks
-==67511== 
-==67511== For lists of detected and suppressed errors, rerun with: -s
-==67511== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==37732== 
+==37732== FILE DESCRIPTORS: 0 open (0 std) at exit.
+==37732== 
+==37732== HEAP SUMMARY:
+==37732==     in use at exit: 208,338 bytes in 226 blocks
+==37732==   total heap usage: 763 allocs, 537 frees, 243,485 bytes allocated
+==37732== 
+==37732== LEAK SUMMARY:
+==37732==    definitely lost: 0 bytes in 0 blocks
+==37732==    indirectly lost: 0 bytes in 0 blocks
+==37732==      possibly lost: 0 bytes in 0 blocks
+==37732==    still reachable: 0 bytes in 0 blocks
+==37732==         suppressed: 208,338 bytes in 226 blocks
+==37732== 
+==37732== For lists of detected and suppressed errors, rerun with: -s
+==37732== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 1 from 1)

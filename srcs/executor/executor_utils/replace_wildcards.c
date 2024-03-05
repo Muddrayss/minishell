@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:05:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:07:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 00:06:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,9 @@ void	replace_wildcards(char **const str)
 		matching_files = parse_pattern(pattern, cwd, false);
 		matching_files = sort_result(matching_files);
 		*str = insert_result(*str, matching_files, idx, len);
-		lstclear(&matching_files, (void *const)&free);
 		idx += len;
-		free_and_null((void **)&pattern);
 		pattern = get_pattern(*str, &idx, &len);
 	}
-	free_and_null((void **)&cwd);
 }
 
 static t_list	*parse_pattern(const char *pattern, const char *const cwd, const bool is_root)
@@ -66,15 +63,11 @@ static t_list	*parse_pattern(const char *pattern, const char *const cwd, const b
 		full_entry = get_full_entry(basedir, entry->d_name, cwd, is_root);
 		new_pattern = get_new_pattern(basedir, pattern, entry->d_name);
 		if (!new_pattern)
-			lstadd_front(&matching_files, lstnew_p(full_entry));
+			lstadd_front(&matching_files, lstnew(full_entry, false));
 		else
-		{
-			free_and_null((void **)&full_entry);
 			lstadd_back(&matching_files, parse_pattern(new_pattern, cwd, is_root));
-		}
-		free_and_null((void **)&new_pattern);
 	}
-	return (free_and_null((void **)&basedir), closedir((DIR *)dir), matching_files);
+	return (closedir((DIR *)dir), matching_files);
 }
 
 static char *get_full_entry(const char *basedir, const char *const entry, const char *cwd, const bool is_root)
@@ -152,7 +145,7 @@ static	char *get_base_dir(const char **const pattern, bool *const is_root)
 	if (!basedir[0])
 	{
 		*is_root = true;
-		return (free_and_null((void **)&basedir), strdup_p("/"));
+		return (strdup_p("/"));
 	}
 	return (basedir);
 }
@@ -186,7 +179,7 @@ static char	*get_pattern(const char *const str, uint16_t *const i, uint16_t *con
 		(*len)++;
 	pattern = (char *)malloc_p(sizeof(char) * (*len + 1));
 	ft_strlcpy(pattern, &str[*i], *len + 1);
-	return (clear_quotes(&pattern), pattern);
+	return (clear_quotes(pattern));
 }
 
 static	t_list *sort_result(t_list *matching_files)
@@ -220,13 +213,13 @@ static char	*add_cwd(const char *pattern, const char *const cwd)
 	if (pattern[0] == '/')
 	{
 		new_pattern = strdup_p(pattern);
-		return (free_and_null((void **)&pattern), new_pattern);
+		return (new_pattern);
 	}
 	new_pattern = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(pattern) + 2));
 	ft_strcpy(new_pattern, cwd);
 	ft_strcat(new_pattern, "/");
 	ft_strcat(new_pattern, pattern);
-	return (free_and_null((void **)&pattern), new_pattern);
+	return (new_pattern);
 }
 
 static char	*insert_result(const char *const str, const t_list *const matching_files, const uint16_t idx, const uint16_t pattern_len)
@@ -256,5 +249,5 @@ static char	*insert_result(const char *const str, const t_list *const matching_f
 		node = node->next;
 	}
 	ft_strcat(new_str, &str[idx + pattern_len]);
-	return (free_and_null((void **)&str), new_str);
+	return (new_str);
 }

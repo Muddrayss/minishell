@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 16:58:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 23:38:13 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	ft_exit(const char *const *args)
 			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 		}
 	}
-	free_data();
+	lstclear(*get_resources_stack());
 	exit(id);
 }
 

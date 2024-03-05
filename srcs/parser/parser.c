@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:19:32 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:20:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 23:00:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ static t_tree	*fill_tree(const t_list *const lexered_params, const t_list *const
 static t_list	*skip_parenthesis(const t_list *lexered_params);
 static t_list	*unskip_parenthesis(const t_list *lexered_params);
 
-void	parser(t_list *lexered_params)
+t_tree	*parser(t_list *lexered_params)
 {
-	lstdelif(&lexered_params, &is_empty_cmd, &del_content_lexer);
+	lstremoveif(&lexered_params, &is_empty_cmd);
 	if (merge_separators(&lexered_params) == -1 || check_syntax(lexered_params) == -1)
 	{
 		g_status = 2;
-		return ;
+		return (NULL);
 	}
-	get_data()->parsed_params = fill_tree(lexered_params, NULL);
+	return(fill_tree(lexered_params, NULL));
 }
 
 static t_tree	*fill_tree(const t_list *const lexered_params, const t_list *const stop)

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:39:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:23:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 00:07:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ DIR	*opendir_p(const char *const name)
 
 	if (!dir && is_bad_errno(errno))
 		ft_quit(ERR_MEM, NULL);
+	lstadd_front(get_resources_stack(), lstnew(dir, true));
 	return ((DIR *)dir);
 }
 
@@ -27,6 +28,7 @@ struct dirent	*readdir_p(const DIR *const dir)
 
 	if (!entry && is_bad_errno(errno))
 		ft_quit(ERR_MEM, NULL);
+	lstadd_front(get_resources_stack(), lstnew(entry, true));
 	return ((struct dirent *)entry);
 }
 
@@ -36,6 +38,7 @@ char	*getcwd_p(const char *const buf, const size_t size)
 
 	if (!cwd && is_bad_errno(errno))
 		ft_quit(ERR_MEM, NULL);
+	lstadd_front(get_resources_stack(), lstnew(cwd, true));
 	return ((char *)cwd);
 }
 

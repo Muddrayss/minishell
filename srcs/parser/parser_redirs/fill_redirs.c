@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:14:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:15:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 00:06:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	init_redir(t_list **const redirs, const char type, const char *const
 	redir->type = type;
 	redir->filename = get_filename(str);
 	redir->heredoc_fileno = -1 * (type != REDIR_HEREDOC) + heredoc_fileno * (type == REDIR_HEREDOC);
-	lstadd_front(redirs, lstnew_p(redir));
+	lstadd_front(redirs, lstnew(redir, false));
 }
 
 static char *get_filename(const char *const str)

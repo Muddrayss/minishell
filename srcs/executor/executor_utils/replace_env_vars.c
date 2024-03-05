@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:04:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 21:46:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,8 @@ static char *expand_dollar(char *str, uint16_t *const i, const bool ignore_quote
 	ft_strlcpy(new_str, start, str - start);
 	ft_strcat(new_str, env_value);
 	ft_strcat(new_str, str + ft_strlen(env_name));
-	free(start);
 	*i += ft_strlen(env_value) - 1;
-	return (free_and_null((void **)&env_name), new_str);
+	return (new_str);
 }
 
 static char *get_env_name(const char *const str, const bool ignore_quotes)
@@ -84,7 +83,6 @@ static char	*get_env_value(const char *const env_name)
 	{
 		tmp = strjoin_p(env_name, "=");
 		env_value = ft_getenv(tmp);
-		free_and_null((void **)&tmp);
 	}
 	if (!env_value)
 		env_value = "";

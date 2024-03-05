@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 16:59:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 21:36:48 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	ft_unset(const char *const *args)
 		{
 			name = strjoin_p(*args, "=");
 			ft_unsetenv(name);
-			free_and_null((void **)&name);
 		}
 		else
 		{

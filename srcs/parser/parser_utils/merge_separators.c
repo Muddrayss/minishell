@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:19:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 22:25:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int8_t	merge_ampersands(t_list **const head, t_list **const node)
 	if (next_elem && next_elem->token == '&')
 	{
 		elem->token = AND;
-		lstremoveone(head, (*node)->next, &del_content_lexer);
+		lstremoveone(head, (*node)->next);
 	}
 	else
 		return (throw_syntax_error('&'), -1);
@@ -78,7 +78,7 @@ static void	merge_pipes(t_list **const head, t_list **const node)
 	{
 		elem->token = OR;
 		node_prev = (*node)->prev;
-		lstremoveone(head, (*node)->next, del_content_lexer);
+		lstremoveone(head, (*node)->next);
 		*node = node_prev;
 	}
 	else

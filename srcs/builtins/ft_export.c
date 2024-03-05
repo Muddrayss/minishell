@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:27:44 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 16:59:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 21:35:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,5 @@ void	ft_export(const char *const *args)
 			env_value = strdup_p("");
 		}
 		ft_setenv(env_name, env_value, true);
-		free_and_null((void **)&env_name);
-		free_and_null((void **)&env_value);
 	}
 }

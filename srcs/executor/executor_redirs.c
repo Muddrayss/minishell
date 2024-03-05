@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:09:16 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:09:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 22:43:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	exec_redirs(const t_list *redirs)
 		{
 			replace_env_vars(&redir->filename, false);
 			replace_wildcards(&redir->filename);
-			clear_quotes(&redir->filename);
+			redir->filename = clear_quotes(redir->filename);
 		}
 		exec_dup(redir);
 		redirs = redirs->next;
@@ -58,7 +58,6 @@ static uint16_t	open_redir_file(const t_redir *const redir)
 	{
 		heredoc_filename = get_heredoc_filename(redir->heredoc_fileno);
 		fd = open_p(heredoc_filename, O_RDONLY, 0644);
-		free_and_null((void **)&heredoc_filename);
 	}
 	else if (redir->type == REDIR_OUTPUT)
 		fd = open_p(redir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
