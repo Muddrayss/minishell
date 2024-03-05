@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 15:22:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:59:33 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	exec_simple_cmd(const char *const path, const char *const cmd_str)
 {
 	pid_t				pid;
-	const char *const 	cmd = strdup_p(cmd_str);
+	const char *const	cmd = strdup_p(cmd_str);
 
 	pid = fork_p();
 	if (pid == 0)
@@ -24,7 +24,7 @@ void	exec_simple_cmd(const char *const path, const char *const cmd_str)
 	wait(NULL);
 }
 
-void  exec(const char *const path, const char *const cmd_str)
+void	exec(const char *const path, const char *const cmd_str)
 {
 	t_data	*data;
 	char	*cmd_path;
@@ -51,6 +51,3 @@ void  exec(const char *const path, const char *const cmd_str)
 		exit(0);
 	}
 }
-
-
-

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 16:27:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 15:19:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:47:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@
 
 # define N_ERRNOS       200
 
-static const uint8_t    g_bad_errnos[]
-    = {
-        EFAULT,
-        EMFILE,
-        ENFILE,
-        EIO,
-        ENOSPC,
-        EPIPE,
-        EAGAIN,
-        ELOOP };
+static const uint8_t	g_bad_errnos[] = {
+	EFAULT,
+	EMFILE,
+	ENFILE,
+	EIO,
+	ENOSPC,
+	EPIPE,
+	EAGAIN,
+	ELOOP
+};
 
 #endif

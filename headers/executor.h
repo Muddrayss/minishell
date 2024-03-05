@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:26 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 15:21:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:46:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 # define EXEC_FAILURE   1
 # define CMD_NOT_FOUND  127
 
-void    executor(const t_tree *const parsed_params);
-void    create_heredocs(const t_tree *const tree, uint8_t *const status);
-char    *get_heredoc_filename(uint16_t id);
-void    exec_redirs(const t_list *redirs);
+void	executor(const t_tree *const parsed_params);
+void	create_heredocs(const t_tree *const tree, uint8_t *const status);
+char	*get_heredoc_filename(uint16_t id);
+void	exec_redirs(const t_list *redirs);
 char	*get_cmd_path(const char *const path, const char *const cmd);
-char    **get_cmd_args(char **const cmd_str);
-void    replace_env_vars(char **const str, const bool ignore_quotes);
-void    replace_wildcards(char **str);
-void    exec_simple_cmd(const char *const path, const char *const cmd_str);
-void    exec(const char *const path, const char *const cmd_str);
+char	**get_cmd_args(char **const cmd_str);
+void	replace_env_vars(char **const str, const bool ignore_quotes);
+void	replace_wildcards(char **str);
+void	exec_simple_cmd(const char *const path, const char *const cmd_str);
+void	exec(const char *const path, const char *const cmd_str);
 
 #endif

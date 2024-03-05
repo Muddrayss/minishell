@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 08:36:25 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:59:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-void ft_unset(const char *const *args)
+void	ft_unset(const char *const *args)
 {
 	char	*name;
 
@@ -25,7 +25,7 @@ void ft_unset(const char *const *args)
 			ft_unsetenv(name);
 			free_and_null((void **)&name);
 		}
-		else 
+		else
 		{
 			g_status = EXIT_FAILURE;
 			ft_putstr_fd("unset: not a valid identifier\n", STDERR_FILENO);

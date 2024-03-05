@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:29:39 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 08:36:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:58:45 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-void ft_env(const char *const *args)
+void	ft_env(const char *const *args)
 {
 	g_status = EXIT_SUCCESS;
 	if (args[1])

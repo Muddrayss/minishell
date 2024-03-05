@@ -6,16 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 16:05:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 18:43:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:28:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char   ft_tolower(const char c)
+char	ft_tolower(const char c)
 {
-    if (c >= 'A' && c <= 'Z')
-        return (c + 32);
-    return (c);
+	if (c >= 'A' && c <= 'Z')
+		return (c + 32);
+	return (c);
 }
-

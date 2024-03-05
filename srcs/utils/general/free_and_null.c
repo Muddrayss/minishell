@@ -14,8 +14,8 @@
 
 void	free_and_null(void **const ptr)
 {
-    if (!ptr)
-        return ;
-    free(*ptr);
-    *ptr = NULL;
+	if (!ptr)
+		return ;
+	free(*ptr);
+	*ptr = NULL;
 }

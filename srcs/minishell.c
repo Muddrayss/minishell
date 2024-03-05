@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/04 21:51:27 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:37:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 uint8_t	g_status;
 
-static void minishell_loop(void);
+static void	minishell_loop(void);
 
 int	main(const int argc, const char **const argv, const char **const envp)
 {
@@ -26,7 +26,7 @@ int	main(const int argc, const char **const argv, const char **const envp)
 
 static void	minishell_loop()
 {
-	t_data 		*data;
+	t_data	*data;
 
 	data = get_data();
 	while (true)
@@ -50,5 +50,3 @@ static void	minishell_loop()
 		treeclear(&data->parsed_params, &del_content_parser);
 	}
 }
-
-

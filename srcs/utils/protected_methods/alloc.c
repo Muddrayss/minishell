@@ -6,32 +6,32 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:40:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 15:26:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:23:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void    *malloc_p(const size_t size)
+void	*malloc_p(const size_t size)
 {
-    void    *ptr;
+	void	*ptr;
 
-    if (size == 0)
-        return (NULL);
-    ptr = malloc(size);
-    if (!ptr)
-        ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-    return (ptr);
+	if (size == 0)
+		return (NULL);
+	ptr = malloc(size);
+	if (!ptr)
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+	return (ptr);
 }
 
-void    *calloc_p(const size_t nmemb, const size_t size)
+void	*calloc_p(const size_t nmemb, const size_t size)
 {
-    void    *ptr;
+	void	*ptr;
 
-    if (nmemb == 0 || size == 0)
-        return (NULL);
-    ptr = ft_calloc(nmemb, size);
-    if (!ptr)
-        ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-    return (ptr);
+	if (nmemb == 0 || size == 0)
+		return (NULL);
+	ptr = ft_calloc(nmemb, size);
+	if (!ptr)
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+	return (ptr);
 }

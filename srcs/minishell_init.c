@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 20:00:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:36:49 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	init_data(const char **const envp)
 		ft_quit(ERR_ENV, "minishell: failed to initialize environment");
 }
 
-void init_general(void)
+void	init_general(void)
 {
 	char	*path;
-	
+
 	set_errnos();
 	path = ft_getenv("PATH=");
 	g_status = 0;
@@ -58,13 +58,13 @@ void init_general(void)
 
 static void	clean_heredocs(const char *const path)
 {
-	const t_data *const data = get_data();
-	char	*cmd;
+	const t_data *const	data = get_data();
+	char				*cmd;
 
 	cmd = (char *)calloc_p(ft_strlen(data->starting_dir) + 12, sizeof(char));
 	ft_strcpy(cmd, "rm -rf ");
 	ft_strcat(cmd, data->starting_dir);
 	ft_strcat(cmd, "/tmp");
-    exec_simple_cmd(path, cmd);
+	exec_simple_cmd(path, cmd);
 	free_and_null((void **)&cmd);
 }

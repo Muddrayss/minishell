@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:27:44 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 08:32:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 16:59:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_export(const char *const *args)
 	char	*env_name;
 	char	*env_value;
 	char	*sep;
-	
+
 	g_status = EXIT_SUCCESS;
 	if (!args[1])
 		envp_print_export(get_data()->envp_tree);

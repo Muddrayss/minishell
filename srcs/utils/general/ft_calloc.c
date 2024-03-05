@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 12:04:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/03 19:47:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:21:11 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static void ft_bzero(void *s, size_t n);
+static void	ft_bzero(void *s, size_t n);
 
 void	*ft_calloc(const size_t nmemb, const size_t size)
 {
@@ -29,7 +29,7 @@ void	*ft_calloc(const size_t nmemb, const size_t size)
 
 void	ft_bzero(void *const s, size_t n)
 {
-	char	*const ptr = (char *)s;
+	char *const	ptr = (char *)s;
 
 	while (n-- > 0)
 		ptr[n] = '\0';

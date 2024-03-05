@@ -6,15 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 16:02:51 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:36:54 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-t_data *get_data(void)
+t_data	*get_data(void)
 {
-	static t_data data;
+	static t_data	data;
 
 	return (&data);
 }

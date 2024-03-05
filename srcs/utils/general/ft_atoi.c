@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:59:54 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 16:35:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:20:59 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	is_space(const char c);
 
 int32_t	ft_atoi(const char *nptr)
 {
-	int64_t 	n;
+	int64_t		n;
 	char		sign;
 
 	n = 0;

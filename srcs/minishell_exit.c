@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 11:05:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:36:24 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_quit(const uint8_t id, const char *const msg)
 
 static void	quit_from_main(const uint8_t id)
 {
-	uint8_t 			i;
+	uint8_t				i;
 	const t_data *const	data = get_data();
 
 	i = 0;
@@ -70,7 +70,7 @@ static void	close_all_fds(void)
 {
 	uint16_t	fd;
 
-	fd = 0; //senza chiudere stdin e stdout
+	fd = 0;
 	while (fd < MAX_FDS)
-		close(fd++); //NON close_p perche' la maggiorparte daranno errore
+		close(fd++);
 }

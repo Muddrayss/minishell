@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 16:05:57 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/02 23:50:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:27:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 int16_t  ft_strcmp_lower(const char *s1, const char *s2)
 {
-    char   first_lower;
-    char   second_lower;
+ 	char	first_lower;
+	char	second_lower;
 
-    while (*s1 && *s2)
-    {
-        first_lower = ft_tolower(*s1);
-        second_lower = ft_tolower(*s2);
-        if (first_lower != second_lower)
-            return (first_lower - second_lower);
-        s1++;
-        s2++;
-    }
-    return (first_lower - second_lower);
+	while (*s1 && *s2)
+	{
+		first_lower = ft_tolower(*s1);
+		second_lower = ft_tolower(*s2);
+		if (first_lower != second_lower)
+			return (first_lower - second_lower);
+		s1++;
+		s2++;
+	}
+	return (first_lower - second_lower);
 }
