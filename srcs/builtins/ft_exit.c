@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 08:31:30 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:18:08 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,17 @@ void ft_exit(const char *const *args)
 		id = EXIT_FAILURE;
 		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 	}
-	if (is_number(args[1]) && !is_long_overflow(args[1]))
-		id = (uint8_t)ft_atoi(args[1]);
 	else
 	{
-		id = 2;
-		ft_putstr_fd("exit: ", STDERR_FILENO);
-		ft_putstr_fd(args[1], STDERR_FILENO);
-		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+		if (is_number(args[1]) && !is_long_overflow(args[1]))
+			id = (uint8_t)ft_atoi(args[1]);
+		else
+		{
+			id = 2;
+			ft_putstr_fd("exit: ", STDERR_FILENO);
+			ft_putstr_fd(args[1], STDERR_FILENO);
+			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+		}
 	}
 	free_data();
 	exit(id);

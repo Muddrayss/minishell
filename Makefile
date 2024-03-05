@@ -6,7 +6,7 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/03/04 18:44:32 by craimond         ###   ########.fr        #
+#    Updated: 2024/03/05 11:20:12 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ fclean: clean
 leaks: all
 	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME) 2> leak_report
 	@echo "leak report generated"
-	@make clean
+	@make clean > /dev/null
 
 re: fclean all
 

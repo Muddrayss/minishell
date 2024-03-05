@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 11:03:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:28:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void  exec(const char *const path, const char *const cmd_str)
 
 	data = get_data();
 	data->cmd_str = strdup_p(cmd_str);
-	data->cmd_args = get_cmd_args(data->cmd_str);
+	data->cmd_args = get_cmd_args(&data->cmd_str);
 	if (!data->cmd_args[0] || !data->cmd_args[0][0])
 	{
 		free_data();
