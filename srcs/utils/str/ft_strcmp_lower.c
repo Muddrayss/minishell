@@ -6,15 +6,15 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 16:05:57 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:27:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:34:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-int16_t  ft_strcmp_lower(const char *s1, const char *s2)
+int16_t	ft_strcmp_lower(const char *s1, const char *s2)
 {
- 	char	first_lower;
+	char	first_lower;
 	char	second_lower;
 
 	while (*s1 && *s2)

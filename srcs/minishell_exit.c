@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exit.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 19:12:28 by codespace        ###   ########.fr       */
+/*   Updated: 2024/03/06 21:35:23 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 static void	quit_from_main(const uint8_t id);
-static void free_data();
+static void free_data(void);
 static void	close_all_fds(void);
 
-void	ft_quit(const uint8_t id, const char *const msg)
+void	panic(const uint8_t id, const char *const msg)
 {
 	if (errno != EINTR)
 	{
@@ -40,11 +40,12 @@ static void	quit_from_main(const uint8_t id)
 	i = 0;
 	while (i < (sizeof(id) * 8))
 	{
-		if (id & (0x01 << i++))
+		if (id & (0x01 << i))
 			kill(main_pid, SIGUSR1);
 		else
 			kill(main_pid, SIGUSR2);
 		usleep(100);
+		i++;
 	}
 }
 
@@ -56,7 +57,7 @@ void	release_resources(void)
 	close_all_fds();
 }
 
-static void free_data()
+static void	free_data(void)
 {
 	t_data	*data;
 

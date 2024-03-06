@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:14:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:41:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:32:04 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	init_redir(t_list **const redirs, const char type, const char *const
 	lstadd_front(redirs, lstnew(redir, TMP));
 }
 
-static char *get_filename(const char *const str)
+static char	*get_filename(const char *const str)
 {
 	char		*filename;
 	uint16_t	len;

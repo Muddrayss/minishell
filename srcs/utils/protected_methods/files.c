@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:41:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:25:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ uint16_t	open_p(const char *const path, const int32_t flags, const uint16_t mode
 	const int16_t	fd = open(path, flags, mode);
 
 	if (fd == -1)
-		ft_quit(ERR_FD, NULL);
+		panic(ERR_FD, NULL);
 	return ((uint16_t)fd);
 }
 
 void	close_p(const int16_t fd)
 {
 	if (close(fd) == -1)
-		ft_quit(ERR_FD, NULL);
+		panic(ERR_FD, NULL);
 }
 
 void	reset_fd(int16_t *const fd)

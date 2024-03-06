@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:52:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	exec(const char *const path, char *cmd_str)
 			exit(CMD_NOT_FOUND);
 		execve(cmd_path, cmd_args, data->envp_matrix);
 		if (errno != ENOEXEC)
-			ft_quit(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_args[0], TMP));
+			panic(EXEC_FAILURE, ft_strjoin("minishell: failed to execute command: ", cmd_args[0], TMP));
 		release_resources();
 		exit(0);
 	}

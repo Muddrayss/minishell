@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:33:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:27:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:34:14 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-uint16_t    ft_strlen(const char *const str)
+uint16_t	ft_strlen(const char *const str)
 {
 	uint16_t	i;
 

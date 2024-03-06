@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:40:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:15:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*malloc_p(const size_t size, const uint8_t alloc_type)
 		return (NULL);
 	ptr = malloc(size);
 	if (!ptr)
-		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+		panic(ERR_MEM, "minishell: failed to allocate memory");
 	if (alloc_type == TMP)
 		gc_add(ptr);
 	return (ptr);
@@ -34,7 +34,7 @@ void	*calloc_p(const size_t nmemb, const size_t size, const uint8_t alloc_type)
 		return (NULL);
 	ptr = ft_calloc(nmemb, size);
 	if (!ptr)
-		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+		panic(ERR_MEM, "minishell: failed to allocate memory");
 	if (alloc_type == TMP)
 		gc_add(ptr);
 	return (ptr);

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 11:41:26 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:30:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ static void		parent(const t_tree *const node, int16_t fds[5], const pid_t pid);
 static void		wait_for_children(const t_tree *const node);
 static uint16_t	get_n_pipelines(const t_tree *const node);
 
-void    executor(const t_tree *const parsed_params)
+void	executor(const t_tree *const parsed_params)
 {
 	const uint8_t	original_status = g_status;
 	uint8_t			heredoc_status;
-	int16_t			fds[5] = {-42, -42, -42, -42, -42}; //pipe read, pipe write, prev_output, original stdin, original stdout
+	int16_t			fds[5] = {-42, -42, -42, -42, -42};//pipe read, pipe write, prev_output, original stdin, original stdout
 
 	fds[3] = dup_p(STDIN_FILENO);
 	fds[4] = dup_p(STDOUT_FILENO);
@@ -125,6 +125,7 @@ static void	child(const t_tree *const node, const int16_t fds[5], const int8_t p
 {
 	const t_parser *const	elem = (t_parser *)node->content;
 
+	panic(2, "TEST");
 	if (prev_type == PIPELINE)
 		dup2_p(fds[2], STDIN_FILENO);
 	replace_env_vars(&elem->cmd->cmd_str, false);

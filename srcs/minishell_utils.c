@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:32:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:35:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-t_data *get_data(void)
+t_data	*get_data(void)
 {
 	static t_data	data;
 
@@ -45,4 +45,3 @@ char	*clear_quotes(const char *const str)
 	new_str[j] = '\0';
 	return (new_str);
 }
-

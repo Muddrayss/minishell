@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:52:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:35:36 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void	check_args(const int argc, const char **const argv, const char **const envp
 
 void	init_data(const char **const envp)
 {
-	t_data	*const	data = get_data();
+	t_data *const	data = get_data();
 
 	data->starting_dir = getcwd_p(NULL, 0, PERM);
 	if (!data->starting_dir && is_bad_errno(errno))
-		ft_quit(ERR_MEM, NULL);
+		panic(ERR_MEM, NULL);
 	data->main_pid = getpid();
 	envp_init(envp);
 }

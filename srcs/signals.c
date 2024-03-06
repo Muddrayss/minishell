@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/03/06 16:27:00 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:36:56 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	set_signals(const uint8_t mode, const bool is_main)
 		sigaction_p(SIGUSR2, &sa, NULL);
 	}
 }
+
 static void	safe_exit(const int32_t signo)
 {
 	(void)signo;
@@ -50,9 +51,7 @@ static void	death_mode(const int32_t signo, siginfo_t *const info, void *const c
 	static pid_t	calling_pid = -1;
 	static uint8_t	id = 0;
 	static uint8_t	n_signals = 0;
-	static pid_t	main_pid; //TODO fare const
 
-	main_pid = get_data()->main_pid;
 	(void)context;
 	if (calling_pid == -1)
 		calling_pid = info->si_pid;
@@ -64,8 +63,9 @@ static void	death_mode(const int32_t signo, siginfo_t *const info, void *const c
 		n_signals++;
 	if (n_signals == (sizeof(id) * 8))
 	{
-		kill(-main_pid, SIGTERM);
+		kill(-get_data()->main_pid, SIGTERM);
 		//TODO non viene raggiunto
+		//open("TEST", O_CREAT | O_RDWR, 0666);
 		release_resources();
 		exit(id);
 	}

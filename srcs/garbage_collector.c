@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 13:37:03 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 19:10:38 by codespace        ###   ########.fr       */
+/*   Updated: 2024/03/06 21:34:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

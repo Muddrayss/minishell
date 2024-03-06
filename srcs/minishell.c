@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:41:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:36:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(const int argc, const char **const argv, const char **const envp)
 	minishell_loop();
 }
 
-static void	minishell_loop()
+static void	minishell_loop(void)
 {
 	char				*input;
 	static const char	prompt[] = RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT;
@@ -34,7 +34,7 @@ static void	minishell_loop()
 		set_signals(S_INTERACTIVE, true);
 		input = readline(prompt);
 		if (!input)
-			ft_quit(123, "exit");
+			panic(123, "exit");
 		add_history(input);
 		input = ft_strtrim(input, g_shell_spaces, TMP);
 		if (!input)

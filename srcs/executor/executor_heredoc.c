@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:52:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*get_heredoc_filename(const uint16_t id)
 
 	filename = ft_calloc(size, sizeof(char));
 	if (!filename || !id_str)
-		return (ft_quit(ERR_MEM, "minishell: failed to allocate memory"), NULL);
+		return (panic(ERR_MEM, "minishell: failed to allocate memory"), NULL);
 	ft_strcpy(filename, data->starting_dir);
 	ft_strcat(filename, "/tmp/.heredoc_");
 	ft_strcat(filename, id_str);
