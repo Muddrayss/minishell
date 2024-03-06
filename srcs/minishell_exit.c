@@ -6,14 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:35:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:38:16 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 static void	quit_from_main(const uint8_t id);
-static void free_data(void);
+static void	free_data(void);
 static void	close_all_fds(void);
 
 void	panic(const uint8_t id, const char *const msg)
