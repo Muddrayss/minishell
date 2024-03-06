@@ -14,11 +14,11 @@
 # define UTILS_H
 
 void		ft_putstr_fd(const char *const s, const uint16_t fd);
-char		*strdup_p(const char *const s);
 char		*ft_strtok(char *const str, const char sep);
-char		*strtrim_p(const char *s1, const char *const set);
+char		*ft_strtrim(const char *const s1, const char *const set);
 uint16_t	ft_strlen(const char *const s);
-char		*strjoin_p(const char *const s1, const char *const s2);
+char		*ft_strdup(const char *const s);
+char		*ft_strjoin(const char *const s1, const char *const s2);
 char		*ft_strnstr(const char *const big, const char *const little, const uint16_t len);
 char		*ft_strcpy(char *const dst, const char *const src);
 uint16_t	ft_strlcpy(char *const dst, const char *const src, const uint16_t size);
@@ -47,13 +47,13 @@ void		lstadd_front(t_list **const lst, t_list *const new);
 t_list		*lstlast(const t_list *lst);
 void		lstadd_back(t_list **const lst, t_list *const new);
 void		lstreverse(t_list **const lst);
-void		lstclear(t_list *const lst);
+void		lstclear(t_list **const lst);
 void		lstremoveone(t_list **const head, t_list *const to_remove);
 void		lstremoveif(t_list **const lst, bool (*f)(const void *const));
 
-t_tree		*treenew_p(const void *const content);
+t_tree		*treenew(const void *const content);
 t_tree		*treeadd_below(t_tree *const node, const t_tree *const new);
-t_tree		*tree_first(const t_tree *root);
-void		treeclear(t_tree **const tree, void (*del)(const void *const));
+t_tree		*treefirst(const t_tree *root);
+void		treeclear(t_tree *const tree, void (*del)(void *const));
 
 #endif

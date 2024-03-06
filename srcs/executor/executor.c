@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:38:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:41:26 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static void	launch_standard_cmd(const t_tree *const node, const int8_t prev_type
 		set_signals(S_COMMAND, true);
 		launch_commands(node->left, prev_type, fds);
 		wait_for_children(node->left);
-		lstclear(*get_resources_stack());
+		release_resources();
 		exit(g_status);
 	}
 	else

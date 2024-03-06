@@ -6,13 +6,14 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:36:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 static void	quit_from_main(const uint8_t id);
+static void free_data(void);
 static void	close_all_fds(void);
 
 void	ft_quit(const uint8_t id, const char *const msg)
@@ -34,7 +35,7 @@ void	ft_quit(const uint8_t id, const char *const msg)
 static void	quit_from_main(const uint8_t id)
 {
 	uint8_t		i;
-	const pid_t	main_pid = get_data()->main_pid;
+	const pid_t	main_pid = get_perm_data()->main_pid;
 
 	i = 0;
 	while (i < (sizeof(id) * 8))
@@ -47,10 +48,20 @@ static void	quit_from_main(const uint8_t id)
 	}
 }
 
-void	free_resources(void)
+void	release_resources(void)
 {
-	lstclear(*get_resources_stack());
+	free_data();
+	lstclear(get_tmp_resources_stack());
 	close_all_fds();
+}
+
+static void free_data(void)
+{
+	t_data	*const	data = get_perm_data();
+
+	free(data->starting_dir);
+	treeclear(data->envp_tree, &free);
+	free(data->envp_matrix);
 }
 
 static void	close_all_fds(void)

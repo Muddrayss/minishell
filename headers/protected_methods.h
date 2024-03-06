@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 16:52:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:12:22 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 void			*malloc_p(const size_t size);
 void			*calloc_p(const size_t count, const size_t size);
+char			*strdup_p(const char *const s);
+char			*strjoin_p(const char *s1, const char *s2);
+char			*strtrim_p(const char *s1, const char *const set);
+t_tree			*treenew_p(const void *const content);
 int32_t			chdir_p(const char *const path);
 DIR				*opendir_p(const char *const name);
 struct dirent	*readdir_p(const DIR *const dir);

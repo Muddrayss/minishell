@@ -6,20 +6,20 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:35:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:44:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-t_list	**get_resources_stack(void)
+t_list	**get_tmp_resources_stack(void)
 {
 	static t_list	*data;
 
 	return (&data);
 }
 
-t_data *get_data(void)
+t_data *get_perm_data(void)
 {
 	static t_data	data;
 

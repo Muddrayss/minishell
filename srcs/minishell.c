@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:58:37 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:43:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static void	minishell_loop()
 
 	while (true)
 	{
-		//TODO distinguish between temporary_data(resources-stack) and permanent_data(envp_matrix, envp_tree, starting_dir) 
 		set_signals(S_INTERACTIVE, true);
 		input = readline(prompt);
 		if (!input)
@@ -42,5 +41,7 @@ static void	minishell_loop()
 			continue ;
 		set_signals(S_SILENT, true);
 		executor(parser(lexer(input)));
+		lstclear(get_tmp_resources_stack());
 	}
+	lstclear(get_tmp_resources_stack());
 }

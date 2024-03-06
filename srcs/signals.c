@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/03/05 23:59:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	set_signals(const uint8_t mode, const bool is_main)
 static void	safe_exit(const int32_t signo)
 {
 	(void)signo;
-	free_resources();
+	release_resources();
 	exit(0);
 }
 
@@ -52,7 +52,7 @@ static void	death_mode(const int32_t signo, siginfo_t *const info, void *const c
 	static uint8_t	n_signals = 0;
 	static pid_t	main_pid; //TODO fare const
 
-	main_pid = get_data()->main_pid;
+	main_pid = get_perm_data()->main_pid;
 	(void)context;
 	if (calling_pid == -1)
 		calling_pid = info->si_pid;
@@ -65,7 +65,7 @@ static void	death_mode(const int32_t signo, siginfo_t *const info, void *const c
 	if (n_signals == (sizeof(id) * 8))
 	{
 		kill(-main_pid, SIGTERM);
-		free_resources();
+		release_resources();
 		exit(id);
 	}
 }
@@ -97,7 +97,7 @@ static void	heredoc_mode(const int32_t signo)
 	if (signo == SIGINT)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
-		lstclear(*get_resources_stack());
+		release_resources();
 		exit(130);
 	}
 	else if (signo == SIGQUIT)
@@ -110,7 +110,7 @@ static void	command_mode(const int32_t signo)
 	{
 		g_status = 130;
 		ft_putstr_fd("\n", STDOUT_FILENO);
-		lstclear(*get_resources_stack());
+		release_resources();
 		exit(130);
 	}
 	else if (signo == SIGQUIT)
@@ -118,7 +118,7 @@ static void	command_mode(const int32_t signo)
 		g_status = 131;
 		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
 		ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
-		lstclear(*get_resources_stack());
+		release_resources();
 		exit(131);
 	}
 }

@@ -6,18 +6,20 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:42:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 21:56:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:38:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	treeclear(t_tree **const tree, void (*del)(const void *const))
+void	treeclear(t_tree *const tree, void (*del)(void *const))
 {
-	if (!tree || !*tree)
+	if (!tree)
 		return ;
-	treeclear(&(*tree)->left, del);
-	treeclear(&(*tree)->right, del);
-	del((*tree)->content);
-	(*tree)->content = NULL;
+	treeclear(tree->left, del);
+	treeclear(tree->right, del);
+	if (del)
+		del(tree->content);
+	tree->content = NULL;
+	free(tree);
 }

@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:49:43 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,12 @@ static const char	g_shell_spaces[] = " \t\n";
 # define MAX_FDS 1024
 
 void	check_args(const int argc, const char **const argv, const char **const envp);
-t_data	*get_data(void);
+t_data	*get_perm_data(void);
 void	init_data(const char **const envp);
 void	init_general(void);
 char	*clear_quotes(const char *const str);
-t_list	**get_resources_stack(void);
+t_list	**get_tmp_resources_stack(void);
 void	ft_quit(const uint8_t id, const char *const msg);
-void	free_resources(void);
+void	release_resources(void);
 
 #endif

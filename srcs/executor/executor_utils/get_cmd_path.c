@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:38:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:39:53 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*get_cmd_path(const char *const path, const char *const cmd)
 		entry = ft_strtok(NULL, ':');
 	}
 	if (!entry)
-		return (throw_error(cmd), lstclear(*get_resources_stack()), NULL);
+		return (throw_error(cmd), release_resources(), NULL);
 	return (full_path);
 }
 

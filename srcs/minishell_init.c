@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:05:38 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@ void	check_args(const int argc, const char **const argv, const char **const envp
 
 void	init_data(const char **const envp)
 {
-	t_data	*const	data = get_data();
+	t_data	*const	data = get_perm_data();
 
-	data->starting_dir = getcwd_p(NULL, 0);
+	data->starting_dir = getcwd(NULL, 0);
+	if (!data->starting_dir && is_bad_errno(errno))
+		ft_quit(ERR_MEM, NULL);
 	data->main_pid = getpid();
 	envp_init(envp);
 }
@@ -52,7 +54,7 @@ void	init_general(void)
 
 static void	clean_heredocs(const char *const path)
 {
-	const t_data *const	data = get_data();
+	const t_data *const	data = get_perm_data();
 	char				*cmd;
 
 	cmd = (char *)calloc_p(ft_strlen(data->starting_dir) + 12, sizeof(char));

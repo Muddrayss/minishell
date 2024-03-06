@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:27:44 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 21:35:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ void	ft_export(const char *const *args)
 
 	g_status = EXIT_SUCCESS;
 	if (!args[1])
-		envp_print_export(get_data()->envp_tree);
+		envp_print_export(get_perm_data()->envp_tree);
 	while (*(++args))
 	{
 		sep = ft_strchr(*args, '=');
 		if (sep)
 		{
-			env_name = (char *)malloc(sizeof(char) * (sep - *args + 2));
+			env_name = (char *)malloc_p(sizeof(char) * (sep - *args + 2));
 			ft_strlcpy(env_name, *args, sep - *args + 2);
 			env_value = strdup_p(sep + 1);
 		}

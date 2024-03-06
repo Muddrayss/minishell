@@ -1,38 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strtrim_p.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/18 16:36:23 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 22:54:59 by craimond         ###   ########.fr       */
+/*   Created: 2024/02/03 20:12:11 by craimond          #+#    #+#             */
+/*   Updated: 2024/03/06 11:17:17 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*strtrim_p(const char *s1, const char *const set)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
 	char		*newstr;
 	uint16_t	i;
+	uint16_t	n;
 
-	if (!s1)
-		return (NULL);
-	if (!set)
-		return ((char *)s1);
 	i = 0;
-	while (*s1 != '\0' && ft_strchr(set, *s1))
-		s1++;
-	i = ft_strlen(s1);
-	while (i > 0 && ft_strchr(set, s1[i - 1]))
-		i--;
-	newstr = (char *)malloc_p(sizeof(char) * (i + 1));
-	newstr[i] = '\0';
-	while (i > 0)
+	newstr = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!newstr)
+		return (NULL);
+	while (s1[i] != '\0')
 	{
-		newstr[i - 1] = s1[i - 1];
-		i--;
+		newstr[i] = s1[i];
+		i++;
 	}
+	n = i;
+	i = 0;
+	while (s2[i] != '\0')
+	{
+		newstr[n + i] = s2[i];
+		i++;
+	}
+	newstr[n + i] = '\0';
 	return (newstr);
 }

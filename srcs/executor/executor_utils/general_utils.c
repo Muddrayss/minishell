@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:48:18 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:45:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void	exec(const char *const path, char *cmd_str)
 	char	*cmd_path;
 	char	**cmd_args;
 
-	data = get_data();
+	data = get_perm_data();
 	cmd_args = get_cmd_args(cmd_str);
 	if (!cmd_args[0] || !cmd_args[0][0])
 	{
-		lstclear(*get_resources_stack());
+		release_resources();
 		exit(0);
 	}
 	if (is_builtin(cmd_args[0]))
@@ -45,7 +45,7 @@ void	exec(const char *const path, char *cmd_str)
 		execve(cmd_path, cmd_args, data->envp_matrix);
 		if (errno != ENOEXEC)
 			ft_quit(EXEC_FAILURE, strjoin_p("minishell: failed to execute command: ", cmd_args[0]));
-		lstclear(*get_resources_stack());
+		release_resources();
 		exit(0);
 	}
 }

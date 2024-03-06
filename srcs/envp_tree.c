@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:12:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 21:34:17 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:14:10 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 
 t_tree	*envp_tree_add(t_tree *const root, const char *const str)
 {
+	t_tree	*new;
+
 	if (!root)
-		return (treenew_p(str));
+	{
+		new = treenew(str);
+		if (!new)
+			ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+		return (new);
+	}
 	if (ft_strcmp(str, (char *)root->content) < 0)
 		root->left = envp_tree_add(root->left, str);
 	else if (ft_strcmp(str, (char *)root->content) > 0)
@@ -39,7 +46,7 @@ t_tree	*envp_tree_remove(t_tree *const root, const char *const name, const uint1
 			return (root->right);
 		else if (root->right == NULL)
 			return (root->left);
-		tmp = tree_first(root->right);
+		tmp = treefirst(root->right);
 		root->content = tmp->content;
 		root->right = envp_tree_remove(root->right, (char *)tmp->content, name_len);
 	}

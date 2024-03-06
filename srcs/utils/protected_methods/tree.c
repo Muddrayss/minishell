@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strdup_p.c                                        :+:      :+:    :+:   */
+/*   tree.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/14 13:52:49 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/01 18:20:03 by craimond         ###   ########.fr       */
+/*   Created: 2024/03/06 11:01:57 by craimond          #+#    #+#             */
+/*   Updated: 2024/03/06 11:43:29 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*strdup_p(const char *const s)
+t_tree    *treenew_p(const void *const content)
 {
-	char		*dst;
-	uint16_t	i;
+	t_tree    *new_node;
 
-	if (!s)
-		return (NULL);
-	dst = (char *)malloc_p(sizeof(char) * (ft_strlen(s) + 3));
-	i = 0;
-	while (s[i] != '\0')
-	{
-		dst[i] = s[i];
-		i++;
-	}
-	dst[i] = '\0';
-	return (dst);
+	new_node = treenew(content);
+	if (!new_node)
+		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
+	lstadd_front(get_tmp_resources_stack(), lstnew(new_node, true));
+	return (new_node);
 }

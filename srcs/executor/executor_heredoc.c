@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:38:13 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	create_heredocs(const t_tree *const tree, uint8_t *const status)
 char	*get_heredoc_filename(const uint16_t id)
 {
 	char				*filename;
-	const t_data *const	data = get_data();
+	const t_data *const	data = get_perm_data();
 	const char *const	id_str = ft_itoa((uint16_t)id);
 	const uint16_t		size = ft_strlen(data->starting_dir) + ft_strlen(id_str) + 16;
 
@@ -101,6 +101,6 @@ static void	fill_heredoc(const char *const limiter, const uint16_t fd)
 		ft_putstr_fd(str, fd);
 		write(fd, "\n", 1);
 	}
-	lstclear(*get_resources_stack());
+	release_resources();
 	exit(0);
 }
