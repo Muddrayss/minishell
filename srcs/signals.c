@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/03/06 21:36:56 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 22:11:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,28 @@ static void	silent_mode(const int32_t signo);
 static void	interactive_mode(const int32_t signo);
 static void	heredoc_mode(const int32_t signo);
 static void	command_mode(const int32_t signo);
-static void	death_mode(const int32_t signo, siginfo_t *const info, void *const context);
+static void	catch_panic(const int32_t signo, siginfo_t *const info, void *const context);
 static void	safe_exit(const int32_t signo);
 
 void	set_signals(const uint8_t mode, const bool is_main)
 {
-	struct sigaction			sa;
 	static const __sighandler_t	sig_handler[] = {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode};
 
 	signal_p(SIGINT, sig_handler[mode]);
 	signal_p(SIGQUIT, sig_handler[mode]);
 	if (!is_main)
 		signal_p(SIGTERM, &safe_exit);
-	else
-	{
-		signal_p(SIGTERM, SIG_IGN);
-		sa.sa_sigaction = death_mode;
-		sa.sa_flags = SA_SIGINFO | SA_RESTART;
-		sigemptyset(&sa.sa_mask);
-		sigaction_p(SIGUSR1, &sa, NULL);
-		sigaction_p(SIGUSR2, &sa, NULL);
-	}
+}
+
+void	init_signals(void)
+{
+	struct sigaction	sa;
+
+	sa.sa_sigaction = &catch_panic;
+	sa.sa_flags = SA_SIGINFO | SA_RESTART;
+	sigemptyset(&sa.sa_mask);
+	sigaction_p(SIGUSR1, &sa, NULL);
+	sigaction_p(SIGUSR2, &sa, NULL);
 }
 
 static void	safe_exit(const int32_t signo)
@@ -46,12 +47,13 @@ static void	safe_exit(const int32_t signo)
 	exit(0);
 }
 
-static void	death_mode(const int32_t signo, siginfo_t *const info, void *const context)
+static void	catch_panic(const int32_t signo, siginfo_t *const info, void *const context)
 {
-	static pid_t	calling_pid = -1;
+	static pid_t	calling_pid = -1; //data races (provare a far fallire 2 comandi di una pipeline)
 	static uint8_t	id = 0;
 	static uint8_t	n_signals = 0;
 
+	signal_p(SIGTERM, SIG_IGN); //fare fuori dal ciclo , signal si applica a tutto il sottogruppo
 	(void)context;
 	if (calling_pid == -1)
 		calling_pid = info->si_pid;
@@ -65,8 +67,8 @@ static void	death_mode(const int32_t signo, siginfo_t *const info, void *const c
 	{
 		kill(-get_data()->main_pid, SIGTERM);
 		//TODO non viene raggiunto
-		//open("TEST", O_CREAT | O_RDWR, 0666);
 		release_resources();
+		//TODO aspettare i figli prima di fare exit
 		exit(id);
 	}
 }

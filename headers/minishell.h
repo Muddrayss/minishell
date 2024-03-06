@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:49:37 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ t_data *get_data(void);
 void	check_args(const int argc, const char **const argv, const char **const envp);
 void	init_data(const char **const envp);
 void	init_general(void);
+void	init_signals(void);
 char	*clear_quotes(const char *const str);
 void	gc_add(const void *const ptr);
 void    gc_cleanup();
