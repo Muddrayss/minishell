@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 11:48:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:16:38 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,19 @@ typedef struct s_data
 extern uint8_t		g_status;
 static const char	g_shell_spaces[] = " \t\n";
 
-# define MAX_FDS 1024
+# define RAM_SIZE	1000
+# define MAX_FDS	1024
+# define TMP        1
+# define PERM       2
 
+t_data *get_data(void);
 void	check_args(const int argc, const char **const argv, const char **const envp);
-t_data	*get_perm_data(void);
 void	init_data(const char **const envp);
 void	init_general(void);
 char	*clear_quotes(const char *const str);
-t_list	**get_tmp_resources_stack(void);
+void	gc_add(const void *const ptr, const uint8_t type);
+void    gc_remove(void *ptr);
+void    gc_clear_type(const uint8_t type);
 void	ft_quit(const uint8_t id, const char *const msg);
 void	release_resources(void);
 

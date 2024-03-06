@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 21:56:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:32:43 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	is_builtin(const char *const cmd_str)
 	i = 0;
 	while (cmd_str[i] && !is_shell_space(cmd_str[i]))
 		i++;
-	cmd = (char *)malloc_p(sizeof(char) * (i + 1));
+	cmd = (char *)malloc_p(sizeof(char) * (i + 1), TMP);
 	ft_strlcpy(cmd, cmd_str, i + 1);
 	i = 0;
 	while (i < n_builtins)

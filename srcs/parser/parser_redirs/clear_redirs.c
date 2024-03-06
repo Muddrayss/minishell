@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:13:57 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 21:51:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:47:02 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ char	*clear_redirs(const char *cmd_str)
 	uint16_t	i;
 	char		master_quote;
 
-	cmd_str = strdup_p(cmd_str);
-	to_remove_array = (bool *)calloc_p(ft_strlen(cmd_str), sizeof(bool));
+	to_remove_array = (bool *)calloc_p(ft_strlen(cmd_str), sizeof(bool), TMP);
 	master_quote = '\0';
 	i = 0;
 	while (cmd_str[i])
@@ -74,7 +73,7 @@ static char	*remove_chars(const char *const str, const bool *const to_remove_arr
 	to_remove_len = 0;
 	while (str[i])
 		to_remove_len += to_remove_array[i++];
-	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) - to_remove_len + 1));
+	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) - to_remove_len + 1), TMP);
 	i = 0;
 	j = 0;
 	while (str[i])

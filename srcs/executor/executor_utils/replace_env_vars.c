@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:38:46 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 21:46:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:42:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char *expand_dollar(char *str, uint16_t *const i, const bool ignore_quote
 	if (!env_name)
 		return (start);
 	env_value = get_env_value(env_name);
-	new_str = (char *)calloc_p(ft_strlen(start) + ft_strlen(env_value) - ft_strlen(env_name), sizeof(char));
+	new_str = (char *)calloc_p(ft_strlen(start) + ft_strlen(env_value) - ft_strlen(env_name), sizeof(char), TMP);
 	ft_strlcpy(new_str, start, str - start);
 	ft_strcat(new_str, env_value);
 	ft_strcat(new_str, str + ft_strlen(env_name));
@@ -67,7 +67,7 @@ static char *get_env_name(const char *const str, const bool ignore_quotes)
 		len++;
 	if (len == 0 && (!is_quote(str[len]) || ignore_quotes))
 		return (NULL);
-	env_name = (char *)malloc_p(sizeof(char) * (len + 1));
+	env_name = (char *)malloc_p(sizeof(char) * (len + 1), TMP);
 	ft_strlcpy(env_name, str, len + 1);
 	return (env_name);
 }
@@ -75,15 +75,11 @@ static char *get_env_name(const char *const str, const bool ignore_quotes)
 static char	*get_env_value(const char *const env_name)
 {
 	char	*env_value;
-	char	*tmp;
 
 	if (env_name[0] == '?')
 		env_value = ft_itoa((uint8_t)g_status);
 	else
-	{
-		tmp = strjoin_p(env_name, "=");
-		env_value = ft_getenv(tmp);
-	}
+		env_value = ft_getenv(ft_strjoin(env_name, "=", TMP));
 	if (!env_value)
 		env_value = "";
 	return (env_value);

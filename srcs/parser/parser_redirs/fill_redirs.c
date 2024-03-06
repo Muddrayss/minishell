@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:14:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 00:06:58 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:41:21 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ static void	init_redir(t_list **const redirs, const char type, const char *const
 {
 	t_redir	*redir;
 
-	redir = (t_redir *)malloc_p(sizeof(t_redir));
+	redir = (t_redir *)malloc_p(sizeof(t_redir), TMP);
 	redir->type = type;
 	redir->filename = get_filename(str);
 	redir->heredoc_fileno = -1 * (type != REDIR_HEREDOC) + heredoc_fileno * (type == REDIR_HEREDOC);
-	lstadd_front(redirs, lstnew(redir, false));
+	lstadd_front(redirs, lstnew(redir, TMP));
 }
 
 static char *get_filename(const char *const str)
@@ -81,7 +81,7 @@ static char *get_filename(const char *const str)
 			break ;
 		len++;
 	}
-	filename = malloc_p(sizeof(char) * len + 1);
+	filename = malloc_p(sizeof(char) * len + 1, TMP);
 	ft_strlcpy(filename, &str[i], len + 1);
 	return (filename);
 }

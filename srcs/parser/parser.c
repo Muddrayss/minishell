@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:19:32 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:00:16 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:46:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static t_list	*unskip_parenthesis(const t_list *lexered_params);
 
 t_tree	*parser(t_list *lexered_params)
 {
-	lstremoveif(&lexered_params, &is_empty_cmd);
+	lstremoveif(&lexered_params, &is_empty_cmd, NULL);
 	if (merge_separators(&lexered_params) == -1 || check_syntax(lexered_params) == -1)
 	{
 		g_status = 2;
@@ -41,17 +41,17 @@ static t_tree	*fill_tree(const t_list *const lexered_params, const t_list *const
 		return (fill_tree(skip_parenthesis(lexered_params), stop));
 	if (lexered_params->next == stop)
 	{
-		node = treenew_p(init_cmd(END, NULL));
+		node = treenew(init_cmd(END, NULL), TMP);
 		if (elem->token == SUBSHELL_END)
 			node = treeadd_below(node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
 		else
-			node = treeadd_below(node, treenew_p(init_cmd(elem->token, elem->cmd_str)));
+			node = treeadd_below(node, treenew(init_cmd(elem->token, elem->cmd_str), TMP));
 		return (node);
 	}
 	next_elem = (t_lexer *)lexered_params->next->content;
-	node = treenew_p(init_cmd(next_elem->token, next_elem->cmd_str));
+	node = treenew(init_cmd(next_elem->token, next_elem->cmd_str), TMP);
 	if (elem->token != SUBSHELL_END)
-		node = treeadd_below(node, treenew_p(init_cmd(elem->token, elem->cmd_str)));
+		node = treeadd_below(node, treenew(init_cmd(elem->token, elem->cmd_str), TMP));
 	else
 		node = treeadd_below(node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
 	node = treeadd_below(node, fill_tree(lexered_params->next->next, stop));
@@ -98,12 +98,12 @@ static t_parser	*init_cmd(const char type, const char *const cmd_str)
 {
 	t_parser	*node;
 
-	node = (t_parser *)malloc_p(sizeof(t_parser));
+	node = (t_parser *)malloc_p(sizeof(t_parser), TMP);
 	node->type = type;
 	node->cmd = NULL;
 	if (cmd_str)
 	{
-		node->cmd = (t_cmd *)malloc_p(sizeof(t_cmd));
+		node->cmd = (t_cmd *)malloc_p(sizeof(t_cmd), TMP);
 		node->cmd->redirs = fill_redirs(cmd_str);
 		node->cmd->cmd_str = clear_redirs(cmd_str);
 	}

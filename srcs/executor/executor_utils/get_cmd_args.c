@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:00:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:59:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:34:31 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**get_cmd_args(char *cmd_str)
 	i = 0;
 	quote_split(cmd_str);
 	cmd_str = clear_quotes(cmd_str);
-	cmd_args = (char **)malloc_p(sizeof(char *) * (count_separators(cmd_str, '\n') + 2));
+	cmd_args = (char **)malloc_p(sizeof(char *) * (count_separators(cmd_str, '\n') + 2), TMP);
 	arg = ft_strtok(cmd_str, '\n');
 	while (arg)
 	{

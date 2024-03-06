@@ -6,23 +6,20 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 17:05:13 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 11:12:22 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:15:44 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROTECTED_METHODS_H
 # define PROTECTED_METHODS_H
 
-void			*malloc_p(const size_t size);
-void			*calloc_p(const size_t count, const size_t size);
-char			*strdup_p(const char *const s);
-char			*strjoin_p(const char *s1, const char *s2);
-char			*strtrim_p(const char *s1, const char *const set);
-t_tree			*treenew_p(const void *const content);
+void			*malloc_p(const size_t size, const uint8_t alloc_type);
+void			*calloc_p(const size_t count, const size_t size, const uint8_t alloc_type);
+void			free_p(void *ptr);
 int32_t			chdir_p(const char *const path);
 DIR				*opendir_p(const char *const name);
 struct dirent	*readdir_p(const DIR *const dir);
-char			*getcwd_p(const char *const buf, const size_t size);
+char			*getcwd_p(const char *const buf, const size_t size, const uint8_t alloc_type);
 uint16_t		dup_p(const uint16_t fd);
 void			dup2_p(const uint16_t oldfd, const uint16_t newfd);
 uint16_t		open_p(const char *const path, const int32_t flags, const uint16_t mode);

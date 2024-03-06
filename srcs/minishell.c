@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 11:43:29 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:41:41 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,11 @@ static void	minishell_loop()
 		if (!input)
 			ft_quit(123, "exit");
 		add_history(input);
-		input = strtrim_p(input, g_shell_spaces);
+		input = ft_strtrim(input, g_shell_spaces, TMP);
 		if (!input)
 			continue ;
 		set_signals(S_SILENT, true);
 		executor(parser(lexer(input)));
-		lstclear(get_tmp_resources_stack());
+		gc_clear_type(TMP);
 	}
-	lstclear(get_tmp_resources_stack());
 }

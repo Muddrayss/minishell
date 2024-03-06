@@ -15,10 +15,10 @@
 
 void		ft_putstr_fd(const char *const s, const uint16_t fd);
 char		*ft_strtok(char *const str, const char sep);
-char		*ft_strtrim(const char *const s1, const char *const set);
+char		*ft_strtrim(const char *const s1, const char *const set, const uint8_t alloc_type);
 uint16_t	ft_strlen(const char *const s);
-char		*ft_strdup(const char *const s);
-char		*ft_strjoin(const char *const s1, const char *const s2);
+char		*ft_strdup(const char *const s, const uint8_t alloc_type);
+char		*ft_strjoin(const char *const s1, const char *const s2, const uint8_t alloc_type);
 char		*ft_strnstr(const char *const big, const char *const little, const uint16_t len);
 char		*ft_strcpy(char *const dst, const char *const src);
 uint16_t	ft_strlcpy(char *const dst, const char *const src, const uint16_t size);
@@ -42,16 +42,16 @@ bool		is_shell_space(const char c);
 bool		is_empty_str(const char *str);
 bool		is_digit(const char c);
 
-t_list		*lstnew(const void *const content, const bool is_resource_stack);
+t_list		*lstnew(const void *const content, const uint8_t alloc_type);
 void		lstadd_front(t_list **const lst, t_list *const new);
 t_list		*lstlast(const t_list *lst);
 void		lstadd_back(t_list **const lst, t_list *const new);
 void		lstreverse(t_list **const lst);
 void		lstclear(t_list **const lst);
-void		lstremoveone(t_list **const head, t_list *const to_remove);
-void		lstremoveif(t_list **const lst, bool (*f)(const void *const));
+void		lstremoveone(t_list **const head, t_list *const to_remove, void (*del)(void *));
+void		lstremoveif(t_list **const lst, bool (*f)(const void *const), void (*del)(void *));
 
-t_tree		*treenew(const void *const content);
+t_tree		*treenew(const void *const content, const uint8_t alloc_type);
 t_tree		*treeadd_below(t_tree *const node, const t_tree *const new);
 t_tree		*treefirst(const t_tree *root);
 void		treeclear(t_tree *const tree, void (*del)(void *const));

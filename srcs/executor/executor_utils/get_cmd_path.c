@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 11:39:53 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:42:18 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*get_cmd_path(const char *const path, const char *const cmd)
 		return (NULL);
 	if (is_custom_bin(cmd))
 		return (get_custom_bin(cmd));
-	path_cpy = strdup_p(path);
+	path_cpy = ft_strdup(path, TMP);
 	entry = ft_strtok(path_cpy, ':');
 	while (entry && !full_path)
 	{
@@ -60,7 +60,7 @@ static char *search_cmd_in_dirs(const char *const entry, const char *const cmd)
 	char			*full_path;
 	const uint16_t	len = ft_strlen(entry) + ft_strlen(cmd) + 2;
 
-	full_path = (char *)malloc_p(sizeof(char) * len);
+	full_path = (char *)malloc_p(sizeof(char) * len, TMP);
 	ft_strcpy(full_path, entry);
 	ft_strcat(full_path, "/");
 	ft_strcat(full_path, cmd);
@@ -72,9 +72,9 @@ static char *search_cmd_in_dirs(const char *const entry, const char *const cmd)
 static char	*get_custom_bin(const char *const cmd)
 {
 	char		*full_path;
-	const char	*cwd = getcwd_p(NULL, 0);
+	const char	*cwd = getcwd_p(NULL, 0, TMP);
 
-	full_path = (char *)calloc_p(ft_strlen(cwd) + ft_strlen(cmd) + 2, sizeof(char));
+	full_path = (char *)calloc_p(ft_strlen(cwd) + ft_strlen(cmd) + 2, sizeof(char), TMP);
 	if (ft_strncmp(cmd, "../", 3) == 0 || ft_strncmp(cmd, "./", 2) == 0)
 	{
 		ft_strcpy(full_path, cwd);

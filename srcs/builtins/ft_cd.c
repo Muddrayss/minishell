@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 21:35:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:29:42 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static char	*cd_getcwd(void)
 {
 	char	*cwd;
 
-	cwd = getcwd_p(NULL, 0);
+	cwd = getcwd_p(NULL, 0, TMP);
 	if (!cwd)
 	{
 		perror("cd");

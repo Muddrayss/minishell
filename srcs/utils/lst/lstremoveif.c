@@ -6,13 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 20:47:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 23:01:07 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 14:13:19 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	lstremoveif(t_list **const lst, bool (*f)(const void *const))
+void	lstremoveif(t_list **const lst, bool (*f)(const void *const), void (*del)(void *))
 {
 	t_list	*tmp;
 	t_list	*next;
@@ -23,12 +23,7 @@ void	lstremoveif(t_list **const lst, bool (*f)(const void *const))
 		if (f(tmp->content) == true)
 		{
 			next = tmp->next;
-			if (tmp->prev)
-				tmp->prev->next = tmp->next;
-			else
-				*lst = tmp->next;
-			if (tmp->next)
-				tmp->next->prev = tmp->prev;
+			lstremoveone(lst, tmp, del);
 			tmp = next;
 		}
 		else

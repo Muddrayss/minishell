@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:05:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 00:06:04 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:15:57 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	replace_wildcards(char **const str)
 	char				*pattern;
 	uint16_t			idx;
 	uint16_t			len;
-	const char *const	cwd = getcwd_p(NULL, 0);
+	const char *const	cwd = getcwd_p(NULL, 0, TMP);
 
 	idx = 0;
 	pattern = get_pattern(*str, &idx, &len);
@@ -63,7 +63,7 @@ static t_list	*parse_pattern(const char *pattern, const char *const cwd, const b
 		full_entry = get_full_entry(basedir, entry->d_name, cwd, is_root);
 		new_pattern = get_new_pattern(basedir, pattern, entry->d_name);
 		if (!new_pattern)
-			lstadd_front(&matching_files, lstnew(full_entry, false));
+			lstadd_front(&matching_files, lstnew(full_entry, TMP));
 		else
 			lstadd_back(&matching_files, parse_pattern(new_pattern, cwd, is_root));
 	}
@@ -81,7 +81,7 @@ static char *get_full_entry(const char *basedir, const char *const entry, const 
 	}
 	if (*basedir == '/')
 		basedir++;
-	full_entry = (char *)calloc_p(ft_strlen(basedir) + ft_strlen(entry) + 2 + is_root, sizeof(char));
+	full_entry = (char *)calloc_p(ft_strlen(basedir) + ft_strlen(entry) + 2 + is_root, sizeof(char), TMP);
 	if (is_root)
 		ft_strcat(full_entry, "/");
 	if (*basedir)
@@ -117,7 +117,7 @@ static char  *get_new_pattern(const char *const basedir, const char *pattern, co
 	if (!pattern)
 		return (NULL);
 	size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(pattern) + 3;
-	new_pattern = (char *)calloc_p(size, sizeof(char));
+	new_pattern = (char *)calloc_p(size, sizeof(char), TMP);
 	ft_strcpy(new_pattern, basedir);
 	ft_strcat(new_pattern, "/");
 	ft_strcat(new_pattern, entry);
@@ -139,13 +139,13 @@ static	char *get_base_dir(const char **const pattern, bool *const is_root)
 			end = i;
 		i++;
 	}
-	basedir = (char *)malloc_p(sizeof(char) * (end + 1));
+	basedir = (char *)malloc_p(sizeof(char) * (end + 1), TMP);
 	ft_strlcpy(basedir, *pattern, end + 1);
 	*pattern += end + 1;
 	if (!basedir[0])
 	{
 		*is_root = true;
-		return (strdup_p("/"));
+		return (ft_strdup("/", TMP));
 	}
 	return (basedir);
 }
@@ -177,7 +177,7 @@ static char	*get_pattern(const char *const str, uint16_t *const i, uint16_t *con
 	*len = 1;
 	while (!ft_strchr(stop_chars, str[*i + *len]))
 		(*len)++;
-	pattern = (char *)malloc_p(sizeof(char) * (*len + 1));
+	pattern = (char *)malloc_p(sizeof(char) * (*len + 1), TMP);
 	ft_strlcpy(pattern, &str[*i], *len + 1);
 	return (clear_quotes(pattern));
 }
@@ -211,11 +211,8 @@ static char	*add_cwd(const char *pattern, const char *const cwd)
 	char	*new_pattern;
 
 	if (pattern[0] == '/')
-	{
-		new_pattern = strdup_p(pattern);
-		return (new_pattern);
-	}
-	new_pattern = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(pattern) + 2));
+		return ((char *)pattern);
+	new_pattern = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(pattern) + 2), TMP);
 	ft_strcpy(new_pattern, cwd);
 	ft_strcat(new_pattern, "/");
 	ft_strcat(new_pattern, pattern);
@@ -239,7 +236,7 @@ static char	*insert_result(const char *const str, const t_list *const matching_f
 		node = node->next;
 	}
 	size = ft_strlen(str) - pattern_len + filenames_len + 1;
-	new_str = (char *)malloc_p(sizeof(char) * size);
+	new_str = (char *)malloc_p(sizeof(char) * size, TMP);
 	ft_strlcpy(new_str, str, idx + 1);
 	node = (t_list *)matching_files;
 	while (node)

@@ -6,20 +6,13 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 11:44:03 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:32:12 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-t_list	**get_tmp_resources_stack(void)
-{
-	static t_list	*data;
-
-	return (&data);
-}
-
-t_data *get_perm_data(void)
+t_data *get_data(void)
 {
 	static t_data	data;
 
@@ -35,7 +28,7 @@ char	*clear_quotes(const char *const str)
 
 	if (!ft_strchr(str, '\'') && !ft_strchr(str, '"'))
 		return ((char *)str);
-	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) + 1));
+	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) + 1), TMP);
 	master_quote = '\0';
 	j = 0;
 	i = 0;
@@ -52,3 +45,4 @@ char	*clear_quotes(const char *const str)
 	new_str[j] = '\0';
 	return (new_str);
 }
+

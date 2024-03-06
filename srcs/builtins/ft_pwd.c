@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 14:59:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 21:36:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 15:30:35 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_pwd(const char *const *args)
 	char	*pwd;
 
 	(void)args;
-	pwd = getcwd_p(NULL, 0);
+	pwd = getcwd_p(NULL, 0, TMP);
 	if (!pwd)
 	{
 		ft_putstr_fd("pwd: PWD environvment variable not set\n", STDERR_FILENO);

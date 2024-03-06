@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:27:00 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	death_mode(const int32_t signo, siginfo_t *const info, void *const c
 	static uint8_t	n_signals = 0;
 	static pid_t	main_pid; //TODO fare const
 
-	main_pid = get_perm_data()->main_pid;
+	main_pid = get_data()->main_pid;
 	(void)context;
 	if (calling_pid == -1)
 		calling_pid = info->si_pid;
@@ -65,6 +65,7 @@ static void	death_mode(const int32_t signo, siginfo_t *const info, void *const c
 	if (n_signals == (sizeof(id) * 8))
 	{
 		kill(-main_pid, SIGTERM);
+		//TODO non viene raggiunto
 		release_resources();
 		exit(id);
 	}
