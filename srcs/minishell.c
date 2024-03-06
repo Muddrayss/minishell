@@ -41,6 +41,6 @@ static void	minishell_loop()
 			continue ;
 		set_signals(S_SILENT, true);
 		executor(parser(lexer(input)));
-		gc_clear_type(TMP);
+		gc_cleanup();
 	}
 }

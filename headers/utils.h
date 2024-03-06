@@ -47,13 +47,13 @@ void		lstadd_front(t_list **const lst, t_list *const new);
 t_list		*lstlast(const t_list *lst);
 void		lstadd_back(t_list **const lst, t_list *const new);
 void		lstreverse(t_list **const lst);
-void		lstclear(t_list **const lst);
+void		lstclear(t_list **lst, void (*del)(void *));
 void		lstremoveone(t_list **const head, t_list *const to_remove, void (*del)(void *));
 void		lstremoveif(t_list **const lst, bool (*f)(const void *const), void (*del)(void *));
 
 t_tree		*treenew(const void *const content, const uint8_t alloc_type);
 t_tree		*treeadd_below(t_tree *const node, const t_tree *const new);
 t_tree		*treefirst(const t_tree *root);
-void		treeclear(t_tree *const tree, void (*del)(void *const));
+void		treeclear(t_tree **const tree, void (*del)(void *const));
 
 #endif

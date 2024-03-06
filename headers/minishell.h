@@ -73,7 +73,6 @@ typedef struct s_data
 extern uint8_t		g_status;
 static const char	g_shell_spaces[] = " \t\n";
 
-# define RAM_SIZE	1000
 # define MAX_FDS	1024
 # define TMP        1
 # define PERM       2
@@ -83,9 +82,8 @@ void	check_args(const int argc, const char **const argv, const char **const envp
 void	init_data(const char **const envp);
 void	init_general(void);
 char	*clear_quotes(const char *const str);
-void	gc_add(const void *const ptr, const uint8_t type);
-void    gc_remove(void *ptr);
-void    gc_clear_type(const uint8_t type);
+void	gc_add(const void *const ptr);
+void    gc_cleanup();
 void	ft_quit(const uint8_t id, const char *const msg);
 void	release_resources(void);
 

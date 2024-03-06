@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/03/06 15:51:36 by craimond         ###   ########.fr        #
+#    Updated: 2024/03/06 19:03:34 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_heredoc.c executor_re
 BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)
 GENERAL_SRCS = minishell.c minishell_init.c minishell_exit.c minishell_utils.c envp_tree.c envp_matrix.c envp_utils.c signals.c garbage_collector.c
 GENERAL_UTILS_SRCS = $(addprefix general/, ft_atoi.c ft_matrixsize.c ft_itoa.c ft_calloc.c  conditionals.c)
-LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstadd_back.c lstlast.c lstreverse.c lstnew.c lstremoveone.c lstremoveif.c)
+LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstadd_back.c lstlast.c lstreverse.c lstnew.c lstremoveone.c lstremoveif.c lstclear.c)
 STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_strtok.c ft_strtrim.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strcmp_lower.c ft_strchr.c ft_tolower.c)
 TREE_UTILS_SRCS = $(addprefix tree/, treeadd_below.c treeclear.c treenew.c treefirst.c)
 PROTECTED_METHODS_SRCS = $(addprefix protected_methods/, alloc.c dirs.c dup.c files.c processes.c signals.c wait.c utils.c)

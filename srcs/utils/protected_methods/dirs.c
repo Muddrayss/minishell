@@ -36,7 +36,9 @@ char	*getcwd_p(const char *const buf, const size_t size, const uint8_t alloc_typ
 
 	if (!cwd && is_bad_errno(errno))
 		ft_quit(ERR_MEM, NULL);
-	return (gc_add(cwd, alloc_type), (char *)cwd);
+	if (alloc_type == TMP)
+		gc_add(cwd);
+	return ((char *)cwd);
 }
 
 int32_t	chdir_p(const char *const path)

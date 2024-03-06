@@ -29,9 +29,9 @@ void	envp_matrix_remove(const char *const env_name, const uint16_t name_len)
 		if (!ft_strncmp(data->envp_matrix[old_size], env_name, name_len) == 0)
 			new_matrix[i--] = data->envp_matrix[old_size];
 		else
-			free_p(data->envp_matrix[old_size]);
+			free(data->envp_matrix[old_size]);
 	}
-	free_p(data->envp_matrix);
+	free(data->envp_matrix);
 	data->envp_matrix = new_matrix;
 	return ;
 }
@@ -49,7 +49,7 @@ void	envp_matrix_add(const char *str)
 	new_matrix[size] = (char *)str;
 	while (size--)
 		new_matrix[size] = data->envp_matrix[size];
-	free_p(data->envp_matrix);
+	free(data->envp_matrix);
 	data->envp_matrix = new_matrix;
 	return ;
 }

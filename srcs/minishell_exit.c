@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exit.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:31:02 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:58:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 19:12:28 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 static void	quit_from_main(const uint8_t id);
+static void free_data();
 static void	close_all_fds(void);
 
 void	ft_quit(const uint8_t id, const char *const msg)
@@ -49,9 +50,22 @@ static void	quit_from_main(const uint8_t id)
 
 void	release_resources(void)
 {
-	gc_clear_type(TMP | PERM);
+	free_data();
+	gc_cleanup();
 	rl_clear_history();
 	close_all_fds();
+}
+
+static void free_data()
+{
+	t_data	*data;
+
+	data = get_data();
+	treeclear(&data->envp_tree, free);
+	free(data->envp_matrix);
+	data->envp_matrix = NULL;
+	free(data->starting_dir);
+	data->starting_dir = NULL;
 }
 
 static void	close_all_fds(void)

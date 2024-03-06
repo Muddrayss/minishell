@@ -21,7 +21,9 @@ void	*malloc_p(const size_t size, const uint8_t alloc_type)
 	ptr = malloc(size);
 	if (!ptr)
 		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-	return (gc_add(ptr, alloc_type), ptr);
+	if (alloc_type == TMP)
+		gc_add(ptr);
+	return (ptr);
 }
 
 void	*calloc_p(const size_t nmemb, const size_t size, const uint8_t alloc_type)
@@ -33,10 +35,7 @@ void	*calloc_p(const size_t nmemb, const size_t size, const uint8_t alloc_type)
 	ptr = ft_calloc(nmemb, size);
 	if (!ptr)
 		ft_quit(ERR_MEM, "minishell: failed to allocate memory");
-	return (gc_add(ptr, alloc_type), ptr);
-}
-
-void    free_p(void *ptr)
-{
-	gc_remove(ptr);
+	if (alloc_type == TMP)
+		gc_add(ptr);
+	return (ptr);
 }

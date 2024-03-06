@@ -45,4 +45,5 @@ void exec_builtin(const char **const cmd_args)
 			builtin_functions[i](cmd_args);
 		i++;
 	}
+	gc_cleanup();
 }
