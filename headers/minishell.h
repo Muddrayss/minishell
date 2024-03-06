@@ -6,9 +6,11 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:20 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 11:44:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:48:03 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//TODO rendere piu leggibile sta distinzione tra risorse (utils si confondono, lo stack e' una lista, le funzioni standard delle liste non sono piu standard)
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
