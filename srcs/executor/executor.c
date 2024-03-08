@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:46:08 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:30:41 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/08 11:49:07 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ static void	child(const t_tree *const node, const int16_t fds[5], const int8_t p
 {
 	const t_parser *const	elem = (t_parser *)node->content;
 
-	panic(2, "TEST");
 	if (prev_type == PIPELINE)
 		dup2_p(fds[2], STDIN_FILENO);
 	replace_env_vars(&elem->cmd->cmd_str, false);

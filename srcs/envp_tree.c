@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:12:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:11:21 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:25:46 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,21 @@ t_tree	*envp_tree_remove(t_tree *const root, const char *const name, const uint1
 	t_tree	*tmp;
 
 	if (!root)
-		return (NULL);
+		return (NULL); //mettere la free TODO 
 	if (ft_strncmp(name, (char *)root->content, name_len) < 0)
 		root->left = envp_tree_remove(root->left, name, name_len);
 	else if (ft_strncmp(name, (char *)root->content, name_len) > 0)
 		root->right = envp_tree_remove(root->right, name, name_len);
 	else
 	{
-		if (root->left == NULL)
-			return (root->right);
-		else if (root->right == NULL)
-			return (root->left);
+		if (!root->left || !root->right)
+		{
+			if (!root->left)
+				tmp = root->right;
+			else
+				tmp = root->left;
+			return (free(root), tmp);
+		}
 		tmp = treefirst(root->right);
 		root->content = tmp->content;
 		root->right = envp_tree_remove(root->right, (char *)tmp->content, name_len);

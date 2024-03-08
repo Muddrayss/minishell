@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:25:42 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/06 15:42:44 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/08 12:05:58 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_unset(const char *const *args)
 	while (*(++args))
 	{
 		if (!ft_strchr(*args, '='))
-			ft_unsetenv(ft_strjoin(*args, "=", TMP));
+			ft_unsetenv(ft_strjoin(*args, "=", TMP)); // leaks
 		else
 		{
 			g_status = EXIT_FAILURE;

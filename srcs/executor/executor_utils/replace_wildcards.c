@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:05:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 16:15:57 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/08 11:58:55 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static t_list	*sort_result(t_list *matching_files);
 static char		*add_cwd(const char *pattern, const char *const cwd);
 static char		*insert_result(const char *const str, const t_list *const matching_files, const uint16_t idx, const uint16_t pattern_len);
 
+//TODO non funziona /*/*/*
 void	replace_wildcards(char **const str)
 {
 	t_list				*matching_files;
