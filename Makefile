@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
+#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/03/06 19:03:34 by codespace        ###   ########.fr        #
+#    Updated: 2024/03/08 16:48:49 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread -g
+VALGRIND_FLASG = --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --suppressions=readline.supp
 RM = rm -f
 
 NAME = minishell
@@ -56,7 +57,7 @@ fclean: clean
 	@echo "Full cleaning of $(NAME) done!"
 
 leaks: all
-	@valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME) 2> leak_report
+	@valgrind $(VALGRIND_FLASG) ./$(NAME) 2> leak_report
 	@echo "leak report generated"
 	@make clean > /dev/null
 

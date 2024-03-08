@@ -2,12 +2,12 @@ tmp/
 .vscode/
 libft/.vscode/
 libft/*.a
-# *.tmp
+*.tmp
 *.a
 .nfs*
 minishell
-#leak_report
+leak_report
 *.o
 *.out
-# *.txt
+*.txt
 *.log
