@@ -6,7 +6,7 @@
 #    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/03/08 16:48:49 by craimond         ###   ########.fr        #
+#    Updated: 2024/03/08 17:32:33 by craimond         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,8 @@ $(NAME): $(OBJS)
 	@mkdir -p tmp
 	@$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
 	@echo "Compilation of $(NAME) done!"
+
+bonus: all
 
 %.o: %.c $(HEADERS)
 	@$(CC) $(CFLAGS) -c $< -o $@
