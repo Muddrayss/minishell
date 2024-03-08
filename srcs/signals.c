@@ -6,7 +6,7 @@
 /*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/03/06 22:11:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:44:01 by craimond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,10 @@ static void	safe_exit(const int32_t signo)
 
 static void	catch_panic(const int32_t signo, siginfo_t *const info, void *const context)
 {
-	static pid_t	calling_pid = -1; //data races (provare a far fallire 2 comandi di una pipeline)
+	static pid_t	calling_pid = -1;
 	static uint8_t	id = 0;
 	static uint8_t	n_signals = 0;
 
-	signal_p(SIGTERM, SIG_IGN); //fare fuori dal ciclo , signal si applica a tutto il sottogruppo
 	(void)context;
 	if (calling_pid == -1)
 		calling_pid = info->si_pid;
@@ -65,10 +64,12 @@ static void	catch_panic(const int32_t signo, siginfo_t *const info, void *const 
 		n_signals++;
 	if (n_signals == (sizeof(id) * 8))
 	{
+		signal_p(SIGTERM, SIG_IGN);
 		kill(-get_data()->main_pid, SIGTERM);
-		//TODO non viene raggiunto
+		signal_p(SIGTERM, &safe_exit);
 		release_resources();
-		//TODO aspettare i figli prima di fare exit
+		while (waitpid(-1, NULL, WNOHANG) > 0)
+			;
 		exit(id);
 	}
 }
