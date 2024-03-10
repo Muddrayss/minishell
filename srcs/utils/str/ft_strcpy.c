@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:18:45 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:27:08 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*ft_strcpy(char *const dest, const char *const src)
+char	*ft_strcpy(char *const dest, t_cc *const src)
 {
 	uint16_t	i;
 

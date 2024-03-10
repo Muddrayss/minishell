@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 20:17:06 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:26:32 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*ft_strcat(char *const dest, const char *const src)
+char	*ft_strcat(char *const dest, t_cc *const src)
 {
 	uint16_t	i;
 	uint16_t	j;

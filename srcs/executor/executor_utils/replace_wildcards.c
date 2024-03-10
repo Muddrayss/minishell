@@ -3,75 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   replace_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:05:44 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/08 11:58:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 15:02:44 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static t_list	*parse_pattern(const char *const pattern, const char *const cwd, const bool is_root);
-static char		*get_full_entry(const char *basedir, const char *const entry, const char *cwd, const bool is_root);
-static bool		matches_pattern(const char *pattern, const struct dirent *const entry, const uint16_t idx);
-static char		*get_new_pattern(const char *const basedir, const char *pattern, const char *const entry);
-static char		*get_base_dir(const char **const pattern, bool *const is_root);
-static char		*get_pattern(const char *const str, uint16_t *const i, uint16_t *const len);
-static t_list	*sort_result(t_list *matching_files);
-static char		*add_cwd(const char *pattern, const char *const cwd);
-static char		*insert_result(const char *const str, const t_list *const matching_files, const uint16_t idx, const uint16_t pattern_len);
+static t_list	*parse_patn(t_cc *const patn, t_cc *const cwd, const bool is_r);
+static char		*get_full_entry(t_cc *basedir, t_cc *const entry,
+					t_cc *cwd, const bool is_r);
+static bool		matches_patn(t_cc *patn, const struct dirent *const entry,
+					const uint16_t idx);
+static char		*get_new_patn(t_cc *const basedir, t_cc *patn,
+					t_cc *const entry);
 
 //TODO non funziona /*/*/*
 void	replace_wildcards(char **const str)
 {
 	t_list				*matching_files;
-	char				*pattern;
+	char				*patn;
 	uint16_t			idx;
 	uint16_t			len;
-	const char *const	cwd = getcwd_p(NULL, 0, TMP);
+	t_cc *const			cwd = getcwd_p(NULL, 0, TMP);
 
 	idx = 0;
-	pattern = get_pattern(*str, &idx, &len);
-	while (pattern)
+	patn = get_patn(*str, &idx, &len);
+	while (patn)
 	{
-		pattern = add_cwd(pattern, cwd);
-		matching_files = parse_pattern(pattern, cwd, false);
+		patn = add_cwd(patn, cwd);
+		matching_files = parse_patn(patn, cwd, false);
 		matching_files = sort_result(matching_files);
 		*str = insert_result(*str, matching_files, idx, len);
 		idx += len;
-		pattern = get_pattern(*str, &idx, &len);
+		patn = get_patn(*str, &idx, &len);
 	}
 }
 
-static t_list	*parse_pattern(const char *pattern, const char *const cwd, const bool is_root)
+static t_list	*parse_patn(t_cc *patn, t_cc *const cwd, const bool is_r)
 {
 	struct dirent		*entry;
 	t_list				*matching_files;
-	char				*new_pattern;
+	char				*new_patn;
 	char				*full_entry;
-	const char *const	basedir = get_base_dir(&pattern, (bool *)&is_root);
-	const DIR  *const	dir = opendir_p(basedir);
+	t_dir				dir;
 
+	dir.basedir = get_base_dir(&patn, (bool *)&is_r);
+	dir.dir = opendir_p(dir.basedir);
 	matching_files = NULL;
-	while (dir)
+	while (dir.dir)
 	{
-		entry = readdir_p(dir);
+		entry = readdir_p(dir.dir);
 		if (!entry)
 			break ;
-		if (entry->d_name[0] == '.' || !matches_pattern(pattern, entry, 0))
+		if (entry->d_name[0] == '.' || !matches_patn(patn, entry, 0))
 			continue ;
-		full_entry = get_full_entry(basedir, entry->d_name, cwd, is_root);
-		new_pattern = get_new_pattern(basedir, pattern, entry->d_name);
-		if (!new_pattern)
+		full_entry = get_full_entry(dir.basedir, entry->d_name, cwd, is_r);
+		new_patn = get_new_patn(dir.basedir, patn, entry->d_name);
+		if (!new_patn)
 			lstadd_front(&matching_files, lstnew(full_entry, TMP));
 		else
-			lstadd_back(&matching_files, parse_pattern(new_pattern, cwd, is_root));
+			lstadd_back(&matching_files, parse_patn(new_patn, cwd, is_r));
 	}
-	return (closedir((DIR *)dir), matching_files);
+	return (closedir((DIR *)dir.dir), matching_files);
 }
 
-static char *get_full_entry(const char *basedir, const char *const entry, const char *cwd, const bool is_root)
+static char	*get_full_entry(t_cc *basedir, t_cc *const entry,
+				t_cc *cwd, const bool is_r)
 {
 	char	*full_entry;
 
@@ -82,8 +82,9 @@ static char *get_full_entry(const char *basedir, const char *const entry, const 
 	}
 	if (*basedir == '/')
 		basedir++;
-	full_entry = (char *)calloc_p(ft_strlen(basedir) + ft_strlen(entry) + 2 + is_root, sizeof(char), TMP);
-	if (is_root)
+	full_entry = (char *)calloc_p(ft_strlen(basedir)
+			+ ft_strlen(entry) + 2 + is_r, sizeof(char), TMP);
+	if (is_r)
 		ft_strcat(full_entry, "/");
 	if (*basedir)
 	{
@@ -94,158 +95,36 @@ static char *get_full_entry(const char *basedir, const char *const entry, const 
 	return (full_entry);
 }
 
-static bool	matches_pattern(const char *pattern, const struct dirent *const entry, const uint16_t idx)
+static bool	matches_patn(t_cc *patn,
+				const struct dirent *const entry, const uint16_t idx)
 {
 	if (entry->d_name[idx] == '\0')
 	{
-		while (*pattern == '*')
-			pattern++;
-		return (*pattern == '\0' || (*pattern == '/' && entry->d_type == DT_DIR));
+		while (*patn == '*')
+			patn++;
+		return (*patn == '\0' || (*patn == '/' && entry->d_type == DT_DIR));
 	}
-	if (*pattern == '*')
-		return (matches_pattern(pattern + 1, entry, idx) || matches_pattern(pattern, entry, idx + 1));
-	if (*pattern == entry->d_name[idx])
-		return (matches_pattern(pattern + 1, entry, idx + 1));
+	if (*patn == '*')
+		return (matches_patn(patn + 1, entry, idx)
+			|| matches_patn(patn, entry, idx + 1));
+	if (*patn == entry->d_name[idx])
+		return (matches_patn(patn + 1, entry, idx + 1));
 	return (false);
 }
 
-static char  *get_new_pattern(const char *const basedir, const char *pattern, const char *const entry)
+static char	*get_new_patn(t_cc *const basedir, t_cc *patn, t_cc *const entry)
 {
-	char		*new_pattern;
+	char		*new_patn;
 	uint16_t	size;
 
-	pattern = ft_strchr(pattern, '/');
-	if (!pattern)
+	patn = ft_strchr(patn, '/');
+	if (!patn)
 		return (NULL);
-	size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(pattern) + 3;
-	new_pattern = (char *)calloc_p(size, sizeof(char), TMP);
-	ft_strcpy(new_pattern, basedir);
-	ft_strcat(new_pattern, "/");
-	ft_strcat(new_pattern, entry);
-	ft_strcat(new_pattern, pattern);
-	return (new_pattern);
-}
-
-static	char *get_base_dir(const char **const pattern, bool *const is_root)
-{
-	char		*basedir;
-	uint16_t	end;
-	uint16_t	i;
-
-	end = 0;
-	i = 0;
-	while ((*pattern)[i] && (*pattern)[i] != '*')
-	{
-		if ((*pattern)[i] == '/')
-			end = i;
-		i++;
-	}
-	basedir = (char *)malloc_p(sizeof(char) * (end + 1), TMP);
-	ft_strlcpy(basedir, *pattern, end + 1);
-	*pattern += end + 1;
-	if (!basedir[0])
-	{
-		*is_root = true;
-		return (ft_strdup("/", TMP));
-	}
-	return (basedir);
-}
-
-static char	*get_pattern(const char *const str, uint16_t *const i, uint16_t *const len)
-{
-	char		*pattern;
-	char		master_quote;
-	const char	stop_chars[] = {' ', '\t', '\n', '\"', '\'', '\0'};
-
-	if (!str)
-		return (NULL);
-	master_quote = '\0';
-	while (str[*i])
-	{
-		if (!master_quote && (is_quote(str[*i])))
-			master_quote = str[*i];
-		else if (master_quote && str[*i] == master_quote)
-			master_quote = '\0';
-		if (!master_quote && str[*i] == '*')
-			break ;
-		(*i)++;
-	}
-	if (str[*i] != '*')
-		return (NULL);
-	while (*i > 0 && !is_shell_space(str[*i]))
-		(*i)--;
-	*i += is_shell_space(str[*i]);
-	*len = 1;
-	while (!ft_strchr(stop_chars, str[*i + *len]))
-		(*len)++;
-	pattern = (char *)malloc_p(sizeof(char) * (*len + 1), TMP);
-	ft_strlcpy(pattern, &str[*i], *len + 1);
-	return (clear_quotes(pattern));
-}
-
-static	t_list *sort_result(t_list *matching_files)
-{
-	const t_list *const	head = matching_files;
-	t_list				*next;
-	char				*tmp;
-
-	while (matching_files)
-	{
-		next = matching_files->next;
-		while (next)
-		{
-			if (ft_strcmp_lower(matching_files->content, next->content) > 0)
-			{
-				tmp = matching_files->content;
-				matching_files->content = next->content;
-				next->content = tmp;
-			}
-			next = next->next;
-		}
-		matching_files = matching_files->next;
-	}
-	return ((t_list *)head);
-}
-
-static char	*add_cwd(const char *pattern, const char *const cwd)
-{
-	char	*new_pattern;
-
-	if (pattern[0] == '/')
-		return ((char *)pattern);
-	new_pattern = (char *)malloc_p(sizeof(char) * (ft_strlen(cwd) + ft_strlen(pattern) + 2), TMP);
-	ft_strcpy(new_pattern, cwd);
-	ft_strcat(new_pattern, "/");
-	ft_strcat(new_pattern, pattern);
-	return (new_pattern);
-}
-
-static char	*insert_result(const char *const str, const t_list *const matching_files, const uint16_t idx, const uint16_t pattern_len)
-{
-	t_list		*node;
-	char		*new_str;
-	uint16_t	size;
-	uint16_t	filenames_len;
-
-	if (!matching_files)
-		return ((char *)str);
-	node = (t_list *)matching_files;
-	filenames_len = 0;
-	while (node)
-	{
-		filenames_len += ft_strlen(node->content) + 1;
-		node = node->next;
-	}
-	size = ft_strlen(str) - pattern_len + filenames_len + 1;
-	new_str = (char *)malloc_p(sizeof(char) * size, TMP);
-	ft_strlcpy(new_str, str, idx + 1);
-	node = (t_list *)matching_files;
-	while (node)
-	{
-		ft_strcat(new_str, node->content);
-		ft_strcat(new_str, " ");
-		node = node->next;
-	}
-	ft_strcat(new_str, &str[idx + pattern_len]);
-	return (new_str);
+	size = ft_strlen(basedir) + ft_strlen(entry) + ft_strlen(patn) + 3;
+	new_patn = (char *)calloc_p(size, sizeof(char), TMP);
+	ft_strcpy(new_patn, basedir);
+	ft_strcat(new_patn, "/");
+	ft_strcat(new_patn, entry);
+	ft_strcat(new_patn, patn);
+	return (new_patn);
 }

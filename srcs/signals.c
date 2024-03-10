@@ -3,25 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 17:37:20 by marvin            #+#    #+#             */
-/*   Updated: 2024/03/08 16:44:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:24:32 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
 static void	silent_mode(const int32_t signo);
-static void	interactive_mode(const int32_t signo);
-static void	heredoc_mode(const int32_t signo);
-static void	command_mode(const int32_t signo);
-static void	catch_panic(const int32_t signo, siginfo_t *const info, void *const context);
+static void	catch_panic(const int32_t signo,
+				siginfo_t *const info, void *const context);
 static void	safe_exit(const int32_t signo);
 
 void	set_signals(const uint8_t mode, const bool is_main)
 {
-	static const __sighandler_t	sig_handler[] = {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode};
+	static const __sighandler_t	sig_handler[]
+		= {&interactive_mode, &heredoc_mode, &command_mode, &silent_mode};
 
 	signal_p(SIGINT, sig_handler[mode]);
 	signal_p(SIGQUIT, sig_handler[mode]);
@@ -47,7 +46,8 @@ static void	safe_exit(const int32_t signo)
 	exit(0);
 }
 
-static void	catch_panic(const int32_t signo, siginfo_t *const info, void *const context)
+static void	catch_panic(const int32_t signo,
+	siginfo_t *const info, void *const context)
 {
 	static pid_t	calling_pid = -1;
 	static uint8_t	id = 0;
@@ -80,49 +80,4 @@ static void	silent_mode(const int32_t signo)
 		g_status = 130;
 	else if (signo == SIGQUIT)
 		g_status = 131;
-}
-
-static void	interactive_mode(const int32_t signo)
-{
-	if (signo == SIGINT)
-	{
-		g_status = 130;
-		ft_putstr_fd("\n", STDOUT_FILENO);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	else if (signo == SIGQUIT)
-		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
-}
-
-static void	heredoc_mode(const int32_t signo)
-{
-	if (signo == SIGINT)
-	{
-		ft_putstr_fd("\n", STDOUT_FILENO);
-		release_resources();
-		exit(130);
-	}
-	else if (signo == SIGQUIT)
-		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
-}
-
-static void	command_mode(const int32_t signo)
-{
-	if (signo == SIGINT)
-	{
-		g_status = 130;
-		ft_putstr_fd("\n", STDOUT_FILENO);
-		release_resources();
-		exit(130);
-	}
-	else if (signo == SIGQUIT)
-	{
-		g_status = 131;
-		ft_putstr_fd("\b\b  \b\b", STDOUT_FILENO);
-		ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
-		release_resources();
-		exit(131);
-	}
 }

@@ -3,22 +3,22 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+         #
+#    By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/04 17:09:33 by craimond          #+#    #+#              #
-#    Updated: 2024/03/08 17:32:33 by craimond         ###   ########.fr        #
+#    Updated: 2024/03/10 16:46:47 by egualand         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 LEXER_SRCS = $(addprefix lexer/, lexer.c)
-PARSER_UTILS = $(addprefix parser_utils/, general_utils.c merge_separators.c check_syntax.c)
+PARSER_UTILS = $(addprefix parser_utils/, general_utils.c merge_separators.c check_syntax.c check_syntax_2.c check_syntax_3.c)
 PARSER_REDIRS = $(addprefix parser_redirs/, fill_redirs.c clear_redirs.c)
 PARSER_SRCS = $(addprefix parser/, parser.c $(PARSER_REDIRS) $(PARSER_UTILS))
-EXECUTOR_UTILS = $(addprefix executor_utils/, general_utils.c get_cmd_path.c get_cmd_args.c replace_env_vars.c replace_wildcards.c)
-EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_heredoc.c executor_redirs.c $(EXECUTOR_UTILS))
+EXECUTOR_UTILS = $(addprefix executor_utils/, general_utils.c get_cmd_path.c get_cmd_args.c replace_env_vars.c replace_wildcards.c replace_wildcards_2.c replace_wildcards_3.c)
+EXECUTOR_SRCS = $(addprefix executor/, executor.c executor_2.c executor_heredoc.c executor_redirs.c $(EXECUTOR_UTILS))
 BUILTIN_SRCS = $(addprefix builtins/, builtins_handler.c ft_cd.c ft_echo.c ft_env.c ft_exit.c ft_export.c ft_pwd.c ft_unset.c)
-GENERAL_SRCS = minishell.c minishell_init.c minishell_exit.c minishell_utils.c envp_tree.c envp_matrix.c envp_utils.c signals.c garbage_collector.c
+GENERAL_SRCS = minishell.c minishell_init.c minishell_exit.c minishell_utils.c envp_tree.c envp_matrix.c envp_utils.c signals.c signals_2.c garbage_collector.c
 GENERAL_UTILS_SRCS = $(addprefix general/, ft_atoi.c ft_matrixsize.c ft_itoa.c ft_calloc.c  conditionals.c)
 LST_UTILS_SRCS = $(addprefix lst/, lstadd_front.c lstadd_back.c lstlast.c lstreverse.c lstnew.c lstremoveone.c lstremoveif.c lstclear.c)
 STR_UTILS_SRCS = $(addprefix str/, ft_putstr_fd.c ft_strtok.c ft_strtrim.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strcat.c ft_strcpy.c ft_strlcpy.c ft_strnstr.c ft_strncmp.c ft_strcmp.c ft_strcmp_lower.c ft_strchr.c ft_tolower.c)
@@ -28,7 +28,7 @@ UTILS_SRCS = $(addprefix utils/, $(GENERAL_UTILS_SRCS) $(STR_UTILS_SRCS) $(LST_U
 
 SRCS = $(addprefix srcs/, $(GENERAL_SRCS) $(LEXER_SRCS) $(PARSER_SRCS) $(EXECUTOR_SRCS)  $(BUILTIN_SRCS) $(UTILS_SRCS))		
 OBJS = $(SRCS:.c=.o)
-HEADERS = $(addprefix headers/, minishell.h lexer.h parser.h executor.h signals.h envp.h utils.h protected_methods.h colors.h)
+HEADERS = $(addprefix headers/, minishell.h)
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread -g
@@ -49,6 +49,9 @@ bonus: all
 %.o: %.c $(HEADERS)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
+download:
+	curl -o readline.supp https://pastebin.com/raw/D6hcNyJs
+
 clean:
 	@$(RM) -r tmp
 	@$(RM) $(OBJS)
@@ -58,7 +61,7 @@ fclean: clean
 	@$(RM) $(NAME)
 	@echo "Full cleaning of $(NAME) done!"
 
-leaks: all
+leaks: download all
 	@valgrind $(VALGRIND_FLASG) ./$(NAME) 2> leak_report
 	@echo "leak report generated"
 	@make clean > /dev/null

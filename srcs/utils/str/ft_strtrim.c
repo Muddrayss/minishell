@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 16:36:23 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/06 15:15:48 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	*ft_strtrim(const char *s1, const char *const set, const uint8_t alloc_type)
+char	*ft_strtrim(t_cc *s1, t_cc *const set, const uint8_t alloc_type)
 {
 	char		*newstr;
 	uint16_t	i;

@@ -3,59 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:19:32 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:46:12 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:12:01 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static t_parser	*init_cmd(const char type, const char *const cmd_str);
-static t_tree	*fill_tree(const t_list *const lexered_params, const t_list *const stop);
+static t_parser	*init_cmd(t_cc type, t_cc *const cmd_str);
+static t_tree	*fill_tree(const t_list *const lexered_params,
+					const t_list *const stop);
 static t_list	*skip_parenthesis(const t_list *lexered_params);
 static t_list	*unskip_parenthesis(const t_list *lexered_params);
 
 t_tree	*parser(t_list *lexered_params)
 {
 	lstremoveif(&lexered_params, &is_empty_cmd, NULL);
-	if (merge_separators(&lexered_params) == -1 || check_syntax(lexered_params) == -1)
+	if (merge_separators(&lexered_params) == -1
+		|| check_syntax(lexered_params) == -1)
 	{
 		g_status = 2;
 		return (NULL);
 	}
-	return(fill_tree(lexered_params, NULL));
+	return (fill_tree(lexered_params, NULL));
 }
 
-static t_tree	*fill_tree(const t_list *const lexered_params, const t_list *const stop)
+static t_tree	*fill_tree(const t_list *const lp,
+	const t_list *const stop)
 {
 	t_tree	*node;
 	t_lexer	*elem;
 	t_lexer	*next_elem;
 
-	if (!lexered_params)
+	if (!lp)
 		return (NULL);
-	elem = (t_lexer *)lexered_params->content;
+	elem = (t_lexer *)lp->content;
 	if (elem->token == SUBSHELL_START)
-		return (fill_tree(skip_parenthesis(lexered_params), stop));
-	if (lexered_params->next == stop)
+		return (fill_tree(skip_parenthesis(lp), stop));
+	if (lp->next == stop)
 	{
 		node = treenew(init_cmd(END, NULL), TMP);
 		if (elem->token == SUBSHELL_END)
-			node = treeadd_below(node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
+			node = tb(node, fill_tree(unskip_parenthesis(lp), lp));
 		else
-			node = treeadd_below(node, treenew(init_cmd(elem->token, elem->cmd_str), TMP));
+			node = tb(node, treenew(init_cmd(elem->token, elem->cmd_str), TMP));
 		return (node);
 	}
-	next_elem = (t_lexer *)lexered_params->next->content;
+	next_elem = (t_lexer *)lp->next->content;
 	node = treenew(init_cmd(next_elem->token, next_elem->cmd_str), TMP);
 	if (elem->token != SUBSHELL_END)
-		node = treeadd_below(node, treenew(init_cmd(elem->token, elem->cmd_str), TMP));
+		node = tb(node, treenew(init_cmd(elem->token, elem->cmd_str), TMP));
 	else
-		node = treeadd_below(node, fill_tree(unskip_parenthesis(lexered_params), lexered_params));
-	node = treeadd_below(node, fill_tree(lexered_params->next->next, stop));
-	return (node);
+		node = tb(node, fill_tree(unskip_parenthesis(lp), lp));
+	return (node = tb(node, fill_tree(lp->next->next, stop)), node);
 }
 
 static t_list	*skip_parenthesis(const t_list *lexered_params)
@@ -94,7 +96,7 @@ static t_list	*unskip_parenthesis(const t_list *lexered_params)
 	return (lexered_params->next);
 }
 
-static t_parser	*init_cmd(const char type, const char *const cmd_str)
+static t_parser	*init_cmd(t_cc type, t_cc *const cmd_str)
 {
 	t_parser	*node;
 

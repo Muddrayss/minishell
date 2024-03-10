@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 16:05:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:28:01 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-char	ft_tolower(const char c)
+char	ft_tolower(t_cc c)
 {
 	if (c >= 'A' && c <= 'Z')
 		return (c + 32);

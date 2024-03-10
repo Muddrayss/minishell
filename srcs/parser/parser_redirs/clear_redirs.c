@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   clear_redirs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:13:57 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:47:02 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 15:33:10 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static uint16_t	remove_filename(const char *const str, uint16_t i, bool *const to_remove_array);
-static char		*remove_chars(const char *const str, const bool *const to_remove_array);
+static uint16_t	remove_filename(t_cc *const str,
+					uint16_t i, bool *const to_remove_array);
+static char		*remove_chars(t_cc *const str,
+					const bool *const to_remove_array);
 
-char	*clear_redirs(const char *cmd_str)
+char	*clear_redirs(t_cc *cmd_str)
 {
 	bool		*to_remove_array;
 	uint16_t	i;
@@ -41,7 +43,8 @@ char	*clear_redirs(const char *cmd_str)
 	return (remove_chars(cmd_str, to_remove_array));
 }
 
-static uint16_t	remove_filename(const char *const str, uint16_t i, bool *const to_remove_array)
+static uint16_t	remove_filename(t_cc *const str, uint16_t i,
+					bool *const to_remove_array)
 {
 	char	master_quote;
 
@@ -62,7 +65,7 @@ static uint16_t	remove_filename(const char *const str, uint16_t i, bool *const t
 	return (i - 1);
 }
 
-static char	*remove_chars(const char *const str, const bool *const to_remove_array)
+static char	*remove_chars(t_cc *const str, const bool *const to_remove_array)
 {
 	uint16_t	to_remove_len;
 	char		*new_str;
@@ -73,7 +76,8 @@ static char	*remove_chars(const char *const str, const bool *const to_remove_arr
 	to_remove_len = 0;
 	while (str[i])
 		to_remove_len += to_remove_array[i++];
-	new_str = (char *)malloc_p(sizeof(char) * (ft_strlen(str) - to_remove_len + 1), TMP);
+	new_str = (char *)malloc_p(sizeof(char)
+			* (ft_strlen(str) - to_remove_len + 1), TMP);
 	i = 0;
 	j = 0;
 	while (str[i])

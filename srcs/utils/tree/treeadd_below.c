@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   treeadd_below.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/03 19:37:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:28:35 by craimond         ###   ########.fr       */
+/*   Created: 2024/03/10 16:10:55 by egualand          #+#    #+#             */
+/*   Updated: 2024/03/10 16:10:57 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-t_tree	*treeadd_below(t_tree *const node, const t_tree *const new)
+t_tree	*tb(t_tree *const node, const t_tree *const new)
 {
 	if (!node)
 		return ((t_tree *)new);

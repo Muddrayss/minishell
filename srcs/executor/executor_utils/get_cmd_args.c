@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd_args.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 17:00:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:34:31 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 15:18:49 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static uint16_t	count_separators(const char *str, const char sep);
+static uint16_t	count_separators(t_cc *str, t_cc sep);
 static void		quote_split(char *str);
 
 char	**get_cmd_args(char *cmd_str)
@@ -24,7 +24,8 @@ char	**get_cmd_args(char *cmd_str)
 	i = 0;
 	quote_split(cmd_str);
 	cmd_str = clear_quotes(cmd_str);
-	cmd_args = (char **)malloc_p(sizeof(char *) * (count_separators(cmd_str, '\n') + 2), TMP);
+	cmd_args = (char **)malloc_p(sizeof(char *)
+			* (count_separators(cmd_str, '\n') + 2), TMP);
 	arg = ft_strtok(cmd_str, '\n');
 	while (arg)
 	{
@@ -55,7 +56,7 @@ static void	quote_split(char *str)
 	}
 }
 
-static uint16_t   count_separators(const char *str, const char sep)
+static uint16_t	count_separators(t_cc *str, t_cc sep)
 {
 	uint16_t	n;
 
@@ -64,12 +65,12 @@ static uint16_t   count_separators(const char *str, const char sep)
 	{
 		if (*str == sep)
 		{
-		  n++;
-		  while (*str && *str == sep)
-			 str++;
+			n++;
+			while (*str && *str == sep)
+				str++;
 		}
 		else
-		  str++;
+			str++;
 	}
 	return (n);
 }

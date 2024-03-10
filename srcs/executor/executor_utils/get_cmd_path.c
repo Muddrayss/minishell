@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 23:45:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:42:18 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 15:19:37 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static bool	is_custom_bin(const char *const cmd);
-static char	*search_cmd_in_dirs(const char *const entry, const char *const cmd);
-static char	*get_custom_bin(const char *const cmd);
-static void	throw_error(const char *const cmd);
+static bool	is_custom_bin(t_cc *const cmd);
+static char	*search_cmd_in_dirs(t_cc *const entry, t_cc *const cmd);
+static char	*get_custom_bin(t_cc *const cmd);
+static void	throw_error(t_cc *const cmd);
 
-char	*get_cmd_path(const char *const path, const char *const cmd)
+char	*get_cmd_path(t_cc *const path, t_cc *const cmd)
 {
 	char	*entry;
 	char	*full_path;
@@ -40,10 +40,11 @@ char	*get_cmd_path(const char *const path, const char *const cmd)
 	return (full_path);
 }
 
-static bool is_custom_bin(const char *const cmd)
+static bool	is_custom_bin(t_cc *const cmd)
 {
 	uint8_t				i;
-	static const char	*prefixes[] = {"./", "../", "/", NULL};
+	static const char	*prefixes[]
+		= {"./", "../", "/", NULL};
 
 	i = 0;
 	while (prefixes[i])
@@ -55,7 +56,7 @@ static bool is_custom_bin(const char *const cmd)
 	return (false);
 }
 
-static char *search_cmd_in_dirs(const char *const entry, const char *const cmd)
+static char	*search_cmd_in_dirs(t_cc *const entry, t_cc *const cmd)
 {
 	char			*full_path;
 	const uint16_t	len = ft_strlen(entry) + ft_strlen(cmd) + 2;
@@ -69,12 +70,14 @@ static char *search_cmd_in_dirs(const char *const entry, const char *const cmd)
 	return (NULL);
 }
 
-static char	*get_custom_bin(const char *const cmd)
+static char	*get_custom_bin(t_cc *const cmd)
 {
 	char		*full_path;
-	const char	*cwd = getcwd_p(NULL, 0, TMP);
+	const char	*cwd
+		= getcwd_p(NULL, 0, TMP);
 
-	full_path = (char *)calloc_p(ft_strlen(cwd) + ft_strlen(cmd) + 2, sizeof(char), TMP);
+	full_path = (char *)calloc_p(ft_strlen(cwd)
+			+ ft_strlen(cmd) + 2, sizeof(char), TMP);
 	if (ft_strncmp(cmd, "../", 3) == 0 || ft_strncmp(cmd, "./", 2) == 0)
 	{
 		ft_strcpy(full_path, cwd);
@@ -89,7 +92,7 @@ static char	*get_custom_bin(const char *const cmd)
 	return (NULL);
 }
 
-static void	throw_error(const char *const cmd)
+static void	throw_error(t_cc *const cmd)
 {
 	ft_putstr_fd("minishell: command not found: '", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);

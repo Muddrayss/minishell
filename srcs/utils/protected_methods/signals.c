@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:38:42 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:13:13 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	signal_p(const int32_t signo, const __sighandler_t handler)
 		panic(ERR_SIGSETUP, NULL);
 }
 
-void	sigaction_p(const int32_t signo, const struct sigaction *act, struct sigaction *oldact)
+void	sigaction_p(const int32_t signo,
+	const struct sigaction *act, struct sigaction *oldact)
 {
 	if (sigaction(signo, act, oldact) == -1)
 		panic(ERR_SIGSETUP, NULL);

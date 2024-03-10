@@ -3,27 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   executor_heredoc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:34:01 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 15:24:33 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static uint8_t	fill_in_child(const char *const limiter, const uint16_t heredoc_fd);
-static void		fill_heredoc(const char *const limiter, const uint16_t fd);
+static uint8_t	fic(t_cc *const limiter, const uint16_t heredoc_fd);
+static void		fill_heredoc(t_cc *const limiter, const uint16_t fd);
 
-void	create_heredocs(const t_tree *const tree, uint8_t *const status)
+void	create_heredocs(const t_tree *const tree, uint8_t *const s)
 {
 	t_parser	*elem;
 	t_list		*redirs;
 	t_redir		*redir;
-	char		*filename;
-	uint16_t	fd;
+	char		*f;
 
-	if (!tree || *status != 0)
+	if (!tree || *s != 0)
 		return ;
 	elem = (t_parser *)tree->content;
 	if (elem->type == CMD)
@@ -35,23 +34,23 @@ void	create_heredocs(const t_tree *const tree, uint8_t *const status)
 			redirs = redirs->next;
 			if (redir->type != REDIR_HEREDOC)
 				continue ;
-			filename = get_heredoc_filename(redir->heredoc_fileno);
-			fd = open_p(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			*status = fill_in_child(redir->filename, fd);
-			if (*status != 0)
+			f = get_heredoc_filename(redir->heredoc_fileno);
+			*s = fic(redir->filename, open_p(f, 01101, 0644));
+			if (*s != 0)
 				return ;
 		}
 	}
-	create_heredocs(tree->left, status);
-	create_heredocs(tree->right, status);
+	create_heredocs(tree->left, s);
+	create_heredocs(tree->right, s);
 }
 
 char	*get_heredoc_filename(const uint16_t id)
 {
 	char				*filename;
 	const t_data *const	data = get_data();
-	const char *const	id_str = ft_itoa((uint16_t)id);
-	const uint16_t		size = ft_strlen(data->starting_dir) + ft_strlen(id_str) + 16;
+	t_cc *const			id_str = ft_itoa((uint16_t)id);
+	const uint16_t		size = ft_strlen(data->starting_dir)
+		+ ft_strlen(id_str) + 16;
 
 	filename = ft_calloc(size, sizeof(char));
 	if (!filename || !id_str)
@@ -62,7 +61,7 @@ char	*get_heredoc_filename(const uint16_t id)
 	return (filename);
 }
 
-static uint8_t	fill_in_child(const char *const limiter, const uint16_t heredoc_fd)
+static uint8_t	fic(t_cc *const limiter, const uint16_t heredoc_fd)
 {
 	int32_t		status;
 	const pid_t	pid = fork_p();
@@ -80,7 +79,7 @@ static uint8_t	fill_in_child(const char *const limiter, const uint16_t heredoc_f
 	return ((uint8_t)status);
 }
 
-static void	fill_heredoc(const char *const limiter, const uint16_t fd)
+static void	fill_heredoc(t_cc *const limiter, const uint16_t fd)
 {
 	char		*str;
 	uint16_t	str_len;

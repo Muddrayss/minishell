@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/03 19:33:17 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:34:14 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-uint16_t	ft_strlen(const char *const str)
+uint16_t	ft_strlen(t_cc *const str)
 {
 	uint16_t	i;
 

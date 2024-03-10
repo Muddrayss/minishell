@@ -16,7 +16,7 @@ static void	quit_from_main(const uint8_t id);
 static void	free_data(void);
 static void	close_all_fds(void);
 
-void	panic(const uint8_t id, const char *const msg)
+void	panic(const uint8_t id, t_cc *const msg)
 {
 	if (errno != EINTR)
 	{

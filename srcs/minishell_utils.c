@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:35:55 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:22 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_data	*get_data(void)
 	return (&data);
 }
 
-char	*clear_quotes(const char *const str)
+char	*clear_quotes(t_cc *const str)
 {
 	uint32_t	i;
 	uint32_t	j;

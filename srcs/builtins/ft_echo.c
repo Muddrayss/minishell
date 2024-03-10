@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 11:58:14 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 16:59:40 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:13 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static uint16_t	skip_flags(const char *const *args, bool *is_n);
+static uint16_t	skip_flags(t_cc *const *args, bool *is_n);
 
-void	ft_echo(const char *const *args)
+void	ft_echo(t_cc *const *args)
 {
 	uint16_t	i;
 	bool		is_n;
@@ -32,7 +32,7 @@ void	ft_echo(const char *const *args)
 	g_status = EXIT_SUCCESS;
 }
 
-static uint16_t	skip_flags(const char *const *args, bool *is_n)
+static uint16_t	skip_flags(t_cc *const *args, bool *is_n)
 {
 	uint16_t	i;
 	uint16_t	j;

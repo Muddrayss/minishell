@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   envp_matrix.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 10:36:54 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:52:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:18:07 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	envp_matrix_remove(const char *const env_name, const uint16_t name_len)
+void	envp_matrix_remove(t_cc *const env_name, const uint16_t name_len)
 {
 	t_data		*data;
 	char		**new_matrix;
@@ -36,7 +36,7 @@ void	envp_matrix_remove(const char *const env_name, const uint16_t name_len)
 	return ;
 }
 
-void	envp_matrix_add(const char *str)
+void	envp_matrix_add(t_cc *str)
 {
 	t_data		*data;
 	char		**new_matrix;
@@ -56,8 +56,8 @@ void	envp_matrix_add(const char *str)
 
 void	envp_print_env(void)
 {
-	const char **const	matrix = (const char **)get_data()->envp_matrix;
-	uint16_t			i;
+	t_cc **const	matrix = (t_cc **)get_data()->envp_matrix;
+	uint16_t		i;
 
 	i = 0;
 	while (matrix[i])

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:59:54 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 17:20:59 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-static bool	is_space(const char c);
+static bool	is_space(t_cc c);
 
-int32_t	ft_atoi(const char *nptr)
+int32_t	ft_atoi(t_cc *nptr)
 {
 	int64_t		n;
 	char		sign;
@@ -39,7 +39,7 @@ int32_t	ft_atoi(const char *nptr)
 	return ((int32_t)n);
 }
 
-static bool	is_space(const char c)
+static bool	is_space(t_cc c)
 {
 	return (c == ' ' || (c >= '\t' && c <= '\r'));
 }

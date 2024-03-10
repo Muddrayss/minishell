@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 16:43:35 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 17:27:11 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-uint16_t	ft_strlcpy(char *dst, const char *src, const uint16_t size)
+uint16_t	ft_strlcpy(char *dst, t_cc *src, const uint16_t size)
 {
 	uint16_t		i;
 	const uint16_t	src_len = ft_strlen(src);

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 18:15:19 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/06 11:41:06 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static bool	is_number(const char *str);
-static bool	is_long_overflow(const char *str);
+static bool	is_number(t_cc *str);
+static bool	is_long_overflow(t_cc *str);
 
-void	ft_exit(const char *const *args)
+void	ft_exit(t_cc *const *args)
 {
 	uint8_t	id;
 
@@ -42,7 +42,7 @@ void	ft_exit(const char *const *args)
 	exit(id);
 }
 
-static bool	is_number(const char *str)
+static bool	is_number(t_cc *str)
 {
 	if (*str == '-' || *str == '+')
 		str++;
@@ -55,7 +55,7 @@ static bool	is_number(const char *str)
 	return (true);
 }
 
-static bool	is_long_overflow(const char *str)
+static bool	is_long_overflow(t_cc *str)
 {
 	if (*str == '-' || *str == '+')
 		str++;

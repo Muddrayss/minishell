@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lstremoveif.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 20:47:47 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 14:13:19 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:12:56 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	lstremoveif(t_list **const lst, bool (*f)(const void *const), void (*del)(void *))
+void	lstremoveif(t_list **const lst,
+	bool (*f)(const void *const), void (*del)(void *))
 {
 	t_list	*tmp;
 	t_list	*next;

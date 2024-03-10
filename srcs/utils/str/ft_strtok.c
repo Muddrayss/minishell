@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 13:26:58 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/05 17:27:54 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:17:46 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static uint16_t	ft_strspn(char *str, char sep);
 static char		*ft_strpbrk(char *str, char sep);
 
-char	*ft_strtok(char *const str, const char sep)
+char	*ft_strtok(char *const str, t_cc sep)
 {
 	char			*token;
 	char			*end;
@@ -44,31 +44,30 @@ char	*ft_strtok(char *const str, const char sep)
 	return (token);
 }
 
-static uint16_t    ft_strspn(char *str, char sep)
+static uint16_t	ft_strspn(char *str, char sep)
 {
-    uint16_t    i;
+	uint16_t	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] != sep)
-            break ;
-        i++;
-    }
-    return (i);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != sep)
+			break ;
+		i++;
+	}
+	return (i);
 }
 
-static char    *ft_strpbrk(char *str, char sep)
+static char	*ft_strpbrk(char *str, char sep)
 {
-    uint16_t    i;
+	uint16_t	i;
 
-    i = 0;
-    while (str[i])
-    {
-        if (str[i] == sep)
-            return (str + i);
-        i++;
-    }
-    return (NULL);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == sep)
+			return (str + i);
+		i++;
+	}
+	return (NULL);
 }
-

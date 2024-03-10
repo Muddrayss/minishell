@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   merge_separators.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 23:59:34 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:47:28 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:08:41 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,9 @@ int8_t	merge_separators(t_list **const lexered_params)
 				ret = merge_ampersands(lexered_params, &node);
 			else if (elem->token == '(')
 				elem->token = SUBSHELL_START;
-			else if (elem->token == ')')
-				elem->token = SUBSHELL_END;
-			else if (elem->token == ';')
-				elem->token = SEMICOLON;
+			else
+				elem->token = 1 * (elem->token == ';')
+					+ 6 * (elem->token == ')');
 		}
 		if (node)
 			node = node->next;
@@ -60,7 +59,7 @@ static int8_t	merge_ampersands(t_list **const head, t_list **const node)
 		lstremoveone(head, (*node)->next, NULL);
 	}
 	else
-		return (throw_syntax_error('&'), -1);
+		return (tse('&'), -1);
 	return (0);
 }
 

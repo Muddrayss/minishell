@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   alloc.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:40:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:13:04 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	*malloc_p(const size_t size, const uint8_t alloc_type)
 	return (ptr);
 }
 
-void	*calloc_p(const size_t nmemb, const size_t size, const uint8_t alloc_type)
+void	*calloc_p(const size_t nmemb,
+	const size_t size, const uint8_t alloc_type)
 {
 	void	*ptr;
 

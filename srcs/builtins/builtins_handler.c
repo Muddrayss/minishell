@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/18 14:55:03 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/06 19:50:16 by codespace        ###   ########.fr       */
+/*   Updated: 2024/03/10 15:16:01 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-bool	is_builtin(const char *const cmd_str)
+bool	is_builtin(t_cc *const cmd_str)
 {
-	char 					*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
+	const char				*builtins[]
+		= {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	char					*cmd;
 	uint16_t				i;
 	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
@@ -31,11 +32,13 @@ bool	is_builtin(const char *const cmd_str)
 	return (false);
 }
 
-void exec_builtin(const char **const cmd_args)
+void	exec_builtin(t_cc **const cmd_args)
 {
 	uint8_t					i;
-	static void				(*const builtin_functions[])(const char *const *) = {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
-	static const char		*builtins[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
+	static void				(*builtin_functions[])(t_cc *const *)
+		= {&ft_echo, &ft_cd, &ft_pwd, &ft_export, &ft_unset, &ft_env, &ft_exit};
+	static t_cc				*builtins[]
+		= {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	static const uint8_t	n_builtins = sizeof(builtins) / sizeof(char *);
 
 	i = 0;

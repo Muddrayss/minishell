@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 15:41:15 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/05 17:27:24 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-int16_t	ft_strncmp(const char *const s1, const char *const s2, const uint16_t n)
+int16_t	ft_strncmp(t_cc *const s1, t_cc *const s2, const uint16_t n)
 {
 	uint16_t	i;
 

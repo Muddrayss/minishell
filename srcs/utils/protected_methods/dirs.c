@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   dirs.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:39:25 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-DIR	*opendir_p(const char *const name)
+DIR	*opendir_p(t_cc *const name)
 {
 	const DIR *const	dir = opendir(name);
 
@@ -30,9 +30,9 @@ struct dirent	*readdir_p(const DIR *const dir)
 	return ((struct dirent *)entry);
 }
 
-char	*getcwd_p(const char *const buf, const size_t size, const uint8_t alloc_type)
+char	*getcwd_p(t_cc *const buf, const size_t size, const uint8_t alloc_type)
 {
-	const char *const	cwd = getcwd((char *)buf, size);
+	t_cc *const	cwd = getcwd((char *)buf, size);
 
 	if (!cwd && is_bad_errno(errno))
 		panic(ERR_MEM, NULL);
@@ -41,7 +41,7 @@ char	*getcwd_p(const char *const buf, const size_t size, const uint8_t alloc_typ
 	return ((char *)cwd);
 }
 
-int32_t	chdir_p(const char *const path)
+int32_t	chdir_p(t_cc *const path)
 {
 	const int32_t	ret = chdir(path);
 

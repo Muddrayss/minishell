@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 13:41:23 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:11:20 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-uint16_t	open_p(const char *const path, const int32_t flags, const uint16_t mode)
+uint16_t	open_p(t_cc *const path, const int32_t flags, const uint16_t mode)
 {
 	const int16_t	fd = open(path, flags, mode);
 

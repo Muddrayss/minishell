@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 17:09:22 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:50:05 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:19:51 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ uint8_t	g_status;
 
 static void	minishell_loop(void);
 
-int	main(const int argc, const char **const argv, const char **const envp)
+int	main(const int argc, t_cc **const argv, t_cc **const envp)
 {
 	check_args(argc, argv, envp);
 	init_signals();
@@ -28,7 +28,8 @@ int	main(const int argc, const char **const argv, const char **const envp)
 static void	minishell_loop(void)
 {
 	char				*input;
-	static const char	prompt[] = RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT;
+	static const char	prompt[]
+		= RED "mi" YELLOW "ni" GREEN "sh" CYAN "el" PURPLE "l$ " DEFAULT;
 
 	while (true)
 	{

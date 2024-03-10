@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   envp_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:12:05 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/08 16:25:46 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:19:02 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-t_tree	*envp_tree_add(t_tree *const root, const char *const str)
+t_tree	*envp_tree_add(t_tree *const root, t_cc *const str)
 {
 	t_tree	*new;
 
@@ -30,12 +30,13 @@ t_tree	*envp_tree_add(t_tree *const root, const char *const str)
 	return (root);
 }
 
-t_tree	*envp_tree_remove(t_tree *const root, const char *const name, const uint16_t name_len)
+t_tree	*envp_tree_remove(t_tree *const root,
+	t_cc *const name, const uint16_t name_len)
 {
 	t_tree	*tmp;
 
 	if (!root)
-		return (NULL); //mettere la free TODO 
+		return (NULL);
 	if (ft_strncmp(name, (char *)root->content, name_len) < 0)
 		root->left = envp_tree_remove(root->left, name, name_len);
 	else if (ft_strncmp(name, (char *)root->content, name_len) > 0)
@@ -52,12 +53,14 @@ t_tree	*envp_tree_remove(t_tree *const root, const char *const name, const uint1
 		}
 		tmp = treefirst(root->right);
 		root->content = tmp->content;
-		root->right = envp_tree_remove(root->right, (char *)tmp->content, name_len);
+		root->right = envp_tree_remove(root->right,
+				(char *)tmp->content, name_len);
 	}
 	return (root);
 }
 
-t_tree *envp_tree_find(const t_tree *const root, const char *const name, const uint16_t name_len)
+t_tree	*envp_tree_find(const t_tree *const root,
+	t_cc *const name, const uint16_t name_len)
 {
 	if (!root)
 		return (NULL);

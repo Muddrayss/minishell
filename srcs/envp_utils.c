@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   envp_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:46:00 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 15:52:23 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:19:10 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-void	envp_init(const char **const envp)
+void	envp_init(t_cc **const envp)
 {
 	t_data		*data;
 	char		*str;
@@ -32,20 +32,20 @@ void	envp_init(const char **const envp)
 	}
 }
 
-void	ft_setenv(const char *const name, const char *const value, const bool replace)
+void	ft_setenv(t_cc *const name, t_cc *const val, const bool rep)
 {
 	t_data				*data;
-	const char *const	str = ft_strjoin(name, value, PERM);
+	t_cc *const			str = ft_strjoin(name, val, PERM);
 
 	data = get_data();
-	if (replace && ft_getenv(name))
+	if (rep && ft_getenv(name))
 		ft_unsetenv(name);
 	data->envp_size++;
 	data->envp_tree = envp_tree_add(data->envp_tree, str);
 	envp_matrix_add(str);
 }
 
-void	ft_unsetenv(const char *const name)
+void	ft_unsetenv(t_cc *const name)
 {
 	t_data		*data;
 	uint16_t	name_len;
@@ -59,10 +59,11 @@ void	ft_unsetenv(const char *const name)
 	envp_matrix_remove(name, name_len);
 }
 
-char	*ft_getenv(const char *const name)
+char	*ft_getenv(t_cc *const name)
 {
 	char				*value;
-	const t_tree *const	found = envp_tree_find(get_data()->envp_tree, name, ft_strlen(name));
+	const t_tree *const	found
+		= envp_tree_find(get_data()->envp_tree, name, ft_strlen(name));
 
 	if (found)
 	{

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:08:20 by egualand          #+#    #+#             */
-/*   Updated: 2024/03/06 15:29:42 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:50:21 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static int8_t	cd_check_args(const char *const *args);
+static int8_t	cd_check_args(t_cc *const *args);
 static char		*cd_getcwd(void);
 
-void	ft_cd(const char *const *args)
+void	ft_cd(t_cc *const *args)
 {
 	char	*tmp;
 
@@ -38,7 +38,7 @@ void	ft_cd(const char *const *args)
 	g_status = EXIT_SUCCESS;
 }
 
-static int8_t	cd_check_args(const char *const *args)
+static int8_t	cd_check_args(t_cc *const *args)
 {
 	if (!args[1])
 		return (-1);

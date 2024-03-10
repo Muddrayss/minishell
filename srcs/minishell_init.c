@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_init.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: craimond <bomboclat@bidol.juis>            +#+  +:+       +#+        */
+/*   By: egualand <egualand@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 00:26:11 by craimond          #+#    #+#             */
-/*   Updated: 2024/03/06 21:35:36 by craimond         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:19:35 by egualand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
-static void	clean_heredocs(const char *const path);
+static void	clean_heredocs(t_cc *const path);
 
-void	check_args(const int argc, const char **const argv, const char **const envp)
+void	check_args(const int argc, t_cc **const argv, t_cc **const envp)
 {
 	(void)argv;
 	if (argc > 1)
@@ -24,12 +24,13 @@ void	check_args(const int argc, const char **const argv, const char **const envp
 	}
 	if (!envp || !*envp)
 	{
-		ft_putstr_fd("minishell: failed to initialize environvment\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: failed to initialize environvment\n",
+			STDERR_FILENO);
 		exit(ERR_ENV);
 	}
 }
 
-void	init_data(const char **const envp)
+void	init_data(t_cc **const envp)
 {
 	t_data *const	data = get_data();
 
@@ -52,12 +53,13 @@ void	init_general(void)
 	exec_simple_cmd(path, "mkdir -p tmp");
 }
 
-static void	clean_heredocs(const char *const path)
+static void	clean_heredocs(t_cc *const path)
 {
 	const t_data *const	data = get_data();
 	char				*cmd;
 
-	cmd = (char *)calloc_p(ft_strlen(data->starting_dir) + 12, sizeof(char), TMP);
+	cmd = (char *)calloc_p(ft_strlen(data->starting_dir)
+			+ 12, sizeof(char), TMP);
 	ft_strcpy(cmd, "rm -rf ");
 	ft_strcat(cmd, data->starting_dir);
 	ft_strcat(cmd, "/tmp");
