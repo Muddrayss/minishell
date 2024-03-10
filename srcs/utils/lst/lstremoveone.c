@@ -30,6 +30,8 @@ void	lstremoveone(t_list **const head, t_list *const to_remove, void (*del)(void
 	if (to_remove == *head)
 		*head = next;
 	if (del)
+	{
 		del(to_remove->content);
-	free(to_remove);
+		free(to_remove);
+	}
 }
